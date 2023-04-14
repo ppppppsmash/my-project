@@ -6,7 +6,8 @@ const Dummy: NextPage<Props> = () => {
   return (
     <div className='h-screen md:flex'>
       <div className='md:w-1/3 justify-center py-10 items-center bg-white'>
-        <form className='bg-white w-[70%] mx-auto'>
+        <p className='text-lg text-center font-bold m-5'>追加で計測をしたいサイトを登録してください</p>
+        <form className='bg-white w-[80%] mx-auto'>
           <div className='border-2 py-2 px-3 rounded-2xl mb-4'>
             <input className='pl-2 outline-none border-none' type='text' name='' placeholder='サイト名' />
           </div>
