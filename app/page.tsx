@@ -27,9 +27,11 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
     <div>
-      <label htmlFor="url-input">Enter URL:</label>
+      <label htmlFor="url-input">URL:</label>
       <input className='text-gray-900' id="url-input" type="text" value={url} onChange={handleUrlChange} />
-      {score ? <div>Score: {score}</div> : <button onClick={getScore}>Get Score</button>}
+      <div className='mt-3 text-right'>
+        {score ? <div>スコア: {score}</div> : <div><button className='rounded-full bg-white text-gray-900' onClick={getScore}>スコア取得</button></div>}
+      </div>
     </div>
   </main>
   )
