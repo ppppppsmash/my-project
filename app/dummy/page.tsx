@@ -1,30 +1,9 @@
-'use client'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import { SetStateAction, useState } from 'react'
+import { NextPage } from 'next'
 
-const inter = Inter({ subsets: ['latin'] })
+interface Props {}
 
-export default function Home() {
-  const [url, setUrl] = useState('');
-  const [score, setScore] = useState(0);
-
-  const getScore = async () => {
-    const res = await fetch(`http://localhost:3000/api/pagespeedInsights?url=${url}`, {
-      cache: "no-store",
-    })
-    if(res.ok) {
-      const data =await res.json()
-      setScore(data.score)
-    }
-  }
-
-  const handleUrlChange = (event: { target: { value: SetStateAction<string> } }) => {
-    setUrl(event.target.value);
-  }
-
+const Dummy: NextPage<Props> = () => {
   return (
-
     <div className='h-screen md:flex'>
       <div className='md:w-1/3 justify-center py-10 items-center bg-white'>
         <p className='text-lg text-center font-bold m-5'>追加で計測をしたいサイトを登録してください</p>
@@ -37,17 +16,7 @@ export default function Home() {
           </div>
           <button type='submit' className='block w-1/3 bg-gray-900 mt-4 py-2 rounded-2xl text-white font-semibold mb-2'>登録</button>
         </form>
-
-        <form className='bg-white w-[80%] mx-auto mt-10'>
-          <div className='border-2 py-2 px-3 rounded-2xl mb-4'>
-          <input className='pl-2 outline-none border-none' type='text' name='' placeholder='URL' value={url} onChange={handleUrlChange} />
-          </div>
-          <div className='mt-3 text-right'>
-            <div><button type='button' className='block w-1/3 bg-gray-900 mt-4 py-2 rounded-2xl text-white font-semibold mb-2' onClick={getScore}>スコア取得</button></div>
-          </div>
-        </form>
       </div>
-
       <div className='md:w-2/3 justify-center py-10 items-center'>
         <div className='w-[80%] mx-auto'>
           <p className='text-lg text-center font-bold m-5'>テキスト</p>
@@ -61,8 +30,8 @@ export default function Home() {
             </thead>
             <tbody>
               <tr className='bg-gray-100 border-b border-gray-200'>
-                <td className='px-4 py-3'>{url}</td>
-                <td className='px-4 py-3'>{score}</td>
+                <td className='px-4 py-3'>https://gohan.soudan-anshin.com/</td>
+                <td className='px-4 py-3'>66</td>
                 <td className='px-4 py-3'>2023/4/14 23:21:43</td>
               </tr>
             </tbody>
@@ -72,3 +41,5 @@ export default function Home() {
     </div>
   )
 }
+
+export default Dummy
