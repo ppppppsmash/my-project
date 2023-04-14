@@ -25,5 +25,5 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 
 
-
-http://localhost:3000/api/pagespeedInsights?url=
+http://localhost:3000
+http://localhost:3000/api/pagespeedInsights
