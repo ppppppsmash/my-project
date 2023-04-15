@@ -9,7 +9,7 @@ export async function GET(request: Request, response: Response) {
   // request.url = http://localhost:3000/api/pagespeedInsights
   const url = searchParams.get('url')
   console.log(request.url)
-  const res = await fetch(`https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${url}`, {
+  const res = await fetch(`https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${url}&key=${API_KEY}&strategy=mobile`, {
     headers: {
       'Content-Type': 'application/json',
     },
