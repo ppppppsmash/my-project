@@ -3,11 +3,19 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import { SetStateAction, useState } from 'react'
 
-const inter = Inter({ subsets: ['latin'] })
-
 export default function Home() {
-  const [url, setUrl] = useState('');
-  const [score, setScore] = useState(0);
+  interface pageList {
+    url: string,
+    score: number,
+    date: string
+  }
+
+  const [pageList, setPageList] = useState<pageList[]>([])
+
+  const [url, setUrl] = useState('')
+  const [score, setScore] = useState(0)
+  const urlArray: {url: string, score: number, date: string}[] = [];
+  const [scoreList, setScoreList] = useState()
 
   const getScore = async () => {
     const res = await fetch(`http://localhost:3000/api/pagespeedInsights?url=${url}`, {
@@ -15,13 +23,17 @@ export default function Home() {
     })
     if(res.ok) {
       const data =await res.json()
-      setScore(data.score)
+      const score = data.score
+      setPageList((pageList) => [...pageList, {score, url, date: new Date().toLocaleString()}])
     }
+    
   }
 
   const handleUrlChange = (event: { target: { value: SetStateAction<string> } }) => {
     setUrl(event.target.value);
   }
+
+  
 
   return (
 
@@ -51,6 +63,7 @@ export default function Home() {
       <div className='md:w-2/3 justify-center py-10 items-center'>
         <div className='w-[80%] mx-auto'>
           <p className='text-lg text-center font-bold m-5'>テキスト</p>
+          <p>入力中：{url}</p>
           <table className='rounded-t-lg m-5 w-5/6 mx-auto bg-gray-200 text-gray-800'>
             <thead>
               <tr className='text-left border-b-2 border-gray-300'>
@@ -60,15 +73,18 @@ export default function Home() {
               </tr>
             </thead>
             <tbody>
-              <tr className='bg-gray-100 border-b border-gray-200'>
-                <td className='px-4 py-3'>{url}</td>
-                <td className='px-4 py-3'>{score}</td>
-                <td className='px-4 py-3'>2023/4/14 23:21:43</td>
+              {pageList.map((page) => (
+                <tr className='bg-gray-100 border-b border-gray-200'>
+                <td className='px-4 py-3'>{page.url}</td>
+                <td className='px-4 py-3'>{page.score}</td>
+                <td className='px-4 py-3'>{page.date}</td>
               </tr>
+              ))}
             </tbody>
           </table>
         </div>
       </div>
     </div>
+
   )
 }
