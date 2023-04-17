@@ -1,7 +1,28 @@
 'use client'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
+import PageScoreTable from '@/app/components/PageScoreTable'
 import { SetStateAction, useState } from 'react'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2'
+import { faker } from '@faker-js/faker'
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 export default function Home() {
   interface pageList {
@@ -12,6 +33,7 @@ export default function Home() {
   }
 
   const [pageList, setPageList] = useState<pageList[]>([])
+  //const [page, setPage] = useState<string>('')
 
   const [url, setUrl] = useState('')
   const [name, setName] = useState('')
@@ -25,7 +47,27 @@ export default function Home() {
       const score = data.score
       setPageList((pageList) => [...pageList, {name, score, url, date: new Date().toLocaleString()}])
     }
-    
+  }
+
+  const getScoreAgain = async (existedUrl: string) => {
+    const res = await fetch(`http://localhost:3000/api/pagespeedInsights?url=${existedUrl}`, {
+      cache: "no-store",
+    })
+    console.log('abc')
+    if(res.ok) {
+      const data =await res.json()
+      const score = data.score
+      setPageList((pageList) => {
+        const updatedPageList = pageList.map((page) => {
+          if (page.url === existedUrl) {
+            return { ...page, score, date: new Date().toLocaleString() }
+          } else {
+            return page
+          }
+        })
+        return updatedPageList
+      })
+    }
   }
 
   const handleNameChange = (event: { target: { value: SetStateAction<string> } }) => {
@@ -36,7 +78,36 @@ export default function Home() {
     setUrl(event.target.value);
   }
 
-  
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: '各ページのスコア',
+      },
+    },
+  }
+
+  const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
+  const graphData = {
+    labels,
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+      {
+        label: 'Dataset 2',
+        data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      },
+    ],
+  }
 
   return (
 
@@ -67,26 +138,24 @@ export default function Home() {
         <div className='w-[80%] mx-auto'>
           <p className='text-lg text-center font-bold m-5'>計測対象ページ</p>
           {pageList.map((page, index) => (
-          <div key={index}>
-            <h2 className='text-2xl font-bold mx-auto w-5/6'>{page.name}</h2>
-            <table className='rounded-t-lg m-5 w-5/6 mx-auto bg-gray-200 text-gray-800'>
-              <thead>
-                <tr className='text-left border-b-2 border-gray-300'>
-                  <th className='px-4 py-3'>URL</th>
-                  <th className='px-4 py-3'>スコア</th>
-                  <th className='px-4 py-3'>取得日時</th>
-                </tr>
-              </thead>
-              <tbody>
-              <tr className='bg-gray-100 border-b border-gray-200'>
-                  <td className='px-4 py-3'>{page.url}</td>
-                  <td className='px-4 py-3'>{page.score}</td>
-                  <td className='px-4 py-3'>{page.date}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            <PageScoreTable
+              key={index}
+              name={page.name}
+              url={page.url}
+              score={page.score}
+              date={page.date}
+              onClick={() => getScoreAgain(page.url)}
+            />
           ))}
+
+          <h3 className='text-2xl font-bold mx-auto w-5/6 mt-8'>線グラフ</h3>
+          <Bar
+            height={300}
+            width={300}
+            data={graphData}
+            options={options}
+            id='chart-key'
+          />
         </div>
       </div>
     </div>
