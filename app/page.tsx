@@ -12,6 +12,7 @@ export default function Home() {
   }
 
   const [pageList, setPageList] = useState<pageList[]>([])
+  //const [page, setPage] = useState<string>('')
 
   const [url, setUrl] = useState('')
   const [name, setName] = useState('')
@@ -25,8 +26,28 @@ export default function Home() {
       const score = data.score
       setPageList((pageList) => [...pageList, {name, score, url, date: new Date().toLocaleString()}])
     }
-    
   }
+
+  const getScoreAgain = async (existedUrl: string) => {
+    const res = await fetch(`http://localhost:3000/api/pagespeedInsights?url=${existedUrl}`, {
+      cache: "no-store",
+    })
+    if(res.ok) {
+      const data =await res.json()
+      const score = data.score
+      setPageList((pageList) => {
+        const updatedPageList = pageList.map((page) => {
+          if (page.url === existedUrl) {
+            return { ...page, score, date: new Date().toLocaleString() }
+          } else {
+            return page
+          }
+        })
+        return updatedPageList
+      })
+    }
+  }
+  
 
   const handleNameChange = (event: { target: { value: SetStateAction<string> } }) => {
     setName(event.target.value);
@@ -68,8 +89,8 @@ export default function Home() {
           <p className='text-lg text-center font-bold m-5'>計測対象ページ</p>
           {pageList.map((page, index) => (
           <div key={index}>
-            <h2 className='text-2xl font-bold mx-auto w-5/6'>{page.name}</h2>
-            <table className='rounded-t-lg m-5 w-5/6 mx-auto bg-gray-200 text-gray-800'>
+            <h3 className='text-2xl font-bold mx-auto w-5/6 mt-8'>{page.name}</h3>
+            <table className='rounded-t-lg my-3 w-5/6 mx-auto bg-gray-200 text-gray-800'>
               <thead>
                 <tr className='text-left border-b-2 border-gray-300'>
                   <th className='px-4 py-3'>URL</th>
@@ -82,6 +103,7 @@ export default function Home() {
                   <td className='px-4 py-3'>{page.url}</td>
                   <td className='px-4 py-3'>{page.score}</td>
                   <td className='px-4 py-3'>{page.date}</td>
+                  <td className='px-4 py-3'><button type='button' className='block w-full bg-gray-900 mt-4 py-2 rounded-2xl text-white font-semibold mb-2' onClick={() => getScoreAgain(page.url)}>再取得</button></td>
                 </tr>
               </tbody>
             </table>
