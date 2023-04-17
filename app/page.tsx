@@ -1,6 +1,7 @@
 'use client'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
+import PageScoreTable from '@/app/components/PageScoreTable'
 import { SetStateAction, useState } from 'react'
 import {
   Chart as ChartJS,
@@ -52,6 +53,7 @@ export default function Home() {
     const res = await fetch(`http://localhost:3000/api/pagespeedInsights?url=${existedUrl}`, {
       cache: "no-store",
     })
+    console.log('abc')
     if(res.ok) {
       const data =await res.json()
       const score = data.score
@@ -67,7 +69,6 @@ export default function Home() {
       })
     }
   }
-  
 
   const handleNameChange = (event: { target: { value: SetStateAction<string> } }) => {
     setName(event.target.value);
@@ -137,26 +138,14 @@ export default function Home() {
         <div className='w-[80%] mx-auto'>
           <p className='text-lg text-center font-bold m-5'>計測対象ページ</p>
           {pageList.map((page, index) => (
-          <div key={index}>
-            <h3 className='text-2xl font-bold mx-auto w-5/6 mt-8'>{page.name}</h3>
-            <table className='rounded-t-lg my-3 w-5/6 mx-auto bg-gray-200 text-gray-800'>
-              <thead>
-                <tr className='text-left border-b-2 border-gray-300'>
-                  <th className='px-4 py-3'>URL</th>
-                  <th className='px-4 py-3'>スコア</th>
-                  <th className='px-4 py-3'>取得日時</th>
-                </tr>
-              </thead>
-              <tbody>
-              <tr className='bg-gray-100 border-b border-gray-200'>
-                  <td className='px-4 py-3'>{page.url}</td>
-                  <td className='px-4 py-3'>{page.score}</td>
-                  <td className='px-4 py-3'>{page.date}</td>
-                  <td className='px-4 py-3'><button type='button' className='block w-full bg-gray-900 mt-4 py-2 rounded-2xl text-white font-semibold mb-2' onClick={() => getScoreAgain(page.url)}>再取得</button></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            <PageScoreTable
+              key={index}
+              name={page.name}
+              url={page.url}
+              score={page.score}
+              date={page.date}
+              onClick={() => getScoreAgain(page.url)}
+            />
           ))}
 
           <h3 className='text-2xl font-bold mx-auto w-5/6 mt-8'>線グラフ</h3>
