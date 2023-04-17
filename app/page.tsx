@@ -2,6 +2,26 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import { SetStateAction, useState } from 'react'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2'
+import { faker } from '@faker-js/faker'
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 export default function Home() {
   interface pageList {
@@ -57,7 +77,36 @@ export default function Home() {
     setUrl(event.target.value);
   }
 
-  
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: '各ページのスコア',
+      },
+    },
+  }
+
+  const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
+  const graphData = {
+    labels,
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+      {
+        label: 'Dataset 2',
+        data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      },
+    ],
+  }
 
   return (
 
@@ -109,6 +158,15 @@ export default function Home() {
             </table>
           </div>
           ))}
+
+          <h3 className='text-2xl font-bold mx-auto w-5/6 mt-8'>線グラフ</h3>
+          <Bar
+            height={300}
+            width={300}
+            data={graphData}
+            options={options}
+            id='chart-key'
+          />
         </div>
       </div>
     </div>
