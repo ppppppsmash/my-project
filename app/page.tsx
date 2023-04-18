@@ -34,12 +34,15 @@ export default function Home() {
     date: string
   }
 
+  const [isPressed, setIsPressed] = useState<boolean>(false)
+  
   const [pageList, setPageList] = useState<pageList[]>([])
 
   const [url, setUrl] = useState('')
   const [name, setName] = useState('')
 
   const getScore = async () => {
+    setIsPressed(true)
     const res = await fetch(`http://localhost:3000/api/pagespeedInsights?url=${url}`, {
       cache: "no-store",
     })
@@ -122,7 +125,9 @@ export default function Home() {
           <div className='border-2 py-2 px-3 rounded-2xl mb-4'>
             <input className='pl-2 outline-none border-none' type='text' name='' placeholder='URL' value={url} onChange={handleUrlChange} />
           </div>
-          <button type='button' className='block w-1/3 bg-gray-900 mt-4 py-2 rounded-2xl text-white font-semibold mb-2 hover:scale-[0.90] transition' onClick={getScore}>登録</button>
+          <button type='button' className='w-1/3 bg-gray-900 mt-4 py-2 rounded-2xl
+          text-white font-semibold mb-2 active:bg-gray-500 hover:scale-[0.95] active:scale-[1] transition focus:outline-none
+          focus:shadow-outline duration-150 ease-in-out' onClick={getScore}>登録</button>
         </form>
       </div>
 
