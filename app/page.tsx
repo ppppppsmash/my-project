@@ -38,8 +38,8 @@ export default function Home() {
   
   const [pageList, setPageList] = useState<pageList[]>([])
 
-  const [url, setUrl] = useState('')
   const [name, setName] = useState('')
+  const [url, setUrl] = useState('')
 
   const getScore = async () => {
     const res = await fetch(`http://localhost:3000/api/pagespeedInsights?url=${url}`, {
@@ -50,6 +50,8 @@ export default function Home() {
       const data =await res.json()
       const score = data.score
       setPageList((pageList) => [...pageList, {name, score, url, date: new Date().toLocaleString()}])
+      setName('')
+      setUrl('')
     } else {
       setIsError(true)
     }
