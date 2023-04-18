@@ -38,8 +38,7 @@ export default function Home() {
   const [isError, setIsError] = useState<boolean>(false)
   
   const [pageList, setPageList] = useState<pageList[]>([])
-  const [selectedPages, setSelectedPages] = useState<string[]>([])
-
+  const [selectedPage, setSelectedPage] = useState<pageList[]>([])
 
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
@@ -53,7 +52,7 @@ export default function Home() {
       const data =await res.json()
       const score = data.score
       setPageList((pageList) => [...pageList, {name, score, url, date: new Date().toLocaleString()}])
-      setSelectedPages((page) => [...page, name])
+      // setSelectedPages((page) => [...page, name])
       setName('')
       setUrl('')
     } else {
@@ -82,8 +81,13 @@ export default function Home() {
     }
   }
 
-  const handlePageSelect = (event: any) => {
-    setSelectedPages(event.target.value)
+  const handlePageSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const pageName = e.target.value
+    const selected = pageList.find(page => page.name === pageName)
+    console.log(selected)
+    if (selected) {
+      setSelectedPage([selected])
+    }
   }
 
   const handleNameChange = (event: { target: { value: string } }) => {
@@ -100,11 +104,6 @@ export default function Home() {
     } else {
       setUrl(inputValue)
     }
-  }
-
-  const isSelected = (pageName: any) => {
-    return selectedPages.includes(pageName)
-
   }
 
   const options = {
@@ -158,10 +157,10 @@ export default function Home() {
       <div className='md:w-2/3 justify-center py-10 items-center bg-gray-100'>
         <div className='w-[90%] mx-auto'>
           <p className='text-lg text-center font-bold m-5'>計測対象ページ</p>
-          <PageSelect pageList={pageList} handlePageSelect={handlePageSelect} onClick={() => getScoreAgain(pageList[0].url)}/>
-            {/* <Suspense fallback={<Loading />}>
-              {pageList.map((page, index) => (
-                
+          <PageSelect selectedPages={pageList} handlePageSelect={handlePageSelect}>
+          {selectedPage && (
+            <Suspense fallback={<Loading />}>
+              {selectedPage.map((page, index) => (
                 <PageScoreTable
                   key={index}
                   name={page.name}
@@ -172,7 +171,8 @@ export default function Home() {
                 />
               ))}
             </Suspense>
-          </PageSelect> */}
+          )}
+          </PageSelect>
 
           <h3 className='text-2xl font-bold mx-auto w-full mt-8'>線グラフ</h3>
           <div className='w-[60%] mx-auto'>
