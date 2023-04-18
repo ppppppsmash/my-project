@@ -16,6 +16,7 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2'
 import { faker } from '@faker-js/faker'
+import PageSelect from './components/PageSelect'
 
 ChartJS.register(
   CategoryScale,
@@ -37,6 +38,8 @@ export default function Home() {
   const [isError, setIsError] = useState<boolean>(false)
   
   const [pageList, setPageList] = useState<pageList[]>([])
+  const [selectedPages, setSelectedPages] = useState<string[]>([])
+
 
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
@@ -50,6 +53,7 @@ export default function Home() {
       const data =await res.json()
       const score = data.score
       setPageList((pageList) => [...pageList, {name, score, url, date: new Date().toLocaleString()}])
+      setSelectedPages((page) => [...page, name])
       setName('')
       setUrl('')
     } else {
@@ -78,6 +82,10 @@ export default function Home() {
     }
   }
 
+  const handlePageSelect = (event: any) => {
+    setSelectedPages(event.target.value)
+  }
+
   const handleNameChange = (event: { target: { value: string } }) => {
     setName(event.target.value);
   }
@@ -94,6 +102,10 @@ export default function Home() {
     }
   }
 
+  const isSelected = (pageName: any) => {
+    return selectedPages.includes(pageName)
+
+  }
 
   const options = {
     responsive: true,
@@ -126,7 +138,6 @@ export default function Home() {
   }
 
   return (
-
     <div className='h-screen md:flex font-primary'>
       <div className='md:w-1/3 justify-center p-8 items-center bg-white'>
         <p className='text-lg mb-3 font-bold font-primary'>追加で計測をしたいサイトを登録してください</p>
@@ -147,18 +158,21 @@ export default function Home() {
       <div className='md:w-2/3 justify-center py-10 items-center bg-gray-100'>
         <div className='w-[90%] mx-auto'>
           <p className='text-lg text-center font-bold m-5'>計測対象ページ</p>
-          <Suspense fallback={<Loading />}>
-            {pageList.map((page, index) => (
-              <PageScoreTable
-                key={index}
-                name={page.name}
-                url={page.url}
-                score={page.score}
-                date={page.date}
-                onClick={() => getScoreAgain(page.url)}
-              />
-            ))}
-          </Suspense>
+          <PageSelect pageList={pageList} handlePageSelect={handlePageSelect} onClick={() => getScoreAgain(pageList[0].url)}/>
+            {/* <Suspense fallback={<Loading />}>
+              {pageList.map((page, index) => (
+                
+                <PageScoreTable
+                  key={index}
+                  name={page.name}
+                  url={page.url}
+                  score={page.score}
+                  date={page.date}
+                  onClick={() => getScoreAgain(page.url)}
+                />
+              ))}
+            </Suspense>
+          </PageSelect> */}
 
           <h3 className='text-2xl font-bold mx-auto w-full mt-8'>線グラフ</h3>
           <div className='w-[60%] mx-auto'>
