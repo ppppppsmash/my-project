@@ -27,3 +27,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 http://localhost:3000
 http://localhost:3000/api/pagespeedInsights
+
+### コンテナをビルド
+```
+docker build -t pagespeed_insights_app .
+```
+
+### コンテナを起動
+```
+docker run -p 3000:3000 pagespeed_insights_app
+```
