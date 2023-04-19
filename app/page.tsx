@@ -2,6 +2,7 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import PageScoreTable from '@/app/components/PageScoreTable'
+import PageScoreTableAll from '@/app/components/PageScoreTableAll'
 import { SetStateAction, useState } from 'react'
 import { Suspense } from 'react'
 import Loading from '@/app/components/Loading'
@@ -44,7 +45,7 @@ export default function Home() {
   const [url, setUrl] = useState('')
 
   const getScore = async () => {
-    const res = await fetch(`http://localhost:3000/api/pagespeedInsights?url=${url}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pagespeedInsights?url=${url}`, {
       cache: "no-store",
     })
     console.log(res)
@@ -52,7 +53,6 @@ export default function Home() {
       const data =await res.json()
       const score = data.score
       setPageList((pageList) => [...pageList, {name, score, url, date: new Date().toLocaleString()}])
-      // setSelectedPages((page) => [...page, name])
       setName('')
       setUrl('')
     } else {
@@ -61,7 +61,7 @@ export default function Home() {
   }
 
   const getScoreAgain = async (existedUrl: string) => {
-    const res = await fetch(`http://localhost:3000/api/pagespeedInsights?url=${existedUrl}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pagespeedInsights?url=${existedUrl}`, {
       cache: "no-store",
     })
     console.log(res)
@@ -86,8 +86,17 @@ export default function Home() {
     const selected = pageList.find(page => page.name === pageName)
     console.log(selected)
     if (selected) {
+      console.log(selectedPage)
       setSelectedPage([selected])
     }
+    // if (pageName === 'All') {
+    //   setSelectedPage(pageList)
+    // } else {
+    //   const selected = pageList.find(page => page.name === pageName)
+    //   if (selected) {
+    //     setSelectedPage([selected])
+    //   }
+    // }
   }
 
   const handleNameChange = (event: { target: { value: string } }) => {
@@ -118,6 +127,8 @@ export default function Home() {
       },
     },
   }
+
+  console.log(process.env.NEXT_PUBLIC_URL)
 
   const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
   const graphData = {
@@ -171,7 +182,10 @@ export default function Home() {
                 />
               ))}
             </Suspense>
-          )}
+            )}
+            <PageScoreTableAll
+              pageList={pageList}  
+              />
           </PageSelect>
 
           <h3 className='text-2xl font-bold mx-auto w-full mt-8'>線グラフ</h3>

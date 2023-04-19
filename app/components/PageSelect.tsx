@@ -22,6 +22,7 @@ const PageSelect: FC<Props> = (props): JSX.Element => {
           onChange={props.handlePageSelect}
       >
         <option value=''>ページを選択してください.</option>
+        <option value='All'>全サイト</option>
         {props.selectedPages.map((selectedPage, index)=> (
           <option key={index} value={selectedPage.name}>{selectedPage.name}</option>
         ))}
