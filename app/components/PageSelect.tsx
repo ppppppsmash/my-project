@@ -2,7 +2,12 @@ import { FC, ReactNode } from 'react'
 
 interface Props {
   children: ReactNode
-  selectedPages: string[]
+  selectedPages: {
+    name: string,
+    url: string,
+    score: number,
+    date: string,
+  }[]
   handlePageSelect: (e: any) => void
 }
 
@@ -16,8 +21,10 @@ const PageSelect: FC<Props> = (props): JSX.Element => {
           focus:ring-blue-500 focus:border-blue-500'
           onChange={props.handlePageSelect}
       >
+        <option value=''>ページを選択してください.</option>
+        <option value='All'>全サイト</option>
         {props.selectedPages.map((selectedPage, index)=> (
-          <option key={index} value={selectedPage}>{selectedPage}</option>
+          <option key={index} value={selectedPage.name}>{selectedPage.name}</option>
         ))}
         
       </select>

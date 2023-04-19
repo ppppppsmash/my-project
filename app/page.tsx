@@ -2,6 +2,7 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import PageScoreTable from '@/app/components/PageScoreTable'
+import PageScoreTableAll from '@/app/components/PageScoreTableAll'
 import { SetStateAction, useState } from 'react'
 import { Suspense } from 'react'
 import Loading from '@/app/components/Loading'
@@ -16,6 +17,7 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2'
 import { faker } from '@faker-js/faker'
+import PageSelect from './components/PageSelect'
 
 ChartJS.register(
   CategoryScale,
@@ -37,12 +39,13 @@ export default function Home() {
   const [isError, setIsError] = useState<boolean>(false)
   
   const [pageList, setPageList] = useState<pageList[]>([])
+  const [selectedPage, setSelectedPage] = useState<pageList[]>([])
 
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
 
   const getScore = async () => {
-    const res = await fetch(`http://localhost:3000/api/pagespeedInsights?url=${url}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pagespeedInsights?url=${url}`, {
       cache: "no-store",
     })
     console.log(res)
@@ -58,7 +61,7 @@ export default function Home() {
   }
 
   const getScoreAgain = async (existedUrl: string) => {
-    const res = await fetch(`http://localhost:3000/api/pagespeedInsights?url=${existedUrl}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pagespeedInsights?url=${existedUrl}`, {
       cache: "no-store",
     })
     console.log(res)
@@ -78,6 +81,24 @@ export default function Home() {
     }
   }
 
+  const handlePageSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const pageName = e.target.value
+    const selected = pageList.find(page => page.name === pageName)
+    console.log(selected)
+    if (selected) {
+      console.log(selectedPage)
+      setSelectedPage([selected])
+    }
+    // if (pageName === 'All') {
+    //   setSelectedPage(pageList)
+    // } else {
+    //   const selected = pageList.find(page => page.name === pageName)
+    //   if (selected) {
+    //     setSelectedPage([selected])
+    //   }
+    // }
+  }
+
   const handleNameChange = (event: { target: { value: string } }) => {
     setName(event.target.value);
   }
@@ -94,7 +115,6 @@ export default function Home() {
     }
   }
 
-
   const options = {
     responsive: true,
     plugins: {
@@ -107,6 +127,8 @@ export default function Home() {
       },
     },
   }
+
+  console.log(process.env.NEXT_PUBLIC_URL)
 
   const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
   const graphData = {
@@ -126,7 +148,6 @@ export default function Home() {
   }
 
   return (
-
     <div className='h-screen md:flex font-primary'>
       <div className='md:w-1/3 justify-center p-8 items-center bg-white'>
         <p className='text-lg mb-3 font-bold font-primary'>追加で計測をしたいサイトを登録してください</p>
@@ -147,18 +168,25 @@ export default function Home() {
       <div className='md:w-2/3 justify-center py-10 items-center bg-gray-100'>
         <div className='w-[90%] mx-auto'>
           <p className='text-lg text-center font-bold m-5'>計測対象ページ</p>
-          <Suspense fallback={<Loading />}>
-            {pageList.map((page, index) => (
-              <PageScoreTable
-                key={index}
-                name={page.name}
-                url={page.url}
-                score={page.score}
-                date={page.date}
-                onClick={() => getScoreAgain(page.url)}
+          <PageSelect selectedPages={pageList} handlePageSelect={handlePageSelect}>
+          {selectedPage && (
+            <Suspense fallback={<Loading />}>
+              {selectedPage.map((page, index) => (
+                <PageScoreTable
+                  key={index}
+                  name={page.name}
+                  url={page.url}
+                  score={page.score}
+                  date={page.date}
+                  onClick={() => getScoreAgain(page.url)}
+                />
+              ))}
+            </Suspense>
+            )}
+            <PageScoreTableAll
+              pageList={pageList}  
               />
-            ))}
-          </Suspense>
+          </PageSelect>
 
           <h3 className='text-2xl font-bold mx-auto w-full mt-8'>線グラフ</h3>
           <div className='w-[60%] mx-auto'>
