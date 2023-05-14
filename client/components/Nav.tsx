@@ -1,13 +1,28 @@
 import { FC } from 'react'
+import Link from 'next/link'
+import { IconType } from 'react-icons'
 
-interface Props {}
+interface Props {
+  navItems: {
+    label: string
+    href: string
+    icon: IconType
+  }
+}
 
-const AdminNav: FC<Props> = (props): JSX.Element => {
+const Nav: FC<Props> = ({ navItem }): JSX.Element => {
   return (
     <nav>
-      Nav
+      <div>
+        <Link href='/'>
+          logo
+        </Link>
+
+        <div>
+        </div>
+      </div>
     </nav>
   )
 }
 
-export default AdminNav
+export default Nav
