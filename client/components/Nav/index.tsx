@@ -7,10 +7,10 @@ interface Props {
     label: string
     href: string
     icon: IconType
-  }
+  }[]
 }
 
-const Nav: FC<Props> = ({ navItem }): JSX.Element => {
+const Nav: FC<Props> = ({navItems}): JSX.Element => {
   return (
     <nav>
       <div>
@@ -19,6 +19,14 @@ const Nav: FC<Props> = ({ navItem }): JSX.Element => {
         </Link>
 
         <div>
+          {navItems.map((item) => (
+            <Link key={item.href} href={item.href}>
+              <div className='flex items-center'>
+                <item.icon size={24} />
+                {item.label}
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </nav>
