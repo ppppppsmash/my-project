@@ -13,7 +13,11 @@ module.exports = {
         highlight: {
           light: '#FFF',
           dark: '#696969',
-        }
+        },
+        primary: {
+          dark: '#333',
+        },
+        action: '#3B82F6',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
