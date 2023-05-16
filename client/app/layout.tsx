@@ -18,7 +18,7 @@ export default function RootLayout({
       <body>
         <div className='flex'>
           <Nav navItems={navItems} />
-          <div className='flex-1 p-4'>
+          <div className='flex-1 p-4 bg-primary'>
             {children}
           </div>
         </div>
