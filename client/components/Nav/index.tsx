@@ -1,5 +1,6 @@
 import { FC } from 'react'
 import Link from 'next/link'
+// https://react-icons.github.io/react-icons/icons?name=ai
 import Logo from '@/components/Logo'
 import { IconType } from 'react-icons'
 
@@ -13,13 +14,13 @@ interface Props {
 
 const Nav: FC<Props> = ({navItems}): JSX.Element => {
   return (
-    <nav className='h-screen w-60 shadow-sm flex flex-col justify-between
-    transition-[width] bg-secondary'>
+    <nav className='h-screen overflow-hidden w-60 top-0 sticky shadow-sm flex flex-col
+    justify-between transition-[width] bg-secondary'>
       <div>
         <Link href='/'>
           <div className='flex items-center space-x-2 p-3 mb-10'>
-            <Logo className='fill-highlight-light' />
-            <span>Page Speed Insights</span>
+            <Logo className='fill-highlight-light w-5 h-5' />
+            <span className='text-xl font-semibold leading-none'>Page Speed Insights</span>
           </div>
         </Link>
 
@@ -27,9 +28,9 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
           {navItems.map((item) => (
             <Link key={item.href} href={item.href}>
               <div className='flex items-center text-xl hover:scale-[0.9]
-                transition'>
+                transition p-3'>
                 <item.icon size={24} />
-                {item.label}
+                <span className='ml-2 leading-none'>{item.label}</span>
               </div>
             </Link>
           ))}
