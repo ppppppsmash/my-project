@@ -1,12 +1,16 @@
-import Image from 'next/image'
+import { FC } from 'react'
 import { Inter } from 'next/font/google'
+
+interface Props {}
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+const Home: FC<Props> = (props): JSX.Element => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col items-center justify-between">
       <div>テスト</div>
     </main>
   )
 }
+
+export default Home
