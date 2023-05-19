@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef, useEffect, FC } from 'react'
+import { useState, useRef, useEffect, useRouter, FC } from 'react'
 import Link from 'next/link'
 // https://react-icons.github.io/react-icons/icons?name=ai
 import Logo from '@/components/Logo'
@@ -45,6 +45,17 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
     localStorage.setItem(NAV_VISIBILITY, JSON.stringify(newState))
   }
 
+  useEffect(() => {
+    const navState = localStorage.getItem(NAV_VISIBILITY)
+    if(navState !== null) {
+      const newState = JSON.parse(navState)
+      setVisible(newState)
+      toggleNav(!newState)
+    } else {
+      setVisible(true)
+    }
+  }, [])
+
   return (
     <nav ref={navRef} className='h-screen overflow-hidden w-60 top-0 sticky shadow-sm flex flex-col
     justify-between transition-[width] bg-secondary text-white'>
@@ -52,7 +63,10 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
         <Link href='/'>
           <div className='flex items-top space-x-2 p-3 mb-10'>
             <Logo className='fill-highlight-light w-5 h-5' />
-            <span className='font-semibold leading-none'>Page Speed Insights Measurement</span>
+            {/* <span className='font-semibold leading-none'>
+              Page Speed Insights Measurement
+            </span> */}
+            {visible && <span className='font-semibold leading-none'>Page Speed Insights Measurement</span>}
           </div>
         </Link>
 
@@ -62,7 +76,7 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
               <div className='flex items-center text-xl hover:scale-[0.9]
                 transition p-3'>
                 <item.icon size={24} />
-                <span className='ml-2 leading-none active:'>{item.label}</span>
+                {visible && <span className='ml-2 leading-none'>{item.label}</span>}
               </div>
             </Link>
           ))}
