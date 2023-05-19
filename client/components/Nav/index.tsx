@@ -1,7 +1,7 @@
 'use client'
 import { useState, useRef, useEffect, FC } from 'react'
-import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { useRouter, usePathname } from 'next/navigation'
 // https://react-icons.github.io/react-icons/icons?name=ai
 import Logo from '@/components/Logo'
 import { IconType } from 'react-icons'
@@ -22,6 +22,8 @@ const NAV_VISIBILITY = 'nav-visibility'
 const Nav: FC<Props> = ({navItems}): JSX.Element => {
   const navRef = useRef<HTMLElement>(null)
   const [visible, setVisible] = useState(false)
+
+  const pathname = usePathname()
 
   const toggleNav = (visibility: boolean) => {
     const { current: currentNav } = navRef
@@ -64,9 +66,6 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
         <Link href='/'>
           <div className='flex items-top space-x-2 p-3 mb-10'>
             <Logo className='fill-highlight-light w-5 h-5' />
-            {/* <span className='font-semibold leading-none'>
-              Page Speed Insights Measurement
-            </span> */}
             {visible && <span className='font-semibold leading-none'>Page Speed Insights Measurement</span>}
           </div>
         </Link>
@@ -74,8 +73,9 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
         <div className='space-y-6'>
           {navItems.map((item) => (
             <Link key={item.href} href={item.href}>
-              <div className='flex items-center text-xl hover:scale-[0.9]
-                transition p-3'>
+              <div className={`flex items-center text-xl hover:scale-[0.9]
+                transition p-3 ${pathname === item.href && 'bg-black'}`
+              }>
                 <item.icon size={24} />
                 {visible && <span className='ml-2 leading-none'>{item.label}</span>}
               </div>
