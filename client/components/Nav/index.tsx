@@ -1,5 +1,6 @@
 'use client'
-import { useState, useRef, useEffect, useRouter, FC } from 'react'
+import { useState, useRef, useEffect, FC } from 'react'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 // https://react-icons.github.io/react-icons/icons?name=ai
 import Logo from '@/components/Logo'
