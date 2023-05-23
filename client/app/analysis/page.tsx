@@ -1,8 +1,10 @@
-import { FC } from 'react'
+import { NextPage } from 'next'
+import AnalysisInput from '@/components/Input/AnalysisInput'
+import AnalysisButton from '@/components/Button/AnalysisButton'
 
 interface Props {}
 
-const page: FC<Props> = (props): JSX.Element => {
+const page: NextPage<Props> = (props): JSX.Element => {
   return (
     <div className='w-[66%] mx-auto'>
       <div className='text-center mb-2'>
@@ -10,20 +12,12 @@ const page: FC<Props> = (props): JSX.Element => {
       </div>
       <div className='flex items-center justify-center space-x-3'>
         <div className='w-full'>
-          <input id='url' name='url' type='text'
-            className='w-full border-solid border-2 border-gray-300
-            focus:outline-none focus:border-gray-500 rounded p-2'
-            placeholder='https://example.com'
-          />
+          <AnalysisInput />
         </div>
         <div className='w-2/12'>
-          <button
-            className='w-full bg-gray-900 hover:bg-gray-700 text-white
-            font-bold py-2 px-4 rounded active:bg-gray-500 active:scale-[1]
-            duration-150 focus:shadow-outline ease-in-out hover:scale-[0.95]'
-          >
-            分析
-          </button>
+          <AnalysisButton
+            label='分析'
+          />
         </div>
       </div>
     </div>
