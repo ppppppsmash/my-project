@@ -5,5 +5,5 @@ export const navItems = [
   { href: '/analysis', icon: AiOutlineDashboard, label: 'URL分析'},
   { href: '/test1', icon: AiOutlineDashboard, label: 'テスト'},
   { href: '/test2', icon: AiOutlineDashboard, label: 'テスト'},
-  { href: '/test3', icon: AiOutlineDashboard, label: 'テスト'},
+  { href: '/apitest', icon: AiOutlineDashboard, label: 'API叩き'},
 ]
