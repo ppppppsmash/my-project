@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 
 const API_URL = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed'
-const API_KEY = 'process.env.NEXT_PUBLIC_API_KEY'
+const API_KEY = process.env.NEXT_PUBLIC_API_KEY
 
 export async function GET(request: Request, response: Response) {
   const { searchParams } = new URL(request.url)
