@@ -9,7 +9,7 @@ interface Props {}
 
 const page: NextPage<Props> = (props): JSX.Element => {
   const [url, setUrl] = useState('')
-  const [score, setScore] = useState<ApiResultType>({})
+  const [score, setScore] = useState<ApiResultType>()
 
   const getChangeUrl = ({target}: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(target.value)
@@ -35,7 +35,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
       <div className='flex items-center justify-center space-x-3'>
         <div className='w-full'>
           <AnalysisInput
-            handleUrlChange={getChangeUrl}
+            placeholder='https://example.com'
+            handleChange={getChangeUrl}
           />
         </div>
         <div className='w-2/12'>

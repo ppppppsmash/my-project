@@ -1,7 +1,7 @@
 export interface ApiResultType {
-  name: string
-  url: string
-  date: string
+  name?: string
+  url?: string
+  date?: string
   score: string
   lcp?: string
   fcp?: string
