@@ -11,7 +11,9 @@ interface Props {
 
 const Page: NextPage<Props> = (props): JSX.Element => {
   const [url, setUrl] = useState('')
-  const [results, setResults] = useState({score: '', fcp: '', lcp: ''})
+  const [results, setResults] = useState<
+  ApiResultType
+  >({})
 
   const getChangeUrl = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(target.value)
@@ -21,20 +23,21 @@ const Page: NextPage<Props> = (props): JSX.Element => {
       const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}`, {
         cache: 'no-store'
       })
-  
+
       if (res.ok) {
         const { result } = await res.json()
         const { lighthouseResult } = result
-  
+
         const { categories } = lighthouseResult
         const { performance } = categories
         const score = String(performance.score * 100) // スコア
-  
+
         const { audits } = lighthouseResult // audits
-        const fcp = audits['first-contentful-paint']
         const lcp = audits['largest-contentful-paint']
-        const tbt = audits['total-blocking-time']
+        const fid = audits['first-input-delay']
         const cls = audits['cumulative-layout-shift']
+        const fcp = audits['first-contentful-paint']
+        const tbt = audits['total-blocking-time']
         const si = audits['speed-index']
         const fci = audits['first-cpu-idle']
         const eil = audits['estimated-input-latency']
@@ -68,9 +71,11 @@ const Page: NextPage<Props> = (props): JSX.Element => {
       </div>
 
       <div>
-        {results.score}
-        {results.fcp}
-        {results.lcp}
+        <p>
+          {results.score}
+          {results.fcp}
+          {results.lcp}
+        </p>
       </div>
 
 
