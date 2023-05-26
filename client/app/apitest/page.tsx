@@ -9,30 +9,49 @@ interface Props {
   initialData?: ApiResultType
 }
 
-const Page: NextPage<Props> = ({ initialData }: Props): JSX.Element => {
+const Page: NextPage<Props> = (props): JSX.Element => {
   const [url, setUrl] = useState('')
-  const [results, setResults] = useState<ApiResultType | undefined>(initialData)
+  const [results, setResults] = useState({score: '', fcp: '', lcp: ''})
 
   const getChangeUrl = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(target.value)
   }
 
-  const getUrl = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}`, {
-      cache: 'no-store'
-    })
+    const getUrl = async () => {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}`, {
+        cache: 'no-store'
+      })
+  
+      if (res.ok) {
+        const { result } = await res.json()
+        const { lighthouseResult } = result
+  
+        const { categories } = lighthouseResult
+        const { performance } = categories
+        const score = String(performance.score * 100) // スコア
+  
+        const { audits } = lighthouseResult // audits
+        const fcp = audits['first-contentful-paint']
+        const lcp = audits['largest-contentful-paint']
+        const tbt = audits['total-blocking-time']
+        const cls = audits['cumulative-layout-shift']
+        const si = audits['speed-index']
+        const fci = audits['first-cpu-idle']
+        const eil = audits['estimated-input-latency']
+        const fmp = audits['first-meaningful-paint']
+        const tti = audits['interactive']
 
-    if (res.ok) {
-      const data = await res.json()
-      const lighthouseResult = data.result.lighthouseResult;
-      const categories = data.result.lighthouseResult.categories;
-      const loadingExperience = data.result.loadingExperience;
-      const analysisUTCTimestamp = data.result.analysisUTCTimestamp;
-      const audits = data.result.lighthouseResult.audits;
+        const psiData = {
+          score,
+          fcp: fcp.displayValue,
+          lcp: lcp.numericValue,
+        }
 
-      console.log(lighthouseResult, loadingExperience,analysisUTCTimestamp, audits)
+        setResults((prevState) => ({
+          ...prevState, ...psiData
+        }))
+      }
     }
-  }
 
   return (
     <div className='w-[66%] mx-auto'>
@@ -46,6 +65,12 @@ const Page: NextPage<Props> = ({ initialData }: Props): JSX.Element => {
         <div className='w-2/12'>
           <AnalysisButton label='分析' handleScore={getUrl} />
         </div>
+      </div>
+
+      <div>
+        {results.score}
+        {results.fcp}
+        {results.lcp}
       </div>
 
 

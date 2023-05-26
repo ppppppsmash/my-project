@@ -20,8 +20,9 @@ const page: NextPage<Props> = (props): JSX.Element => {
 
     if (res.ok) {
       const data = await res.json()
-      const score = data.score
-      setScore(score)
+      console.log(data.result)
+      const score = data.result.lighthouseResult.categories.performance.score * 100
+      console.log(score)
     }
   }
 
