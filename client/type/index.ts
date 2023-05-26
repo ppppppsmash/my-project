@@ -1,5 +1,15 @@
 export interface ApiResultType {
-  score?: string
+  name: string
+  url: string
+  date: string
+  score: string
   lcp?: string
   fcp?: string
+}
+
+export interface pageList {
+  name: string
+  url: string
+  score: string
+  date: string
 }

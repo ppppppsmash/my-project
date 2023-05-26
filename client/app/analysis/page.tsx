@@ -3,12 +3,13 @@ import { NextPage } from 'next'
 import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
 import { useState } from 'react'
+import { ApiResultType } from '@/type'
 
 interface Props {}
 
 const page: NextPage<Props> = (props): JSX.Element => {
   const [url, setUrl] = useState('')
-  const [score, setScore] = useState('')
+  const [score, setScore] = useState<ApiResultType>({})
 
   const getChangeUrl = ({target}: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(target.value)
@@ -46,7 +47,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
       </div>
 
       <div>
-        {score}
+
       </div>
     </div>
   )

@@ -19,42 +19,42 @@ const Page: NextPage<Props> = (props): JSX.Element => {
     setUrl(target.value)
   }
 
-    const getUrl = async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}`, {
-        cache: 'no-store'
-      })
+  const getUrl = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}`, {
+      cache: 'no-store'
+    })
 
-      if (res.ok) {
-        const { result } = await res.json()
-        const { lighthouseResult } = result
+    if (res.ok) {
+      const { result } = await res.json()
+      const { lighthouseResult } = result
 
-        const { categories } = lighthouseResult
-        const { performance } = categories
-        const score = String(performance.score * 100) // スコア
+      const { categories } = lighthouseResult
+      const { performance } = categories
+      const score = String(performance.score * 100) // スコア
 
-        const { audits } = lighthouseResult // audits
-        const lcp = audits['largest-contentful-paint']
-        const fid = audits['first-input-delay']
-        const cls = audits['cumulative-layout-shift']
-        const fcp = audits['first-contentful-paint']
-        const tbt = audits['total-blocking-time']
-        const si = audits['speed-index']
-        const fci = audits['first-cpu-idle']
-        const eil = audits['estimated-input-latency']
-        const fmp = audits['first-meaningful-paint']
-        const tti = audits['interactive']
+      const { audits } = lighthouseResult // audits
+      const lcp = audits['largest-contentful-paint']
+      const fid = audits['first-input-delay']
+      const cls = audits['cumulative-layout-shift']
+      const fcp = audits['first-contentful-paint']
+      const tbt = audits['total-blocking-time']
+      const si = audits['speed-index']
+      const fci = audits['first-cpu-idle']
+      const eil = audits['estimated-input-latency']
+      const fmp = audits['first-meaningful-paint']
+      const tti = audits['interactive']
 
-        const psiData = {
-          score,
-          fcp: fcp.displayValue,
-          lcp: lcp.numericValue,
-        }
-
-        setResults((prevState) => ({
-          ...prevState, ...psiData
-        }))
+      const psiData = {
+        score,
+        fcp: fcp.displayValue,
+        lcp: lcp.numericValue,
       }
+
+      setResults((prevState) => ({
+        ...prevState, ...psiData
+      }))
     }
+  }
 
   return (
     <div className='w-[66%] mx-auto'>
@@ -63,7 +63,9 @@ const Page: NextPage<Props> = (props): JSX.Element => {
       </div>
       <div className='flex items-center justify-center space-x-3'>
         <div className='w-full'>
-          <AnalysisInput handleUrlChange={getChangeUrl} />
+          <AnalysisInput
+            placeholder='https://example.com'
+            handleChange={getChangeUrl} />
         </div>
         <div className='w-2/12'>
           <AnalysisButton label='分析' handleScore={getUrl} />
