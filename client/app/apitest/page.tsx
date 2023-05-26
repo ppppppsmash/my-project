@@ -9,9 +9,11 @@ interface Props {
   initialData?: ApiResultType
 }
 
-const Page: NextPage<Props> = ({ initialData }: Props): JSX.Element => {
+const Page: NextPage<Props> = (props): JSX.Element => {
   const [url, setUrl] = useState('')
-  const [results, setResults] = useState<ApiResultType | undefined>(initialData)
+  const [results, setResults] = useState<
+  ApiResultType
+  >({})
 
   const getChangeUrl = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(target.value)
@@ -23,14 +25,34 @@ const Page: NextPage<Props> = ({ initialData }: Props): JSX.Element => {
     })
 
     if (res.ok) {
-      const data = await res.json()
-      const lighthouseResult = data.result.lighthouseResult;
-      const categories = data.result.lighthouseResult.categories;
-      const loadingExperience = data.result.loadingExperience;
-      const analysisUTCTimestamp = data.result.analysisUTCTimestamp;
-      const audits = data.result.lighthouseResult.audits;
+      const { result } = await res.json()
+      const { lighthouseResult } = result
 
-      console.log(lighthouseResult, loadingExperience,analysisUTCTimestamp, audits)
+      const { categories } = lighthouseResult
+      const { performance } = categories
+      const score = String(performance.score * 100) // スコア
+
+      const { audits } = lighthouseResult // audits
+      const lcp = audits['largest-contentful-paint']
+      const fid = audits['first-input-delay']
+      const cls = audits['cumulative-layout-shift']
+      const fcp = audits['first-contentful-paint']
+      const tbt = audits['total-blocking-time']
+      const si = audits['speed-index']
+      const fci = audits['first-cpu-idle']
+      const eil = audits['estimated-input-latency']
+      const fmp = audits['first-meaningful-paint']
+      const tti = audits['interactive']
+
+      const psiData = {
+        score,
+        fcp: fcp.displayValue,
+        lcp: lcp.numericValue,
+      }
+
+      setResults((prevState) => ({
+        ...prevState, ...psiData
+      }))
     }
   }
 
@@ -41,11 +63,21 @@ const Page: NextPage<Props> = ({ initialData }: Props): JSX.Element => {
       </div>
       <div className='flex items-center justify-center space-x-3'>
         <div className='w-full'>
-          <AnalysisInput handleUrlChange={getChangeUrl} />
+          <AnalysisInput
+            placeholder='https://example.com'
+            handleChange={getChangeUrl} />
         </div>
         <div className='w-2/12'>
           <AnalysisButton label='分析' handleScore={getUrl} />
         </div>
+      </div>
+
+      <div>
+        <p>
+          {results.score}
+          {results.fcp}
+          {results.lcp}
+        </p>
       </div>
 
 

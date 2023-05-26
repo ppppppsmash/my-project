@@ -3,12 +3,13 @@ import { NextPage } from 'next'
 import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
 import { useState } from 'react'
+import { ApiResultType } from '@/type'
 
 interface Props {}
 
 const page: NextPage<Props> = (props): JSX.Element => {
   const [url, setUrl] = useState('')
-  const [score, setScore] = useState('')
+  const [score, setScore] = useState<ApiResultType>()
 
   const getChangeUrl = ({target}: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(target.value)
@@ -20,8 +21,9 @@ const page: NextPage<Props> = (props): JSX.Element => {
 
     if (res.ok) {
       const data = await res.json()
-      const score = data.score
-      setScore(score)
+      console.log(data.result)
+      const score = data.result.lighthouseResult.categories.performance.score * 100
+      console.log(score)
     }
   }
 
@@ -33,7 +35,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
       <div className='flex items-center justify-center space-x-3'>
         <div className='w-full'>
           <AnalysisInput
-            handleUrlChange={getChangeUrl}
+            placeholder='https://example.com'
+            handleChange={getChangeUrl}
           />
         </div>
         <div className='w-2/12'>
@@ -45,7 +48,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
       </div>
 
       <div>
-        {score}
+
       </div>
     </div>
   )
