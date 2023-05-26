@@ -50,3 +50,7 @@ https://console.firebase.google.com/project/page-speed-measurement/database/page
 ↑保存機能を考えるならFirestore Databaseを利用したほうが良さそう
 - Vacelのcron job利用したらバックエンドに頼らずとも自動取得できるかも
 - スコアの文字色などを実際のPSIに合わせて色分けする
+
+
+### pagespeed insights 参考URL:
+- https://developers.google.com/speed/docs/insights/v5/get-started?hl=ja
