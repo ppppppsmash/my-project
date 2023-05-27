@@ -4,13 +4,16 @@ import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
 import AnalysisTable from '@/components/Table/AnalysisTable'
 import { useState } from 'react'
-import { ApiResultType, pageList } from '@/type'
+import { ApiResultType } from '@/type'
+import Loading from '@/components/Loading'
 
 interface Props extends ApiResultType {}
 
 const page: NextPage<Props> = (props): JSX.Element => {
   const [urlName, setUrlName] = useState('')
   const [url, setUrl] = useState('')
+
+  const [loading, setLoading] = useState(false)
 
   const [results, setResults] = useState<Props>()
 
@@ -24,7 +27,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
     setUrl(target.value)
   }
 
-  const getScore = async() => {
+  const getPsiInfo = async() => {
+    setLoading(true)
     const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}`, {
       cache: 'no-store'
     })
@@ -61,6 +65,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
       setResults((prevState) => ({
         ...prevState, ...psiData
       }))
+
+      setLoading(false)
     }
   }
 
@@ -108,11 +114,12 @@ const page: NextPage<Props> = (props): JSX.Element => {
           <div className='w-2/12'>
             <AnalysisButton
               label='登録'
-              handleScore={getScore}
+              handleScore={getPsiInfo}
             />
           </div>
         </div>
       </section>
+      {loading && <Loading />}
       { results &&
         <section>
         <div>

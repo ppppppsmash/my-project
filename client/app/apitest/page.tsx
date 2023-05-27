@@ -9,11 +9,9 @@ interface Props {
   initialData?: ApiResultType
 }
 
-const Page: NextPage<Props> = (props): JSX.Element => {
+const Page: NextPage<ApiResultType> = (props): JSX.Element => {
   const [url, setUrl] = useState('')
-  const [results, setResults] = useState<
-  ApiResultType
-  >({})
+  const [results, setResults] = useState<ApiResultType>()
 
   const getChangeUrl = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(target.value)
@@ -74,9 +72,7 @@ const Page: NextPage<Props> = (props): JSX.Element => {
 
       <div>
         <p>
-          {results.score}
-          {results.fcp}
-          {results.lcp}
+          {results?.score}
         </p>
       </div>
 
