@@ -86,7 +86,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
 
   return (
     <div className='w-[80%] mx-auto'>
-      <section className='mb-3'>
+      <section className='mb-5'>
         <div className='text-center mb-2'>
           <h2 className='text-2xl font-semibold'></h2>
         </div>

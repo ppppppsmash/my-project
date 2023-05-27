@@ -7,17 +7,18 @@ interface Props extends ApiResultType {
 
 const AnalysisTable: FC<Props> = ({name, url, score, date, getScoreAgain}): JSX.Element => {
   return (
-    <table className='rounded-t-lg my-2 w-full mx-auto bg-gray-200 text-gray-800'>
-      <thead>
-        <tr className='text-left border-b-2 border-gray-300'>
+    <table className='rounded my-2 w-full mx-auto text-white border-b-2 border-gray-300'>
+      <thead className='bg-black'>
+        <tr className='text-left '>
           <th className='px-4 py-3'>サイト名</th>
           <th className='px-4 py-3'>URL</th>
           <th className='px-4 py-3'>スコア</th>
           <th className='px-4 py-3'>取得日時</th>
+          <th className='px-4 py-3'></th>
         </tr>
       </thead>
-      <tbody>
-        <tr className='bg-gray-100 border-b border-gray-200' key={name}>
+      <tbody className='text-gray-900'>
+        <tr className='border-b' key={name}>
           <td className='px-4 py-3 font-bold'>{name}</td>
           <td className='px-4 py-3'>{url}</td>
           <td className='px-4 py-3'>{score}</td>
