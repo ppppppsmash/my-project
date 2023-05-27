@@ -7,16 +7,15 @@ import { useState } from 'react'
 import { ApiResultType } from '@/type'
 import Loading from '@/components/Loading'
 import AnalysisTableAll from '@/components/Table/AnalysisTableAll'
+import AnalysisTab from '@/components/Tab/AnalysisTab'
 
 interface Props extends ApiResultType {}
-
-// interface ApiResultAllType extends ApiResultType {
-//   pageList: ApiResultType[]
-// }
 
 const page: NextPage<Props> = (props): JSX.Element => {
   const [urlName, setUrlName] = useState('')
   const [url, setUrl] = useState('')
+
+  const [visible, setVisible] = useState(false)
 
   const [loading, setLoading] = useState(false)
 
@@ -73,6 +72,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
 
       setPageList((prevState) => [...prevState, psiData])
 
+      setVisible(true)
       setLoading(false)
     }
   }
@@ -92,9 +92,23 @@ const page: NextPage<Props> = (props): JSX.Element => {
       const score = String(performance.score * 100)
       const date = new Date().toLocaleString()
 
+      const psiData = {
+        date,
+        score
+      }
+
       setResults((prevState) => ({
         ...prevState, date, score
       }))
+
+      setPageList(prevState =>
+        prevState.map(item => {
+          if (item.url === url) {
+            return { ...item, ...psiData }
+          }
+          return item
+        })
+      )
 
       setLoading(false)
     }
@@ -129,6 +143,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
           </div>
         </div>
       </section>
+
+      <AnalysisTab>
       { loading && <Loading /> }
       { results &&
         <section>
@@ -144,13 +160,15 @@ const page: NextPage<Props> = (props): JSX.Element => {
       </section>
       }
 
-      { pageList &&
+      { visible &&
         <section>
           <AnalysisTableAll
             pageList={pageList}
+            getScoreAgain={getScoreAgain}
           />
         </section>
       }
+      </AnalysisTab>
     </div>
   )
 }
