@@ -6,8 +6,13 @@ import AnalysisTable from '@/components/Table/AnalysisTable'
 import { useState } from 'react'
 import { ApiResultType } from '@/type'
 import Loading from '@/components/Loading'
+import AnalysisTableAll from '@/components/Table/AnalysisTableAll'
 
 interface Props extends ApiResultType {}
+
+// interface ApiResultAllType extends ApiResultType {
+//   pageList: ApiResultType[]
+// }
 
 const page: NextPage<Props> = (props): JSX.Element => {
   const [urlName, setUrlName] = useState('')
@@ -17,7 +22,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
 
   const [results, setResults] = useState<Props>()
 
-  const [scoreUpdate, setScoreUpdate] = useState('')
+  const [pageList, setPageList] = useState<Props[]>([])
 
   const getChangeUrlName = ({target}: React.ChangeEvent<HTMLInputElement>) => {
     setUrlName(target.value)
@@ -66,11 +71,14 @@ const page: NextPage<Props> = (props): JSX.Element => {
         ...prevState, ...psiData
       }))
 
+      setPageList((prevState) => [...prevState, psiData])
+
       setLoading(false)
     }
   }
 
   const getScoreAgain = async () => {
+    setLoading(true)
     const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}`, {
       cache: 'no-store'
     })
@@ -87,12 +95,14 @@ const page: NextPage<Props> = (props): JSX.Element => {
       setResults((prevState) => ({
         ...prevState, date, score
       }))
+
+      setLoading(false)
     }
   }
 
   return (
     <div className='w-[80%] mx-auto'>
-      <section className='mb-5'>
+      <section className='mb-10'>
         <div className='text-center mb-2'>
           <h2 className='text-2xl font-semibold'></h2>
         </div>
@@ -119,7 +129,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
           </div>
         </div>
       </section>
-      {loading && <Loading />}
+      { loading && <Loading /> }
       { results &&
         <section>
         <div>
@@ -132,6 +142,14 @@ const page: NextPage<Props> = (props): JSX.Element => {
           />
         </div>
       </section>
+      }
+
+      { pageList &&
+        <section>
+          <AnalysisTableAll
+            pageList={pageList}
+          />
+        </section>
       }
     </div>
   )
