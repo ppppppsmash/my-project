@@ -4,7 +4,10 @@ import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
 import AnalysisTable from '@/components/Table/AnalysisTable'
 import { useState } from 'react'
-import { ApiResultType, pageList } from '@/type'
+import { ApiResultType } from '@/type'
+import Loading from '@/components/Loading'
+import AnalysisTableAll from '@/components/Table/AnalysisTableAll'
+import AnalysisTab from '@/components/Tab/AnalysisTab'
 
 interface Props extends ApiResultType {}
 
@@ -12,9 +15,13 @@ const page: NextPage<Props> = (props): JSX.Element => {
   const [urlName, setUrlName] = useState('')
   const [url, setUrl] = useState('')
 
+  const [visible, setVisible] = useState(false)
+
+  const [loading, setLoading] = useState(false)
+
   const [results, setResults] = useState<Props>()
 
-  const [scoreUpdate, setScoreUpdate] = useState('')
+  const [pageList, setPageList] = useState<Props[]>([])
 
   const getChangeUrlName = ({target}: React.ChangeEvent<HTMLInputElement>) => {
     setUrlName(target.value)
@@ -24,7 +31,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
     setUrl(target.value)
   }
 
-  const getScore = async() => {
+  const getPsiInfo = async() => {
+    setLoading(true)
     const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}`, {
       cache: 'no-store'
     })
@@ -61,10 +69,16 @@ const page: NextPage<Props> = (props): JSX.Element => {
       setResults((prevState) => ({
         ...prevState, ...psiData
       }))
+
+      setPageList((prevState) => [...prevState, psiData])
+
+      setVisible(true)
+      setLoading(false)
     }
   }
 
   const getScoreAgain = async () => {
+    setLoading(true)
     const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}`, {
       cache: 'no-store'
     })
@@ -78,15 +92,31 @@ const page: NextPage<Props> = (props): JSX.Element => {
       const score = String(performance.score * 100)
       const date = new Date().toLocaleString()
 
+      const psiData = {
+        date,
+        score
+      }
+
       setResults((prevState) => ({
         ...prevState, date, score
       }))
+
+      setPageList(prevState =>
+        prevState.map(item => {
+          if (item.url === url) {
+            return { ...item, ...psiData }
+          }
+          return item
+        })
+      )
+
+      setLoading(false)
     }
   }
 
   return (
     <div className='w-[80%] mx-auto'>
-      <section className='mb-3'>
+      <section className='mb-10'>
         <div className='text-center mb-2'>
           <h2 className='text-2xl font-semibold'></h2>
         </div>
@@ -108,11 +138,14 @@ const page: NextPage<Props> = (props): JSX.Element => {
           <div className='w-2/12'>
             <AnalysisButton
               label='登録'
-              handleScore={getScore}
+              handleScore={getPsiInfo}
             />
           </div>
         </div>
       </section>
+
+      <AnalysisTab>
+      { loading && <Loading /> }
       { results &&
         <section>
         <div>
@@ -126,6 +159,16 @@ const page: NextPage<Props> = (props): JSX.Element => {
         </div>
       </section>
       }
+
+      { visible &&
+        <section>
+          <AnalysisTableAll
+            pageList={pageList}
+            getScoreAgain={getScoreAgain}
+          />
+        </section>
+      }
+      </AnalysisTab>
     </div>
   )
 }
