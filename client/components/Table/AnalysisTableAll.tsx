@@ -28,7 +28,7 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, pageList}): JSX.Element =>
             <td className='px-4 py-3'>
               <button type='button' className='transition block w-full bg-gray-900 mt-4
               py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
-              hover:scale-[0.95] active:scale-[1]'
+              hover:scale-[0.95] active:scale-[1] hover:bg-white hover:text-gray-900'
               onClick={getScoreAgain}
               >再取得
               </button>

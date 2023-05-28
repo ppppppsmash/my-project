@@ -42,191 +42,125 @@ const page: NextPage<Props> = (props): JSX.Element => {
 
   const date = new Date().toLocaleString()
 
+  
+
+  const fetchPsiData = async (url: any, device: any) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}&strategy=${device}`, {
+      cache: 'no-store'
+    })
+    return res
+  }
+
   const getPsiInfo = async() => {
     setLoading(true)
+    const res = await fetchPsiData(url, selectedDevice)
 
-    if(selectedDevice === 'desktop') {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}&strategy=${selectedDevice}`, {
-        cache: 'no-store'
-      })
+    if (res.ok) {
+      const data = await res.json()
+      const { result } = data
+      const { lighthouseResult } = result
+      const { categories } = lighthouseResult
+      const { performance } = categories
+      const score = String(performance.score * 100)
 
-      if (res.ok) {
-        const { result } = await res.json()
-        const { lighthouseResult } = result
-
-        const { categories } = lighthouseResult
-        const { performance } = categories
-        const score = String(performance.score * 100)
-
-        const { audits } = lighthouseResult
-        const lcp = audits['largest-contentful-paint']
-        const fid = audits['first-input-delay']
-        const cls = audits['cumulative-layout-shift']
-        const fcp = audits['first-contentful-paint']
-        const tbt = audits['total-blocking-time']
-        const si = audits['speed-index']
-        const fci = audits['first-cpu-idle']
-        const eil = audits['estimated-input-latency']
-        const fmp = audits['first-meaningful-paint']
-        const tti = audits['interactive']
-
-        const psiData = {
-          name: urlName,
-          url: url,
-          date: date,
-          score,
-          fcp: fcp.displayValue,
-          lcp: lcp.numericValue,
-        }
-
-        setResults((prevState) => ({
-          ...prevState, ...psiData
-        }))
-
-        setPageList((prevState) => [...prevState, psiData])
-
-        setVisible(true)
-        setLoading(false)
+      const { audits } = lighthouseResult
+      const metrics = {
+        lcp: audits['largest-contentful-paint'],
+        fid: audits['first-input-delay'],
+        cls: audits['cumulative-layout-shift'],
+        fcp: audits['first-contentful-paint'],
+        tbt: audits['total-blocking-time'],
+        si: audits['speed-index'],
+        fci: audits['first-cpu-idle'],
+        eil: audits['estimated-input-latency'],
+        fmp: audits['first-meaningful-paint'],
+        tti: audits['interactive']
       }
-    } else if (selectedDevice === 'mobile') {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}&strategy=${selectedDevice}`, {
-        cache: 'no-store'
-      })
-  
-      if (res.ok) {
-        const { result } = await res.json()
-        const { lighthouseResult } = result
-  
-        const { categories } = lighthouseResult
-        const { performance } = categories
-        const score = String(performance.score * 100)
-  
-        const { audits } = lighthouseResult
-        const lcp = audits['largest-contentful-paint']
-        const fid = audits['first-input-delay']
-        const cls = audits['cumulative-layout-shift']
-        const fcp = audits['first-contentful-paint']
-        const tbt = audits['total-blocking-time']
-        const si = audits['speed-index']
-        const fci = audits['first-cpu-idle']
-        const eil = audits['estimated-input-latency']
-        const fmp = audits['first-meaningful-paint']
-        const tti = audits['interactive']
-  
-        const psiData = {
-          name: urlName,
-          url: url,
-          date: date,
-          score,
-          fcp: fcp.displayValue,
-          lcp: lcp.numericValue,
-        }
-  
-        setMobileResults((prevState) => ({
-          ...prevState, ...psiData
-        }))
-  
-        setMobilePageList((prevState) => [...prevState, psiData])
-  
-        setVisible(true)
-        setLoading(false)
+
+      const psiData = {
+        name: urlName,
+        url,
+        date,
+        score,
+        fcp: metrics.fcp.displayValue,
+        lcp: metrics.lcp.numericValue
       }
+
+      selectedDevice === 'desktop'
+        ? setResults(prevState => ({ ...prevState, ...psiData }))
+        : setMobileResults(prevState => ({ ...prevState, ...psiData }))
+      selectedDevice === 'desktop'
+        ? setPageList(prevState => [...prevState, psiData])
+        : setMobilePageList(prevState => [...prevState, psiData])
+
+       setVisible(true)
+       setLoading(false)
     }
   }
 
+
+
+
+
   const getScoreAgain = async () => {
     setLoading(true)
-    if(selectedDevice === 'desktop') {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}&strategy=${selectedDevice}`, {
-        cache: 'no-store'
-      })
+    const res = await fetchPsiData(url, selectedDevice)
 
-      if (res.ok) {
-        const { result } = await res.json()
-        const { lighthouseResult } = result
+    if (res.ok) {
+      const data = await res.json()
+      const { result } = data
+      const { lighthouseResult } = result
+      const { categories } = lighthouseResult
+      const { performance } = categories
+      const score = String(performance.score * 100)
 
-        const { categories } = lighthouseResult
-        const { performance } = categories
-        const score = String(performance.score * 100)
-
-        const { audits } = lighthouseResult
-        const lcp = audits['largest-contentful-paint']
-        const fid = audits['first-input-delay']
-        const cls = audits['cumulative-layout-shift']
-        const fcp = audits['first-contentful-paint']
-        const tbt = audits['total-blocking-time']
-        const si = audits['speed-index']
-        const fci = audits['first-cpu-idle']
-        const eil = audits['estimated-input-latency']
-        const fmp = audits['first-meaningful-paint']
-        const tti = audits['interactive']
-
-        const psiData = {
-          name: urlName,
-          url: url,
-          // date: new Date().toLocaleString(),
-          date: date,
-          score,
-          fcp: fcp.displayValue,
-          lcp: lcp.numericValue,
-        }
-
-        setResults((prevState) => ({
-          ...prevState, ...psiData
-        }))
-
-        setPageList((prevState) => [...prevState, psiData])
-
-        setVisible(true)
-        setLoading(false)
+      const { audits } = lighthouseResult
+      const metrics = {
+        lcp: audits['largest-contentful-paint'],
+        fid: audits['first-input-delay'],
+        cls: audits['cumulative-layout-shift'],
+        fcp: audits['first-contentful-paint'],
+        tbt: audits['total-blocking-time'],
+        si: audits['speed-index'],
+        fci: audits['first-cpu-idle'],
+        eil: audits['estimated-input-latency'],
+        fmp: audits['first-meaningful-paint'],
+        tti: audits['interactive']
       }
-    } else if (selectedDevice === 'mobile') {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}&strategy=${selectedDevice}`, {
-        cache: 'no-store'
-      })
-  
-      if (res.ok) {
-        const { result } = await res.json()
-        const { lighthouseResult } = result
-  
-        const { categories } = lighthouseResult
-        const { performance } = categories
-        const score = String(performance.score * 100)
-  
-        const { audits } = lighthouseResult
-        const lcp = audits['largest-contentful-paint']
-        const fid = audits['first-input-delay']
-        const cls = audits['cumulative-layout-shift']
-        const fcp = audits['first-contentful-paint']
-        const tbt = audits['total-blocking-time']
-        const si = audits['speed-index']
-        const fci = audits['first-cpu-idle']
-        const eil = audits['estimated-input-latency']
-        const fmp = audits['first-meaningful-paint']
-        const tti = audits['interactive']
-  
-        const psiData = {
-          name: urlName,
-          url: url,
-          date: date,
-          score,
-          fcp: fcp.displayValue,
-          lcp: lcp.numericValue,
-        }
-  
-        setMobileResults((prevState) => ({
-          ...prevState, ...psiData
-        }))
-  
-        setMobilePageList((prevState) => [...prevState, psiData])
-  
-        setVisible(true)
-        setLoading(false)
+
+      const psiData = {
+        name: urlName,
+        url,
+        date,
+        score,
+        fcp: metrics.fcp.displayValue,
+        lcp: metrics.lcp.numericValue
       }
+
+      selectedDevice === 'desktop'
+        ? setResults(prevState => ({ ...prevState, date, score }))
+        : setMobileResults(prevState => ({ ...prevState, date, score }))
+
+      selectedDevice === 'desktop'
+        ? setPageList(prevState =>
+          prevState.map(item => {
+            if (item.url === url) {
+              return { ...item, psiData }
+            }
+            return item
+          })
+        )
+        : setMobilePageList(prevState =>
+          prevState.map(item => {
+            if (item.url === url) {
+              return { item, ...psiData }
+            }
+            return item
+          })
+        )
+
+      setVisible(true)
+      setLoading(false)
     }
   }
 
