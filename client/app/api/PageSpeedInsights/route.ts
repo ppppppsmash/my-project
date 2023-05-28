@@ -7,7 +7,9 @@ export async function GET(request: Request, response: Response) {
   const { searchParams } = new URL(request.url)
   const url = searchParams.get('url')
 
-  const res = await fetch(`${API_URL}?url=${url}&key=${API_KEY}`, {
+  const device = searchParams.get('strategy')
+
+  const res = await fetch(`${API_URL}?url=${url}&key=${API_KEY}&strategy=${device}`, {
     headers: {
       'Content-Type': 'application/json'
     }
