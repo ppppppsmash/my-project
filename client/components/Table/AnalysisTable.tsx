@@ -9,17 +9,17 @@ const AnalysisTable: FC<Props> = ({name, url, score, date, getScoreAgain}): JSX.
   return (
     <table className='rounded my-2 w-full mx-auto text-white border-b-2 border-gray-300'>
       <thead className='bg-black'>
-        <tr className='text-left '>
-          <th className='px-4 py-3'>サイト名</th>
-          <th className='px-4 py-3'>URL</th>
-          <th className='px-4 py-3'>スコア</th>
-          <th className='px-4 py-3'>取得日時</th>
-          <th className='px-4 py-3'></th>
+        <tr className='text-left'>
+          <th className='px-4 py-3 font-normal'>サイト名</th>
+          <th className='px-4 py-3 font-normal'>URL</th>
+          <th className='px-4 py-3 font-normal'>スコア</th>
+          <th className='px-4 py-3 font-normal'>取得日時</th>
+          <th className='px-4 py-3 font-normal'></th>
         </tr>
       </thead>
       <tbody className='text-gray-900'>
-        <tr className='border-b' key={name}>
-          <td className='px-4 py-3 font-bold'>{name}</td>
+        <tr className='border-b hover:text-white hover:bg-gray-900' key={name}>
+          <td className='px-4 py-3 font-semibold'>{name}</td>
           <td className='px-4 py-3'>{url}</td>
           <td className='px-4 py-3'>{score}</td>
           <td className='px-4 py-3'>{date}</td>

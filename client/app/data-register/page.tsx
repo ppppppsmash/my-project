@@ -15,13 +15,13 @@ const page: NextPage<Props> = (props): JSX.Element => {
   const [urlName, setUrlName] = useState('')
   const [url, setUrl] = useState('')
 
+  const [results, setResults] = useState<Props>()
+  const [pageList, setPageList] = useState<Props[]>([])
+  const [selectedDevice, setSelectedDevice] = useState<'mobile' | 'desktop'>('desktop');
+
   const [visible, setVisible] = useState(false)
 
   const [loading, setLoading] = useState(false)
-
-  const [results, setResults] = useState<Props>()
-
-  const [pageList, setPageList] = useState<Props[]>([])
 
   const getChangeUrlName = ({target}: React.ChangeEvent<HTMLInputElement>) => {
     setUrlName(target.value)
@@ -31,9 +31,17 @@ const page: NextPage<Props> = (props): JSX.Element => {
     setUrl(target.value)
   }
 
+  const handleDeviceSelection = (device: 'mobile' | 'desktop') => {
+    console.log(device)
+    setSelectedDevice(device);
+  };
+
+  console.log(selectedDevice)
+
   const getPsiInfo = async() => {
     setLoading(true)
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}`, {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}&strategy=${selectedDevice}`, {
       cache: 'no-store'
     })
 
@@ -144,7 +152,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
         </div>
       </section>
 
-      <AnalysisTab>
+      <AnalysisTab
+      >
       { loading && <Loading /> }
       { results &&
         <section>

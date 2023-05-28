@@ -7,7 +7,7 @@ interface Props {}
 
 const Loading: NextPage<Props> = (props): JSX.Element => {
   return (
-    <div className='flex flex-col items-center justify-center'>
+    <div className='flex flex-col items-center justify-center mt-5'>
 
       <RiLoader2Fill
         className='animate-spin'
