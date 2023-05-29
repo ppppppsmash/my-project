@@ -97,10 +97,6 @@ const page: NextPage<Props> = (props): JSX.Element => {
     }
   }
 
-
-
-
-
   const getScoreAgain = async (url: string) => {
     setLoading(true)
     const res = await fetchPsiData(url, selectedDevice)
