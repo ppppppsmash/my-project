@@ -10,6 +10,7 @@ import AnalysisTableAll from '@/components/Table/AnalysisTableAll'
 import AnalysisTab from '@/components/Tab/AnalysisTab'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
+import { urlValidate } from '@/lib/urlValidate'
 
 interface Props extends ApiResultType {}
 
@@ -42,8 +43,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
 
   const date = new Date().toLocaleString()
 
-  const fetchPsiData = async (url: any, device: any) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}&strategy=${device}`, {
+  const fetchPsiData = async (url: string, device: string) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${urlValidate(url)}&strategy=${device}`, {
       cache: 'no-store'
     })
     return res
