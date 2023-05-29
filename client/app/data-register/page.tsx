@@ -10,6 +10,7 @@ import AnalysisTableAll from '@/components/Table/AnalysisTableAll'
 import AnalysisTab from '@/components/Tab/AnalysisTab'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
+import { urlValidate } from '@/lib/urlValidate'
 
 interface Props extends ApiResultType {}
 
@@ -42,10 +43,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
 
   const date = new Date().toLocaleString()
 
-  
-
-  const fetchPsiData = async (url: any, device: any) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${url}&strategy=${device}`, {
+  const fetchPsiData = async (url: string, device: string) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${urlValidate(url)}&strategy=${device}`, {
       cache: 'no-store'
     })
     return res
@@ -98,11 +97,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
     }
   }
 
-
-
-
-
-  const getScoreAgain = async () => {
+  const getScoreAgain = async (url: string) => {
     setLoading(true)
     const res = await fetchPsiData(url, selectedDevice)
 
@@ -145,7 +140,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
         ? setPageList(prevState =>
           prevState.map(item => {
             if (item.url === url) {
-              return { ...item, psiData }
+              return { ...item, score: psiData.score, date }
             }
             return item
           })
@@ -153,7 +148,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
         : setMobilePageList(prevState =>
           prevState.map(item => {
             if (item.url === url) {
-              return { item, ...psiData }
+              console.log(item)
+              return { ...item, score: psiData.score, date }
             }
             return item
           })
@@ -219,62 +215,21 @@ const page: NextPage<Props> = (props): JSX.Element => {
           </div>
         </div>
         <div>
-
+        {/* loading */}
         { loading && <Loading /> }
-
         {/* mobile */}
-
-        { mobileResults && selectedDevice === 'mobile' &&
-        <div>
-          <section>
-              <AnalysisTable
-                name={mobileResults.name}
-                url={mobileResults.url}
-                score={mobileResults.score}
-                date={mobileResults.date}
-                getScoreAgain={getScoreAgain}
-              />
-          </section>
-
-          <section>
+        { !loading && mobileResults && selectedDevice === 'mobile' &&
           <AnalysisTableAll
             pageList={mobilePageList}
             getScoreAgain={getScoreAgain}
           />
-          </section>
-        </div>
         }
-
-        {/* { visible &&
-          <section>
-            <AnalysisTableAll
-              pageList={pageList}
-              getScoreAgain={getScoreAgain}
-            />
-          </section>
-        } */}
-
         {/* desktop */}
-
-        { results && selectedDevice === 'desktop' &&
-        <div>
-          <section>
-            <AnalysisTable
-              name={results.name}
-              url={results.url}
-              score={results.score}
-              date={results.date}
-              getScoreAgain={getScoreAgain}
-            />
-          </section>
-
-          <section>
+        { !loading && results && selectedDevice === 'desktop' &&
           <AnalysisTableAll
             pageList={pageList}
             getScoreAgain={getScoreAgain}
           />
-          </section>
-        </div>
         }
         </div>
     </section>
