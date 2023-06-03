@@ -7,7 +7,5 @@ export const urlValidate = (url: string) => {
     finalUrl = new URL('https://' + url)
   }
 
-  console.log(finalUrl)
-
   return finalUrl.origin
 }
