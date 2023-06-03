@@ -7,6 +7,7 @@ import { ApiResultType } from '@/type'
 import { urlValidate } from '@/lib/urlValidate'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
+import Loading from '@/components/Loading'
 
 interface Props extends ApiResultType {}
 
@@ -133,6 +134,9 @@ const page: NextPage<Props> = (props): JSX.Element => {
             </div>
           </div>
           <div>
+          {/* loading */}
+          { loading && <Loading /> }
+          {/* mobile */}
           { !loading && mobileResults && selectedDevice === 'mobile' &&
             mobilePageList.map((mobilePage) => (
               <div>mobile: {mobilePage.score}</div>
