@@ -9,6 +9,42 @@ import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import Loading from '@/components/Loading'
 
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
+import { Bar } from 'react-chartjs-2'
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+export const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top' as const,
+    },
+    title: {
+      display: true,
+      text: '推移グラフ',
+    }
+  }
+}
+
+const labels = ['1日', '2日', '3日', '4日', '5日', '6日', '7日']
+
+const testData = [
+  {id: 1, label:'', data: [600, 100, 600, 100, 600, 100], backgroundColor: 'rgba(255, 99, 132, 0.5)',},
+  {id: 2, label:'', data: [300, 200, 500, 800, 100, 400], backgroundColor: 'rgba(53, 162, 235, 0.5)',},
+]
+
+export const data = {
+  labels,
+  datasets: testData,
+};
+
 interface Props extends ApiResultType {}
 
 const page: NextPage<Props> = (props): JSX.Element => {
@@ -148,6 +184,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
               <div>desktop: {page.score}</div>
             ))
           }
+
+          <Bar datasetIdKey='id' options={options} data={data} />
         </div>
       </section>
     </div>
