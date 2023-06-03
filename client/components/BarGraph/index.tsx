@@ -28,12 +28,20 @@ export const options = {
   }
 }
 
-const today = new Date().toLocaleDateString()
-
-const labels = ['1日', '2日', '3日', '4日', '5日', '6日', '7日']
+const now = new Date()
+const monthNow = now.getMonth() + 1
+const today = now.getDate()
+const labels = [`${monthNow}月${today}日`]
 
 const index: FC<Props> = ({pageList}): JSX.Element => {
-  const todayScore = pageList.filter(page => page.date === today)
+  // const todayScore = pageList.filter((page) => {
+  //   const pageDate = new Date(String(page.date))
+  //   return (
+  //     pageDate.getMonth() + 1 === monthNow &&
+  //     pageDate.getDate() === today
+  //   )
+  // })
+  // console.log(todayScore)
   const testData = [
     {id: 1, label:'', data: pageList.map((page) => (page.score)), backgroundColor: 'rgba(105, 105, 105, 0.5)',},
   ]
