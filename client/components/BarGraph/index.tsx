@@ -1,11 +1,14 @@
-import { FC } from 'react'
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
-import { Bar } from 'react-chartjs-2'
+'use client'
+import { FC, useEffect, useState } from 'react'
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js'
+import { Bar, Line } from 'react-chartjs-2'
 import { ApiResultType } from '@/type'
 ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend
@@ -31,28 +34,40 @@ export const options = {
 const now = new Date()
 const monthNow = now.getMonth() + 1
 const today = now.getDate()
-const labels = [`${monthNow}月${today}日`]
 
 const index: FC<Props> = ({pageList}): JSX.Element => {
-  // const todayScore = pageList.filter((page) => {
-  //   const pageDate = new Date(String(page.date))
-  //   return (
-  //     pageDate.getMonth() + 1 === monthNow &&
-  //     pageDate.getDate() === today
-  //   )
-  // })
-  // console.log(todayScore)
-  const testData = [
-    {id: 1, label:'', data: pageList.map((page) => (page.score)), backgroundColor: 'rgba(105, 105, 105, 0.5)',},
-  ]
+  const [labels, setLabels] = useState<string[]>([`${monthNow}.${today}`])
 
+  useEffect(() => {
+    const currentDate = new Date()
+    const currentMonth = currentDate.getMonth() + 1
+    const currentDay = currentDate.getDate()
+    const newLabel = `${currentMonth}月${currentDay}日`
+
+    // 既存のlabelsにnewLabelが含まれていない場合にのみ追加
+    if (!labels.includes(newLabel)) {
+      setLabels((prevLabels) => [...prevLabels, newLabel])
+    }
+  }, [])
+
+  const testData = [
+    {id: 1, label:'テスト', data: pageList.map((page) => {
+      page.score
+    }), backgroundColor: 'rgba(105, 105, 105, 0.5)',},
+  ]
+  console.log(labels)
   const data = {
     labels,
     datasets: testData,
   }
 
+  console.log
+
   return (
-      <Bar datasetIdKey='id' options={options} data={data} />
+    <div>
+      {/* <Bar datasetIdKey='id' options={options} data={data} /> */}
+      <Line datasetIdKey='id' options={options} data={data} />
+    </div>
   )
 }
 

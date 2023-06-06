@@ -9,6 +9,7 @@ import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import Loading from '@/components/Loading'
 import BarGraph from '@/components/BarGraph'
+import RxCross2 from 'react-icons/rx'
 
 interface Props extends ApiResultType {}
 
@@ -44,11 +45,13 @@ const page: NextPage<Props> = (props): JSX.Element => {
     const res = await fetchPsiData(url, selectedDevice)
 
     if (res.ok) {
+      const now = new Date()
       const data = await res.json()
       const { result } = data
       const { lighthouseResult } = result
       const { categories } = lighthouseResult
       const { performance } = categories
+      const label = `${now.getMonth() + 1}.${now.getDate()}`
       const score = String(performance.score * 100)
 
       const { audits } = lighthouseResult
@@ -69,6 +72,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
         url,
         date,
         score,
+        label,
         fcp: metrics.fcp.displayValue,
         lcp: metrics.lcp.numericValue
       }
@@ -82,13 +86,42 @@ const page: NextPage<Props> = (props): JSX.Element => {
 
        setVisible(true)
        setLoading(false)
-       console.log(pageList)
     }
   }
 
   const handleDeviceSelection = (device: 'mobile' | 'desktop') => {
     setSelectedDevice(device);
   };
+
+  const postTest = async () => {
+    const score = pageList.map((page) => {
+      return page.score
+    })
+
+    const label = pageList.map((page) => {
+      return page.label
+    })
+    console.log(score)
+
+    console.log(label)
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}postTest`, {
+        method: 'POST',
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({score, label}), // score: ['x']
+        // body: JSON.stringify({score}), ['x']
+      })
+
+      const data = await response.json()
+      return data
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div className='w-[80%] mx-auto'>
@@ -136,17 +169,22 @@ const page: NextPage<Props> = (props): JSX.Element => {
             </div>
           </div>
           <div>
-          {/* loading */}
-          { loading && <Loading /> }
-          {/* mobile */}
-          { !loading && mobileResults && selectedDevice === 'mobile' &&
-            <BarGraph pageList={mobilePageList} />
-          }
-          {/* desktop */}
-          { !loading && results && selectedDevice === 'desktop' &&
-            <BarGraph pageList={pageList} />
-          }
-        </div>
+            {/* loading */}
+            { loading && <Loading /> }
+            {/* mobile */}
+            { !loading && mobileResults && selectedDevice === 'mobile' &&
+              <BarGraph pageList={mobilePageList} />
+            }
+            {/* desktop */}
+            { !loading && results && selectedDevice === 'desktop' &&
+              <BarGraph pageList={pageList} />
+            }
+          </div>
+          <div>
+            <button onClick={postTest}>
+              保存
+            </button>
+          </div>
       </section>
     </div>
   )

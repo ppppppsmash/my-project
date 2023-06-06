@@ -2,6 +2,7 @@ version: '3'
 services:
   client:
     build: ./docker/client/
+    container_name: psi-app
     ports:
       - '9999:3000'
     volumes:
@@ -10,3 +11,30 @@ services:
     tty: true
     environment:
       - CHOKIDAR_USEPOLLING=true
+    networks:
+      - default
+  db:
+    build: ./docker/mysql/
+    container_name: mysql
+    restart: always
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: Asia/Tokyo
+    volumes:
+      # 設定ファイルディレクトリにマウントする
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
+      # DB初期化ディレクトリにマウントする
+      - ./docker/mysql/init.d:/docker-entrypoint-initdb.d
+    # ネットワーク
+    networks:
+      - default
+
+# ネットワーク
+networks:
+  default:
+    driver: bridge
