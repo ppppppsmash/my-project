@@ -13,3 +13,8 @@ export interface pageList {
   score: string
   date: string
 }
+
+export interface Month {
+  label: string
+  days: number
+}
