@@ -11,14 +11,12 @@ export async function POST(request: Request, response: Response) {
     database: process.env.MYSQL_DATABASE,
   })
 
-  //db.connect()
   const datas = await request.json()
-  const data = datas.score.map((data: string) => {
-    return data
-  })
-  console.log(data)
-  const sql = 'INSERT INTO test_api (score) VALUES (?)'
-  const result = db.query(sql, data)
+  const data = datas.score.pop()
+  const label = datas.label.pop()
+  console.log(data, label)
+  const sql = 'INSERT INTO test_api (label, score) VALUES (?, ?)'
+  const result = db.query(sql, [label, data])
   db.end()
 
   return NextResponse.json(result)

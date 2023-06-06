@@ -45,11 +45,13 @@ const page: NextPage<Props> = (props): JSX.Element => {
     const res = await fetchPsiData(url, selectedDevice)
 
     if (res.ok) {
+      const now = new Date()
       const data = await res.json()
       const { result } = data
       const { lighthouseResult } = result
       const { categories } = lighthouseResult
       const { performance } = categories
+      const label = `${now.getMonth() + 1}.${now.getDate()}`
       const score = String(performance.score * 100)
 
       const { audits } = lighthouseResult
@@ -70,6 +72,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
         url,
         date,
         score,
+        label,
         fcp: metrics.fcp.displayValue,
         lcp: metrics.lcp.numericValue
       }
@@ -95,6 +98,13 @@ const page: NextPage<Props> = (props): JSX.Element => {
       return page.score
     })
 
+    const label = pageList.map((page) => {
+      return page.label
+    })
+    console.log(score)
+
+    console.log(label)
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL}postTest`, {
         method: 'POST',
@@ -102,7 +112,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({score}), // score: ['x']
+        body: JSON.stringify({score, label}), // score: ['x']
         // body: JSON.stringify({score}), ['x']
       })
 
