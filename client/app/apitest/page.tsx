@@ -2,7 +2,7 @@
 import { NextPage } from 'next'
 import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ApiResultType } from '@/type'
 import { urlValidate } from '@/lib/urlValidate'
 import { SlScreenSmartphone } from 'react-icons/sl'
@@ -52,7 +52,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
       const { categories } = lighthouseResult
       const { performance } = categories
       const label = `${now.getMonth() + 1}.${now.getDate()}`
-      const score = String(performance.score * 100)
+      const score = performance.score * 100
 
       const { audits } = lighthouseResult
       const metrics = {
@@ -84,6 +84,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
         ? setPageList(prevState => [...prevState, psiData])
         : setMobilePageList(prevState => [...prevState, psiData])
 
+        console.log(pageList)
+
        setVisible(true)
        setLoading(false)
     }
@@ -106,22 +108,54 @@ const page: NextPage<Props> = (props): JSX.Element => {
     console.log(label)
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}postTest`, {
+      await fetch(`${process.env.NEXT_PUBLIC_URL}postTest`, {
         method: 'POST',
         cache: 'no-store',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({score, label}), // score: ['x']
-        // body: JSON.stringify({score}), ['x']
+        body: JSON.stringify({score, label}), // score: [number]
       })
-
-      const data = await response.json()
-      return data
+      //setPageList(prevState => [...prevState, psiData])
     } catch (error) {
       console.log(error)
     }
   }
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}postTest`, {
+          method: 'GET',
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+
+        const data = await response.json()
+        // data[0].map((item: any, index: any) => {
+        //   console.log(item.label)
+        //   console.log(item.score)
+        //   setPageList(prevState => [...prevState, {
+        //     score: item.score,
+        //     label: item.label}])
+        // })
+        setPageList(prevState => {
+          const updatedList = data[0].map((item: any) => ({
+            score: item.score,
+            label: item.label
+          }))
+          return [...prevState, ...updatedList]
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+      // pageListが更新された後にAPIリクエストを行う
+      getData()
+  }, [])
 
   return (
     <div className='w-[80%] mx-auto'>
@@ -169,14 +203,14 @@ const page: NextPage<Props> = (props): JSX.Element => {
             </div>
           </div>
           <div>
-            {/* loading */}
-            { loading && <Loading /> }
-            {/* mobile */}
-            { !loading && mobileResults && selectedDevice === 'mobile' &&
+            
+             { loading && <Loading /> }
+            
+            { mobilePageList && selectedDevice === 'mobile' &&
               <BarGraph pageList={mobilePageList} />
             }
-            {/* desktop */}
-            { !loading && results && selectedDevice === 'desktop' &&
+            
+            { pageList && selectedDevice === 'desktop' &&
               <BarGraph pageList={pageList} />
             }
           </div>

@@ -48,7 +48,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
       const { lighthouseResult } = result
       const { categories } = lighthouseResult
       const { performance } = categories
-      const score = String(performance.score * 100)
+      const score = performance.score * 100
 
       const { audits } = lighthouseResult
       const metrics = {

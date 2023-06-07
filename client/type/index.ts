@@ -2,7 +2,7 @@ export interface ApiResultType {
   name?: string
   url?: string
   date?: string
-  score: string
+  score: number
   label?: string
   lcp?: string
   fcp?: string
