@@ -2,7 +2,7 @@
 import { NextPage } from 'next'
 import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ApiResultType } from '@/type'
 import { urlValidate } from '@/lib/urlValidate'
 import { SlScreenSmartphone } from 'react-icons/sl'
@@ -122,6 +122,27 @@ const page: NextPage<Props> = (props): JSX.Element => {
       console.log(error)
     }
   }
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        // const response = await fetch(`${process.env.NEXT_PUBLIC_URL}postTest`, {
+        //   method: 'GET',
+        //   cache: 'no-store',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   }
+        // })
+        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}postTest`)
+        const data = await response.json()
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    getData()
+  }, [])
 
   return (
     <div className='w-[80%] mx-auto'>

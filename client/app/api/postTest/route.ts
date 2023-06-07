@@ -21,3 +21,25 @@ export async function POST(request: Request, response: Response) {
 
   return NextResponse.json(result)
 }
+
+export async function GET(request: Request, response: Response) {
+  const db = await mysql.createConnection({
+    host: process.env.MYSQL_HOST,
+    port: Number(process.env.MYSQL_PORT),
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_ROOT_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+  })
+
+  const sql = 'SELECT label, score FROM test_api'
+  const data = db.query(sql, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    console.log(results);
+  });
+
+  db.end()
+
+  return NextResponse.json(data)
+}
