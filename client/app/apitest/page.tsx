@@ -126,16 +126,16 @@ const page: NextPage<Props> = (props): JSX.Element => {
   useEffect(() => {
     const getData = async () => {
       try {
-        // const response = await fetch(`${process.env.NEXT_PUBLIC_URL}postTest`, {
-        //   method: 'GET',
-        //   cache: 'no-store',
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //   }
-        // })
-        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}postTest`)
+        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}postTest`, {
+          method: 'GET',
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+        //const response = await fetch(`${process.env.NEXT_PUBLIC_URL}postTest`)
         const data = await response.json()
-        console.log(data)
+        console.log(data[0])
       } catch (error) {
         console.log(error)
       }

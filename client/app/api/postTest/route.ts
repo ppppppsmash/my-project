@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import mysql from 'mysql2'
+import mysql from 'mysql2/promise'
 //import * as mysql from 'promise-mysql'
 
 export async function POST(request: Request, response: Response) {
@@ -32,12 +32,8 @@ export async function GET(request: Request, response: Response) {
   })
 
   const sql = 'SELECT label, score FROM test_api'
-  const data = db.query(sql, (error, results, fields) => {
-    if (error) {
-      return console.error(error.message);
-    }
-    console.log(results);
-  });
+  const data = await db.query(sql)
+  console.log(data)
 
   db.end()
 
