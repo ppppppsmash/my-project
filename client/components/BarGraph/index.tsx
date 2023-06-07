@@ -31,41 +31,22 @@ export const options = {
   }
 }
 
-const now = new Date()
-const monthNow = now.getMonth() + 1
-const today = now.getDate()
-
 const index: FC<Props> = ({pageList}): JSX.Element => {
-  const [labels, setLabels] = useState<string[]>([`${monthNow}.${today}`])
 
-  useEffect(() => {
-    const currentDate = new Date()
-    const currentMonth = currentDate.getMonth() + 1
-    const currentDay = currentDate.getDate()
-    const newLabel = `${currentMonth}月${currentDay}日`
-
-    // 既存のlabelsにnewLabelが含まれていない場合にのみ追加
-    if (!labels.includes(newLabel)) {
-      setLabels((prevLabels) => [...prevLabels, newLabel])
-    }
-  }, [])
+  const labels = pageList.map((page) => (page.label))
 
   const testData = [
-    {id: 1, label:'テスト', data: pageList.map((page) => {
-      page.score
-    }), backgroundColor: 'rgba(105, 105, 105, 0.5)',},
+    {id: 1, label:'テスト', data: pageList.map((page) => (page.score)), backgroundColor: 'rgba(105, 105, 105, 0.5)',},
   ]
+  console.log(pageList)
   console.log(labels)
   const data = {
     labels,
     datasets: testData,
   }
 
-  console.log
-
   return (
     <div>
-      {/* <Bar datasetIdKey='id' options={options} data={data} /> */}
       <Line datasetIdKey='id' options={options} data={data} />
     </div>
   )

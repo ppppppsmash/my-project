@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import mysql from 'mysql2/promise'
-//import * as mysql from 'promise-mysql'
 
 export async function POST(request: Request, response: Response) {
   const db = await mysql.createConnection({
@@ -14,7 +13,7 @@ export async function POST(request: Request, response: Response) {
   const datas = await request.json()
   const data = datas.score.pop()
   const label = datas.label.pop()
-  console.log(data, label)
+
   const sql = 'INSERT INTO test_api (label, score) VALUES (?, ?)'
   const result = db.query(sql, [label, data])
   db.end()
