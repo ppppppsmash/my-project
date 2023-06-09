@@ -51,7 +51,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
       const { lighthouseResult } = result
       const { categories } = lighthouseResult
       const { performance } = categories
-      const label = `${now.getMonth() + 1}.${now.getDate()}`
+      const label = `${now.getMonth() + 1}月${now.getDate()}日`
       const score = performance.score * 100
 
       const { audits } = lighthouseResult
@@ -116,7 +116,6 @@ const page: NextPage<Props> = (props): JSX.Element => {
         },
         body: JSON.stringify({score, label}), // score: [number]
       })
-      //setPageList(prevState => [...prevState, psiData])
     } catch (error) {
       console.log(error)
     }

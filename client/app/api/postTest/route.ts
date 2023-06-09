@@ -14,7 +14,7 @@ export async function POST(request: Request, response: Response) {
   const data = datas.score.pop()
   const label = datas.label.pop()
 
-  const sql = 'INSERT INTO test_api (label, score) VALUES (?, ?)'
+  const sql = 'INSERT INTO test_db (label, score) VALUES (?, ?)'
   const result = db.query(sql, [label, data])
   db.end()
 
@@ -30,7 +30,7 @@ export async function GET(request: Request, response: Response) {
     database: process.env.MYSQL_DATABASE,
   })
 
-  const sql = 'SELECT label, score FROM test_api'
+  const sql = 'SELECT label, score FROM test_db'
   const data = await db.query(sql)
   console.log(data)
 
