@@ -9,7 +9,6 @@ import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import Loading from '@/components/Loading'
 import BarGraph from '@/components/BarGraph'
-import RxCross2 from 'react-icons/rx'
 
 interface Props extends ApiResultType {}
 
@@ -51,7 +50,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
       const { lighthouseResult } = result
       const { categories } = lighthouseResult
       const { performance } = categories
-      const label = `${now.getMonth() + 1}.${now.getDate()}`
+      const label = `${now.getMonth() + 1}月${now.getDate()}日`
       const score = performance.score * 100
 
       const { audits } = lighthouseResult
@@ -116,7 +115,6 @@ const page: NextPage<Props> = (props): JSX.Element => {
         },
         body: JSON.stringify({score, label}), // score: [number]
       })
-      //setPageList(prevState => [...prevState, psiData])
     } catch (error) {
       console.log(error)
     }
@@ -134,13 +132,6 @@ const page: NextPage<Props> = (props): JSX.Element => {
         })
 
         const data = await response.json()
-        // data[0].map((item: any, index: any) => {
-        //   console.log(item.label)
-        //   console.log(item.score)
-        //   setPageList(prevState => [...prevState, {
-        //     score: item.score,
-        //     label: item.label}])
-        // })
         setPageList(prevState => {
           const updatedList = data[0].map((item: any) => ({
             score: item.score,
@@ -153,7 +144,6 @@ const page: NextPage<Props> = (props): JSX.Element => {
       }
     }
 
-      // pageListが更新された後にAPIリクエストを行う
       getData()
   }, [])
 
