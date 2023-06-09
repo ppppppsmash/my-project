@@ -161,6 +161,14 @@ const page: NextPage<Props> = (props): JSX.Element => {
     }
   }
 
+  const deleteItem = async (index: number) => {
+    setPageList((prevPageList) => {
+      const updatedList = [...prevPageList];
+      updatedList.splice(index, 1);
+      return updatedList;
+    });
+  }
+
   return (
     <div className='w-[80%] mx-auto'>
       <section className='mb-10'>
@@ -222,6 +230,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
           <AnalysisTableAll
             pageList={mobilePageList}
             getScoreAgain={getScoreAgain}
+            deleteItem={deleteItem}
           />
         }
         {/* desktop */}
@@ -229,6 +238,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
           <AnalysisTableAll
             pageList={pageList}
             getScoreAgain={getScoreAgain}
+            deleteItem={deleteItem}
           />
         }
         </div>
