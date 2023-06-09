@@ -12,6 +12,7 @@ import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import { urlValidate } from '@/lib/urlValidate'
 
+
 interface Props extends ApiResultType {}
 
 const page: NextPage<Props> = (props): JSX.Element => {
@@ -60,7 +61,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
       const { lighthouseResult } = result
       const { categories } = lighthouseResult
       const { performance } = categories
-      const score = String(performance.score * 100)
+      const score = performance.score * 100
 
       const { audits } = lighthouseResult
       const metrics = {
@@ -107,7 +108,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
       const { lighthouseResult } = result
       const { categories } = lighthouseResult
       const { performance } = categories
-      const score = String(performance.score * 100)
+      const score = performance.score * 100
 
       const { audits } = lighthouseResult
       const metrics = {
@@ -162,7 +163,6 @@ const page: NextPage<Props> = (props): JSX.Element => {
 
   return (
     <div className='w-[80%] mx-auto'>
-      <p>https://google.com</p>
       <section className='mb-10'>
         <div className='text-center mb-2'>
           <h2 className='text-2xl font-semibold'></h2>

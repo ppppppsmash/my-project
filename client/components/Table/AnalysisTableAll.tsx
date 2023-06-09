@@ -1,5 +1,6 @@
 import { FC } from 'react'
 import { ApiResultType } from '@/type'
+import { RxCross2 } from 'react-icons/rx'
 
 interface Props {
   getScoreAgain: (url: any) => void
@@ -16,6 +17,7 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, pageList}): JSX.Element =>
             <th className='px-4 py-3 font-normal text-center'>URL</th>
             <th className='px-4 py-3 font-normal text-center'>スコア</th>
             <th className='px-4 py-3 font-normal text-center'>取得日時</th>
+            <th className='px-4 py-3 font-normal text-center'></th>
             <th className='px-4 py-3 font-normal text-center'></th>
           </tr>
         </thead>
@@ -34,8 +36,27 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, pageList}): JSX.Element =>
                 >再取得
                 </button>
               </td>
+              <td className='px-4 py-3 text-center'><RxCross2 /></td>
             </tr>
           ))}
+          <tr className='border-b hover:text-white hover:bg-gray-900' key='1'>
+          <td className='px-4 py-3 font-semibold text-center'>test</td>
+              <td className='px-4 py-3 text-center'>test</td>
+              <td className='px-4 py-3 text-center'>test</td>
+              <td className='px-4 py-3 text-center'>test</td>
+              <td className='px-4 py-3'>
+                <button type='button' className='transition block w-full bg-gray-900 mt-4
+                py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
+                hover:scale-[0.95] active:scale-[1] hover:bg-white hover:text-gray-900'
+                >再取得
+                </button>
+              </td>
+              <td className='px-4 py-3 text-center'>
+                <p className='flex justify-center hover:bg-white hover:text-gray-900
+                transition w-full bg-gray-900 mt-4 cursor-pointer
+                py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
+                hover:scale-[0.95] active:scale-[1]'>DELETE</p></td>
+          </tr>
         </tbody>
       </table>
     </section>
