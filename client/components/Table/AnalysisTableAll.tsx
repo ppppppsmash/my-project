@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { ApiResultType } from '@/type'
 import { RxCross2 } from 'react-icons/rx'
+import { formatDate } from '@/lib/formatDate'
 
 interface Props {
   getScoreAgain: (url: string) => void
@@ -29,7 +30,7 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
               <td className='px-4 py-3 font-semibold text-center'>{page.name}</td>
               <td className='px-4 py-3 text-center'>{page.url}</td>
               <td className='px-4 py-3 text-center'>{page.score}</td>
-              <td className='px-4 py-3 text-center'>{page.date}</td>
+              <td className='px-4 py-3 text-center whitespace-pre'> {formatDate(page.date)}</td>
               <td className='px-4 py-3'>
                 <button type='button' className='transition block w-full bg-gray-900 mt-4
                 py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
@@ -47,25 +48,6 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
               >DELETE</button></td>
             </tr>
           ))}
-          <tr className='border-b hover:text-white hover:bg-gray-900' key='1'>
-          <td className='px-4 py-3 font-semibold text-center'>test</td>
-              <td className='px-4 py-3 text-center'>test</td>
-              <td className='px-4 py-3 text-center'>test</td>
-              <td className='px-4 py-3 text-center'>test</td>
-              <td className='px-4 py-3'>
-                <button type='button' className='transition block w-full bg-gray-900 mt-4
-                py-1 px-2 rounded text-white font-semibold mb-2 active:bg-gray-500 text-sm
-                hover:scale-[0.95] active:scale-[1] hover:bg-white hover:text-gray-900'
-                >再取得
-                </button>
-              </td>
-              <td className='px-4 py-3 text-center'>
-                <button className='flex justify-center hover:bg-white hover:text-gray-900
-                transition w-full bg-gray-900 mt-4 cursor-pointer text-sm
-                py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
-                hover:scale-[0.95] active:scale-[1]'
-              >DELETE</button></td>
-          </tr>
         </tbody>
       </table>
     </section>
