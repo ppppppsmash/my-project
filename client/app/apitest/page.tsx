@@ -132,13 +132,6 @@ const page: NextPage<Props> = (props): JSX.Element => {
         })
 
         const data = await response.json()
-        // data[0].map((item: any, index: any) => {
-        //   console.log(item.label)
-        //   console.log(item.score)
-        //   setPageList(prevState => [...prevState, {
-        //     score: item.score,
-        //     label: item.label}])
-        // })
         setPageList(prevState => {
           const updatedList = data[0].map((item: any) => ({
             score: item.score,
@@ -151,7 +144,6 @@ const page: NextPage<Props> = (props): JSX.Element => {
       }
     }
 
-      // pageListが更新された後にAPIリクエストを行う
       getData()
   }, [])
 

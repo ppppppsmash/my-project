@@ -16,7 +16,7 @@ import { urlValidate } from '@/lib/urlValidate'
 interface Props extends ApiResultType {}
 
 const page: NextPage<Props> = (props): JSX.Element => {
-  const [urlName, setUrlName] = useState('')
+  const [name, setName] = useState('')
   const [url, setUrl] = useState('')
 
   const [results, setResults] = useState<Props>()
@@ -31,7 +31,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
   const [loading, setLoading] = useState(false)
 
   const getChangeUrlName = ({target}: React.ChangeEvent<HTMLInputElement>) => {
-    setUrlName(target.value)
+    setName(target.value)
   }
 
   const getChangeUrl = ({target}: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,8 +56,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
     const res = await fetchPsiData(url, selectedDevice)
 
     if (res.ok) {
-      const data = await res.json()
-      const { result } = data
+      const info = await res.json()
+      const { result } = info
       const { lighthouseResult } = result
       const { categories } = lighthouseResult
       const { performance } = categories
@@ -78,7 +78,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
       }
 
       const psiData = {
-        name: urlName,
+        name,
         url,
         date,
         score,
@@ -93,6 +93,16 @@ const page: NextPage<Props> = (props): JSX.Element => {
         ? setPageList(prevState => [...prevState, psiData])
         : setMobilePageList(prevState => [...prevState, psiData])
 
+        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}pageList`, {
+          method: 'POST',
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({name, url, score})
+        })
+        const data = await response.json()
+
        setVisible(true)
        setLoading(false)
     }
@@ -100,6 +110,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
 
   const getScoreAgain = async (url: string) => {
     setLoading(true)
+
     const res = await fetchPsiData(url, selectedDevice)
 
     if (res.ok) {
@@ -125,7 +136,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
       }
 
       const psiData = {
-        name: urlName,
+        name,
         url,
         date,
         score,
@@ -134,8 +145,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
       }
 
       selectedDevice === 'desktop'
-        ? setResults(prevState => ({ ...prevState, date, score }))
-        : setMobileResults(prevState => ({ ...prevState, date, score }))
+        ? setResults(prevState => ({ ...prevState, url, date, score }))
+        : setMobileResults(prevState => ({ ...prevState, url, date, score }))
 
       selectedDevice === 'desktop'
         ? setPageList(prevState =>
@@ -162,8 +173,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
   }
 
   const deleteItem = async (index: number) => {
-    setPageList((prevPageList) => {
-      const updatedList = [...prevPageList];
+    setPageList((prevState) => {
+      const updatedList = [...prevState];
       updatedList.splice(index, 1);
       return updatedList;
     });
@@ -226,7 +237,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
         {/* loading */}
         { loading && <Loading /> }
         {/* mobile */}
-        { !loading && mobileResults && selectedDevice === 'mobile' &&
+        { mobileResults && selectedDevice === 'mobile' &&
           <AnalysisTableAll
             pageList={mobilePageList}
             getScoreAgain={getScoreAgain}
@@ -234,7 +245,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
           />
         }
         {/* desktop */}
-        { !loading && results && selectedDevice === 'desktop' &&
+        { results && selectedDevice === 'desktop' &&
           <AnalysisTableAll
             pageList={pageList}
             getScoreAgain={getScoreAgain}
