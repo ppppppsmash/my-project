@@ -11,14 +11,14 @@ export async function POST(request: Request, response: Response) {
   })
 
   const datas = await request.json()
-  const data = datas.score.pop()
+  const score = datas.score.pop()
   const label = datas.label.pop()
 
   const sql = 'INSERT INTO test_db (label, score) VALUES (?, ?)'
-  const result = db.query(sql, [label, data])
+  const data = db.query(sql, [label, score])
   db.end()
 
-  return NextResponse.json(result)
+  return NextResponse.json(data)
 }
 
 export async function GET(request: Request, response: Response) {

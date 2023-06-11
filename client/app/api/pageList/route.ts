@@ -31,7 +31,7 @@ export async function GET(request: Request, response: Response) {
     database: process.env.MYSQL_DATABASE,
   })
 
-  const sql = 'SELECT name, url, score, date FROM site_list_db'
+  const sql = 'SELECT id, name, url, score, date FROM site_list_db'
   const data = await db.query(sql)
 
   db.end()

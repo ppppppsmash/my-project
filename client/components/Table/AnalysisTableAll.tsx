@@ -26,8 +26,8 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
         </thead>
         <tbody className='text-gray-900'>
           {pageList.map((page, index) => (
-            <tr className='border-b hover:text-white hover:bg-gray-900' key={index}>
-              <td className='px-4 py-3 font-semibold text-center'>{page.name}</td>
+            <tr className='border-b hover:text-white hover:bg-gray-900' key={page.id}>
+              <td className='px-4 py-3 font-semibold text-center'>{page.name} - {page.id}</td>
               <td className='px-4 py-3 text-center'>{page.url}</td>
               <td className='px-4 py-3 text-center'>{page.score}</td>
               <td className='px-4 py-3 text-center whitespace-pre'> {formatDate(page.date)}</td>

@@ -16,6 +16,7 @@ import { urlValidate } from '@/lib/urlValidate'
 interface Props extends ApiResultType {}
 
 const page: NextPage<Props> = (props): JSX.Element => {
+  const [id, setId] = useState<number>(0)
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
 
@@ -51,7 +52,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
     return res
   }
 
-  const getPsiInfo = async() => {
+  const getPsiInfo = async(id: number) => {
     setLoading(true)
     const res = await fetchPsiData(url, selectedDevice)
 
@@ -78,6 +79,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
       }
 
       const psiData = {
+        id,
         name,
         url,
         date,
@@ -99,7 +101,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({name, url, score})
+          body: JSON.stringify({id, name, url, score})
         })
 
        setVisible(true)
@@ -150,7 +152,6 @@ const page: NextPage<Props> = (props): JSX.Element => {
       selectedDevice === 'desktop'
         ? setPageList(prevState =>
           prevState.map((item, idx) => {
-            console.log(item, index, idx)
             if (index === idx) {
               return { ...item, score: psiData.score, date }
             }
@@ -158,8 +159,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
           })
         )
         : setMobilePageList(prevState =>
-          prevState.map(item => {
-            if (item.url === url) {
+          prevState.map((item, idx) => {
+            if (index === idx) {
               return { ...item, score: psiData.score, date }
             }
             return item
@@ -193,6 +194,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
         const data = await response.json()
         setPageList(prevState => {
           const updatedList = data[0].map((item: any) => ({
+            id: item.id,
             name: item.name,
             url: item.url,
             score: item.score,
@@ -231,6 +233,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
         <div>
           <div className='w-2/12'>
             <AnalysisButton
+              id={id}
               label='登録'
               handleScore={getPsiInfo}
             />
