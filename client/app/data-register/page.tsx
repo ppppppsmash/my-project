@@ -101,7 +101,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({id, name, url, score})
+          body: JSON.stringify({name, url, score})
         })
 
        setVisible(true)
@@ -146,8 +146,8 @@ const page: NextPage<Props> = (props): JSX.Element => {
       }
 
       selectedDevice === 'desktop'
-        ? setResults(prevState => ({ ...prevState, url, date, score }))
-        : setMobileResults(prevState => ({ ...prevState, url, date, score }))
+        ? setResults(prevState => ({ ...prevState, id, url, date, score }))
+        : setMobileResults(prevState => ({ ...prevState, id, url, date, score }))
 
       selectedDevice === 'desktop'
         ? setPageList(prevState =>
@@ -172,7 +172,17 @@ const page: NextPage<Props> = (props): JSX.Element => {
     }
   }
 
-  const deleteItem = async (index: number) => {
+  const deleteItem = async (index: number, id: number) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}pageList/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      //body: JSON.stringify({id})
+    })
+
+    console.log(response)
+
     setPageList((prevState) => {
       const updatedList = [...prevState];
       updatedList.splice(index, 1);
@@ -183,7 +193,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}pageList`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}pageList/`, {
           method: 'GET',
           cache: 'no-store',
           headers: {

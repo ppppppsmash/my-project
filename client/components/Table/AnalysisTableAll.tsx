@@ -5,7 +5,7 @@ import { formatDate } from '@/lib/formatDate'
 
 interface Props {
   getScoreAgain: (url: string, index: number) => void
-  deleteItem: (index: number) => void
+  deleteItem: (index: number,  id: number) => void
   pageList: ApiResultType[]
 }
 
@@ -44,7 +44,7 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
                 transition w-full bg-gray-900 mt-4 cursor-pointer
                 py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
                 hover:scale-[0.95] active:scale-[1]'
-                onClick={() => deleteItem(index)}
+                onClick={() => deleteItem(index, page.id)}
               >DELETE</button></td>
             </tr>
           ))}
