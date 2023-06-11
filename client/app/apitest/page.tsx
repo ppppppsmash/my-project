@@ -193,13 +193,13 @@ const page: NextPage<Props> = (props): JSX.Element => {
             </div>
           </div>
           <div>
-            
+
              { loading && <Loading /> }
-            
+
             { mobilePageList && selectedDevice === 'mobile' &&
               <BarGraph pageList={mobilePageList} />
             }
-            
+
             { pageList && selectedDevice === 'desktop' &&
               <BarGraph pageList={pageList} />
             }

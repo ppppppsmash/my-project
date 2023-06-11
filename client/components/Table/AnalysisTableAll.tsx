@@ -4,7 +4,7 @@ import { RxCross2 } from 'react-icons/rx'
 import { formatDate } from '@/lib/formatDate'
 
 interface Props {
-  getScoreAgain: (url: string) => void
+  getScoreAgain: (url: string, index: number) => void
   deleteItem: (index: number) => void
   pageList: ApiResultType[]
 }
@@ -35,7 +35,7 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
                 <button type='button' className='transition block w-full bg-gray-900 mt-4
                 py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
                 hover:scale-[0.95] active:scale-[1] hover:bg-white hover:text-gray-900'
-                onClick={()=>getScoreAgain(page.url)}
+                onClick={()=>getScoreAgain(page.url, index)}
                 >再取得
                 </button>
               </td>
