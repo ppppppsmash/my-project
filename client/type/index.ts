@@ -1,5 +1,5 @@
 export interface ApiResultType {
-  id?: number,
+  id: number,
   name?: string
   url: string
   date?: string

@@ -13,6 +13,7 @@ import BarGraph from '@/components/BarGraph'
 interface Props extends ApiResultType {}
 
 const page: NextPage<Props> = (props): JSX.Element => {
+  const [id, setId] = useState<number>(0)
   const [url, setUrl] = useState('')
 
   const [results, setResults] = useState<Props>()
@@ -68,6 +69,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
       }
 
       const psiData = {
+        id,
         url,
         date,
         score,
@@ -162,6 +164,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
           </div>
           <div className='w-2/12'>
             <AnalysisButton
+              id={id}
               label='分析'
               handleScore={getPsiInfo}
             />
