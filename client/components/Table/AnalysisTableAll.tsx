@@ -4,8 +4,8 @@ import { RxCross2 } from 'react-icons/rx'
 import { formatDate } from '@/lib/formatDate'
 
 interface Props {
-  getScoreAgain: (url: string) => void
-  deleteItem: (index: number) => void
+  getScoreAgain: (url: string, index: number) => void
+  deleteItem: (index: number,  id: number) => void
   pageList: ApiResultType[]
 }
 
@@ -26,8 +26,8 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
         </thead>
         <tbody className='text-gray-900'>
           {pageList.map((page, index) => (
-            <tr className='border-b hover:text-white hover:bg-gray-900' key={index}>
-              <td className='px-4 py-3 font-semibold text-center'>{page.name}</td>
+            <tr className='border-b hover:text-white hover:bg-gray-900' key={page.id}>
+              <td className='px-4 py-3 font-semibold text-center'>{page.name} - {page.id}</td>
               <td className='px-4 py-3 text-center'>{page.url}</td>
               <td className='px-4 py-3 text-center'>{page.score}</td>
               <td className='px-4 py-3 text-center whitespace-pre'> {formatDate(page.date)}</td>
@@ -35,7 +35,7 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
                 <button type='button' className='transition block w-full bg-gray-900 mt-4
                 py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
                 hover:scale-[0.95] active:scale-[1] hover:bg-white hover:text-gray-900'
-                onClick={()=>getScoreAgain(page.url)}
+                onClick={()=>getScoreAgain(page.url, index)}
                 >再取得
                 </button>
               </td>
@@ -44,7 +44,7 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
                 transition w-full bg-gray-900 mt-4 cursor-pointer
                 py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
                 hover:scale-[0.95] active:scale-[1]'
-                onClick={() => deleteItem(index)}
+                onClick={() => deleteItem(index, page.id)}
               >DELETE</button></td>
             </tr>
           ))}

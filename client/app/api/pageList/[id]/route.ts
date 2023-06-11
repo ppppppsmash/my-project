@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import mysql from 'mysql2/promise'
 
-export async function POST(request: Request, response: Response) {
+export async function GET(request: Request, { params }: { params: { id: number } }) {
   const db = await mysql.createConnection({
     host: process.env.MYSQL_HOST,
     port: Number(process.env.MYSQL_PORT),
@@ -10,18 +10,18 @@ export async function POST(request: Request, response: Response) {
     database: process.env.MYSQL_DATABASE,
   })
 
-  const datas = await request.json()
-  const score = datas.score.pop()
-  const label = datas.label.pop()
+  const id = params.id
+  console.log(id)
 
-  const sql = 'INSERT INTO test_db (label, score) VALUES (?, ?)'
-  const data = db.query(sql, [label, score])
+  const sql = 'SELECT * FROM site_list_db WHERE id = ?'
+  const data = await db.query(sql, [id])
+
   db.end()
 
   return NextResponse.json(data)
 }
 
-export async function GET(request: Request, response: Response) {
+export async function DELETE(request: Request, { params }: {params: {id: number} }) {
   const db = await mysql.createConnection({
     host: process.env.MYSQL_HOST,
     port: Number(process.env.MYSQL_PORT),
@@ -30,9 +30,10 @@ export async function GET(request: Request, response: Response) {
     database: process.env.MYSQL_DATABASE,
   })
 
-  const sql = 'SELECT label, score FROM test_db'
-  const data = await db.query(sql)
-  console.log(data)
+  const id = params.id
+
+  const sql = 'DELETE FROM site_list_db WHERE id = ?'
+  const data = await db.query(sql, [id])
 
   db.end()
 

@@ -7,8 +7,8 @@ export const formatDate = (timestamp: string | undefined) => {
   const day = date.getDate();
 
   const hours = date.getHours()
-  const minutes = date.getMinutes()
-  const seconds = date.getSeconds()
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+  const seconds = date.getSeconds().toString().padStart(2, '0')
 
   const formattedDate = `${year}/${month}/${day}`
   const formattedTime = `${hours}:${minutes}:${seconds}`

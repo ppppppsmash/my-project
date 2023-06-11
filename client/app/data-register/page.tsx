@@ -3,7 +3,7 @@ import { NextPage } from 'next'
 import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
 import AnalysisTable from '@/components/Table/AnalysisTable'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ApiResultType } from '@/type'
 import Loading from '@/components/Loading'
 import AnalysisTableAll from '@/components/Table/AnalysisTableAll'
@@ -16,6 +16,7 @@ import { urlValidate } from '@/lib/urlValidate'
 interface Props extends ApiResultType {}
 
 const page: NextPage<Props> = (props): JSX.Element => {
+  const [id, setId] = useState<number>(0)
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
 
@@ -51,7 +52,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
     return res
   }
 
-  const getPsiInfo = async() => {
+  const getPsiInfo = async(id: number) => {
     setLoading(true)
     const res = await fetchPsiData(url, selectedDevice)
 
@@ -78,6 +79,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
       }
 
       const psiData = {
+        id,
         name,
         url,
         date,
@@ -101,14 +103,13 @@ const page: NextPage<Props> = (props): JSX.Element => {
           },
           body: JSON.stringify({name, url, score})
         })
-        const data = await response.json()
 
        setVisible(true)
        setLoading(false)
     }
   }
 
-  const getScoreAgain = async (url: string) => {
+  const getScoreAgain = async (url: string, index: number) => {
     setLoading(true)
 
     const res = await fetchPsiData(url, selectedDevice)
@@ -145,22 +146,21 @@ const page: NextPage<Props> = (props): JSX.Element => {
       }
 
       selectedDevice === 'desktop'
-        ? setResults(prevState => ({ ...prevState, url, date, score }))
-        : setMobileResults(prevState => ({ ...prevState, url, date, score }))
+        ? setResults(prevState => ({ ...prevState, id, url, date, score }))
+        : setMobileResults(prevState => ({ ...prevState, id, url, date, score }))
 
       selectedDevice === 'desktop'
         ? setPageList(prevState =>
-          prevState.map(item => {
-            if (item.url === url) {
+          prevState.map((item, idx) => {
+            if (index === idx) {
               return { ...item, score: psiData.score, date }
             }
             return item
           })
         )
         : setMobilePageList(prevState =>
-          prevState.map(item => {
-            if (item.url === url) {
-              console.log(item)
+          prevState.map((item, idx) => {
+            if (index === idx) {
               return { ...item, score: psiData.score, date }
             }
             return item
@@ -172,13 +172,53 @@ const page: NextPage<Props> = (props): JSX.Element => {
     }
   }
 
-  const deleteItem = async (index: number) => {
+  const deleteItem = async (index: number, id: number) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}pageList/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      //body: JSON.stringify({id})
+    })
+
+    console.log(response)
+
     setPageList((prevState) => {
       const updatedList = [...prevState];
       updatedList.splice(index, 1);
       return updatedList;
     });
   }
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}pageList/`, {
+          method: 'GET',
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+
+        const data = await response.json()
+        setPageList(prevState => {
+          const updatedList = data[0].map((item: any) => ({
+            id: item.id,
+            name: item.name,
+            url: item.url,
+            score: item.score,
+            date: item.date
+          }))
+          return [...prevState, ...updatedList]
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+      getData()
+  }, [])
 
   return (
     <div className='w-[80%] mx-auto'>
@@ -203,6 +243,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
         <div>
           <div className='w-2/12'>
             <AnalysisButton
+              id={id}
               label='登録'
               handleScore={getPsiInfo}
             />
@@ -237,7 +278,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
         {/* loading */}
         { loading && <Loading /> }
         {/* mobile */}
-        { mobileResults && selectedDevice === 'mobile' &&
+        { selectedDevice === 'mobile' &&
           <AnalysisTableAll
             pageList={mobilePageList}
             getScoreAgain={getScoreAgain}
@@ -245,7 +286,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
           />
         }
         {/* desktop */}
-        { results && selectedDevice === 'desktop' &&
+        { selectedDevice === 'desktop' &&
           <AnalysisTableAll
             pageList={pageList}
             getScoreAgain={getScoreAgain}
