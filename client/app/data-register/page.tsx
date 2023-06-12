@@ -287,7 +287,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
         {/* loading */}
         { loading && <Loading /> }
         {/* mobile */}
-        { selectedDevice === 'mobile' &&
+        { !loading && selectedDevice === 'mobile' &&
           <AnalysisTableAll
             pageList={mobilePageList}
             getScoreAgain={getScoreAgain}
@@ -295,7 +295,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
           />
         }
         {/* desktop */}
-        { selectedDevice === 'desktop' &&
+        { !loading && selectedDevice === 'desktop' &&
           <AnalysisTableAll
             pageList={pageList}
             getScoreAgain={getScoreAgain}

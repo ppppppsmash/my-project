@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { useState, useEffect } from 'react'
 import { ApiResultType } from '@/type'
 import { RxCross2 } from 'react-icons/rx'
 import { formatDate } from '@/lib/formatDate'
@@ -10,9 +11,15 @@ interface Props {
 }
 
 const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JSX.Element => {
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    pageList.length ? setVisible(true) : setVisible(false)
+  }, [pageList])
 
   return (
     <section>
+      {visible &&
       <table className='rounded my-2 w-full mx-auto text-white border-b-2 border-gray-300'>
         <thead className='bg-black'>
           <tr className='text-left '>
@@ -27,7 +34,7 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
         <tbody className='text-gray-900'>
           {pageList.map((page, index) => (
             <tr className='border-b hover:text-white hover:bg-gray-900' key={page.id}>
-              <td className='px-4 py-3 font-semibold text-center'>{page.name} - {page.id}</td>
+              <td className='px-4 py-3 font-semibold text-center'>{page.name}</td>
               <td className='px-4 py-3 text-center'>{page.url}</td>
               <td className='px-4 py-3 text-center'>{page.score}</td>
               <td className='px-4 py-3 text-center whitespace-pre'> {formatDate(page.date)}</td>
@@ -50,6 +57,7 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
           ))}
         </tbody>
       </table>
+      }
     </section>
   )
 }
