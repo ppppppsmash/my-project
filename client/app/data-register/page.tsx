@@ -109,7 +109,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
     }
   }
 
-  const getScoreAgain = async (url: string, index: number) => {
+  const getScoreAgain = async (url: string, index: number, id: number) => {
     setLoading(true)
 
     const res = await fetchPsiData(url, selectedDevice)
@@ -137,6 +137,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
       }
 
       const psiData = {
+        id,
         name,
         url,
         date,
@@ -167,6 +168,15 @@ const page: NextPage<Props> = (props): JSX.Element => {
           })
         )
 
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}pageList/${id}`, {
+        method: 'PATCH',
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ score })
+      })
+
       setVisible(true)
       setLoading(false)
     }
@@ -178,7 +188,6 @@ const page: NextPage<Props> = (props): JSX.Element => {
       headers: {
         'Content-Type': 'application/json',
       },
-      //body: JSON.stringify({id})
     })
 
     console.log(response)
@@ -278,7 +287,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
         {/* loading */}
         { loading && <Loading /> }
         {/* mobile */}
-        { selectedDevice === 'mobile' &&
+        { !loading && selectedDevice === 'mobile' &&
           <AnalysisTableAll
             pageList={mobilePageList}
             getScoreAgain={getScoreAgain}
@@ -286,7 +295,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
           />
         }
         {/* desktop */}
-        { selectedDevice === 'desktop' &&
+        { !loading && selectedDevice === 'desktop' &&
           <AnalysisTableAll
             pageList={pageList}
             getScoreAgain={getScoreAgain}

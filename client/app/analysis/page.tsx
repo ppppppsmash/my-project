@@ -9,9 +9,11 @@ import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import Loading from '@/components/Loading'
 
+
 interface Props extends ApiResultType {}
 
 const page: NextPage<Props> = (props): JSX.Element => {
+  const [id, setId] = useState<number>(0)
   const [url, setUrl] = useState('')
 
   const [results, setResults] = useState<Props>()
@@ -53,24 +55,34 @@ const page: NextPage<Props> = (props): JSX.Element => {
       const { audits } = lighthouseResult
       const metrics = {
         lcp: audits['largest-contentful-paint'],
-        fid: audits['first-input-delay'],
+        fid: audits['max-potential-fid'],
         cls: audits['cumulative-layout-shift'],
         fcp: audits['first-contentful-paint'],
-        tbt: audits['total-blocking-time'],
-        si: audits['speed-index'],
         fci: audits['first-cpu-idle'],
         eil: audits['estimated-input-latency'],
         fmp: audits['first-meaningful-paint'],
-        tti: audits['interactive']
+        tti: audits['interactive'],
+        tbt: audits['total-blocking-time'],
+        tbf: audits['time-to-first-byte'],
+        si: audits['speed-index']
       }
 
+      console.log(audits)
+
       const psiData = {
+        id,
         url,
         date,
         score,
+        lcp: metrics.lcp.displayValue,
+        fid: metrics.fid.displayValue,
+        cls: metrics.cls.displayValue,
         fcp: metrics.fcp.displayValue,
-        lcp: metrics.lcp.numericValue
+        tbt: metrics.tbt.displayValue,
+        si: metrics.si.displayValue
       }
+
+      console.log(psiData)
 
       selectedDevice === 'desktop'
         ? setResults(prevState => ({ ...prevState, ...psiData }))
@@ -103,6 +115,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
           </div>
           <div className='w-2/12'>
             <AnalysisButton
+              id={id}
               label='分析'
               handleScore={getPsiInfo}
             />

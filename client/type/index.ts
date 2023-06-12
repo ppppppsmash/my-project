@@ -6,7 +6,11 @@ export interface ApiResultType {
   score: number
   label?: string
   lcp?: string
+  fid?: string
+  cls?: string
   fcp?: string
+  tbt?: string
+  tbf?: string
 }
 
 export interface pageList {
