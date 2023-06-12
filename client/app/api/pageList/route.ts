@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import mysql from 'mysql2/promise'
-import { NextApiHandler, NextApiRequest } from "next"
 
 export async function POST(request: Request, response: Response) {
   const db = await mysql.createConnection({
