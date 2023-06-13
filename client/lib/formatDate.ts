@@ -11,7 +11,7 @@ export const formatDate = (timestamp: string | undefined) => {
   const seconds = date.getSeconds().toString().padStart(2, '0')
 
   const formattedDate = `${year}/${month}/${day}`
-  const formattedTime = `${hours}:${minutes}:${seconds}`
+  const formattedTime = `${hours - 9}:${minutes}:${seconds}`
 
   return `${formattedDate}\n${formattedTime}`
 }
