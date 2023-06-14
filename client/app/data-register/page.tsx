@@ -4,16 +4,17 @@ import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
 import AnalysisTable from '@/components/Table/AnalysisTable'
 import { useEffect, useState } from 'react'
-import { ApiResultType } from '@/type'
+import { PSIDataType } from '@/type'
 import Loading from '@/components/Loading'
 import AnalysisTableAll from '@/components/Table/AnalysisTableAll'
 import AnalysisTab from '@/components/Tab/AnalysisTab'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import { urlValidate } from '@/lib/urlValidate'
+import { postData, patchData, deleteData } from '@/lib/fetchData'
 
 
-interface Props extends ApiResultType {}
+interface Props extends PSIDataType {}
 
 const page: NextPage<Props> = (props): JSX.Element => {
   const [id, setId] = useState<number>(0)
@@ -95,14 +96,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
         ? setPageList(prevState => [...prevState, psiData])
         : setMobilePageList(prevState => [...prevState, psiData])
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}pageList`, {
-          method: 'POST',
-          cache: 'no-store',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({name, url, score})
-        })
+        await postData('pageList', {name, url, score})
 
        setVisible(true)
        setLoading(false)
@@ -168,14 +162,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
           })
         )
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}pageList/${id}`, {
-        method: 'PATCH',
-        cache: 'no-store',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ score })
-      })
+      await patchData('pageList', id, { score })
 
       setVisible(true)
       setLoading(false)
@@ -183,14 +170,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
   }
 
   const deleteItem = async (index: number, id: number) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}pageList/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-
-    console.log(response)
+    await deleteData('pageList', id)
 
     setPageList((prevState) => {
       const updatedList = [...prevState];
@@ -230,7 +210,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
   }, [])
 
   return (
-    <div className='w-[80%] mx-auto'>
+    <div className='w-full mx-auto'>
       <section className='mb-10'>
         <div className='text-center mb-2'>
           <h2 className='text-2xl font-semibold'></h2>

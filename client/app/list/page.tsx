@@ -1,38 +1,48 @@
 'use client'
 import { NextPage } from 'next'
-import AnalysisInput from '@/components/Input/AnalysisInput'
-import AnalysisButton from '@/components/Button/AnalysisButton'
+import Link from 'next/link'
+
 import { useEffect, useState } from 'react'
 import { PSIDataType } from '@/type'
-import { urlValidate } from '@/lib/urlValidate'
+import Loading from '@/components/Loading'
+import AnalysisTableAll from '@/components/Table/AnalysisTableAll'
+
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
-import Loading from '@/components/Loading'
-import BarGraph from '@/components/BarGraph'
-import { getDataAll, postData } from '@/lib/fetchData'
+import { urlValidate } from '@/lib/urlValidate'
+import { postData, patchData, deleteData, getDataAll } from '@/lib/fetchData'
 
 interface Props extends PSIDataType {}
 
-const page: NextPage<Props> = (props): JSX.Element => {
+const page: NextPage<Props> = (): JSX.Element => {
   const [id, setId] = useState<number>(0)
+  const [name, setName] = useState('')
   const [url, setUrl] = useState('')
 
   const [results, setResults] = useState<Props>()
   const [mobileResults, setMobileResults] = useState<Props>()
-
+  // const [desktopResults, setDesktopResults] = useState<Props>()
+  const [pageList, setPageList] = useState<Props[]>([])
+  const [mobilePageList, setMobilePageList] = useState<Props[]>([])
   const [selectedDevice, setSelectedDevice] = useState<'mobile' | 'desktop'>('mobile')
 
   const [visible, setVisible] = useState(false)
+
   const [loading, setLoading] = useState(false)
 
-  const [pageList, setPageList] = useState<Props[]>([])
-  const [mobilePageList, setMobilePageList] = useState<Props[]>([])
-
-  const date = new Date().toLocaleString()
+  const getChangeUrlName = ({target}: React.ChangeEvent<HTMLInputElement>) => {
+    setName(target.value)
+  }
 
   const getChangeUrl = ({target}: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(target.value)
   }
+
+  const handleDeviceSelection = (device: 'mobile' | 'desktop') => {
+    setSelectedDevice(device);
+  };
+
+  const date = new Date().toLocaleString()
 
   const fetchPsiData = async (url: string, device: string) => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${urlValidate(url)}&strategy=${device}`, {
@@ -41,18 +51,17 @@ const page: NextPage<Props> = (props): JSX.Element => {
     return res
   }
 
-  const getPsiInfo = async() => {
+  const getScoreAgain = async (url: string, index: number, id: number) => {
     setLoading(true)
+
     const res = await fetchPsiData(url, selectedDevice)
 
     if (res.ok) {
-      const now = new Date()
       const data = await res.json()
       const { result } = data
       const { lighthouseResult } = result
       const { categories } = lighthouseResult
       const { performance } = categories
-      const label = `${now.getMonth() + 1}月${now.getDate()}日`
       const score = performance.score * 100
 
       const { audits } = lighthouseResult
@@ -71,59 +80,68 @@ const page: NextPage<Props> = (props): JSX.Element => {
 
       const psiData = {
         id,
+        name,
         url,
         date,
         score,
-        label,
         fcp: metrics.fcp.displayValue,
         lcp: metrics.lcp.numericValue
       }
 
       selectedDevice === 'desktop'
-        ? setResults(prevState => ({ ...prevState, ...psiData }))
-        : setMobileResults(prevState => ({ ...prevState, ...psiData }))
+        ? setResults(prevState => ({ ...prevState, id, url, date, score }))
+        : setMobileResults(prevState => ({ ...prevState, id, url, date, score }))
+
       selectedDevice === 'desktop'
-        ? setPageList(prevState => [...prevState, psiData])
-        : setMobilePageList(prevState => [...prevState, psiData])
+        ? setPageList(prevState =>
+          prevState.map((item, idx) => {
+            if (index === idx) {
+              return { ...item, score: psiData.score, date }
+            }
+            return item
+          })
+        )
+        : setMobilePageList(prevState =>
+          prevState.map((item, idx) => {
+            if (index === idx) {
+              return { ...item, score: psiData.score, date }
+            }
+            return item
+          })
+        )
 
-        console.log(pageList)
+      await patchData('pageList', id, { score })
 
-       setVisible(true)
-       setLoading(false)
+      setVisible(true)
+      setLoading(false)
     }
   }
 
-  const handleDeviceSelection = (device: 'mobile' | 'desktop') => {
-    setSelectedDevice(device);
-  };
+  const deleteItem = async (index: number, id: number) => {
+    await deleteData('pageList', id)
 
-  const postTest = async () => {
-    const score = pageList.map((page) => {
-      return page.score
-    })
-
-    const label = pageList.map((page) => {
-      return page.label
-    })
-
-    await postData('postTest', {score, label})
-
+    setPageList((prevState) => {
+      const updatedList = [...prevState];
+      updatedList.splice(index, 1);
+      return updatedList;
+    });
   }
 
   useEffect(() => {
     const getData = async () => {
-      try {
-        const data = await getDataAll('postTest')
+        const data = await getDataAll('pageList')
+
         setPageList(prevState => {
-          const updatedList = data[0].map((item: PSIDataType) => ({
+          const updatedList = data[0].map((item: any) => ({
+            id: item.id,
+            name: item.name,
+            url: item.url,
             score: item.score,
-            label: item.label
+            date: item.date
           }))
           return [...prevState, ...updatedList]
         })
-      } catch (error) {
-        console.log(error)
-      }
+
     }
 
       getData()
@@ -131,29 +149,12 @@ const page: NextPage<Props> = (props): JSX.Element => {
 
   return (
     <div className='w-full mx-auto'>
-      <section className='mb-10'>
-        <div className='text-center mb-2'>
-          <h2 className='text-2xl font-semibold'>計測対象URL</h2>
-        </div>
-        <div className='flex items-center justify-center space-x-3'>
-          <div className='w-full'>
-            <AnalysisInput
-              placeholder='https://example.com'
-              handleChange={getChangeUrl}
-            />
-          </div>
-          <div className='w-2/12'>
-            <AnalysisButton
-              id={id}
-              label='分析'
-              handleScore={getPsiInfo}
-            />
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <div
+      <div className='mb-2'>
+        <h2 className='text-xl font-semibold'>ページリスト</h2>
+      </div>
+      <div>
+        <section>
+          <div
             className='w-[250px] flex items-center justify-between mx-auto'
           >
             <div
@@ -176,28 +177,37 @@ const page: NextPage<Props> = (props): JSX.Element => {
             </div>
           </div>
           <div>
-
-             { loading && <Loading /> }
-
-            { mobilePageList && selectedDevice === 'mobile' &&
-              <BarGraph pageList={mobilePageList} />
-            }
-
-            { pageList && selectedDevice === 'desktop' &&
-              <BarGraph pageList={pageList} />
-            }
+          {/* loading */}
+          { loading && <Loading /> }
+          {/* mobile */}
+          { !loading && selectedDevice === 'mobile' &&
+            <AnalysisTableAll
+              pageList={mobilePageList}
+              getScoreAgain={getScoreAgain}
+              deleteItem={deleteItem}
+            />
+          }
+          {/* desktop */}
+          { !loading && selectedDevice === 'desktop' &&
+            <AnalysisTableAll
+              pageList={pageList}
+              getScoreAgain={getScoreAgain}
+              deleteItem={deleteItem}
+            />
+          }
           </div>
-          <div>
-            <button
-              className='w-full bg-gray-900 hover:bg-gray-700 text-white
-              font-bold py-2 px-4 rounded active:bg-gray-500 active:scale-[1]
-              duration-150 focus:shadow-outline ease-in-out hover:scale-[0.95]'
-              onClick={postTest}
-            >
-              データを保存
-            </button>
-          </div>
-      </section>
+        </section>
+      </div>
+      <div className='my-6 flex justify-start'>
+        <button
+          className='w-2/12 bg-gray-900 hover:bg-gray-700 text-white text-sm
+          font-bold py-2 px-4 rounded active:bg-gray-500 active:scale-[1]
+          duration-150 focus:shadow-outline ease-in-out hover:scale-[0.95]'>
+            <Link href='/add'>
+              ページ登録
+            </Link>
+        </button>
+      </div>
     </div>
   )
 }

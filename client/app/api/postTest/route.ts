@@ -14,6 +14,8 @@ export async function POST(request: Request, response: Response) {
   const score = datas.score.pop()
   const label = datas.label.pop()
 
+  console.log(score, label)
+
   const sql = 'INSERT INTO test_db (label, score) VALUES (?, ?)'
   const data = db.query(sql, [label, score])
   db.end()

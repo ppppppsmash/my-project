@@ -1,4 +1,4 @@
-import { ApiResultType } from '@/type'
+import { PSIDataType } from '@/type'
 import { NextPage } from 'next'
 
 interface Props {

@@ -1,5 +1,5 @@
-export interface ApiResultType {
-  id: number,
+export interface PSIDataType {
+  id: number
   name?: string
   url: string
   date?: string
@@ -10,7 +10,7 @@ export interface ApiResultType {
   cls?: string
   fcp?: string
   tbt?: string
-  tbf?: string
+  si?: string
 }
 
 export interface pageList {
