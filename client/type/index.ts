@@ -1,4 +1,4 @@
-export interface ApiResultType {
+export interface PSIDataType {
   id: number,
   name?: string
   url: string
@@ -10,7 +10,7 @@ export interface ApiResultType {
   cls?: string
   fcp?: string
   tbt?: string
-  tbf?: string
+  si?: string
 }
 
 export interface pageList {

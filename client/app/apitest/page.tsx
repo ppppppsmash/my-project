@@ -3,14 +3,14 @@ import { NextPage } from 'next'
 import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
 import { useEffect, useState } from 'react'
-import { ApiResultType } from '@/type'
+import { PSIDataType } from '@/type'
 import { urlValidate } from '@/lib/urlValidate'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import Loading from '@/components/Loading'
 import BarGraph from '@/components/BarGraph'
 
-interface Props extends ApiResultType {}
+interface Props extends PSIDataType {}
 
 const page: NextPage<Props> = (props): JSX.Element => {
   const [id, setId] = useState<number>(0)
@@ -104,9 +104,6 @@ const page: NextPage<Props> = (props): JSX.Element => {
     const label = pageList.map((page) => {
       return page.label
     })
-    console.log(score)
-
-    console.log(label)
 
     try {
       await fetch(`${process.env.NEXT_PUBLIC_URL}postTest`, {
@@ -208,8 +205,13 @@ const page: NextPage<Props> = (props): JSX.Element => {
             }
           </div>
           <div>
-            <button onClick={postTest}>
-              保存
+            <button
+              className='w-full bg-gray-900 hover:bg-gray-700 text-white
+              font-bold py-2 px-4 rounded active:bg-gray-500 active:scale-[1]
+              duration-150 focus:shadow-outline ease-in-out hover:scale-[0.95]'
+              onClick={postTest}
+            >
+              データを保存
             </button>
           </div>
       </section>

@@ -4,7 +4,7 @@ import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
 import AnalysisTable from '@/components/Table/AnalysisTable'
 import { useEffect, useState } from 'react'
-import { ApiResultType } from '@/type'
+import { PSIDataType } from '@/type'
 import Loading from '@/components/Loading'
 import AnalysisTableAll from '@/components/Table/AnalysisTableAll'
 import AnalysisTab from '@/components/Tab/AnalysisTab'
@@ -13,7 +13,7 @@ import { RiComputerLine } from 'react-icons/ri'
 import { urlValidate } from '@/lib/urlValidate'
 
 
-interface Props extends ApiResultType {}
+interface Props extends PSIDataType {}
 
 const page: NextPage<Props> = (props): JSX.Element => {
   const [id, setId] = useState<number>(0)

@@ -2,7 +2,7 @@
 import { FC, useEffect, useState } from 'react'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js'
 import { Bar, Line } from 'react-chartjs-2'
-import { ApiResultType } from '@/type'
+import { PSIDataType } from '@/type'
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -15,7 +15,7 @@ ChartJS.register(
 )
 
 interface Props {
-  pageList: ApiResultType[]
+  pageList: PSIDataType[]
 }
 
 export const options = {

@@ -3,14 +3,14 @@ import { NextPage } from 'next'
 import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
 import { useState } from 'react'
-import { ApiResultType } from '@/type'
+import { PSIDataType } from '@/type'
 import { urlValidate } from '@/lib/urlValidate'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import Loading from '@/components/Loading'
 
 
-interface Props extends ApiResultType {}
+interface Props extends PSIDataType {}
 
 const page: NextPage<Props> = (props): JSX.Element => {
   const [id, setId] = useState<number>(0)
@@ -152,13 +152,37 @@ const page: NextPage<Props> = (props): JSX.Element => {
           {/* mobile */}
           { !loading && mobileResults && selectedDevice === 'mobile' &&
             mobilePageList.map((mobilePage) => (
-              <div>mobile: {mobilePage.score}</div>
+              <div>
+                <ul>
+                  <li>url:  {mobilePage.url}</li>
+                  <li>score: {mobilePage.score}</li>
+                  <li>date:  {mobilePage.date}</li>
+                  <li>lcp: {mobilePage.lcp}</li>
+                  <li>fid: {mobilePage.fid}</li>
+                  <li>cls: {mobilePage.cls}</li>
+                  <li>fcp: {mobilePage.fcp}</li>
+                  <li>tbt: {mobilePage.tbt}</li>
+                  <li>si: {mobilePage.si}</li>
+                </ul>
+              </div>
             ))
           }
           {/* desktop */}
           { !loading && results && selectedDevice === 'desktop' &&
             pageList.map((page) => (
-              <div>desktop: {page.score}</div>
+              <div>
+                <ul>
+                  <li>url:  {page.url}</li>
+                  <li>score: {page.score}</li>
+                  <li>date:  {page.date}</li>
+                  <li>lcp: {page.lcp}</li>
+                  <li>fid: {page.fid}</li>
+                  <li>cls: {page.cls}</li>
+                  <li>fcp: {page.fcp}</li>
+                  <li>tbt: {page.tbt}</li>
+                  <li>si: {page.si}</li>
+                </ul>
+              </div>
             ))
           }
         </div>

@@ -1,7 +1,7 @@
 import { FC } from 'react'
-import { ApiResultType } from '@/type'
+import { PSIDataType } from '@/type'
 
-interface Props extends ApiResultType {
+interface Props extends PSIDataType {
   getScoreAgain?: () => void
 }
 
