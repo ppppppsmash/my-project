@@ -9,6 +9,7 @@ import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import Loading from '@/components/Loading'
 import BarGraph from '@/components/BarGraph'
+import { getDataAll, postData } from '@/lib/fetchData'
 
 interface Props extends PSIDataType {}
 
@@ -105,34 +106,16 @@ const page: NextPage<Props> = (props): JSX.Element => {
       return page.label
     })
 
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_URL}postTest`, {
-        method: 'POST',
-        cache: 'no-store',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({score, label}), // score: [number]
-      })
-    } catch (error) {
-      console.log(error)
-    }
+    await postData('postTest', {score, label})
+
   }
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}postTest`, {
-          method: 'GET',
-          cache: 'no-store',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        })
-
-        const data = await response.json()
+        const data = await getDataAll()
         setPageList(prevState => {
-          const updatedList = data[0].map((item: any) => ({
+          const updatedList = data[0].map((item: PSIDataType) => ({
             score: item.score,
             label: item.label
           }))

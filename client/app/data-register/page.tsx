@@ -11,6 +11,7 @@ import AnalysisTab from '@/components/Tab/AnalysisTab'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import { urlValidate } from '@/lib/urlValidate'
+import { postData, patchData, deleteData } from '@/lib/fetchData'
 
 
 interface Props extends PSIDataType {}
@@ -95,14 +96,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
         ? setPageList(prevState => [...prevState, psiData])
         : setMobilePageList(prevState => [...prevState, psiData])
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}pageList`, {
-          method: 'POST',
-          cache: 'no-store',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({name, url, score})
-        })
+        await postData('pageList', {name, url, score})
 
        setVisible(true)
        setLoading(false)
@@ -168,14 +162,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
           })
         )
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}pageList/${id}`, {
-        method: 'PATCH',
-        cache: 'no-store',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ score })
-      })
+      await patchData('pageList', id, { score })
 
       setVisible(true)
       setLoading(false)
@@ -183,14 +170,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
   }
 
   const deleteItem = async (index: number, id: number) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}pageList/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-
-    console.log(response)
+    await deleteData('pageList', id)
 
     setPageList((prevState) => {
       const updatedList = [...prevState];
