@@ -12,7 +12,7 @@ import { urlValidate } from '@/lib/urlValidate'
 interface Props extends PSIDataType {}
 
 const page: NextPage<Props> = (): JSX.Element => {
-  const [id, setId] = useState<number>(0)
+  const [id, setId] = useState(0)
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
   const [date, setDate] = useState('')
@@ -81,7 +81,7 @@ const page: NextPage<Props> = (): JSX.Element => {
     setUrl(target.value)
   }
   return (
-    <div className='w-[80%] mx-auto'>
+    <div className='w-full mx-auto'>
       <div className='text-center mb-2'>
         <h2 className='text-2xl font-semibold'></h2>
       </div>

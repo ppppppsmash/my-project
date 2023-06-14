@@ -113,7 +113,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const data = await getDataAll()
+        const data = await getDataAll('postTest')
         setPageList(prevState => {
           const updatedList = data[0].map((item: PSIDataType) => ({
             score: item.score,
@@ -130,7 +130,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
   }, [])
 
   return (
-    <div className='w-[80%] mx-auto'>
+    <div className='w-full mx-auto'>
       <section className='mb-10'>
         <div className='text-center mb-2'>
           <h2 className='text-2xl font-semibold'>計測対象URL</h2>

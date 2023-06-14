@@ -101,7 +101,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
   };
 
   return (
-    <div className='w-[80%] mx-auto'>
+    <div className='w-full mx-auto'>
       <section className='mb-10'>
         <div className='text-center mb-2'>
           <h2 className='text-2xl font-semibold'>計測対象URL</h2>

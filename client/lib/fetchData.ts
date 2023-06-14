@@ -1,7 +1,7 @@
 
-export const getDataAll = async() => {
+export const getDataAll = async(api: string) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}postTest`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}${api}/`, {
       method: 'GET',
       cache: 'no-store',
       headers: {
