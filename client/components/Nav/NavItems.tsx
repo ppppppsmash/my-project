@@ -8,7 +8,7 @@ import { SiHackaday } from 'react-icons/si'
 import { BiTestTube } from 'react-icons/bi'
 
 export const subNavItems = [
-  { href: '/add', icon: AiOutlineFileAdd, label: 'ページ登録'}
+  { href: '/list/add', icon: AiOutlineFileAdd, label: 'ページ登録'}
 ]
 
 export const navItems = [
