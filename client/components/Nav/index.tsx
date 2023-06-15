@@ -18,9 +18,8 @@ interface Props {
     label: string
     href: string
     icon: IconType
-    children: NavItemProps[]
+    children?: NavItemProps[]
   }[]
-
 }
 
 const NAV_ITEM_TRANSITION = 'transition-all duration-300 ease-out';
@@ -104,7 +103,7 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
         <div className='space-y-6'>
           {navItems.map((item, index) => (
             <Link
-              key={item.href}
+              key={index}
               href={item.href}
               onMouseEnter={() => handleMouse(index, !!item.children, 'enter')}
               onMouseLeave={() => handleMouse(index, !!item.children, 'leave')}
@@ -117,8 +116,8 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
               </div>
               {/* <div className='pl-[40px]'> */}
               <div className={`${index === activeIndex ? subNavDisplay : SUB_NAV_HIDE} pl-[40px]`}>
-                {item.children && item.children.map((child) => (
-                  <Link href={child.href} className='w-full'>
+                {item.children && item.children.map((child, index) => (
+                  <Link key={index} href={child.href} className='w-full'>
                     <div className={`${subNavDisplay} items-center hover:scale-[0.9]
                       transition p-3 ${pathname === child.href && 'bg-black'}`
                     }>
