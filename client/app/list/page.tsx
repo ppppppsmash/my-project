@@ -21,7 +21,6 @@ const page: NextPage<Props> = (): JSX.Element => {
 
   const [results, setResults] = useState<Props>()
   const [mobileResults, setMobileResults] = useState<Props>()
-  // const [desktopResults, setDesktopResults] = useState<Props>()
   const [pageList, setPageList] = useState<Props[]>([])
   const [mobilePageList, setMobilePageList] = useState<Props[]>([])
   const [selectedDevice, setSelectedDevice] = useState<'mobile' | 'desktop'>('mobile')
@@ -203,7 +202,7 @@ const page: NextPage<Props> = (): JSX.Element => {
           className='w-2/12 bg-gray-900 hover:bg-gray-700 text-white text-sm
           font-bold py-2 px-4 rounded active:bg-gray-500 active:scale-[1]
           duration-150 focus:shadow-outline ease-in-out hover:scale-[0.95]'>
-            <Link href='/add'>
+            <Link href='/list/add'>
               ページ登録
             </Link>
         </button>
