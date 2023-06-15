@@ -7,10 +7,13 @@ import { RiFileList2Line } from 'react-icons/ri'
 import { SiHackaday } from 'react-icons/si'
 import { BiTestTube } from 'react-icons/bi'
 
+export const subNavItems = [
+  { href: '/add', icon: AiOutlineFileAdd, label: 'ページ登録'}
+]
+
 export const navItems = [
   { href: '/', icon: AiOutlineDashboard, label: 'ホーム'},
-  { href: '/list', icon: VscListUnordered, label: 'ページ一覧'},
-  { href: '/add', icon: AiOutlineFileAdd, label: 'ページ登録'},
+  { href: '/list', icon: VscListUnordered, label: 'ページ一覧', children: subNavItems},
   { href: '/compare', icon: MdOutlineCompareArrows, label: 'ページ比較'},
   { href: '/analysis', icon: TbAnalyze, label: 'URL分析'},
   { href: '/data-register', icon: RiFileList2Line, label: 'データ登録'},

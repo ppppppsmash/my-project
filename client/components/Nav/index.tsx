@@ -7,12 +7,20 @@ import Logo from '@/components/Logo'
 import { IconType } from 'react-icons'
 import { RiMenuFoldFill, RiMenuUnfoldFill } from 'react-icons/ri'
 
+interface NavItemProps {
+  label: string
+  href: string
+  icon: IconType
+}
+
 interface Props {
   navItems: {
     label: string
     href: string
     icon: IconType
+    children: NavItemProps[]
   }[]
+
 }
 
 const NAV_OPEN_WIDTH = 'w-60'
@@ -77,7 +85,19 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
                 transition p-3 ${pathname === item.href && 'bg-black'}`
               }>
                 <item.icon size={24} />
-                {visible && <span className='text-[16px] ml-2 leading-none'>{item.label}</span>}
+                {visible && <p className='text-[16px] ml-2 leading-none'>{item.label}</p>}
+              </div>
+              <div className='pl-[40px]'>
+                {item.children && item.children.map((child) => (
+                  <Link href={child.href}>
+                    <div className={`flex items-center hover:scale-[0.9]
+                      transition p-3 ${pathname === child.href && 'bg-black'}`
+                    }>
+                      <child.icon size={18} />
+                      <p className='text-[14px] ml-2 leading-none'>{child.label}</p>
+                    </div>
+                  </Link>
+                ))}
               </div>
             </Link>
           ))}

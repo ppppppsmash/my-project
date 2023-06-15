@@ -21,7 +21,6 @@ const page: NextPage<Props> = (): JSX.Element => {
 
   const [results, setResults] = useState<Props>()
   const [mobileResults, setMobileResults] = useState<Props>()
-  // const [desktopResults, setDesktopResults] = useState<Props>()
   const [pageList, setPageList] = useState<Props[]>([])
   const [mobilePageList, setMobilePageList] = useState<Props[]>([])
   const [selectedDevice, setSelectedDevice] = useState<'mobile' | 'desktop'>('mobile')
