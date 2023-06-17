@@ -10,7 +10,6 @@ import { RiMenuFoldFill, RiMenuUnfoldFill } from 'react-icons/ri'
 interface NavItemProps {
   label: string
   href: string
-  icon: IconType
 }
 
 interface Props {
@@ -55,10 +54,13 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
   }
 
   const handleMouse = (index: number, hasSubNav: boolean, eventType: string) => {
+    if (!visible && eventType === 'enter') {
+      return;
+    }
     if (eventType === 'enter') {
       if (hasSubNav) {
         setActiveIndex(index)
-        navItems[index].children.map((item) => {
+        navItems[index].children?.map((item) => {
           if (pathname === item.href) {
             setSubNavDisplay(SUB_NAV_DISPLAY)
           } else {
