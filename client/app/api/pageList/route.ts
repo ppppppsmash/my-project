@@ -12,15 +12,20 @@ export async function GET(request: Request, response: Response) {
 }
 
 export async function POST(request: Request, response: Response) {
-  const db = await dbConnect()
+  const db = await dbConnect();
 
-  const { name, url, score } = await request.json()
+  const data = await request.json();
 
-  const sql = 'INSERT INTO site_list_db (name, url, score) VALUES (?, ?, ?)'
-  const result = db.query(sql, [name, url, score])
-  db.end()
+  const properties = Object.keys(data);
+  const values = Object.values(data);
 
-  return NextResponse.json(result)
+  const placeholders = properties.map(() => '?').join(', ');
+  const sql = `INSERT INTO site_list_db (${properties.join(', ')}) VALUES (${placeholders})`;
+
+  const result = db.query(sql, values);
+  db.end();
+
+  return NextResponse.json(result);
 }
 
 export async function DELETE(request: Request, response: Response) {

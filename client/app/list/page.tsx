@@ -148,52 +148,19 @@ const page: NextPage<Props> = (): JSX.Element => {
 
   return (
     <div className='w-full mx-auto'>
-      <div className='mb-2'>
-        <h2 className='text-xl font-semibold'>ページリスト</h2>
+      <div className='mb-5'>
+        <h2 className='text-xl text-center font-semibold'>ページ一覧</h2>
       </div>
       <div>
         <section>
-          <div
-            className='w-[250px] flex items-center justify-between mx-auto'
-          >
-            <div
-              className={`flex items-center rounded border border-gray-300 p-2
-              cursor-pointer space-x-2 hover:text-white hover:bg-gray-900
-              ${selectedDevice === 'mobile' ? 'text-white bg-gray-900' : ''}`}
-              onClick={() => handleDeviceSelection('mobile')}
-            >
-              <SlScreenSmartphone size={26} />
-              <p className='text-sm'>携帯電話</p>
-            </div>
-            <div
-              className={`flex items-center rounded border border-gray-300 p-2
-              cursor-pointer space-x-2 hover:text-white hover:bg-gray-900
-              ${selectedDevice === 'desktop' ? 'text-white bg-gray-900' : ''}`}
-              onClick={() => handleDeviceSelection('desktop')}
-            >
-              <RiComputerLine size={26} />
-              <p className='text-sm'>デスクトップ</p>
-            </div>
-          </div>
           <div>
-          {/* loading */}
-          { loading && <Loading /> }
-          {/* mobile */}
-          { !loading && selectedDevice === 'mobile' &&
-            <AnalysisTableAll
-              pageList={mobilePageList}
-              getScoreAgain={getScoreAgain}
-              deleteItem={deleteItem}
-            />
-          }
-          {/* desktop */}
-          { !loading && selectedDevice === 'desktop' &&
+
             <AnalysisTableAll
               pageList={pageList}
               getScoreAgain={getScoreAgain}
               deleteItem={deleteItem}
             />
-          }
+
           </div>
         </section>
       </div>

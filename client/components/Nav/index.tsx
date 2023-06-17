@@ -110,7 +110,7 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
               onMouseEnter={() => handleMouse(index, !!item.children, 'enter')}
               onMouseLeave={() => handleMouse(index, !!item.children, 'leave')}
             >
-              <div className={`flex items-center hover:scale-[0.95]
+              <div className={`flex items-center hover:scale-[0.95] hover:bg-black
                 transition p-3 ${pathname === item.href && 'bg-black'}`
               }>
                 <item.icon size={24} />
