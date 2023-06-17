@@ -10,7 +10,7 @@ import AnalysisTableAll from '@/components/Table/AnalysisTableAll'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import { urlValidate } from '@/lib/urlValidate'
-import { postData, patchData, deleteData, getDataAll } from '@/lib/fetchData'
+import { postData, patchData, deleteData, getDataAll, getData } from '@/lib/fetchData'
 
 interface Props extends PSIDataType {}
 
@@ -78,7 +78,6 @@ const page: NextPage<Props> = (): JSX.Element => {
       }
 
       const psiData = {
-        id,
         name,
         url,
         date,
@@ -127,7 +126,7 @@ const page: NextPage<Props> = (): JSX.Element => {
   }
 
   useEffect(() => {
-    const getData = async () => {
+    const getDataByAll = async () => {
         const data = await getDataAll('pageList')
 
         setPageList(prevState => {
@@ -143,60 +142,11 @@ const page: NextPage<Props> = (): JSX.Element => {
 
     }
 
-      getData()
+    getDataByAll()
   }, [])
 
   return (
     <div className='w-full mx-auto'>
-      <div className='mb-2'>
-        <h2 className='text-xl font-semibold'>ページリスト</h2>
-      </div>
-      <div>
-        <section>
-          <div
-            className='w-[250px] flex items-center justify-between mx-auto'
-          >
-            <div
-              className={`flex items-center rounded border border-gray-300 p-2
-              cursor-pointer space-x-2 hover:text-white hover:bg-gray-900
-              ${selectedDevice === 'mobile' ? 'text-white bg-gray-900' : ''}`}
-              onClick={() => handleDeviceSelection('mobile')}
-            >
-              <SlScreenSmartphone size={26} />
-              <p className='text-sm'>携帯電話</p>
-            </div>
-            <div
-              className={`flex items-center rounded border border-gray-300 p-2
-              cursor-pointer space-x-2 hover:text-white hover:bg-gray-900
-              ${selectedDevice === 'desktop' ? 'text-white bg-gray-900' : ''}`}
-              onClick={() => handleDeviceSelection('desktop')}
-            >
-              <RiComputerLine size={26} />
-              <p className='text-sm'>デスクトップ</p>
-            </div>
-          </div>
-          <div>
-          {/* loading */}
-          { loading && <Loading /> }
-          {/* mobile */}
-          { !loading && selectedDevice === 'mobile' &&
-            <AnalysisTableAll
-              pageList={mobilePageList}
-              getScoreAgain={getScoreAgain}
-              deleteItem={deleteItem}
-            />
-          }
-          {/* desktop */}
-          { !loading && selectedDevice === 'desktop' &&
-            <AnalysisTableAll
-              pageList={pageList}
-              getScoreAgain={getScoreAgain}
-              deleteItem={deleteItem}
-            />
-          }
-          </div>
-        </section>
-      </div>
       <div className='my-6 flex justify-start'>
         <button
           className='w-2/12 bg-gray-900 hover:bg-gray-700 text-white text-sm
@@ -206,6 +156,22 @@ const page: NextPage<Props> = (): JSX.Element => {
               ページ登録
             </Link>
         </button>
+      </div>
+      <div className='mb-5'>
+        <h2 className='text-xl text-center font-semibold'>ページ一覧</h2>
+      </div>
+      <div>
+        <section>
+          <div>
+
+            <AnalysisTableAll
+              pageList={pageList}
+              getScoreAgain={getScoreAgain}
+              deleteItem={deleteItem}
+            />
+
+          </div>
+        </section>
       </div>
     </div>
   )

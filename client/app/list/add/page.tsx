@@ -8,6 +8,7 @@ import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
 
 import { urlValidate } from '@/lib/urlValidate'
+import { postData } from '@/lib/fetchData'
 
 interface Props extends PSIDataType {}
 
@@ -15,9 +16,7 @@ const page: NextPage<Props> = (): JSX.Element => {
   const [id, setId] = useState(0)
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
-  const [date, setDate] = useState('')
 
-  const [pageList, setPageList] = useState<PSIDataType[]>([])
   const [selectedDevice, setSelectedDevice] = useState<'mobile' | 'desktop'>('mobile')
 
   const fetchPsiData = async (url: string, device: string) => {
@@ -41,35 +40,33 @@ const page: NextPage<Props> = (): JSX.Element => {
       const { audits } = lighthouseResult
       const metrics = {
         lcp: audits['largest-contentful-paint'],
-        fid: audits['first-input-delay'],
+        fid: audits['max-potential-fid'],
         cls: audits['cumulative-layout-shift'],
         fcp: audits['first-contentful-paint'],
-        tbt: audits['total-blocking-time'],
-        si: audits['speed-index'],
         fci: audits['first-cpu-idle'],
         eil: audits['estimated-input-latency'],
         fmp: audits['first-meaningful-paint'],
-        tti: audits['interactive']
+        tti: audits['interactive'],
+        tbt: audits['total-blocking-time'],
+        tbf: audits['time-to-first-byte'],
+        si: audits['speed-index']
       }
 
       const psiData = {
-        id,
         name,
         url,
-        date,
         score,
+        lcp: metrics.lcp.displayValue,
+        fid: metrics.fid.displayValue,
+        cls: metrics.cls.displayValue,
         fcp: metrics.fcp.displayValue,
-        lcp: metrics.lcp.numericValue
+        tbt: metrics.tbt.displayValue,
+        si: metrics.si.displayValue
       }
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}pageList`, {
-          method: 'POST',
-          cache: 'no-store',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({name, url, score})
-        })
+      console.log(psiData)
+
+      await postData('pageList', psiData)
     }
   }
 
@@ -118,30 +115,7 @@ const page: NextPage<Props> = (): JSX.Element => {
                 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
             >
               <option>PSI自動取得時間指定</option>
-              <option>2016</option>
-              <option>2017</option>
-              <option>2018</option>
-              <option>2019</option>
-              <option>2020</option>
-              <option>2021</option>
-              <option>2022</option>
-            </select>
-          </div>
-          <div className='w-1/2'>
-          <select
-              className='bg-gray-900 border border-gray-800 text-gray-900 text-sm
-                rounded focus:ring-rounded focus:ring-gray-500 focus:border-gray-500
-                block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400
-                dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
-            >
-              <option>PSI自動取得時間指定</option>
-              <option>2016</option>
-              <option>2017</option>
-              <option>2018</option>
-              <option>2019</option>
-              <option>2020</option>
-              <option>2021</option>
-              <option>2022</option>
+              <option>24時間</option>
             </select>
           </div>
         </div>

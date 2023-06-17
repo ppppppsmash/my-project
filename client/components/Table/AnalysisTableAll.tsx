@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import { PSIDataType } from '@/type'
 import { formatDate } from '@/lib/formatDate'
 import Loading from '@/components/Loading'
+import { getData } from '@/lib/fetchData'
+import Link from 'next/link'
 
 interface Props {
   getScoreAgain: (url: string, index: number, id: number) => void
@@ -39,34 +41,36 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
         </thead>
         <tbody className='text-gray-900'>
           {pageList.map((page, index) => (
-            <tr className='border-b hover:text-white hover:bg-gray-900' key={page.id}>
-              <td className='px-4 py-3 font-semibold text-center'>{page.name}</td>
-              <td className='px-4 py-3 text-center'>{page.url}</td>
-              <td className='px-4 py-3 text-center'>{page.score}</td>
-              <td className='px-4 py-3 text-center whitespace-pre'>{formatDate(page.date)}</td>
-              <td className='px-4 py-3'>
-                <button
-                  type='button'
-                  className='transition block w-full bg-gray-900 mt-4
-                    py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
-                    hover:scale-[0.95] active:scale-[1] hover:bg-white hover:text-gray-900'
-                  onClick={()=>handleClick(page.url, index, page.id)}
-                >
-                  再取得
-                </button>
-              </td>
-              <td className='px-4 py-3 text-center'>
-                <button
-                  className='flex justify-center hover:bg-white hover:text-gray-900
-                    transition w-full bg-gray-900 mt-4 cursor-pointer
-                    py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
-                    hover:scale-[0.95] active:scale-[1]'
-                  onClick={() => deleteItem(index, page.id)}
-                >
-                  DELETE
-                </button>
-              </td>
-            </tr>
+              <tr className='border-b hover:text-white hover:bg-gray-900' key={page.id}>
+                <td className='px-4 py-3 font-semibold text-center underline'>
+                  <Link href={`/list/${page.id}`}>{page.name}</Link>
+                </td>
+                <td className='px-4 py-3 text-center'>{page.url}</td>
+                <td className='px-4 py-3 text-center'>{page.score}</td>
+                <td className='px-4 py-3 text-center whitespace-pre'>{formatDate(page.date)}</td>
+                <td className='px-4 py-3'>
+                  <button
+                    type='button'
+                    className='transition block w-full bg-gray-900 mt-4
+                      py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
+                      hover:scale-[0.95] active:scale-[1] hover:bg-white hover:text-gray-900'
+                    onClick={()=>handleClick(page.url, index, page.id)}
+                  >
+                    再取得
+                  </button>
+                </td>
+                <td className='px-4 py-3 text-center'>
+                  <button
+                    className='flex justify-center hover:bg-white hover:text-gray-900
+                      transition w-full bg-gray-900 mt-4 cursor-pointer
+                      py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
+                      hover:scale-[0.95] active:scale-[1]'
+                    onClick={() => deleteItem(index, page.id)}
+                  >
+                    DELETE
+                  </button>
+                </td>
+              </tr>
           ))}
         </tbody>
       </table>

@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { FaChevronRight } from 'react-icons/fa'
-import { useRouter, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 
 interface NavItemProps {
   label: string
@@ -11,7 +12,7 @@ interface Props {
   navItems: {
     label: string
     href: string
-    children: NavItemProps
+    children?: NavItemProps[]
   }[]
 }
 
@@ -24,23 +25,26 @@ const BreadCrumbs: FC<Props> = ({ navItems }): JSX.Element => {
     }
   })
 
-  console.log(items)
+  const subItems = navItems.map((item) => {
+    if(item.children) return item.children
+  })
 
   return (
-    <ol className='flex font-bold overflow-x-auto whitespace-nowrap' aria-label='breadcrumb'>
-      {items.map((item, index) => (
+    <div>
+      <ol className='flex font-bold overflow-x-auto whitespace-nowrap' aria-label='breadcrumb'>
+        {items.map((item, index) => (
           <li className='flex items-center' key={index}>
-            {navItems.length - 1 !== index
-              ?
-              <>
-                <a className='text-gray-900 text-sm md:text-base underline' href={item.href}>{item.label}</a>
-                <FaChevronRight aria-hidden='true' className='text-xs mx-2'/>
-              </>
-              : <span className='text-sm md:text-base' aria-current='page'>{item.label}</span>
-            }
+            <>
+              <Link className='text-gray-900 text-sm md:text-base underline' href={item.href}>{item.label}</Link>
+              <FaChevronRight aria-hidden='true' className='text-xs mx-2'/>
+            </>
           </li>
-      ))}
-    </ol>
+        ))}
+        {/* {subItems.map((subItem) => (
+          <span>{subItem.label}</span>
+        ))} */}
+      </ol>
+    </div>
   )
 }
 

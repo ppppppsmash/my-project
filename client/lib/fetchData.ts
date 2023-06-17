@@ -16,6 +16,24 @@ export const getDataAll = async(api: string) => {
   }
 }
 
+
+export const getData = async(api: string, id: number) => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}${api}/${id}`, {
+      method: 'GET',
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    const data = await response.json()
+    console.log(data)
+    return data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export const postData = async (api: string, args: any) => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}${api}`, {
