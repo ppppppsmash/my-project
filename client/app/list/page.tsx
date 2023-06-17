@@ -10,7 +10,7 @@ import AnalysisTableAll from '@/components/Table/AnalysisTableAll'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import { urlValidate } from '@/lib/urlValidate'
-import { postData, patchData, deleteData, getDataAll } from '@/lib/fetchData'
+import { postData, patchData, deleteData, getDataAll, getData } from '@/lib/fetchData'
 
 interface Props extends PSIDataType {}
 
@@ -78,7 +78,6 @@ const page: NextPage<Props> = (): JSX.Element => {
       }
 
       const psiData = {
-        id,
         name,
         url,
         date,
@@ -127,7 +126,7 @@ const page: NextPage<Props> = (): JSX.Element => {
   }
 
   useEffect(() => {
-    const getData = async () => {
+    const getDataByAll = async () => {
         const data = await getDataAll('pageList')
 
         setPageList(prevState => {
@@ -143,11 +142,21 @@ const page: NextPage<Props> = (): JSX.Element => {
 
     }
 
-      getData()
+    getDataByAll()
   }, [])
 
   return (
     <div className='w-full mx-auto'>
+      <div className='my-6 flex justify-start'>
+        <button
+          className='w-2/12 bg-gray-900 hover:bg-gray-700 text-white text-sm
+          font-bold py-2 px-4 rounded active:bg-gray-500 active:scale-[1]
+          duration-150 focus:shadow-outline ease-in-out hover:scale-[0.95]'>
+            <Link href='/list/add'>
+              ページ登録
+            </Link>
+        </button>
+      </div>
       <div className='mb-5'>
         <h2 className='text-xl text-center font-semibold'>ページ一覧</h2>
       </div>
@@ -163,16 +172,6 @@ const page: NextPage<Props> = (): JSX.Element => {
 
           </div>
         </section>
-      </div>
-      <div className='my-6 flex justify-start'>
-        <button
-          className='w-2/12 bg-gray-900 hover:bg-gray-700 text-white text-sm
-          font-bold py-2 px-4 rounded active:bg-gray-500 active:scale-[1]
-          duration-150 focus:shadow-outline ease-in-out hover:scale-[0.95]'>
-            <Link href='/list/add'>
-              ページ登録
-            </Link>
-        </button>
       </div>
     </div>
   )
