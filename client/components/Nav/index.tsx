@@ -9,13 +9,13 @@ import { RiMenuFoldFill, RiMenuUnfoldFill } from 'react-icons/ri'
 
 interface NavItemProps {
   label: string
-  href: string
+  link: string
 }
 
 interface Props {
   navItems: {
     label: string
-    href: string
+    link: string
     icon: IconType
     children?: NavItemProps[]
   }[]
@@ -61,7 +61,7 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
       if (hasSubNav) {
         setActiveIndex(index)
         navItems[index].children?.map((item) => {
-          if (pathname === item.href) {
+          if (pathname === item.link) {
             setSubNavDisplay(SUB_NAV_DISPLAY)
           } else {
             setSubNavDisplay(index === activeIndex ? SUB_NAV_DISPLAY : SUB_NAV_HIDE)
@@ -106,12 +106,12 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
           {navItems.map((item, index) => (
             <Link
               key={index}
-              href={item.href}
+              href={item.link}
               onMouseEnter={() => handleMouse(index, !!item.children, 'enter')}
               onMouseLeave={() => handleMouse(index, !!item.children, 'leave')}
             >
               <div className={`flex items-center hover:scale-[0.95] hover:bg-black
-                transition p-3 ${pathname === item.href && 'bg-black'}`
+                transition p-3 ${pathname === item.link && 'bg-black'}`
               }>
                 <item.icon size={24} />
                 {visible && <p className='text-[16px] ml-2 leading-none'>{item.label}</p>}
@@ -119,9 +119,9 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
               {/* <div className='pl-[40px]'> */}
               <div className={`${index === activeIndex ? subNavDisplay : SUB_NAV_HIDE} pl-[40px]`}>
                 {item.children && item.children.map((child, index) => (
-                  <Link key={index} href={child.href} className='w-full'>
+                  <Link key={index} href={child.link} className='w-full'>
                     <div className={`${subNavDisplay} items-center hover:scale-[0.9]
-                      transition p-3 ${pathname === child.href && 'bg-black'}`
+                      transition p-3 ${pathname === child.link && 'bg-black'}`
                     }>
                       <child.icon size={18} />
                       <p className='text-[14px] ml-2 leading-none'>{child.label}</p>
