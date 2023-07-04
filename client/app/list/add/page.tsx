@@ -9,6 +9,7 @@ import AnalysisButton from '@/components/Button/AnalysisButton'
 
 import { urlValidate } from '@/lib/urlValidate'
 import { postData } from '@/lib/fetchData'
+import AnalysisCheckbox from '@/components/CheckBox/Analysischeckbox'
 
 interface Props extends PSIDataType {}
 
@@ -121,16 +122,8 @@ const page: NextPage<Props> = (): JSX.Element => {
         </div>
 
         <div className='flex items-start justify-spacebetween space-x-8 mb-2'>
-          <div className="flex items-start space-x-3 py-6">
-            <input type="checkbox" className="border-gray-300 rounded h-5 w-5" />
-            <p>Desktop</p>
-          </div>
-          <div className="flex items-start space-x-3 py-6">
-            <input type="checkbox" className="border-gray-300 rounded h-5 w-5" />
-            <p>Mobile</p>
-          </div>
+          <AnalysisCheckbox />
         </div>
-        <div></div>
 
         <div className='w-2/12'>
           <AnalysisButton
