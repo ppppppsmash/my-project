@@ -17,11 +17,13 @@ export default function RootLayout({
       <body>
         <div className='flex'>
           <Nav navItems={navItems} />
-          <div className='flex-1 p-10 text-primary-dark bg-primary'>
+          <div className='flex-1'>
             <BreadCrumbs navItems={navItems} />
-            <main className="flex min-h-screen flex-col items-center justify-between">
-              {children}
-            </main>
+            <div className='p-6 text-primary-dark bg-primary'>
+              <main className="flex min-h-screen flex-col items-center justify-between">
+                {children}
+              </main>
+            </div>
           </div>
         </div>
       </body>

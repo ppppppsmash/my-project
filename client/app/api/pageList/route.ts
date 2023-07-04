@@ -12,20 +12,20 @@ export async function GET(request: Request, response: Response) {
 }
 
 export async function POST(request: Request, response: Response) {
-  const db = await dbConnect();
+  const db = await dbConnect()
 
-  const data = await request.json();
+  const data = await request.json()
 
-  const properties = Object.keys(data);
-  const values = Object.values(data);
+  const properties = Object.keys(data)
+  const values = Object.values(data)
 
-  const placeholders = properties.map(() => '?').join(', ');
-  const sql = `INSERT INTO site_list_db (${properties.join(', ')}) VALUES (${placeholders})`;
+  const placeholders = properties.map(() => '?').join(', ')
+  const sql = `INSERT INTO site_list_db (${properties.join(', ')}) VALUES (${placeholders})`
 
-  const result = db.query(sql, values);
-  db.end();
+  const result = db.query(sql, values)
+  db.end()
 
-  return NextResponse.json(result);
+  return NextResponse.json(result)
 }
 
 export async function DELETE(request: Request, response: Response) {

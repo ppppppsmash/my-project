@@ -1,6 +1,6 @@
 'use client'
 import { NextPage } from 'next'
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import Link from 'next/link'
 import { PSIDataType } from '@/type'
 
@@ -9,6 +9,7 @@ import AnalysisButton from '@/components/Button/AnalysisButton'
 
 import { urlValidate } from '@/lib/urlValidate'
 import { postData } from '@/lib/fetchData'
+import AnalysisCheckbox from '@/components/CheckBox/AnalysisCheckbox'
 
 interface Props extends PSIDataType {}
 
@@ -17,7 +18,7 @@ const page: NextPage<Props> = (): JSX.Element => {
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
 
-  const [selectedDevice, setSelectedDevice] = useState<'mobile' | 'desktop'>('mobile')
+  const [selectedDevice, setSelectedDevice] = useState<string[]>([])
 
   const fetchPsiData = async (url: string, device: string) => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${urlValidate(url)}&strategy=${device}`, {
@@ -27,56 +28,111 @@ const page: NextPage<Props> = (): JSX.Element => {
   }
 
   const getPsi = async(id: number) => {
-    const res = await fetchPsiData(url, selectedDevice)
+    if (selectedDevice.includes('desktop') && selectedDevice.includes('mobile')) {
+      const desktopRes = await fetchPsiData(url, 'desktop')
+      const mobileRes = await fetchPsiData(url, 'mobile')
 
-    if (res.ok) {
-      const info = await res.json()
-      const { result } = info
-      const { lighthouseResult } = result
-      const { categories } = lighthouseResult
-      const { performance } = categories
-      const score = performance.score * 100
+      if (desktopRes.ok) {
+        const desktopInfo = await desktopRes.json();
+        const { result: desktopResult } = desktopInfo;
+        const { lighthouseResult } = desktopResult
+        const { categories } = lighthouseResult
+        const { performance } = categories
+        const score = performance.score * 100
 
-      const { audits } = lighthouseResult
-      const metrics = {
-        lcp: audits['largest-contentful-paint'],
-        fid: audits['max-potential-fid'],
-        cls: audits['cumulative-layout-shift'],
-        fcp: audits['first-contentful-paint'],
-        fci: audits['first-cpu-idle'],
-        eil: audits['estimated-input-latency'],
-        fmp: audits['first-meaningful-paint'],
-        tti: audits['interactive'],
-        tbt: audits['total-blocking-time'],
-        tbf: audits['time-to-first-byte'],
-        si: audits['speed-index']
+        const { audits } = lighthouseResult
+        const metrics = {
+          lcp: audits['largest-contentful-paint'],
+          fid: audits['max-potential-fid'],
+          cls: audits['cumulative-layout-shift'],
+          fcp: audits['first-contentful-paint'],
+          fci: audits['first-cpu-idle'],
+          eil: audits['estimated-input-latency'],
+          fmp: audits['first-meaningful-paint'],
+          tti: audits['interactive'],
+          tbt: audits['total-blocking-time'],
+          tbf: audits['time-to-first-byte'],
+          si: audits['speed-index']
+        }
+
+        const psiData = {
+          name,
+          url,
+          score,
+          lcp: metrics.lcp.displayValue,
+          fid: metrics.fid.displayValue,
+          cls: metrics.cls.displayValue,
+          fcp: metrics.fcp.displayValue,
+          tbt: metrics.tbt.displayValue,
+          si: metrics.si.displayValue
+        }
+
+        console.log(psiData)
+
+        //await postData('pageList', psiData)
+
       }
 
-      const psiData = {
-        name,
-        url,
-        score,
-        lcp: metrics.lcp.displayValue,
-        fid: metrics.fid.displayValue,
-        cls: metrics.cls.displayValue,
-        fcp: metrics.fcp.displayValue,
-        tbt: metrics.tbt.displayValue,
-        si: metrics.si.displayValue
+        if (mobileRes.ok) {
+          const mobileInfo = await mobileRes.json();
+          const { result: mobileResult } = mobileInfo;
+          const { lighthouseResult } = mobileResult
+          const { categories } = lighthouseResult
+          const { performance } = categories
+          const score = performance.score * 100
+
+          const { audits } = lighthouseResult
+          const metrics = {
+            lcp: audits['largest-contentful-paint'],
+            fid: audits['max-potential-fid'],
+            cls: audits['cumulative-layout-shift'],
+            fcp: audits['first-contentful-paint'],
+            fci: audits['first-cpu-idle'],
+            eil: audits['estimated-input-latency'],
+            fmp: audits['first-meaningful-paint'],
+            tti: audits['interactive'],
+            tbt: audits['total-blocking-time'],
+            tbf: audits['time-to-first-byte'],
+            si: audits['speed-index']
+          }
+
+        const psiData = {
+          name,
+          url,
+          score,
+          lcp: metrics.lcp.displayValue,
+          fid: metrics.fid.displayValue,
+          cls: metrics.cls.displayValue,
+          fcp: metrics.fcp.displayValue,
+          tbt: metrics.tbt.displayValue,
+          si: metrics.si.displayValue
+        }
+
+        console.log(psiData)
+
+      // await postData('pageList', psiData)
       }
-
-      console.log(psiData)
-
-      await postData('pageList', psiData)
     }
   }
 
-  const getChangeUrlName = ({target}: React.ChangeEvent<HTMLInputElement>) => {
+  const getChangeUrlName = ({target}: ChangeEvent<HTMLInputElement>) => {
     setName(target.value)
   }
 
-  const getChangeUrl = ({target}: React.ChangeEvent<HTMLInputElement>) => {
+  const getChangeUrl = ({target}: ChangeEvent<HTMLInputElement>) => {
     setUrl(target.value)
   }
+
+  const handleDeviceChange = (value: string) => {
+    if (selectedDevice.includes(value)) {
+      setSelectedDevice(prevState => prevState.filter(device => device !== value))
+    } else {
+      setSelectedDevice(prevState => [...prevState, value])
+    }
+  }
+
+  console.log(selectedDevice)
+
   return (
     <div className='w-full mx-auto'>
       <div className='text-center mb-2'>
@@ -121,16 +177,9 @@ const page: NextPage<Props> = (): JSX.Element => {
         </div>
 
         <div className='flex items-start justify-spacebetween space-x-8 mb-2'>
-          <div className="flex items-start space-x-3 py-6">
-            <input type="checkbox" className="border-gray-300 rounded h-5 w-5" />
-            <p>Desktop</p>
-          </div>
-          <div className="flex items-start space-x-3 py-6">
-            <input type="checkbox" className="border-gray-300 rounded h-5 w-5" />
-            <p>Mobile</p>
-          </div>
+          <AnalysisCheckbox device='desktop' checkEvent={handleDeviceChange} />
+          <AnalysisCheckbox device='mobile' checkEvent={handleDeviceChange} />
         </div>
-        <div></div>
 
         <div className='w-2/12'>
           <AnalysisButton

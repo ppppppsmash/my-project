@@ -8,15 +8,15 @@ import { SiHackaday } from 'react-icons/si'
 import { BiTestTube } from 'react-icons/bi'
 
 export const subNavItems = [
-  { href: '/list/add', icon: AiOutlineFileAdd, label: 'ページ登録' }
+  { link: '/list/add', icon: AiOutlineFileAdd, label: 'ページ登録' }
 ]
 
 export const navItems = [
-  { href: '/', icon: AiOutlineDashboard, label: 'ホーム' },
-  { href: '/list', icon: VscListUnordered, label: 'ページ一覧', children: subNavItems },
-  { href: '/compare', icon: MdOutlineCompareArrows, label: 'ページ比較' },
-  { href: '/analysis', icon: TbAnalyze, label: 'URL分析' },
-  { href: '/data-register', icon: RiFileList2Line, label: 'データ登録' },
-  { href: '/test2', icon: SiHackaday, label: 'テスト' },
-  { href: '/apitest', icon: BiTestTube, label: 'API叩き' },
+  { link: '/', icon: AiOutlineDashboard, label: 'ホーム' },
+  { link: '/list', icon: VscListUnordered, label: 'ページ一覧', children: subNavItems },
+  { link: '/compare', icon: MdOutlineCompareArrows, label: 'ページ比較' },
+  { link: '/analysis', icon: TbAnalyze, label: 'URL分析' },
+  { link: '/data-register', icon: RiFileList2Line, label: 'データ登録' },
+  { link: '/test2', icon: SiHackaday, label: 'テスト' },
+  { link: '/apitest', icon: BiTestTube, label: 'API叩き' },
 ]
