@@ -1,5 +1,6 @@
-import { FC } from 'react'
+import { FC, MouseEventHandler } from 'react'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { PSIDataType } from '@/type'
 import { formatDate } from '@/lib/formatDate'
 import Loading from '@/components/Loading'
@@ -16,9 +17,15 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
   const [visible, setVisible] = useState(false)
   const [loadingVisible, setLoadingVisible] = useState(false)
 
+  const router = useRouter()
+
   const handleClick = (url: string, index: number, id: number) => {
     setLoadingVisible(true)
     getScoreAgain(url, index, id)
+  }
+
+  const handleDetailPage = (id: number) => {
+    router.push(`/list/${id}`)
   }
 
   useEffect(() => {
@@ -41,9 +48,9 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
         </thead>
         <tbody className='text-gray-900'>
           {pageList.map((page, index) => (
-              <tr className='border-b hover:text-white hover:bg-gray-900' key={page.id}>
-                <td className='px-4 py-3 font-semibold text-center underline'>
-                  <Link href={`/list/${page.id}`}>{page.name}</Link>
+              <tr className='border-b hover:text-white hover:bg-gray-900 cursor-pointer' key={page.id} onClick={()=>handleDetailPage(page.id)}>
+                <td className='px-4 py-3 font-semibold text-center'>
+                  {page.name}
                 </td>
                 <td className='px-4 py-3 text-center'>{page.url}</td>
                 <td className='px-4 py-3 text-center'>{page.score}</td>
