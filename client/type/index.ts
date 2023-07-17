@@ -1,5 +1,6 @@
 export interface PSIDataType {
   id: number
+  device: string
   name?: string
   url: string
   date?: string

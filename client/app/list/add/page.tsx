@@ -20,6 +20,24 @@ const page: NextPage<Props> = (): JSX.Element => {
 
   const [selectedDevice, setSelectedDevice] = useState<string[]>([])
 
+  const getChangeUrlName = ({target}: ChangeEvent<HTMLInputElement>) => {
+    setName(target.value)
+  }
+
+  const getChangeUrl = ({target}: ChangeEvent<HTMLInputElement>) => {
+    setUrl(target.value)
+  }
+
+  const handleDeviceChange = (value: string) => {
+    if (selectedDevice.includes(value)) {
+      setSelectedDevice(prevState => prevState.filter(device => device !== value))
+    } else {
+      setSelectedDevice(prevState => [...prevState, value])
+    }
+  }
+
+  console.log(selectedDevice)
+
   const fetchPsiData = async (url: string, device: string) => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${urlValidate(url)}&strategy=${device}`, {
       cache: 'no-store'
@@ -27,15 +45,16 @@ const page: NextPage<Props> = (): JSX.Element => {
     return res
   }
 
-  const getPsi = async(id: number) => {
-    if (selectedDevice.includes('desktop') && selectedDevice.includes('mobile')) {
-      const desktopRes = await fetchPsiData(url, 'desktop')
-      const mobileRes = await fetchPsiData(url, 'mobile')
+  const getPsi = async () => {
+    const psiDataArray = []
 
-      if (desktopRes.ok) {
-        const desktopInfo = await desktopRes.json()
-        const { result: desktopResult } = desktopInfo
-        const { lighthouseResult } = desktopResult
+    for (const device of selectedDevice) {
+      const res = await fetchPsiData(url, device)
+
+      if (res.ok) {
+        const info = await res.json()
+        const { result } = info
+        const { lighthouseResult } = result
         const { categories } = lighthouseResult
         const { performance } = categories
         const score = performance.score * 100
@@ -65,75 +84,19 @@ const page: NextPage<Props> = (): JSX.Element => {
           fcp: metrics.fcp.displayValue,
           tbt: metrics.tbt.displayValue,
           si: metrics.si.displayValue,
-          device: 'desktop'
+          device
         }
 
-        console.log(psiData)
+        // console.log(psiData)
 
-        await postData('pageList', psiData)
-
-      }
-
-        if (mobileRes.ok) {
-          const mobileInfo = await mobileRes.json()
-          const { result: mobileResult } = mobileInfo
-          const { lighthouseResult } = mobileResult
-          const { categories } = lighthouseResult
-          const { performance } = categories
-          const score = performance.score * 100
-
-          const { audits } = lighthouseResult
-          const metrics = {
-            lcp: audits['largest-contentful-paint'],
-            fid: audits['max-potential-fid'],
-            cls: audits['cumulative-layout-shift'],
-            fcp: audits['first-contentful-paint'],
-            fci: audits['first-cpu-idle'],
-            eil: audits['estimated-input-latency'],
-            fmp: audits['first-meaningful-paint'],
-            tti: audits['interactive'],
-            tbt: audits['total-blocking-time'],
-            tbf: audits['time-to-first-byte'],
-            si: audits['speed-index']
-          }
-
-        const psiData = {
-          name,
-          url,
-          score,
-          lcp: metrics.lcp.displayValue,
-          fid: metrics.fid.displayValue,
-          cls: metrics.cls.displayValue,
-          fcp: metrics.fcp.displayValue,
-          tbt: metrics.tbt.displayValue,
-          si: metrics.si.displayValue,
-          device: 'mobile'
-        }
-
-        console.log(psiData)
-
-        await postData('pageList', psiData)
+        psiDataArray.push(psiData)
+        console.log(psiDataArray)
       }
     }
+    psiDataArray.map(async (psiData) => {
+      await postData('pageList', psiData)
+    })
   }
-
-  const getChangeUrlName = ({target}: ChangeEvent<HTMLInputElement>) => {
-    setName(target.value)
-  }
-
-  const getChangeUrl = ({target}: ChangeEvent<HTMLInputElement>) => {
-    setUrl(target.value)
-  }
-
-  const handleDeviceChange = (value: string) => {
-    if (selectedDevice.includes(value)) {
-      setSelectedDevice(prevState => prevState.filter(device => device !== value))
-    } else {
-      setSelectedDevice(prevState => [...prevState, value])
-    }
-  }
-
-  console.log(selectedDevice)
 
   return (
     <div className='w-full mx-auto'>

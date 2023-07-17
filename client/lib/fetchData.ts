@@ -9,7 +9,7 @@ export const getDataAll = async(api: string) => {
       }
     })
     const data = await response.json()
-    console.log(data)
+    console.log(data[0])
     return data
   } catch (error) {
     console.log(error)
