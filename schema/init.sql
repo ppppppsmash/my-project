@@ -1,5 +1,6 @@
 CREATE TABLE site_list_db (
   id INT AUTO_INCREMENT PRIMARY KEY,
+  device ENUM('desktop', 'mobile'),
   name VARCHAR(50),
   url VARCHAR(50),
   score INT,
@@ -9,5 +10,5 @@ CREATE TABLE site_list_db (
   cls VARCHAR(10),
   fcp VARCHAR(10),
   tbt VARCHAR(10),
-  si VARCHAR(10)
+  si VARCHAR(10),
 );
