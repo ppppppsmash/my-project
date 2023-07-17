@@ -36,6 +36,8 @@ services:
       # DB初期化ディレクトリにマウントする
       - ./docker/mysql/init.d:/docker-entrypoint-initdb.d
       - ./mysql/data:/var/lib/mysql
+      - ./schema/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # mysql -u root -p pagespeedinsights < init.sql
     # ネットワーク
     networks:
       - default

@@ -33,8 +33,8 @@ const page: NextPage<Props> = (): JSX.Element => {
       const mobileRes = await fetchPsiData(url, 'mobile')
 
       if (desktopRes.ok) {
-        const desktopInfo = await desktopRes.json();
-        const { result: desktopResult } = desktopInfo;
+        const desktopInfo = await desktopRes.json()
+        const { result: desktopResult } = desktopInfo
         const { lighthouseResult } = desktopResult
         const { categories } = lighthouseResult
         const { performance } = categories
@@ -64,18 +64,19 @@ const page: NextPage<Props> = (): JSX.Element => {
           cls: metrics.cls.displayValue,
           fcp: metrics.fcp.displayValue,
           tbt: metrics.tbt.displayValue,
-          si: metrics.si.displayValue
+          si: metrics.si.displayValue,
+          device: 'desktop'
         }
 
         console.log(psiData)
 
-        //await postData('pageList', psiData)
+        await postData('pageList', psiData)
 
       }
 
         if (mobileRes.ok) {
-          const mobileInfo = await mobileRes.json();
-          const { result: mobileResult } = mobileInfo;
+          const mobileInfo = await mobileRes.json()
+          const { result: mobileResult } = mobileInfo
           const { lighthouseResult } = mobileResult
           const { categories } = lighthouseResult
           const { performance } = categories
@@ -105,12 +106,13 @@ const page: NextPage<Props> = (): JSX.Element => {
           cls: metrics.cls.displayValue,
           fcp: metrics.fcp.displayValue,
           tbt: metrics.tbt.displayValue,
-          si: metrics.si.displayValue
+          si: metrics.si.displayValue,
+          device: 'mobile'
         }
 
         console.log(psiData)
 
-      // await postData('pageList', psiData)
+        await postData('pageList', psiData)
       }
     }
   }
