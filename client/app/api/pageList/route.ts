@@ -3,7 +3,7 @@ import { dbConnect } from "@/lib/dbConnect"
 
 export async function GET(request: Request, response: Response) {
   const db = await dbConnect()
-  const sql = 'SELECT id, name, url, score, date FROM site_list_db'
+  const sql = 'SELECT id, name, url, score, date, device FROM site_list_db'
   const data = await db.query(sql)
 
   db.end()
@@ -15,6 +15,7 @@ export async function POST(request: Request, response: Response) {
   const db = await dbConnect()
 
   const data = await request.json()
+  console.log(data)
 
   const properties = Object.keys(data)
   const values = Object.values(data)
@@ -22,7 +23,7 @@ export async function POST(request: Request, response: Response) {
   const placeholders = properties.map(() => '?').join(', ')
   const sql = `INSERT INTO site_list_db (${properties.join(', ')}) VALUES (${placeholders})`
 
-  const result = db.query(sql, values)
+  const result = await db.query(sql, values)
   db.end()
 
   return NextResponse.json(result)

@@ -8,7 +8,7 @@ import { getData } from '@/lib/fetchData'
 import Link from 'next/link'
 
 interface Props {
-  getScoreAgain: (url: string, index: number, id: number) => void
+  getScoreAgain: (url: string, index: number, id: number, device: string) => void
   deleteItem: (index: number,  id: number) => void
   pageList: PSIDataType[]
 }
@@ -19,9 +19,9 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
 
   const router = useRouter()
 
-  const handleClick = (url: string, index: number, id: number) => {
+  const handleClick = (url: string, index: number, id: number, device: string) => {
     setLoadingVisible(true)
-    getScoreAgain(url, index, id)
+    getScoreAgain(url, index, id, device)
   }
 
   const handleDetailPage = (id: number) => {
@@ -48,9 +48,11 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
         </thead>
         <tbody className='text-gray-900'>
           {pageList.map((page, index) => (
-              <tr className='border-b hover:text-white hover:bg-gray-900 cursor-pointer' key={page.id} onClick={()=>handleDetailPage(page.id)}>
-                <td className='px-4 py-3 font-semibold text-center'>
-                  {page.name}
+              <tr className='border-b hover:text-white hover:bg-gray-900 cursor-pointer' key={page.id}>
+                <td className='px-4 py-3 font-semibold text-center underline'>
+                  <Link href={`/list/${page.id}`}>
+                    {page.name}
+                  </Link>
                 </td>
                 <td className='px-4 py-3 text-center'>{page.url}</td>
                 <td className='px-4 py-3 text-center'>{page.score}</td>
@@ -61,7 +63,7 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
                     className='transition block w-full bg-gray-900 mt-4
                       py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
                       hover:scale-[0.95] active:scale-[1] hover:bg-white hover:text-gray-900'
-                    onClick={()=>handleClick(page.url, index, page.id)}
+                    onClick={()=>handleClick(page.url, index, page.id, page.device)}
                   >
                     再取得
                   </button>

@@ -36,6 +36,7 @@ const page: NextPage<Props> = ({params: { id }}): JSX.Element => {
           <p>CLS: {page?.cls}</p>
           <p>FCP: {page?.fcp}</p>
           <p>TBT: {page?.tbt}</p>
+          <p>DEVICE: {page?.device}</p>
         </>
       ))}
     </div>

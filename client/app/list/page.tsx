@@ -15,31 +15,18 @@ import { postData, patchData, deleteData, getDataAll, getData } from '@/lib/fetc
 interface Props extends PSIDataType {}
 
 const page: NextPage<Props> = (): JSX.Element => {
-  const [id, setId] = useState<number>(0)
   const [name, setName] = useState('')
-  const [url, setUrl] = useState('')
 
   const [results, setResults] = useState<Props>()
   const [mobileResults, setMobileResults] = useState<Props>()
   const [pageList, setPageList] = useState<Props[]>([])
   const [mobilePageList, setMobilePageList] = useState<Props[]>([])
   const [selectedDevice, setSelectedDevice] = useState<'mobile' | 'desktop'>('mobile')
+  //const [selectedDevice, setSelectedDevice] = useState<string[]>([])
 
   const [visible, setVisible] = useState(false)
 
   const [loading, setLoading] = useState(false)
-
-  const getChangeUrlName = ({target}: React.ChangeEvent<HTMLInputElement>) => {
-    setName(target.value)
-  }
-
-  const getChangeUrl = ({target}: React.ChangeEvent<HTMLInputElement>) => {
-    setUrl(target.value)
-  }
-
-  const handleDeviceSelection = (device: 'mobile' | 'desktop') => {
-    setSelectedDevice(device);
-  };
 
   const date = new Date().toLocaleString()
 
@@ -50,10 +37,10 @@ const page: NextPage<Props> = (): JSX.Element => {
     return res
   }
 
-  const getScoreAgain = async (url: string, index: number, id: number) => {
+  const getScoreAgain = async (url: string, index: number, id: number, device: string) => {
     setLoading(true)
 
-    const res = await fetchPsiData(url, selectedDevice)
+    const res = await fetchPsiData(url, device)
 
     if (res.ok) {
       const data = await res.json()
@@ -83,12 +70,13 @@ const page: NextPage<Props> = (): JSX.Element => {
         date,
         score,
         fcp: metrics.fcp.displayValue,
-        lcp: metrics.lcp.numericValue
+        lcp: metrics.lcp.numericValue,
+        device
       }
 
       selectedDevice === 'desktop'
-        ? setResults(prevState => ({ ...prevState, id, url, date, score }))
-        : setMobileResults(prevState => ({ ...prevState, id, url, date, score }))
+        ? setResults(prevState => ({ ...prevState, id, device, url, date, score }))
+        : setMobileResults(prevState => ({ ...prevState, id, device, url, date, score }))
 
       selectedDevice === 'desktop'
         ? setPageList(prevState =>
@@ -132,14 +120,14 @@ const page: NextPage<Props> = (): JSX.Element => {
         setPageList(prevState => {
           const updatedList = data[0].map((item: any) => ({
             id: item.id,
+            device: item.device,
             name: item.name,
             url: item.url,
             score: item.score,
-            date: item.date
+            date: item.date,
           }))
           return [...prevState, ...updatedList]
         })
-
     }
 
     getDataByAll()
@@ -163,13 +151,11 @@ const page: NextPage<Props> = (): JSX.Element => {
       <div>
         <section>
           <div>
-
             <AnalysisTableAll
               pageList={pageList}
               getScoreAgain={getScoreAgain}
               deleteItem={deleteItem}
             />
-
           </div>
         </section>
       </div>
