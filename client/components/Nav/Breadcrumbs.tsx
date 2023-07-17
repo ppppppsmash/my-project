@@ -35,7 +35,7 @@ const BreadCrumbs: FC<Props> = ({ navItems }): JSX.Element => {
         {items.map((item, index) => (
           <li className='flex items-center' key={index}>
             <>
-              <Link className='text-gray-900 underline text-[6px]' href={item.link}>{item.label}</Link>
+              <Link className='text-gray-900 underline text-[6px]' href={{pathname: item.link}}>{item.label}</Link>
               <FaChevronRight aria-hidden='true' className='text-[6px] mx-2'/>
             </>
           </li>
