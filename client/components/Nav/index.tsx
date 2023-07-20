@@ -103,42 +103,42 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
         </Link>
 
         <div className='space-y-6'>
-  {navItems.map((item, index) => (
-    <div key={index}>
-      <Link
-        href={{ pathname: item.link }}
-        onMouseEnter={() => handleMouse(index, !!item.children, 'enter')}
-        onMouseLeave={() => handleMouse(index, !!item.children, 'leave')}
-      >
-        <div
-          className={`flex items-center hover:scale-[0.95] hover:bg-black transition p-3 ${
-            pathname === item.link && 'bg-black'
-          }`}
-        >
-          <item.icon size={24} />
-          {visible && (
-            <p className='text-[16px] ml-2 leading-none'>{item.label}</p>
-          )}
-        </div>
-      </Link>
-      <div className={`${index === activeIndex ? subNavDisplay : SUB_NAV_HIDE} pl-[40px]`}>
-        {item.children &&
-          item.children.map((child, index) => (
-            <Link key={index} href={{ pathname: child.link }} className='w-full'>
+        {navItems.map((item, index) => (
+          <div key={index}>
+            <Link
+              href={{ pathname: item.link }}
+              onMouseEnter={() => handleMouse(index, !!item.children, 'enter')}
+              onMouseLeave={() => handleMouse(index, !!item.children, 'leave')}
+            >
               <div
-                className={`flex items-center hover:scale-[0.9] transition p-3 ${
-                  pathname === child.link && 'bg-black'
+                className={`flex items-center hover:scale-[0.95] hover:bg-black transition p-3 ${
+                  pathname === item.link && 'bg-black'
                 }`}
               >
-                <child.icon size={18} />
-                <p className='text-[14px] ml-2 leading-none'>{child.label}</p>
+                <item.icon size={24} />
+                {visible && (
+                  <p className='text-[16px] ml-2 leading-none'>{item.label}</p>
+                )}
               </div>
             </Link>
-          ))}
+            <div className={`${index === activeIndex ? subNavDisplay : SUB_NAV_HIDE} pl-[40px]`}>
+              {item.children &&
+                item.children.map((child, index) => (
+                  <Link key={index} href={{ pathname: child.link }} className='w-full'>
+                    <div
+                      className={`flex items-center hover:scale-[0.9] transition p-3 ${
+                        pathname === child.link && 'bg-black'
+                      }`}
+                    >
+                      <child.icon size={18} />
+                      <p className='text-[14px] ml-2 leading-none'>{child.label}</p>
+                    </div>
+                  </Link>
+                ))}
+            </div>
+          </div>
+        ))}
       </div>
-    </div>
-  ))}
-</div>
 
       </div>
 

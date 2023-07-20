@@ -150,7 +150,7 @@ const page: NextPage<Props> = (): JSX.Element => {
           <AnalysisButton
             id={id}
             label='登録'
-            handleScore={getPsi}
+            getScore={getPsi}
           />
         </div>
       </div>
