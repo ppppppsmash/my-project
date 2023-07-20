@@ -2,9 +2,9 @@ import { FC, MouseEventHandler } from 'react'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { PSIDataType } from '@/type'
-import { formatDate } from '@/lib/formatDate'
+import { formatDate } from '@/utils/formatDate'
 import Loading from '@/components/Loading'
-import { getData } from '@/lib/fetchData'
+import { getData } from '@/utils/fetchData'
 import Link from 'next/link'
 
 interface Props {

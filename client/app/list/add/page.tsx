@@ -7,9 +7,10 @@ import { PSIDataType } from '@/type'
 import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
 
-import { urlValidate } from '@/lib/urlValidate'
-import { postData } from '@/lib/fetchData'
+import { urlValidate } from '@/utils/urlValidate'
+import { postData } from '@/utils/fetchData'
 import AnalysisCheckbox from '@/components/CheckBox/AnalysisCheckbox'
+import AnalysisSelect from '@/components/Select/AnalysisSelect'
 
 interface Props extends PSIDataType {}
 
@@ -54,43 +55,48 @@ const page: NextPage<Props> = (): JSX.Element => {
       if (res.ok) {
         const info = await res.json()
         const { result } = info
-        const { lighthouseResult } = result
+        const { lighthouseResult, loadingExperience } = result
         const { categories } = lighthouseResult
         const { performance } = categories
         const score = performance.score * 100
 
-        const { audits } = lighthouseResult
-        const metrics = {
-          lcp: audits['largest-contentful-paint'],
-          fid: audits['max-potential-fid'],
-          cls: audits['cumulative-layout-shift'],
-          fcp: audits['first-contentful-paint'],
-          fci: audits['first-cpu-idle'],
-          eil: audits['estimated-input-latency'],
-          fmp: audits['first-meaningful-paint'],
-          tti: audits['interactive'],
-          tbt: audits['total-blocking-time'],
-          tbf: audits['time-to-first-byte'],
-          si: audits['speed-index']
+        const { audits: lighthouseResultAudits } = lighthouseResult
+        const lighthouseResultMetrics = {
+          lcp: lighthouseResultAudits['largest-contentful-paint'],
+          fid: lighthouseResultAudits['max-potential-fid'],// FIRST_INPUT_DELAY_MS
+          cls: lighthouseResultAudits['cumulative-layout-shift'],
+          fcp: lighthouseResultAudits['first-contentful-paint'],
+          fci: lighthouseResultAudits['first-cpu-idle'],
+          eil: lighthouseResultAudits['estimated-input-latency'],
+          fmp: lighthouseResultAudits['first-meaningful-paint'],
+          tti: lighthouseResultAudits['interactive'],
+          tbt: lighthouseResultAudits['total-blocking-time'],
+          tbf: lighthouseResultAudits['time-to-first-byte'],
+          si: lighthouseResultAudits['speed-index']
+        }
+
+        const { metrics: loadingExperienceAudits } = loadingExperience
+        const loadingExperienceMetrics = {
+          CUMULATIVE_LAYOUT_SHIFT_SCORE: loadingExperienceAudits['CUMULATIVE_LAYOUT_SHIFT_SCORE']
         }
 
         const psiData = {
           name,
           url,
           score,
-          lcp: metrics.lcp.displayValue,
-          fid: metrics.fid.displayValue,
-          cls: metrics.cls.displayValue,
-          fcp: metrics.fcp.displayValue,
-          tbt: metrics.tbt.displayValue,
-          si: metrics.si.displayValue,
+          lcp: lighthouseResultMetrics.lcp.displayValue,
+          fid: lighthouseResultMetrics.fid.displayValue,
+          cls: lighthouseResultMetrics.cls.displayValue,
+          fcp: lighthouseResultMetrics.fcp.displayValue,
+          tbt: lighthouseResultMetrics.tbt.displayValue,
+          si: lighthouseResultMetrics.si.displayValue,
+          // test: loadingExperienceMetrics.CUMULATIVE_LAYOUT_SHIFT_SCORE.category,
           device
         }
-
-        // console.log(psiData)
-
+        console.log(psiData)
         psiDataArray.push(psiData)
-        console.log(psiDataArray)
+      //  console.log(psiDataArray)
+        console.log(result)
       }
     }
     psiDataArray.map(async (psiData) => {
@@ -129,15 +135,9 @@ const page: NextPage<Props> = (): JSX.Element => {
 
         <div className='flex justify-spacebetween items-center space-x-4'>
           <div className='w-1/2'>
-            <select
-              className='bg-gray-900 border border-gray-800 text-gray-900 text-sm
-                rounded focus:ring-rounded focus:ring-gray-500 focus:border-gray-500
-                block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400
-                dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
-            >
-              <option>PSI自動取得時間指定</option>
-              <option>24時間</option>
-            </select>
+            <AnalysisSelect
+              placeholder='PSI自動取得時間指定'
+            />
           </div>
         </div>
 
@@ -150,7 +150,7 @@ const page: NextPage<Props> = (): JSX.Element => {
           <AnalysisButton
             id={id}
             label='登録'
-            handleScore={getPsi}
+            getScore={getPsi}
           />
         </div>
       </div>

@@ -1,7 +1,7 @@
 'use client'
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
-import { getData } from '@/lib/fetchData'
+import { getData } from '@/utils/fetchData'
 import { PSIDataType } from '@/type'
 
 interface Props {

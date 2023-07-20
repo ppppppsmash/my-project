@@ -4,12 +4,12 @@ import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
 import { useEffect, useState } from 'react'
 import { PSIDataType } from '@/type'
-import { urlValidate } from '@/lib/urlValidate'
+import { urlValidate } from '@/utils/urlValidate'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import Loading from '@/components/Loading'
 import BarGraph from '@/components/BarGraph'
-import { getDataAll, postData } from '@/lib/fetchData'
+import { getDataAll, postData } from '@/utils/fetchData'
 
 interface Props extends PSIDataType {}
 

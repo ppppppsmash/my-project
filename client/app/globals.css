@@ -25,3 +25,7 @@ body {
     )
     rgb(var(--background-start-rgb)); */
 }
+
+.space-y-6 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0
+}

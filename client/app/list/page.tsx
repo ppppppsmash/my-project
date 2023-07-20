@@ -1,6 +1,7 @@
 'use client'
 import { NextPage } from 'next'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 import { useEffect, useState } from 'react'
 import { PSIDataType } from '@/type'
@@ -9,13 +10,16 @@ import AnalysisTableAll from '@/components/Table/AnalysisTableAll'
 
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
-import { urlValidate } from '@/lib/urlValidate'
-import { postData, patchData, deleteData, getDataAll, getData } from '@/lib/fetchData'
+import { urlValidate } from '@/utils/urlValidate'
+import { postData, patchData, deleteData, getDataAll, getData } from '@/utils/fetchData'
+import PageToButton from '@/components/Button/PageToButton'
 
 interface Props extends PSIDataType {}
 
 const page: NextPage<Props> = (): JSX.Element => {
   const [name, setName] = useState('')
+
+  const router = useRouter()
 
   const [results, setResults] = useState<Props>()
   const [mobileResults, setMobileResults] = useState<Props>()
@@ -136,14 +140,10 @@ const page: NextPage<Props> = (): JSX.Element => {
   return (
     <div className='w-full mx-auto'>
       <div className='my-6 flex justify-start'>
-        <button
-          className='w-2/12 bg-gray-900 hover:bg-gray-700 text-white text-sm
-          font-bold py-2 px-4 rounded active:bg-gray-500 active:scale-[1]
-          duration-150 focus:shadow-outline ease-in-out hover:scale-[0.95]'>
-            <Link href='/list/add'>
-              ページ登録
-            </Link>
-        </button>
+        <PageToButton
+          label='ページ登録'
+          pageTo='/list/add'
+        />
       </div>
       <div className='mb-5'>
         <h2 className='text-xl text-center font-semibold'>ページ一覧</h2>

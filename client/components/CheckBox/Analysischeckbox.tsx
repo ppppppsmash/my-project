@@ -23,7 +23,7 @@ const AnalysisCheckbox: NextPage<Props> = ({ device, checkEvent }): JSX.Element 
       <div className="flex items-start space-x-3 py-6">
         <input
           type="checkbox"
-          className="border-gray-300 rounded h-5 w-5"
+          className="border-gray-300 rounded h-5 w-5 accent-gray-900"
           value={device}
           checked={isChecked}
           onChange={handleCheck}

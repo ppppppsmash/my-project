@@ -4,15 +4,14 @@ import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
 import { useState } from 'react'
 import { PSIDataType } from '@/type'
-import { urlValidate } from '@/lib/urlValidate'
+import { urlValidate } from '@/utils/urlValidate'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import Loading from '@/components/Loading'
 
-
 interface Props extends PSIDataType {}
 
-const page: NextPage<Props> = (props): JSX.Element => {
+const page: NextPage<Props> = (): JSX.Element => {
   const [id, setId] = useState<number>(0)
   const [url, setUrl] = useState('')
 
@@ -55,16 +54,15 @@ const page: NextPage<Props> = (props): JSX.Element => {
       const { audits } = lighthouseResult
       const metrics = {
         lcp: audits['largest-contentful-paint'],
-        fid: audits['max-potential-fid'],
+        fid: audits['first-input-delay'],
         cls: audits['cumulative-layout-shift'],
         fcp: audits['first-contentful-paint'],
+        tbt: audits['total-blocking-time'],
+        si: audits['speed-index'],
         fci: audits['first-cpu-idle'],
         eil: audits['estimated-input-latency'],
         fmp: audits['first-meaningful-paint'],
-        tti: audits['interactive'],
-        tbt: audits['total-blocking-time'],
-        tbf: audits['time-to-first-byte'],
-        si: audits['speed-index']
+        tti: audits['interactive']
       }
 
       console.log(audits)
@@ -74,12 +72,13 @@ const page: NextPage<Props> = (props): JSX.Element => {
         url,
         date,
         score,
-        lcp: metrics.lcp.displayValue,
-        fid: metrics.fid.displayValue,
-        cls: metrics.cls.displayValue,
-        fcp: metrics.fcp.displayValue,
-        tbt: metrics.tbt.displayValue,
-        si: metrics.si.displayValue
+        device: selectedDevice,
+        lcp: metrics.lcp.numericValue,
+        // fid: metrics.fid.displayValue,
+        // cls: metrics.cls.displayValue,
+        // fcp: metrics.fcp.displayValue,
+        // tbt: metrics.tbt.displayValue,
+        // si: metrics.si.displayValue
       }
 
       console.log(psiData)
@@ -117,7 +116,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
             <AnalysisButton
               id={id}
               label='分析'
-              handleScore={getPsiInfo}
+              getScore={getPsiInfo}
             />
           </div>
         </div>
@@ -163,6 +162,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
                   <li>fcp: {mobilePage.fcp}</li>
                   <li>tbt: {mobilePage.tbt}</li>
                   <li>si: {mobilePage.si}</li>
+                  <li>device: {mobilePage.device}</li>
                 </ul>
               </div>
             ))
@@ -172,7 +172,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
             pageList.map((page) => (
               <div>
                 <ul>
-                  <li>url:  {page.url}</li>
+                  <li key={page.id}>url:  {page.url}</li>
                   <li>score: {page.score}</li>
                   <li>date:  {page.date}</li>
                   <li>lcp: {page.lcp}</li>
@@ -181,6 +181,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
                   <li>fcp: {page.fcp}</li>
                   <li>tbt: {page.tbt}</li>
                   <li>si: {page.si}</li>
+                  <li>device: {page.device}</li>
                 </ul>
               </div>
             ))
