@@ -3,13 +3,13 @@ import { NextPage } from 'next'
 
 interface Props {
   label: string
-  handleScore: (index: number) => void
+  getScore: (id: number) => void
   id: number
 }
 
-const AnalysisButton: NextPage<Props> = ({label, handleScore, id}): JSX.Element => {
+const AnalysisButton: NextPage<Props> = ({label, getScore, id}): JSX.Element => {
   const handleClick = () => {
-    handleScore(id)
+    getScore(id)
   }
 
   return (
