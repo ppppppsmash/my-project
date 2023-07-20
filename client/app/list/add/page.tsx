@@ -10,6 +10,7 @@ import AnalysisButton from '@/components/Button/AnalysisButton'
 import { urlValidate } from '@/lib/urlValidate'
 import { postData } from '@/lib/fetchData'
 import AnalysisCheckbox from '@/components/CheckBox/AnalysisCheckbox'
+import AnalysisSelect from '@/components/Select/AnalysisSelect'
 
 interface Props extends PSIDataType {}
 
@@ -129,15 +130,9 @@ const page: NextPage<Props> = (): JSX.Element => {
 
         <div className='flex justify-spacebetween items-center space-x-4'>
           <div className='w-1/2'>
-            <select
-              className='bg-gray-900 border border-gray-800 text-gray-900 text-sm
-                rounded focus:ring-rounded focus:ring-gray-500 focus:border-gray-500
-                block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400
-                dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
-            >
-              <option>PSI自動取得時間指定</option>
-              <option>24時間</option>
-            </select>
+            <AnalysisSelect
+              placeholder='PSI自動取得時間指定'
+            />
           </div>
         </div>
 
