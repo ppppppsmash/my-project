@@ -7,8 +7,8 @@ import { PSIDataType } from '@/type'
 import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
 
-import { urlValidate } from '@/lib/urlValidate'
-import { postData } from '@/lib/fetchData'
+import { urlValidate } from '@/utils/urlValidate'
+import { postData } from '@/utils/fetchData'
 import AnalysisCheckbox from '@/components/CheckBox/AnalysisCheckbox'
 import AnalysisSelect from '@/components/Select/AnalysisSelect'
 

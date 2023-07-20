@@ -10,8 +10,8 @@ import AnalysisTableAll from '@/components/Table/AnalysisTableAll'
 
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
-import { urlValidate } from '@/lib/urlValidate'
-import { postData, patchData, deleteData, getDataAll, getData } from '@/lib/fetchData'
+import { urlValidate } from '@/utils/urlValidate'
+import { postData, patchData, deleteData, getDataAll, getData } from '@/utils/fetchData'
 import PageToButton from '@/components/Button/PageToButton'
 
 interface Props extends PSIDataType {}
