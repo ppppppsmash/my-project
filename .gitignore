@@ -5,6 +5,7 @@
 
 # /app/
 /app/psi-api/node_modules
+/app/psi-api/src/migration/
 
 # dependencies
 /client/node_modules
