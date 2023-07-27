@@ -6,21 +6,26 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+export enum DeviceType {
+  Desktop = 'desktop',
+  Mobile = 'mobile'
+}
+
 @Entity()
-export class Page {
+export class site_list_db {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column('varchar', { length: 50, nullable: false })
-  deivice: string
+  @Column('enum', {enum: DeviceType, nullable: false })
+  device: DeviceType
   @Column('varchar', { length: 50, nullable: false })
   name?: string
   @Column('varchar', { length: 50, nullable: false })
   url: string
-  @Column('varchar', { length: 50, nullable: false })
-  date?: string
-  @Column('varchar', { length: 50, nullable: false })
-  label?: string
+  @Column('datetime',{
+    default: () => 'NOW()',
+  })
+  date: Date
   @Column('varchar', { length: 50, nullable: false })
   lcp?: string
   @Column('varchar', { length: 50, nullable: false })
@@ -33,13 +38,6 @@ export class Page {
   tbt?: string
   @Column('varchar', { length: 50, nullable: false })
   si?: string
-
   @Column('int', { nullable: false })
   score: number
-
-  @CreateDateColumn()
-  createdAt?: string
-
-  @UpdateDateColumn()
-  updatedAt?: string
 }

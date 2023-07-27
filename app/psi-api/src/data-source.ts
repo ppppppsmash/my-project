@@ -1,5 +1,5 @@
-import { Page } from './entities/page.entity';
-import { DataSource } from 'typeorm';
+import { site_list_db } from './entities/api.entity'
+import { DataSource } from 'typeorm'
 
 export const AppDataSource = new DataSource({
   type: 'mysql', // MySQL の場合
@@ -10,6 +10,6 @@ export const AppDataSource = new DataSource({
   database: 'pagespeedinsights', // docker-compose.yml の MYSQL_DATABASE
   logging: true, // コンソール画面に実行したSQLが表示される
   synchronize: false, // true にすると migration が自動で実行されます。
-  entities: [Page], // エンティティクラスを指定する（複数の場合はカンマで区切る）
+  entities: [site_list_db], // エンティティクラスを指定する（複数の場合はカンマで区切る）
   migrations: ['dist/migration/*.js'], // dist ディレクトリ内の js ファイルを指定する
 });

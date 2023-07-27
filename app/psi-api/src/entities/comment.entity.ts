@@ -9,18 +9,18 @@ import {
 @Entity()
 export class Comment {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id?: number
 
   @Column()
-  body: string;
+  body: string
 
   @CreateDateColumn()
-  createdAt?: string;
+  createdAt?: string
 
   @UpdateDateColumn()
-  updatedAt?: string;
+  updatedAt?: string
 
   constructor(body: string) {
-    this.body = body;
+    this.body = body
   }
 }
