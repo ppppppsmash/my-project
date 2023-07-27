@@ -2,9 +2,9 @@ version: '3'
 services:
   client:
     build: ./docker/client/
-    container_name: psi-app
+    container_name: psi-client
     ports:
-      - '9999:3000'
+      - '9998:3000'
     volumes:
       - ./client:/app
     command: bash
@@ -13,6 +13,18 @@ services:
       - CHOKIDAR_USEPOLLING=true
     networks:
       - default
+  app:
+    build: ./docker/app
+    container_name: psi-app
+    ports:
+      - '9999:3000'
+    volumes:
+      - ./app:/app
+    tty: true
+    logging:
+      options:
+        max-size: '10m'
+        max-file: '5'
   db:
     build: ./docker/mysql/
     env_file:
