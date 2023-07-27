@@ -3,6 +3,9 @@
 # .vscode
 /.vscode/
 
+# /app/
+/app/psi-api/node_modules
+
 # dependencies
 /client/node_modules
 /client/.pnp
