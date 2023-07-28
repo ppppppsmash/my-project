@@ -37,8 +37,6 @@ const page: NextPage<Props> = (): JSX.Element => {
     }
   }
 
-  console.log(selectedDevice)
-
   const fetchPsiData = async (url: string, device: string) => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${urlValidate(url)}&strategy=${device}`, {
       cache: 'no-store'
@@ -100,7 +98,7 @@ const page: NextPage<Props> = (): JSX.Element => {
       }
     }
     psiDataArray.map(async (psiData) => {
-      await postData('pageList', psiData)
+      await postData('api', psiData)
     })
   }
 

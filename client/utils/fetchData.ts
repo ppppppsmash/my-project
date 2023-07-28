@@ -1,7 +1,7 @@
 
 export const getDataAll = async(api: string) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}${api}/`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}${api}/`, {
       method: 'GET',
       cache: 'no-store',
       headers: {
@@ -9,17 +9,16 @@ export const getDataAll = async(api: string) => {
       }
     })
     const data = await response.json()
-    console.log(data[0])
+    console.log(data)
     return data
   } catch (error) {
     console.log(error)
   }
 }
 
-
 export const getData = async(api: string, id: number) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}${api}/${id}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}${api}/${id}`, {
       method: 'GET',
       cache: 'no-store',
       headers: {
@@ -36,7 +35,7 @@ export const getData = async(api: string, id: number) => {
 
 export const postData = async (api: string, args: any) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}${api}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}${api}`, {
       method: 'POST',
       cache: 'no-store',
       headers: {
@@ -53,7 +52,7 @@ export const postData = async (api: string, args: any) => {
 
 export const patchData = async (api: string, id: number, args: any) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}${api}/${id}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}${api}/${id}`, {
       method: 'PATCH',
       cache: 'no-store',
       headers: {
@@ -70,7 +69,7 @@ export const patchData = async (api: string, id: number, args: any) => {
 
 export const deleteData = async (api: string, id: number) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}${api}/${id}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}${api}/${id}`, {
       method: 'DELETE',
       cache: 'no-store',
       headers: {

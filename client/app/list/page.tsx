@@ -100,7 +100,7 @@ const page: NextPage<Props> = (): JSX.Element => {
           })
         )
 
-      await patchData('pageList', id, { score })
+      await patchData('api', id, { score })
 
       setVisible(true)
       setLoading(false)
@@ -108,7 +108,7 @@ const page: NextPage<Props> = (): JSX.Element => {
   }
 
   const deleteItem = async (index: number, id: number) => {
-    await deleteData('pageList', id)
+    await deleteData('api', id)
 
     setPageList((prevState) => {
       const updatedList = [...prevState];
@@ -119,19 +119,20 @@ const page: NextPage<Props> = (): JSX.Element => {
 
   useEffect(() => {
     const getDataByAll = async () => {
-        const data = await getDataAll('pageList')
+      const data = await getDataAll('api')
+      console.log(data)
 
-        setPageList(prevState => {
-          const updatedList = data[0].map((item: any) => ({
-            id: item.id,
-            device: item.device,
-            name: item.name,
-            url: item.url,
-            score: item.score,
-            date: item.date,
-          }))
-          return [...prevState, ...updatedList]
-        })
+      setPageList(prevState => {
+        const updatedList = data.map((item: any) => ({
+          id: item.id,
+          device: item.device,
+          name: item.name,
+          url: item.url,
+          score: item.score,
+          date: item.date,
+        }))
+        return [...prevState, ...updatedList]
+      })
     }
 
     getDataByAll()
