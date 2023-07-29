@@ -9,7 +9,7 @@ import AnalysisButton from '@/components/Button/AnalysisButton'
 
 import { urlValidate } from '@/utils/urlValidate'
 import { postData } from '@/utils/fetchData'
-import AnalysisCheckbox from '@/components/CheckBox/AnalysisCheckbox'
+import AnalysisCheckbox from '@/components/CheckBox/Analysischeckbox'
 import AnalysisSelect from '@/components/Select/AnalysisSelect'
 
 interface Props extends PSIDataType {}
@@ -38,7 +38,7 @@ const page: NextPage<Props> = (): JSX.Element => {
   }
 
   const fetchPsiData = async (url: string, device: string) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${urlValidate(url)}&strategy=${device}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}psi?url=${urlValidate(url)}&strategy=${device}`, {
       cache: 'no-store'
     })
     return res
@@ -51,8 +51,7 @@ const page: NextPage<Props> = (): JSX.Element => {
       const res = await fetchPsiData(url, device)
 
       if (res.ok) {
-        const info = await res.json()
-        const { result } = info
+        const result = await res.json()
         const { lighthouseResult, loadingExperience } = result
         const { categories } = lighthouseResult
         const { performance } = categories

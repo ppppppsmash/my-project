@@ -33,7 +33,7 @@ const page: NextPage<Props> = (): JSX.Element => {
   }
 
   const fetchPsiData = async (url: string, device: string) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${urlValidate(url)}&strategy=${device}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}PageSpeedInsights?url=${urlValidate(url)}&strategy=${device}`, {
       cache: 'no-store'
     })
     return res
