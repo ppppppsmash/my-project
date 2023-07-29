@@ -26,7 +26,6 @@ const page: NextPage<Props> = (): JSX.Element => {
   const [pageList, setPageList] = useState<Props[]>([])
   const [mobilePageList, setMobilePageList] = useState<Props[]>([])
   const [selectedDevice, setSelectedDevice] = useState<'mobile' | 'desktop'>('mobile')
-  //const [selectedDevice, setSelectedDevice] = useState<string[]>([])
 
   const [visible, setVisible] = useState(false)
 
@@ -35,7 +34,7 @@ const page: NextPage<Props> = (): JSX.Element => {
   const date = new Date().toLocaleString()
 
   const fetchPsiData = async (url: string, device: string) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${urlValidate(url)}&strategy=${device}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}PageSpeedInsights?url=${urlValidate(url)}&strategy=${device}`, {
       cache: 'no-store'
     })
     return res
