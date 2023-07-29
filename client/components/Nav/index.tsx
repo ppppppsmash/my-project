@@ -23,7 +23,7 @@ interface Props {
 
 const NAV_ITEM_TRANSITION = 'transition-all duration-300 ease-out';
 const NAV_OPEN_WIDTH = 'w-60'
-const NAV_CLOSE_WIDTH = 'w-12'
+const NAV_CLOSE_WIDTH = 'w-30'
 const NAV_VISIBILITY = 'nav-visibility'
 
 const SUB_NAV_DISPLAY = 'flex'
@@ -93,7 +93,7 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
 
   return (
     <nav ref={navRef} className='h-screen overflow-hidden w-60 top-0 sticky shadow-sm flex flex-col
-    justify-between transition-[width] bg-secondary text-white'>
+    justify-between transition-[width]'>
       <div>
         <Link href='/'>
           <p className='flex items-top space-x-2 p-3 mb-10 items-center'>
@@ -111,13 +111,13 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
               onMouseLeave={() => handleMouse(index, !!item.children, 'leave')}
             >
               <div
-                className={`flex items-center hover:scale-[0.95] hover:bg-black transition p-3 ${
-                  pathname === item.link && 'bg-black'
+                className={`flex items-center hover:scale-[0.95] hover:bg-black transition py-4 pl-8 dark:hover:text-gray-200 text-gray-800 ${
+                  pathname === item.link && 'border-black border-l-4 font-bold'
                 }`}
               >
-                <item.icon size={24} />
+                <item.icon size={18} />
                 {visible && (
-                  <p className='text-[16px] ml-2 leading-none'>{item.label}</p>
+                  <p className='text-[12px] ml-2 leading-none'>{item.label}</p>
                 )}
               </div>
             </Link>
@@ -131,7 +131,7 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
                       }`}
                     >
                       <child.icon size={18} />
-                      <p className='text-[14px] ml-2 leading-none'>{child.label}</p>
+                      <p className='text-[14px] text-gray-700 ml-2 leading-none'>{child.label}</p>
                     </div>
                   </Link>
                 ))}

@@ -35,32 +35,33 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
   return (
     <section>
       {visible &&
-      <table className='rounded my-2 w-full mx-auto text-white border-b-2 border-gray-300'>
-        <thead className='bg-black'>
+      <div>
+      <table className='w-full whitespace-nowrap'>
+        <thead className='text-xs font-semibold tracking-wide text-left text-gray-100 dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800'>
           <tr className='text-left '>
-            <th className='px-4 py-3 font-normal text-center'>サイト名</th>
-            <th className='px-4 py-3 font-normal text-center'>URL</th>
-            <th className='px-4 py-3 font-normal text-center'>スコア</th>
-            <th className='px-4 py-3 font-normal text-center'>取得日時</th>
-            <th className='px-4 py-3 font-normal text-center'></th>
-            <th className='px-4 py-3 font-normal text-center'></th>
+            <th className='px-4 py-3 text-sm text-center'>サイト名</th>
+            <th className='px-4 py-3 text-sm text-center'>URL</th>
+            <th className='px-4 py-3 text-sm text-center'>スコア</th>
+            <th className='px-4 py-3 text-sm text-center'>取得日時</th>
+            <th className='px-4 py-3 text-sm text-center'></th>
+            <th className='px-4 py-3 text-sm text-center'></th>
           </tr>
         </thead>
-        <tbody className='text-gray-900'>
+        <tbody className='text-gray-800'>
           {pageList.map((page, index) => (
               <tr className='border-b hover:text-white hover:bg-gray-900 cursor-pointer' key={page.id}>
-                <td className='px-4 py-3 font-semibold text-center underline'>
+                <td className='px-4 py-3 font-semibold text-sm text-center underline'>
                   <Link href={`/list/${page.id}`}>
                     {page.name}
                   </Link>
                 </td>
-                <td className='px-4 py-3 text-center'>{page.url}</td>
-                <td className='px-4 py-3 text-center'>{page.score}</td>
-                <td className='px-4 py-3 text-center whitespace-pre'>{formatDate(page.date)}</td>
+                <td className='px-4 py-3 text-sm text-center'>{page.url}</td>
+                <td className='px-4 py-3 text-sm text-center'>{page.score}</td>
+                <td className='px-4 py-3 text-sm text-center whitespace-pre'>{formatDate(page.date)}</td>
                 <td className='px-4 py-3'>
                   <button
                     type='button'
-                    className='transition block w-full bg-gray-900 mt-4
+                    className='transition text-sm block w-full bg-gray-900 mt-4
                       py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
                       hover:scale-[0.95] active:scale-[1] hover:bg-white hover:text-gray-900'
                     onClick={()=>handleClick(page.url, index, page.id, page.device)}
@@ -70,19 +71,23 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
                 </td>
                 <td className='px-4 py-3 text-center'>
                   <button
-                    className='flex justify-center hover:bg-white hover:text-gray-900
+                    className='flex text-sm justify-center hover:bg-white hover:text-gray-900
                       transition w-full bg-gray-900 mt-4 cursor-pointer
                       py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
                       hover:scale-[0.95] active:scale-[1]'
                     onClick={() => deleteItem(index, page.id)}
                   >
-                    DELETE
+                    削除
                   </button>
                 </td>
               </tr>
           ))}
         </tbody>
       </table>
+      <div className='px-4 py-3 border-t dark:border-gray-700 bg-gray-50 text-gray-500 dark:text-gray-400 dark:bg-gray-800'>
+
+      </div>
+      </div>
       }
     </section>
   )
