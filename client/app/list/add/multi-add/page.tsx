@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 interface Props {}
 
-const page: NextPage<Props> = (): JSX.Element => {
+export default function MultiAdd() {
   return (
     <div className='w-full mx-auto'>
       <h2>ページ登録 - register</h2>
@@ -13,5 +13,3 @@ const page: NextPage<Props> = (): JSX.Element => {
     </div>
   )
 }
-
-export default page

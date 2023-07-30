@@ -16,7 +16,7 @@ import PageToButton from '@/components/Button/PageToButton'
 
 interface Props extends PSIDataType {}
 
-const page: NextPage<Props> = (): JSX.Element => {
+export default function List() {
   const [name, setName] = useState('')
 
   const router = useRouter()
@@ -142,7 +142,6 @@ const page: NextPage<Props> = (): JSX.Element => {
       <div className='my-6 flex justify-start'>
         <PageToButton
           label='ページ登録'
-          pageTo='/list/add'
         />
       </div>
       <div className='mb-5'>
@@ -162,5 +161,3 @@ const page: NextPage<Props> = (): JSX.Element => {
     </div>
   )
 }
-
-export default page

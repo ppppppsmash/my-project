@@ -16,7 +16,7 @@ interface Props {
   }[]
 }
 
-const BreadCrumbs: FC<Props> = ({ navItems }): JSX.Element => {
+export default function BreadCrumbs({ navItems }: Props) {
   const pathname = usePathname()
 
   const items = navItems.filter((navItem) => {
@@ -44,5 +44,3 @@ const BreadCrumbs: FC<Props> = ({ navItems }): JSX.Element => {
     </div>
   )
 }
-
-export default BreadCrumbs

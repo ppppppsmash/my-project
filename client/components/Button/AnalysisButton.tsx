@@ -7,7 +7,7 @@ interface Props {
   id: number
 }
 
-const AnalysisButton: NextPage<Props> = ({label, getScore, id}): JSX.Element => {
+export default function AnalysisButton({label, getScore, id}: Props) {
   const handleClick = () => {
     getScore(id)
   }
@@ -23,5 +23,3 @@ const AnalysisButton: NextPage<Props> = ({label, getScore, id}): JSX.Element => 
     </button>
   )
 }
-
-export default AnalysisButton

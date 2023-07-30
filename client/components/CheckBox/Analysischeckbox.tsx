@@ -8,7 +8,7 @@ interface Props {
   checkEvent?: (value: string) => void
 }
 
-const AnalysisCheckbox: NextPage<Props> = ({ device, checkEvent }): JSX.Element => {
+export default function AnalysisCheckbox({ device, checkEvent }: Props) {
   const [isChecked, setIsChecked] = useState(false)
 
   const handleCheck = (event: ChangeEvent<HTMLInputElement>) => {
@@ -32,5 +32,3 @@ const AnalysisCheckbox: NextPage<Props> = ({ device, checkEvent }): JSX.Element 
       </div>
   )
 }
-
-export default AnalysisCheckbox

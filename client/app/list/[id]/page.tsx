@@ -8,7 +8,7 @@ interface Props {
   params: { id: number }
 }
 
-const page: NextPage<Props> = ({params: { id }}): JSX.Element => {
+export default function Slug({params: { id }}: Props) {
   const [pageList, setPageList] = useState<PSIDataType[]>([])
   console.log(pageList)
 
@@ -43,5 +43,3 @@ const page: NextPage<Props> = ({params: { id }}): JSX.Element => {
     </div>
   )
 }
-
-export default page

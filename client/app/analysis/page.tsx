@@ -3,28 +3,43 @@ import { NextPage } from 'next'
 import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
 import { useState } from 'react'
-import { PSIDataType } from '@/type'
+//import { PSIDataType } from '@/type'
 import { urlValidate } from '@/utils/urlValidate'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import Loading from '@/components/Loading'
 
-interface Props extends PSIDataType {}
+interface PSIDataType {
+  id: number;
+  device: string;
+  name?: string;
+  url: string;
+  date?: string;
+  score: number;
+  label?: string;
+  lcp?: string;
+  fid?: string;
+  cls?: string;
+  fcp?: string;
+  tbt?: string;
+  si?: string;
+}
 
-const page: NextPage<Props> = (): JSX.Element => {
+export default function Analysis() {
+// const Analysis: NextPage<PSIDataType> = () => {
   const [id, setId] = useState<number>(0)
   const [url, setUrl] = useState('')
 
-  const [results, setResults] = useState<Props>()
-  const [mobileResults, setMobileResults] = useState<Props>()
+  const [results, setResults] = useState<PSIDataType>()
+  const [mobileResults, setMobileResults] = useState<PSIDataType>()
 
   const [selectedDevice, setSelectedDevice] = useState<'mobile' | 'desktop'>('mobile')
 
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const [pageList, setPageList] = useState<Props[]>([])
-  const [mobilePageList, setMobilePageList] = useState<Props[]>([])
+  const [pageList, setPageList] = useState<PSIDataType[]>([])
+  const [mobilePageList, setMobilePageList] = useState<PSIDataType[]>([])
 
   const date = new Date().toLocaleString()
 
@@ -151,7 +166,7 @@ const page: NextPage<Props> = (): JSX.Element => {
           {/* mobile */}
           { !loading && mobileResults && selectedDevice === 'mobile' &&
             mobilePageList.map((mobilePage) => (
-              <div>
+              <div key={mobilePage.id}>
                 <ul>
                   <li>url:  {mobilePage.url}</li>
                   <li>score: {mobilePage.score}</li>
@@ -170,9 +185,9 @@ const page: NextPage<Props> = (): JSX.Element => {
           {/* desktop */}
           { !loading && results && selectedDevice === 'desktop' &&
             pageList.map((page) => (
-              <div>
+              <div key={page.id}>
                 <ul>
-                  <li key={page.id}>url:  {page.url}</li>
+                  <li>url:  {page.url}</li>
                   <li>score: {page.score}</li>
                   <li>date:  {page.date}</li>
                   <li>lcp: {page.lcp}</li>
@@ -191,5 +206,3 @@ const page: NextPage<Props> = (): JSX.Element => {
     </div>
   )
 }
-
-export default page

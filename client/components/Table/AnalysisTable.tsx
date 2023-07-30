@@ -5,7 +5,7 @@ interface Props extends PSIDataType {
   getScoreAgain?: () => void
 }
 
-const AnalysisTable: FC<Props> = ({name, url, score, date, getScoreAgain}): JSX.Element => {
+export default function AnalysisTable({name, url, score, date, getScoreAgain}: Props) {
   return (
     <table className='rounded my-2 w-full mx-auto text-white border-b-2 border-gray-300'>
       <thead className='bg-black'>
@@ -36,5 +36,3 @@ const AnalysisTable: FC<Props> = ({name, url, score, date, getScoreAgain}): JSX.
     </table>
   )
 }
-
-export default AnalysisTable

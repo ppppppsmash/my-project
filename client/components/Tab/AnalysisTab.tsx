@@ -2,12 +2,8 @@ import { ReactNode, useRef, useState, useEffect } from 'react'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import { NextPage } from 'next'
-import Test11 from '@/components/Test1'
-import Test22 from '@/components/Test2'
 
-interface Props {}
-
-const AnalysisTab: NextPage<Props> = (props): JSX.Element => {
+export default function AnalysisTab() {
   const [selectedTab, setSelectedTab] = useState<'mobile' | 'desktop'>('desktop')
 
   const handleTabClick = (tab: 'mobile' | 'desktop') => {
@@ -38,12 +34,6 @@ const AnalysisTab: NextPage<Props> = (props): JSX.Element => {
           <p className='text-sm'>デスクトップ</p>
         </div>
       </div>
-      <div>
-        {selectedTab === 'mobile' && <Test11 />}
-        {selectedTab === 'desktop' && <Test22 />}
-      </div>
     </div>
   )
 }
-
-export default AnalysisTab
