@@ -5,7 +5,7 @@ import {RiLoader2Fill} from 'react-icons/ri'
 
 interface Props {}
 
-const Loading: NextPage<Props> = (props): JSX.Element => {
+export default function Loading() {
   return (
     <div className='flex flex-col items-center justify-center mt-5'>
 
@@ -17,5 +17,3 @@ const Loading: NextPage<Props> = (props): JSX.Element => {
     </div>
   )
 }
-
-export default Loading

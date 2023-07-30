@@ -14,7 +14,7 @@ import AnalysisSelect from '@/components/Select/AnalysisSelect'
 
 interface Props extends PSIDataType {}
 
-const page: NextPage<Props> = (): JSX.Element => {
+export default function AddList() {
   const [id, setId] = useState(0)
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
@@ -154,5 +154,3 @@ const page: NextPage<Props> = (): JSX.Element => {
     </div>
   )
 }
-
-export default page

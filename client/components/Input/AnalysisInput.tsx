@@ -6,7 +6,7 @@ interface Props {
   handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const AnalysisInput: NextPage<Props> = ({placeholder, handleChange}): JSX.Element => {
+export default function AnalysisInput({placeholder, handleChange}: Props) {
   return (
     <input id='url' name='url' type='text'
       className='w-full border-solid border-2 border-gray-300
@@ -16,5 +16,3 @@ const AnalysisInput: NextPage<Props> = ({placeholder, handleChange}): JSX.Elemen
     />
   )
 }
-
-export default AnalysisInput

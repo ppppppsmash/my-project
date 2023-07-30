@@ -50,15 +50,15 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
         <tbody className='text-gray-800'>
           {pageList.map((page, index) => (
               <tr className='border-b hover:text-white hover:bg-gray-900 cursor-pointer' key={page.id}>
-                <td className='px-4 py-3 font-semibold text-sm text-center underline'>
+                <td className='px-4 py-1 font-semibold text-sm text-center underline'>
                   <Link href={`/list/${page.id}`}>
                     {page.name}
                   </Link>
                 </td>
-                <td className='px-4 py-3 text-sm text-center'>{page.url}</td>
-                <td className='px-4 py-3 text-sm text-center'>{page.score}</td>
-                <td className='px-4 py-3 text-sm text-center whitespace-pre'>{formatDate(page.date)}</td>
-                <td className='px-4 py-3'>
+                <td className='px-4 py-1 text-sm text-center'>{page.url}</td>
+                <td className='px-4 py-1 text-sm text-center'>{page.score}</td>
+                <td className='px-4 py-1 text-sm text-center whitespace-pre'>{formatDate(page.date)}</td>
+                <td className='px-4 py-1 w-[150px]'>
                   <button
                     type='button'
                     className='transition text-sm block w-full bg-gray-900 mt-4
@@ -69,7 +69,7 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
                     再取得
                   </button>
                 </td>
-                <td className='px-4 py-3 text-center'>
+                <td className='px-4 py-1 text-center w-[150px]'>
                   <button
                     className='flex text-sm justify-center hover:bg-white hover:text-gray-900
                       transition w-full bg-gray-900 mt-4 cursor-pointer

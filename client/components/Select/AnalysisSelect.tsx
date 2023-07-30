@@ -6,7 +6,7 @@ interface Props {
   handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const AnalysisSelect: NextPage<Props> = ({placeholder, handleChange}): JSX.Element => {
+export default function AnalysisSelect({ placeholder, handleChange }: Props) {
   return (
     <select
       className='bg-gray-900 border border-gray-800 text-gray-900 text-sm
@@ -20,5 +20,3 @@ const AnalysisSelect: NextPage<Props> = ({placeholder, handleChange}): JSX.Eleme
     </select>
   )
 }
-
-export default AnalysisSelect

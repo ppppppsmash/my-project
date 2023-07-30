@@ -31,8 +31,7 @@ export const options = {
   }
 }
 
-const index: FC<Props> = ({pageList}): JSX.Element => {
-
+export default function Graph({pageList}: Props) {
   const labels = pageList.map((page) => (page.label))
 
   const testData = [
@@ -52,4 +51,3 @@ const index: FC<Props> = ({pageList}): JSX.Element => {
   )
 }
 
-export default index

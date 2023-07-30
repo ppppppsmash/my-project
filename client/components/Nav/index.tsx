@@ -8,6 +8,7 @@ import { IconType } from 'react-icons'
 import { RiMenuFoldFill, RiMenuUnfoldFill } from 'react-icons/ri'
 
 interface NavItemProps {
+  icon: IconType
   label: string
   link: string
 }
@@ -97,7 +98,7 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
       <div>
         <Link href='/'>
           <p className='flex items-top space-x-2 p-3 mb-10 items-center'>
-            <Logo className='fill-highlight-light w-5 h-5' />
+            <Logo className='fill-highlight-dark w-5 h-5' />
             {visible && <span className='font-semibold leading-none'>PSI Measurement</span>}
           </p>
         </Link>

@@ -13,7 +13,7 @@ import { getDataAll, postData } from '@/utils/fetchData'
 
 interface Props extends PSIDataType {}
 
-const page: NextPage<Props> = (props): JSX.Element => {
+export default function ApiTest() {
   const [id, setId] = useState<number>(0)
   const [url, setUrl] = useState('')
 
@@ -75,6 +75,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
         date,
         score,
         label,
+        device: selectedDevice,
         fcp: metrics.fcp.displayValue,
         lcp: metrics.lcp.numericValue
       }
@@ -146,7 +147,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
             <AnalysisButton
               id={id}
               label='分析'
-              handleScore={getPsiInfo}
+              getScore={getPsiInfo}
             />
           </div>
         </div>
@@ -201,5 +202,3 @@ const page: NextPage<Props> = (props): JSX.Element => {
     </div>
   )
 }
-
-export default page

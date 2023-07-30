@@ -16,7 +16,7 @@ import { postData, patchData, deleteData } from '@/utils/fetchData'
 
 interface Props extends PSIDataType {}
 
-const page: NextPage<Props> = (props): JSX.Element => {
+export default function DataRegister() {
   const [id, setId] = useState<number>(0)
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
@@ -85,6 +85,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
         url,
         date,
         score,
+        device: selectedDevice,
         fcp: metrics.fcp.displayValue,
         lcp: metrics.lcp.numericValue
       }
@@ -136,13 +137,14 @@ const page: NextPage<Props> = (props): JSX.Element => {
         url,
         date,
         score,
+        device: selectedDevice,
         fcp: metrics.fcp.displayValue,
         lcp: metrics.lcp.numericValue
       }
 
       selectedDevice === 'desktop'
-        ? setResults(prevState => ({ ...prevState, id, url, date, score }))
-        : setMobileResults(prevState => ({ ...prevState, id, url, date, score }))
+      ? setResults(prevState => ({ ...prevState, ...psiData }))
+      : setMobileResults(prevState => ({ ...prevState, ...psiData }))
 
       selectedDevice === 'desktop'
         ? setPageList(prevState =>
@@ -234,7 +236,7 @@ const page: NextPage<Props> = (props): JSX.Element => {
             <AnalysisButton
               id={id}
               label='登録'
-              handleScore={getPsiInfo}
+              getScore={getPsiInfo}
             />
           </div>
         </div>
@@ -288,5 +290,3 @@ const page: NextPage<Props> = (props): JSX.Element => {
   </div>
   )
 }
-
-export default page
