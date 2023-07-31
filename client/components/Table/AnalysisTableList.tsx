@@ -1,10 +1,7 @@
-import { FC, MouseEventHandler } from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter } from 'next/navigation'
 import { PSIDataType } from '@/type'
 import { formatDate } from '@/utils/formatDate'
-import Loading from '@/components/Loading'
-import { getData } from '@/utils/fetchData'
 import Link from 'next/link'
 
 interface Props {
@@ -13,7 +10,7 @@ interface Props {
   pageList: PSIDataType[]
 }
 
-const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JSX.Element => {
+export default function AnalysisTableList({ getScoreAgain, deleteItem, pageList}: Props) {
   const [visible, setVisible] = useState(false)
   const [loadingVisible, setLoadingVisible] = useState(false)
   const [currentTablePage, setCurrentTablePage] = useState<number>(1)
@@ -26,10 +23,6 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
   const handleClick = (url: string, index: number, id: number, device: string) => {
     setLoadingVisible(true)
     getScoreAgain(url, index, id, device)
-  }
-
-  const handleDetailPage = (id: number) => {
-    router.push(`/list/${id}`)
   }
 
   const getDisplayedTableData = () => {
@@ -48,7 +41,7 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
       pageNumbers.push(
         <li
           key={i}
-          className={`mx-1 px-2 rounded ${
+          className={`mx-1 px-2 rounded cursor-default hover:text-white hover:bg-gray-900 ${
             i === currentTablePage ? 'bg-gray-900 text-white' : 'bg-gray-200 text-black'
           }`}
           onClick={() => handlePageChange(i)}
@@ -65,7 +58,7 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
   }, [pageList])
 
   return (
-    <section>
+    <>
       {visible &&
       <div>
         <table className='w-full whitespace-nowrap'>
@@ -123,8 +116,6 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
         </div>
       </div>
       }
-    </section>
+    </>
   )
 }
-
-export default AnalysisTableAll

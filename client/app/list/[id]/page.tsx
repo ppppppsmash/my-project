@@ -1,6 +1,5 @@
 'use client'
-import { NextPage } from 'next'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { getData } from '@/utils/fetchData'
 import { PSIDataType } from '@/type'
 
@@ -8,18 +7,17 @@ interface Props {
   params: { id: number }
 }
 
-export default function Slug({params: { id }}: Props) {
-  const [pageList, setPageList] = useState<PSIDataType[]>([])
-  console.log(pageList)
-
-  const getPageData = async () => {
-    const res = await getData('api', id)
-    setPageList([res])
-  }
+export default function Slug({ params: { id } }: Props) {
+  const [pageList, setPageList] = useState<PSIDataType[]>([]);
 
   useEffect(() => {
-    getPageData()
-  }, [])
+    const fetchData = async () => {
+      const data = await getData('api', id);
+      setPageList([data]);
+    };
+
+    fetchData();
+  }, [id]);
 
   return (
     <div className='w-full mx-auto'>
@@ -39,7 +37,6 @@ export default function Slug({params: { id }}: Props) {
           <p>DEVICE: {page.device}</p>
         </>
       ))}
-
     </div>
   )
 }

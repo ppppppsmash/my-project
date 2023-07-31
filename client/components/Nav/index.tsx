@@ -23,7 +23,7 @@ interface Props {
 }
 
 const NAV_ITEM_TRANSITION = 'transition-all duration-300 ease-out';
-const NAV_OPEN_WIDTH = 'w-60'
+const NAV_OPEN_WIDTH = 'w-52'
 const NAV_CLOSE_WIDTH = 'w-30'
 const NAV_VISIBILITY = 'nav-visibility'
 
@@ -93,60 +93,60 @@ const Nav: FC<Props> = ({navItems}): JSX.Element => {
   }, [])
 
   return (
-    <nav ref={navRef} className='h-screen overflow-hidden w-60 top-0 sticky shadow-sm flex flex-col
-    justify-between transition-[width]'>
-      <div>
-        <Link href='/'>
-          <p className='flex items-top space-x-2 p-3 mb-10 items-center'>
-            <Logo className='fill-highlight-dark w-5 h-5' />
-            {visible && <span className='font-semibold leading-none'>PSI Measurement</span>}
-          </p>
-        </Link>
+    <>
+      <nav ref={navRef} className='h-screen overflow-hidden w-52 top-0 sticky shadow-sm flex flex-col
+        justify-between transition-[width]'>
+        <div>
+          <Link href='/'>
+            <p className='flex items-top space-x-2 p-3 mb-10 items-center'>
+              <Logo className='fill-highlight-dark w-5 h-5' />
+              {visible && <span className='font-semibold leading-none'>PSI Measurement</span>}
+            </p>
+          </Link>
 
-        <div className='space-y-6'>
-        {navItems.map((item, index) => (
-          <div key={index}>
-            <Link
-              href={{ pathname: item.link }}
-              onMouseEnter={() => handleMouse(index, !!item.children, 'enter')}
-              onMouseLeave={() => handleMouse(index, !!item.children, 'leave')}
-            >
-              <div
-                className={`flex items-center hover:scale-[0.95] hover:bg-black transition py-4 pl-8 dark:hover:text-gray-200 text-gray-800 ${
-                  pathname === item.link && 'border-black border-l-4 font-bold'
-                }`}
+          <div className='space-y-6'>
+          {navItems.map((item, index) => (
+            <div key={index}>
+              <Link
+                href={{ pathname: item.link }}
+                onMouseEnter={() => handleMouse(index, !!item.children, 'enter')}
+                onMouseLeave={() => handleMouse(index, !!item.children, 'leave')}
               >
-                <item.icon size={18} />
-                {visible && (
-                  <p className='text-[12px] ml-2 leading-none'>{item.label}</p>
-                )}
+                <div
+                  className={`flex items-center hover:scale-[0.95] hover:bg-black transition py-4 pl-4 dark:hover:text-gray-200 text-gray-800 ${
+                    pathname === item.link && 'border-black border-l-4 font-bold'
+                  }`}
+                >
+                  <item.icon size={18} />
+                  {visible && (
+                    <p className='text-[12px] ml-2 leading-none'>{item.label}</p>
+                  )}
+                </div>
+              </Link>
+              <div className={`${index === activeIndex ? subNavDisplay : SUB_NAV_HIDE} pl-[40px]`}>
+                {item.children &&
+                  item.children.map((child, index) => (
+                    <Link key={index} href={{ pathname: child.link }} className='w-full'>
+                      <div
+                        className={`flex items-center hover:scale-[0.9] transition p-3 ${
+                          pathname === child.link && 'bg-black'
+                        }`}
+                      >
+                        <child.icon size={18} />
+                        <p className='text-[14px] text-gray-700 ml-2 leading-none'>{child.label}</p>
+                      </div>
+                    </Link>
+                  ))}
               </div>
-            </Link>
-            <div className={`${index === activeIndex ? subNavDisplay : SUB_NAV_HIDE} pl-[40px]`}>
-              {item.children &&
-                item.children.map((child, index) => (
-                  <Link key={index} href={{ pathname: child.link }} className='w-full'>
-                    <div
-                      className={`flex items-center hover:scale-[0.9] transition p-3 ${
-                        pathname === child.link && 'bg-black'
-                      }`}
-                    >
-                      <child.icon size={18} />
-                      <p className='text-[14px] text-gray-700 ml-2 leading-none'>{child.label}</p>
-                    </div>
-                  </Link>
-                ))}
             </div>
+          ))}
           </div>
-        ))}
-      </div>
-
-      </div>
-
-      <button onClick={updateNavState} className='text-highlight-light p-3 hover:scale-[0.9] transition self-end'>
-        {visible ? <RiMenuFoldFill size={25} /> : <RiMenuUnfoldFill size={25} />}
-      </button>
-    </nav>
+        </div>
+        <button onClick={updateNavState} className='text-highlight-dark p-3 hover:scale-[0.95] transition self-end'>
+          {visible ? <RiMenuFoldFill size={25} /> : <RiMenuUnfoldFill size={25} />}
+        </button>
+      </nav>
+    </>
   )
 }
 
