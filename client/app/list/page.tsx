@@ -142,6 +142,7 @@ export default function List() {
       <div className='my-6 flex justify-start'>
         <PageToButton
           label='ページ登録'
+          pageURL='/list/add'
         />
       </div>
       <div className='mb-5'>

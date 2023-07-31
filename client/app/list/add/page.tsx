@@ -11,6 +11,7 @@ import { urlValidate } from '@/utils/urlValidate'
 import { postData } from '@/utils/fetchData'
 import AnalysisCheckbox from '@/components/CheckBox/Analysischeckbox'
 import AnalysisSelect from '@/components/Select/AnalysisSelect'
+import PageToButton from '@/components/Button/PageToButton'
 
 interface Props extends PSIDataType {}
 
@@ -90,9 +91,7 @@ export default function AddList() {
           // test: loadingExperienceMetrics.CUMULATIVE_LAYOUT_SHIFT_SCORE.category,
           device
         }
-        console.log(psiData)
         psiDataArray.push(psiData)
-      //  console.log(psiDataArray)
         console.log(result)
       }
     }
@@ -107,14 +106,10 @@ export default function AddList() {
         <h2 className='text-2xl font-semibold'></h2>
       </div>
       <div className='mb-5 flex justify-end'>
-        <button
-          className='w-2/12 bg-gray-900 hover:bg-gray-700 text-white
-          font-bold py-2 px-4 rounded active:bg-gray-500 active:scale-[1]
-          duration-150 focus:shadow-outline ease-in-out hover:scale-[0.95]'>
-            <Link href={{ pathname: '/add/multi-add' }}>
-              マルチURL登録
-            </Link>
-        </button>
+        <PageToButton
+          label='複数ページ登録'
+          pageURL='/list/add/multi-add'
+        />
       </div>
       <div>
         <div className='mb-4'>

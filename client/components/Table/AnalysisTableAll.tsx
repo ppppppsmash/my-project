@@ -65,7 +65,7 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
   }, [pageList])
 
   return (
-    <section>
+    <>
       {visible &&
       <div>
         <table className='w-full whitespace-nowrap'>
@@ -123,7 +123,7 @@ const AnalysisTableAll: FC<Props> = ({ getScoreAgain, deleteItem, pageList}): JS
         </div>
       </div>
       }
-    </section>
+    </>
   )
 }
 
