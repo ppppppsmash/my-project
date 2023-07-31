@@ -6,7 +6,7 @@ import AnalysisTable from '@/components/Table/AnalysisTable'
 import { useEffect, useState } from 'react'
 import { PSIDataType } from '@/type'
 import Loading from '@/components/Loading'
-import AnalysisTableAll from '@/components/Table/AnalysisTableAll'
+import AnalysisTableList from '@/components/Table/AnalysisTableList'
 import AnalysisTab from '@/components/Tab/AnalysisTab'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
@@ -47,7 +47,7 @@ export default function DataRegister() {
   const date = new Date().toLocaleString()
 
   const fetchPsiData = async (url: string, device: string) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${urlValidate(url)}&strategy=${device}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}psi?url=${urlValidate(url)}&strategy=${device}`, {
       cache: 'no-store'
     })
     return res
@@ -58,8 +58,7 @@ export default function DataRegister() {
     const res = await fetchPsiData(url, selectedDevice)
 
     if (res.ok) {
-      const info = await res.json()
-      const { result } = info
+      const result = await res.json()
       const { lighthouseResult } = result
       const { categories } = lighthouseResult
       const { performance } = categories
@@ -97,7 +96,7 @@ export default function DataRegister() {
         ? setPageList(prevState => [...prevState, psiData])
         : setMobilePageList(prevState => [...prevState, psiData])
 
-        await postData('pageList', {name, url, score})
+        await postData('api', psiData)
 
        setVisible(true)
        setLoading(false)
@@ -270,7 +269,7 @@ export default function DataRegister() {
         { loading && <Loading /> }
         {/* mobile */}
         { !loading && selectedDevice === 'mobile' &&
-          <AnalysisTableAll
+          <AnalysisTableList
             pageList={mobilePageList}
             getScoreAgain={getScoreAgain}
             deleteItem={deleteItem}
@@ -278,7 +277,7 @@ export default function DataRegister() {
         }
         {/* desktop */}
         { !loading && selectedDevice === 'desktop' &&
-          <AnalysisTableAll
+          <AnalysisTableList
             pageList={pageList}
             getScoreAgain={getScoreAgain}
             deleteItem={deleteItem}

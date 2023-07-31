@@ -1,17 +1,12 @@
 'use client'
-import { NextPage } from 'next'
 import { ChangeEvent, useState } from 'react'
-import Link from 'next/link'
 import { PSIDataType } from '@/type'
-
 import AnalysisInput from '@/components/Input/AnalysisInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
-
-import { urlValidate } from '@/utils/urlValidate'
-import { postData } from '@/utils/fetchData'
 import AnalysisCheckbox from '@/components/CheckBox/Analysischeckbox'
 import AnalysisSelect from '@/components/Select/AnalysisSelect'
 import PageToButton from '@/components/Button/PageToButton'
+import { getPsiData } from '@/utils/getPsi'
 
 interface Props extends PSIDataType {}
 
@@ -38,68 +33,9 @@ export default function AddList() {
     }
   }
 
-  const fetchPsiData = async (url: string, device: string) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}psi?url=${urlValidate(url)}&strategy=${device}`, {
-      cache: 'no-store'
-    })
-    return res
+  const handlePsiData = async () => {
+    await getPsiData(selectedDevice, name, url)
   }
-
-  const getPsi = async () => {
-    const psiDataArray = []
-
-    for (const device of selectedDevice) {
-      const res = await fetchPsiData(url, device)
-
-      if (res.ok) {
-        const result = await res.json()
-        const { lighthouseResult, loadingExperience } = result
-        const { categories } = lighthouseResult
-        const { performance } = categories
-        const score = performance.score * 100
-
-        const { audits: lighthouseResultAudits } = lighthouseResult
-        const lighthouseResultMetrics = {
-          lcp: lighthouseResultAudits['largest-contentful-paint'],
-          fid: lighthouseResultAudits['max-potential-fid'],// FIRST_INPUT_DELAY_MS
-          cls: lighthouseResultAudits['cumulative-layout-shift'],
-          fcp: lighthouseResultAudits['first-contentful-paint'],
-          fci: lighthouseResultAudits['first-cpu-idle'],
-          eil: lighthouseResultAudits['estimated-input-latency'],
-          fmp: lighthouseResultAudits['first-meaningful-paint'],
-          tti: lighthouseResultAudits['interactive'],
-          tbt: lighthouseResultAudits['total-blocking-time'],
-          tbf: lighthouseResultAudits['time-to-first-byte'],
-          si: lighthouseResultAudits['speed-index']
-        }
-
-        const { metrics: loadingExperienceAudits } = loadingExperience
-        const loadingExperienceMetrics = {
-          CUMULATIVE_LAYOUT_SHIFT_SCORE: loadingExperienceAudits['CUMULATIVE_LAYOUT_SHIFT_SCORE']
-        }
-
-        const psiData = {
-          name,
-          url,
-          score,
-          lcp: lighthouseResultMetrics.lcp.displayValue,
-          fid: lighthouseResultMetrics.fid.displayValue,
-          cls: lighthouseResultMetrics.cls.displayValue,
-          fcp: lighthouseResultMetrics.fcp.displayValue,
-          tbt: lighthouseResultMetrics.tbt.displayValue,
-          si: lighthouseResultMetrics.si.displayValue,
-          // test: loadingExperienceMetrics.CUMULATIVE_LAYOUT_SHIFT_SCORE.category,
-          device
-        }
-        psiDataArray.push(psiData)
-        console.log(result)
-      }
-    }
-    psiDataArray.map(async (psiData) => {
-      await postData('api', psiData)
-    })
-  }
-
   return (
     <div className='w-full mx-auto'>
       <div className='text-center mb-2'>
@@ -142,7 +78,7 @@ export default function AddList() {
           <AnalysisButton
             id={id}
             label='登録'
-            getScore={getPsi}
+            getScore={handlePsiData}
           />
         </div>
       </div>

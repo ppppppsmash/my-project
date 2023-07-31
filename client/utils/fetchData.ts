@@ -43,7 +43,6 @@ export const postData = async (api: string, args: any) => {
       },
       body: JSON.stringify({...args})
     })
-    console.log(response)
     return response
   } catch (error) {
     console.log(error)
