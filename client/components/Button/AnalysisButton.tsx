@@ -3,13 +3,18 @@ import { NextPage } from 'next'
 
 interface Props {
   label: string
-  getScore: (id: number) => void
+  //getScore: (id: number) => void
+  setOpen: (value: boolean) => void
   id: number
 }
 
-export default function AnalysisButton({label, getScore, id}: Props) {
+export default function AnalysisButton({label, setOpen, id}: Props) {
+  // const handleClick = () => {
+  //   getScore(id)
+  // }
+
   const handleClick = () => {
-    getScore(id)
+    setOpen(true)
   }
 
   return (

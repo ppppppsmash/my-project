@@ -7,6 +7,7 @@ import AnalysisCheckbox from '@/components/CheckBox/Analysischeckbox'
 import AnalysisSelect from '@/components/Select/AnalysisSelect'
 import PageToButton from '@/components/Button/PageToButton'
 import { getPsiData } from '@/utils/getPsi'
+import Modals from '@/components/Modals'
 
 interface Props extends PSIDataType {}
 
@@ -36,11 +37,29 @@ export default function AddList() {
   const handlePsiData = async () => {
     await getPsiData(selectedDevice, name, url)
   }
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+
+  const openModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
   return (
     <div className='w-full mx-auto'>
       <div className='text-center mb-2'>
         <h2 className='text-2xl font-semibold'></h2>
       </div>
+
+      {isModalOpen && <Modals
+        id={id}
+        getPsiData={handlePsiData}
+        onOpen={openModal}
+        onClose={closeModal}
+      />}
+
       <div className='mb-5 flex justify-end'>
         <PageToButton
           label='複数ページ登録'
@@ -78,7 +97,7 @@ export default function AddList() {
           <AnalysisButton
             id={id}
             label='登録'
-            getScore={handlePsiData}
+            setOpen={setIsModalOpen}
           />
         </div>
       </div>
