@@ -1,7 +1,9 @@
 import { useState, useEffect, Suspense } from 'react'
-import { useRouter } from 'next/navigation'
 import { PSIDataType } from '@/type'
 import { formatDate } from '@/utils/formatDate'
+import { MdOutlineDelete } from 'react-icons/md'
+import { FiEdit } from 'react-icons/fi'
+import { FiRotateCw } from 'react-icons/fi'
 import Link from 'next/link'
 
 interface Props {
@@ -14,15 +16,25 @@ export default function AnalysisTableList({ getScoreAgain, deleteItem, pageList}
   const [visible, setVisible] = useState(false)
   const [loadingVisible, setLoadingVisible] = useState(false)
   const [currentTablePage, setCurrentTablePage] = useState<number>(1)
+  const [spinningItems, setSpinningItems] = useState<any[]>([])
   const LIMIT_ROWS = 10
-
   const totalTablePages = Math.ceil(pageList.length / LIMIT_ROWS)
-
-  const router = useRouter()
 
   const handleClick = (url: string, index: number, id: number, device: string) => {
     setLoadingVisible(true)
+    setSpinningItems((prevState: any) => {
+      if (prevState.includes(index)) {
+        return prevState.filter((item: number) => item !== index);
+      } else {
+        return [...prevState, index];
+      }
+    })
+
     getScoreAgain(url, index, id, device)
+
+    setTimeout(() => {
+      setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index));
+    }, 2000)
   }
 
   const getDisplayedTableData = () => {
@@ -74,36 +86,40 @@ export default function AnalysisTableList({ getScoreAgain, deleteItem, pageList}
           </thead>
           <tbody className='text-gray-800'>
             {getDisplayedTableData().map((page, index) => (
-              <tr className='border-b hover:text-white hover:bg-gray-900 cursor-pointer' key={page.id}>
+              <tr className='border-b hover:text-white hover:bg-gray-900 cursor-default' key={page.id}>
                 <td className='px-4 py-1 font-semibold text-sm text-center underline'>
-                  <Link href={`/list/${page.id}`}>
-                    {page.name}
-                  </Link>
+                  <p className='flex items-center space-x-2'>
+                    <Link href={`/list/${page.id}`}>
+                      {page.name}
+                    </Link>
+                    <FiEdit
+                      size={20}
+                      className='cursor-pointer'
+                    />
+                  </p>
                 </td>
                 <td className='px-4 py-1 text-sm text-center'>{page.url}</td>
                 <td className='px-4 py-1 text-sm text-center'>{page.score}</td>
                 <td className='px-4 py-1 text-sm text-center whitespace-pre'>{formatDate(page.date)}</td>
-                <td className='px-4 py-1 w-[150px]'>
-                  <button
-                    type='button'
-                    className='transition text-sm block w-full bg-gray-900 mt-4
-                      py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
-                      hover:scale-[0.95] active:scale-[1] hover:bg-white hover:text-gray-900'
-                    onClick={()=>handleClick(page.url, index, page.id, page.device)}
-                  >
-                    再取得
-                  </button>
+                <td className='px-4 py-1 w-[150px] text-center'>
+                  <p className='flex justify-center'>
+                    <FiRotateCw
+                      className={`cursor-pointer hover:text-white ${
+                        spinningItems.includes(index) ? 'animate-spin' : ''
+                      }`}
+                      size={22}
+                      onClick={()=>handleClick(page.url, index, page.id, page.device)}
+                    />
+                  </p>
                 </td>
                 <td className='px-4 py-1 text-center w-[150px]'>
-                  <button
-                    className='flex text-sm justify-center hover:bg-white hover:text-gray-900
-                      transition w-full bg-gray-900 mt-4 cursor-pointer
-                      py-2 rounded text-white font-semibold mb-2 active:bg-gray-500
-                      hover:scale-[0.95] active:scale-[1]'
-                    onClick={() => deleteItem(index, page.id)}
-                  >
-                    削除
-                  </button>
+                  <p className='flex justify-center'>
+                    <MdOutlineDelete
+                      className='cursor-pointer'
+                      size={25}
+                      onClick={() => deleteItem(index, page.id)}
+                    />
+                  </p>
                 </td>
               </tr>
             ))}
