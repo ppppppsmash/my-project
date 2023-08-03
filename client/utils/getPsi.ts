@@ -1,6 +1,10 @@
 import { postData, patchData } from '@/utils/fetchData'
 import { urlValidate } from '@/utils/urlValidate'
 
+const redirectTo = (url: any) => {
+  window.location.href = url
+}
+
 const fetchPsiData = async (url: string, device: string) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}psi?url=${urlValidate(url)}&strategy=${device}`, {
     cache: 'no-store'
@@ -8,7 +12,7 @@ const fetchPsiData = async (url: string, device: string) => {
   return res
 }
 
-export const getPsiData = async (selectedDevice: string[], name: string, url: string) => {
+export const getPsiData = async (selectedDevice: string[], name: string, url: string, redirect: string) => {
   const psiDataArray = []
 
   for (const device of selectedDevice) {
@@ -62,6 +66,7 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
       const res = await postData('api', psiData)
     })
 
+    redirectTo(redirect)
 }
 
 export const getPsiDataAgain = async (url: string, index: number, id: number, device: string) => {

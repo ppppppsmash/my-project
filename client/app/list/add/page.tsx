@@ -35,7 +35,7 @@ export default function AddList() {
   }
 
   const handlePsiData = async () => {
-    await getPsiData(selectedDevice, name, url)
+    await getPsiData(selectedDevice, name, url, '/list')
   }
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
