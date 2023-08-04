@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.18",
     "@tremor/react": "^2.9.1",
     "@types/node": "18.15.13",
