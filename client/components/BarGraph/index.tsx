@@ -32,7 +32,7 @@ export const options = {
 }
 
 export default function Graph({pageList}: Props) {
-  const labels = pageList.map((page) => (page.label))
+  const labels = pageList.map((page) => (page.name))
 
   const testData = [
     {id: 1, label:'テスト', data: pageList.map((page) => (page.score)), backgroundColor: 'rgba(105, 105, 105, 0.5)',},

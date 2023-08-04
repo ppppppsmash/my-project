@@ -1,9 +1,11 @@
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, Suspense, ChangeEvent } from 'react'
 import { PSIDataType } from '@/type'
 import { formatDate } from '@/utils/formatDate'
 import { MdOutlineDelete } from 'react-icons/md'
 import { FiEdit } from 'react-icons/fi'
 import { FiRotateCw } from 'react-icons/fi'
+import { BsCheckLg } from 'react-icons/bs'
+import { RxCross2 } from 'react-icons/rx'
 import Link from 'next/link'
 
 interface Props {
@@ -13,6 +15,8 @@ interface Props {
 }
 
 export default function AnalysisTableList({ getScoreAgain, deleteItem, pageList}: Props) {
+  const [editName, setEditName] = useState<string[]>([])
+  const [isEdit, setIsEdit] = useState<number | null>(null)
   const [visible, setVisible] = useState(false)
   const [loadingVisible, setLoadingVisible] = useState(false)
   const [currentTablePage, setCurrentTablePage] = useState<number>(1)
@@ -36,6 +40,20 @@ export default function AnalysisTableList({ getScoreAgain, deleteItem, pageList}
       setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index));
     }, 2000)
   }
+
+  const handleChange = ({ target }: ChangeEvent<HTMLInputElement>, index: number) => {
+    const value = target.value
+    setEditName((prevState) => {
+      const updatedEditName = [...prevState]
+      updatedEditName[index] = value
+      return updatedEditName
+    })
+  }
+
+  const handleEdit = (index: number) => {
+    setIsEdit(index)
+  }
+  
 
   const getDisplayedTableData = () => {
     const startIndex = (currentTablePage - 1) * LIMIT_ROWS
@@ -88,15 +106,29 @@ export default function AnalysisTableList({ getScoreAgain, deleteItem, pageList}
             {getDisplayedTableData().map((page, index) => (
               <tr className='border-b hover:text-white hover:bg-gray-900 cursor-default' key={page.id}>
                 <td className='px-4 py-1 font-semibold text-sm text-center underline'>
-                  <p className='flex items-center space-x-2'>
-                    <Link href={`/list/${page.id}`}>
-                      {page.name}
-                    </Link>
-                    <FiEdit
-                      size={20}
-                      className='cursor-pointer'
-                    />
-                  </p>
+                <p className='flex items-center space-x-2'>
+                  {isEdit === index ? (
+                    <>
+                      <input
+                        className='hover:text-gray-900'
+                        value={editName[index] || page.name}
+                        onChange={(e) => handleChange(e, index)}
+                      />
+                      <RxCross2 />
+                      <BsCheckLg />
+                    </>
+                  ) : (
+                    <>
+                      <Link href={`/list/${page.id}`}>{page.name}</Link>
+                      <FiEdit
+                        size={20}
+                        className='cursor-pointer'
+                        onClick={() => handleEdit(index)}
+                      />
+                    </>
+                  )}
+                </p>
+
                 </td>
                 <td className='px-4 py-1 text-sm text-center'>{page.url}</td>
                 <td className='px-4 py-1 text-sm text-center'>{page.score}</td>

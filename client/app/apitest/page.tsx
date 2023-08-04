@@ -114,11 +114,11 @@ export default function ApiTest() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const data = await getDataAll('postTest')
+        const data = await getDataAll('api')
         setPageList(prevState => {
-          const updatedList = data[0].map((item: PSIDataType) => ({
+          const updatedList = data.map((item: PSIDataType) => ({
             score: item.score,
-            label: item.label
+            name: item.name
           }))
           return [...prevState, ...updatedList]
         })
