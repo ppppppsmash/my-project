@@ -1,12 +1,22 @@
-import { useState, useEffect, Suspense, ChangeEvent } from 'react'
+import { Fragment } from 'react'
+import { useState, useEffect, ChangeEvent } from 'react'
 import { PSIDataType } from '@/type'
 import { formatDate } from '@/utils/formatDate'
-import { MdOutlineDelete } from 'react-icons/md'
-import { FiEdit } from 'react-icons/fi'
-import { FiRotateCw } from 'react-icons/fi'
-import { BsCheckLg } from 'react-icons/bs'
-import { RxCross2 } from 'react-icons/rx'
 import Link from 'next/link'
+import {
+  Card,
+  Table,
+  TableHead,
+  TableRow,
+  TableHeaderCell,
+  TableBody,
+  TableCell,
+  Text,
+  Title,
+  Button
+} from '@tremor/react'
+import { Popover, Transition } from '@headlessui/react'
+import { PencilSquareIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
 
 interface Props {
   getScoreAgain: (url: string, index: number, id: number, device: string) => void
@@ -53,7 +63,17 @@ export default function AnalysisTableList({ getScoreAgain, deleteItem, pageList}
   const handleEdit = (index: number) => {
     setIsEdit(index)
   }
-  
+
+  const solutions = [
+    {
+      name: 'Edit',
+      href: '##',
+    },
+    {
+      name: 'Delete',
+      href: '##',
+    },
+  ]
 
   const getDisplayedTableData = () => {
     const startIndex = (currentTablePage - 1) * LIMIT_ROWS
@@ -89,7 +109,88 @@ export default function AnalysisTableList({ getScoreAgain, deleteItem, pageList}
 
   return (
     <>
-      {visible &&
+    <Title>PSI</Title>
+        <Table className="mt-5">
+          <TableHead>
+            <TableRow>
+              <TableHeaderCell>site名</TableHeaderCell>
+              <TableHeaderCell>URL</TableHeaderCell>
+              <TableHeaderCell>psi score</TableHeaderCell>
+              <TableHeaderCell>date</TableHeaderCell>
+              <TableHeaderCell>action</TableHeaderCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {getDisplayedTableData().map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>
+                  <Link href={`/list/${item.id}`}>
+                    {item.name}
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <Text>{item.url}</Text>
+                </TableCell>
+                <TableCell>
+                  <Text>{item.score}</Text>
+                </TableCell>
+                <TableCell>
+                  <Text>{item.date}</Text>
+                </TableCell>
+                <TableCell>
+                  <Popover className="relative">
+                    {({ open }) => (
+                      <>
+                        <Popover.Button
+                          className={`
+                            ${open ? '' : 'text-opacity-90'}
+                           focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
+                        >
+                          <EllipsisHorizontalIcon
+                            className='block h-6 w-6 cursor-pointer'
+                          />
+                        </Popover.Button>
+                        <Transition
+                          as={Fragment}
+                          enter="transition ease-out duration-200"
+                          enterFrom="opacity-0 translate-y-1"
+                          enterTo="opacity-100 translate-y-0"
+                          leave="transition ease-in duration-150"
+                          leaveFrom="opacity-100 translate-y-0"
+                          leaveTo="opacity-0 translate-y-1"
+                        >
+                          <Popover.Panel className='absolute top-2 left-5 z-10 mt-3 max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-xl w-[100px]'>
+                            <div className='overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5'>
+                              <div className='relative block bg-white py-4'>
+                                {solutions.map((item) => (
+                                  <a
+                                    key={item.name}
+                                    href={item.href}
+                                    className='mx-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out
+                                      hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500
+                                      focus-visible:ring-opacity-50'
+                                  >
+                                    <div>
+                                      <p className='text-sm font-medium text-gray-900'>
+                                        {item.name}
+                                      </p>
+                                    </div>
+                                  </a>
+                                ))}
+                              </div>
+                            </div>
+                          </Popover.Panel>
+                        </Transition>
+                      </>
+                    )}
+                  </Popover>
+
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      {/* {visible &&
       <div>
         <table className='w-full whitespace-nowrap'>
           <thead className='text-xs font-semibold tracking-wide text-left text-gray-100 dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800'>
@@ -163,7 +264,7 @@ export default function AnalysisTableList({ getScoreAgain, deleteItem, pageList}
           </ul>
         </div>
       </div>
-      }
+      } */}
     </>
   )
 }

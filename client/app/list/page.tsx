@@ -1,22 +1,77 @@
-import PageToButton from '@/components/Button/PageToButton'
-import AnalysisTableListParent from '@/components/AnalysisTableListParent'
-import { Suspense } from 'react'
+'use client'
+import { useEffect, useState } from 'react'
+import PsiTable from '@/components/PsiTable'
+import { PSIDataType } from '@/type'
+import { deleteData, getDataAll } from '@/utils/fetchData'
+import { getPsiDataAgain } from '@/utils/getPsi'
+import {
+  Card,
+  Title,
+  Button
+} from '@tremor/react'
 
 export default function PsiList() {
+  const [pageList, setPageList] = useState<PSIDataType[]>([])
+
+  const handlePsiData = async (url: string, index: number, id: number, device: string) => {
+    await getPsiDataAgain(url, index, id, device)
+  }
+
+  const deleteItem = async (index: number, id: number) => {
+    await deleteData('api', id)
+
+    setPageList((prevState) => {
+      const updatedList = [...prevState];
+      updatedList.splice(index, 1);
+      return updatedList;
+    });
+  }
+
+  useEffect(() => {
+    const getDataByAll = async () => {
+      const data = await getDataAll('api')
+      console.log(data)
+
+      setPageList(prevState => {
+        const updatedList = data.map((item: any) => ({
+          id: item.id,
+          device: item.device,
+          name: item.name,
+          url: item.url,
+          score: item.score,
+          date: item.date,
+        }))
+        return [...prevState, ...updatedList]
+      })
+    }
+
+    getDataByAll()
+  }, [])
 
   return (
-    <div className='w-full mx-auto'>
-      <div className='my-6 flex justify-start'>
-        <PageToButton
-          label='ページ登録'
-          pageURL='/list/add'
-        />
-      </div>
-      <div className='mb-5'>
-        <h2 className='text-xl text-center font-semibold'>ページ一覧</h2>
-      </div>
+    <div>
+      <Title>ページ一覧</Title>
 
-      <AnalysisTableListParent />
+      <Card className='mt-6'>
+        <PsiTable
+          pageList={pageList}
+          getScoreAgain={handlePsiData}
+          deleteItem={deleteItem}
+        />
+      </Card>
+
+      <div className='mt-5'>
+        <Button
+          className='w-[150px] bg-gray-900 hover:bg-gray-700
+          py-2 px-4 rounded active:bg-gray-500
+          duration-150 focus:shadow-outline ease-in-out'
+          color='gray'
+        >
+          <a href='/list/add'>
+            ページ登録
+          </a>
+        </Button>
+      </div>
     </div>
   )
 }

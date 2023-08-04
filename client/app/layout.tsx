@@ -13,7 +13,9 @@ export default function RootLayout({
         <Suspense fallback="...">
           <Nav />
         </Suspense>
+        <main className="p-4 md:p-10 mx-auto max-w-7xl">
           {children}
+        </main>
       </body>
     </html>
   )

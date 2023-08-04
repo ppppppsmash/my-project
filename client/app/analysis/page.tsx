@@ -1,7 +1,7 @@
 'use client'
 import { NextPage } from 'next'
-import AnalysisInput from '@/components/Input/AnalysisInput'
-import AnalysisButton from '@/components/Button/AnalysisButton'
+import PsiInput from '@/components/PsiInput'
+import PsiButton from '@/components/PsiButton'
 import { useState } from 'react'
 //import { PSIDataType } from '@/type'
 import { urlValidate } from '@/utils/urlValidate'
@@ -122,13 +122,13 @@ export default function Analysis() {
         </div>
         <div className='flex items-center justify-center space-x-3'>
           <div className='w-full'>
-            <AnalysisInput
+            <PsiInput
               placeholder='https://example.com'
               handleChange={getChangeUrl}
             />
           </div>
           <div className='w-2/12'>
-            <AnalysisButton
+            <PsiButton
               id={id}
               label='分析'
               getScore={getPsiInfo}
