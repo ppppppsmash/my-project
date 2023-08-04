@@ -1,13 +1,10 @@
 'use client'
-import { NextPage } from 'next'
-import AnalysisInput from '@/components/Input/AnalysisInput'
-import AnalysisButton from '@/components/Button/AnalysisButton'
-import AnalysisTable from '@/components/Table/AnalysisTable'
+import PsiInput from '@/components/PsiInput'
+import PsiButton from '@/components/PsiButton'
 import { useEffect, useState } from 'react'
 import { PSIDataType } from '@/type'
 import Loading from '@/components/Loading'
-import AnalysisTableList from '@/components/Table/AnalysisTableList'
-import AnalysisTab from '@/components/Tab/AnalysisTab'
+import AnalysisTableList from '@/components/PsiTable'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import { urlValidate } from '@/utils/urlValidate'
@@ -218,13 +215,13 @@ export default function DataRegister() {
         </div>
         <div className=''>
           <div className='mb-2'>
-            <AnalysisInput
+            <PsiInput
               placeholder='サイト名'
               handleChange={getChangeUrlName}
             />
           </div>
           <div className='mb-2'>
-            <AnalysisInput
+            <PsiInput
               placeholder='https://example.com'
               handleChange={getChangeUrl}
             />
@@ -232,7 +229,7 @@ export default function DataRegister() {
         </div>
         <div>
           <div className='w-2/12'>
-            <AnalysisButton
+            <PsiButton
               id={id}
               label='登録'
               getScore={getPsiInfo}

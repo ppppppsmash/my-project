@@ -1,10 +1,21 @@
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, ChangeEvent } from 'react'
 import { PSIDataType } from '@/type'
 import { formatDate } from '@/utils/formatDate'
-import { MdOutlineDelete } from 'react-icons/md'
-import { FiEdit } from 'react-icons/fi'
-import { FiRotateCw } from 'react-icons/fi'
 import Link from 'next/link'
+import {
+  Card,
+  Table,
+  TableHead,
+  TableRow,
+  TableHeaderCell,
+  TableBody,
+  TableCell,
+  Text,
+  Title,
+  Button
+} from '@tremor/react'
+import PsiPopup from '@/components/PsiPopup'
+
 
 interface Props {
   getScoreAgain: (url: string, index: number, id: number, device: string) => void
@@ -12,7 +23,9 @@ interface Props {
   pageList: PSIDataType[]
 }
 
-export default function AnalysisTableList({ getScoreAgain, deleteItem, pageList}: Props) {
+export default function PsiTable({ getScoreAgain, deleteItem, pageList}: Props) {
+  const [editName, setEditName] = useState<string[]>([])
+  const [isEdit, setIsEdit] = useState<number | null>(null)
   const [visible, setVisible] = useState(false)
   const [loadingVisible, setLoadingVisible] = useState(false)
   const [currentTablePage, setCurrentTablePage] = useState<number>(1)
@@ -35,6 +48,19 @@ export default function AnalysisTableList({ getScoreAgain, deleteItem, pageList}
     setTimeout(() => {
       setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index));
     }, 2000)
+  }
+
+  const handleChange = ({ target }: ChangeEvent<HTMLInputElement>, index: number) => {
+    const value = target.value
+    setEditName((prevState) => {
+      const updatedEditName = [...prevState]
+      updatedEditName[index] = value
+      return updatedEditName
+    })
+  }
+
+  const handleEdit = (index: number) => {
+    setIsEdit(index)
   }
 
   const getDisplayedTableData = () => {
@@ -71,7 +97,42 @@ export default function AnalysisTableList({ getScoreAgain, deleteItem, pageList}
 
   return (
     <>
-      {visible &&
+    <Title>PSI</Title>
+        <Table className="mt-5">
+          <TableHead>
+            <TableRow>
+              <TableHeaderCell>site名</TableHeaderCell>
+              <TableHeaderCell>URL</TableHeaderCell>
+              <TableHeaderCell>psi score</TableHeaderCell>
+              <TableHeaderCell>date</TableHeaderCell>
+              <TableHeaderCell>action</TableHeaderCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {getDisplayedTableData().map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>
+                  <Link href={`/list/${item.id}`}>
+                    {item.name}
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <Text>{item.url}</Text>
+                </TableCell>
+                <TableCell>
+                  <Text>{item.score}</Text>
+                </TableCell>
+                <TableCell>
+                  <Text>{item.date}</Text>
+                </TableCell>
+                <TableCell>
+                  <PsiPopup />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      {/* {visible &&
       <div>
         <table className='w-full whitespace-nowrap'>
           <thead className='text-xs font-semibold tracking-wide text-left text-gray-100 dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800'>
@@ -88,15 +149,29 @@ export default function AnalysisTableList({ getScoreAgain, deleteItem, pageList}
             {getDisplayedTableData().map((page, index) => (
               <tr className='border-b hover:text-white hover:bg-gray-900 cursor-default' key={page.id}>
                 <td className='px-4 py-1 font-semibold text-sm text-center underline'>
-                  <p className='flex items-center space-x-2'>
-                    <Link href={`/list/${page.id}`}>
-                      {page.name}
-                    </Link>
-                    <FiEdit
-                      size={20}
-                      className='cursor-pointer'
-                    />
-                  </p>
+                <p className='flex items-center space-x-2'>
+                  {isEdit === index ? (
+                    <>
+                      <input
+                        className='hover:text-gray-900'
+                        value={editName[index] || page.name}
+                        onChange={(e) => handleChange(e, index)}
+                      />
+                      <RxCross2 />
+                      <BsCheckLg />
+                    </>
+                  ) : (
+                    <>
+                      <Link href={`/list/${page.id}`}>{page.name}</Link>
+                      <FiEdit
+                        size={20}
+                        className='cursor-pointer'
+                        onClick={() => handleEdit(index)}
+                      />
+                    </>
+                  )}
+                </p>
+
                 </td>
                 <td className='px-4 py-1 text-sm text-center'>{page.url}</td>
                 <td className='px-4 py-1 text-sm text-center'>{page.score}</td>
@@ -131,7 +206,7 @@ export default function AnalysisTableList({ getScoreAgain, deleteItem, pageList}
           </ul>
         </div>
       </div>
-      }
+      } */}
     </>
   )
 }
