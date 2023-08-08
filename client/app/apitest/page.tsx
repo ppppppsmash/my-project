@@ -77,7 +77,6 @@ export default function AddList() {
         name: item.name,
         url: item.url,
         score: item.score,
-        //date:  formattedDate.replace(/(\d{4})年\s+/, '$1年\n')
         date: formatDate(item.date),
         lcp: Number(item.lcp.replace(/,/g, '').split(/\s/)[0]),
         fid: Number(item.fid.replace(/,/g, '').split(/\s/)[0]) / 1000, // ms -> s
@@ -142,7 +141,6 @@ export default function AddList() {
         <div className='mt-[60px]'>
           <Title>ライン グラフ</Title>
           <LineChart
-            className='whitespace-pre'
             data={pageList}
             index='date'
             categories={['lcp', 'fid', 'fcp', 'tbt']}

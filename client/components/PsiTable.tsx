@@ -15,16 +15,19 @@ import {
 } from '@tremor/react'
 import { XMarkIcon, CheckIcon, LinkIcon } from '@heroicons/react/24/outline'
 import PsiPopup from '@/components/PsiPopup'
+import { patchData } from '@/utils/fetchData'
 
 interface Props {
   getScoreAgain: (url: string, index: number, id: number, device: string) => void
+  //postNameChange: (editName: string, id: number) => void
   deleteItem: (index: number,  id: number) => void
   pageList: PSIDataType[]
 }
 
-export default function PsiTable({ getScoreAgain, deleteItem, pageList}: Props) {
+export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props) {
   const [editName, setEditName] = useState<string[]>([])
-  const [isEdit, setIsEdit] = useState<number | null>(null)
+  const [editIndex, setEditIndex] = useState<number | null>(null)
+  const [isEdited, setIsEdited] = useState<boolean>(false)
   const [visible, setVisible] = useState(false)
   const [loadingVisible, setLoadingVisible] = useState(false)
   const [currentTablePage, setCurrentTablePage] = useState<number>(1)
@@ -36,16 +39,16 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList}: Props) 
     setLoadingVisible(true)
     setSpinningItems((prevState: any) => {
       if (prevState.includes(index)) {
-        return prevState.filter((item: number) => item !== index);
+        return prevState.filter((item: number) => item !== index)
       } else {
-        return [...prevState, index];
+        return [...prevState, index]
       }
     })
 
     getScoreAgain(url, index, id, device)
 
     setTimeout(() => {
-      setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index));
+      setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index))
     }, 2000)
   }
 
@@ -59,7 +62,8 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList}: Props) 
   }
 
   const handleEdit = (index: number) => {
-    setIsEdit(index)
+    setEditIndex(index)
+    setIsEdited(false)
   }
 
   const getDisplayedTableData = () => {
@@ -70,6 +74,12 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList}: Props) 
 
   const handlePageChange = (tablePage: number) => {
     setCurrentTablePage(tablePage)
+  }
+
+  const handleNameChange = async (index: number, id: number) => {
+    await patchData('api', id, {name: editName[index]})
+    setEditIndex(null)
+    setIsEdited(true)
   }
 
   const pagination = () => {
@@ -111,7 +121,7 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList}: Props) 
           {getDisplayedTableData().map((item, index) => (
             <TableRow key={item.id}>
               <TableCell>
-              {isEdit === index ? (
+              {editIndex === index ? (
                 <p className='flex space-x-2 items-center'>
                   <TextInput
                     className='w-10'
@@ -122,17 +132,18 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList}: Props) 
                     className='w-5 h-5 cursor-pointer'
                     onClick={(e)=>{
                       e.stopPropagation()
-                      setIsEdit(null)
+                      setEditIndex(null)
                     }}
                   />
                   <CheckIcon
                     className='w-5 h-5 cursor-pointer'
+                    onClick={()=>handleNameChange(index, item.id)}
                   />
                 </p> ) : (
                     <Link
                       className='underline'
                       href={`/list/${item.id}`}>
-                      {item.name}
+                      {editName[index] || item.name}
                     </Link>
                 )
               }
@@ -144,7 +155,7 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList}: Props) 
                 <Text>{item.score}</Text>
               </TableCell>
               <TableCell>
-                <Text>{item.date}</Text>
+                <Text>{formatDate(item.date)}</Text>
               </TableCell>
               <TableCell>
                 <PsiPopup

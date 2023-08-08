@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import PsiTable from '@/components/PsiTable'
 import { PSIDataType } from '@/type'
-import { deleteData, getDataAll } from '@/utils/fetchData'
+import { deleteData, getDataAll, patchData, postData } from '@/utils/fetchData'
 import { getPsiDataAgain } from '@/utils/getPsi'
 import {
   Card,
@@ -21,30 +21,17 @@ export default function PsiList() {
     await deleteData('api', id)
 
     setPageList((prevState) => {
-      const updatedList = [...prevState];
-      updatedList.splice(index, 1);
-      return updatedList;
-    });
+      const updatedList = [...prevState]
+      updatedList.splice(index, 1)
+      return updatedList
+    })
   }
 
-  useEffect(() => {
+  useEffect(()=> {
     const getDataByAll = async () => {
       const data = await getDataAll('api')
-      console.log(data)
-
-      setPageList(prevState => {
-        const updatedList = data.map((item: any) => ({
-          id: item.id,
-          device: item.device,
-          name: item.name,
-          url: item.url,
-          score: item.score,
-          date: item.date,
-        }))
-        return [...prevState, ...updatedList]
-      })
+      setPageList(data)
     }
-
     getDataByAll()
   }, [])
 

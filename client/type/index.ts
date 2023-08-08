@@ -3,7 +3,7 @@ export interface PSIDataType {
   device: string;
   name?: string;
   url: string;
-  date?: string;
+  date: string;
   score: number;
   label?: string;
   lcp?: string;
