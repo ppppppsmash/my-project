@@ -119,7 +119,10 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
         </TableHead>
         <TableBody>
           {getDisplayedTableData().map((item, index) => (
-            <TableRow key={item.id}>
+            <TableRow
+              className='hover:bg-gray-100'
+              key={item.id}
+            >
               <TableCell>
               {editIndex === index ? (
                 <p className='flex space-x-2 items-center'>
