@@ -13,7 +13,7 @@ import {
   Title,
   TextInput
 } from '@tremor/react'
-import { XMarkIcon, CheckIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, CheckIcon, LinkIcon } from '@heroicons/react/24/outline'
 import PsiPopup from '@/components/PsiPopup'
 
 interface Props {
@@ -129,9 +129,11 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList}: Props) 
                     className='w-5 h-5 cursor-pointer'
                   />
                 </p> ) : (
-                  <Link href={`/list/${item.id}`}>
-                    {item.name}
-                  </Link>
+                    <Link
+                      className='underline'
+                      href={`/list/${item.id}`}>
+                      {item.name}
+                    </Link>
                 )
               }
               </TableCell>

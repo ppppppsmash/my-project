@@ -11,7 +11,7 @@ const navigation = [
   { name: 'ページ比較', href: '/compare' },
   { name: 'URL分析', href: '/analysis' },
   { name: '登録テスト', href: '/data-register' },
-  { name: 'API叩き', href: '/apitest' },
+  { name: 'グラフ', href: '/apitest' },
 ]
 
 function classNames(...classes: string[]) {
