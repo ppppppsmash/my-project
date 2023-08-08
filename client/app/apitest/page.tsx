@@ -1,6 +1,6 @@
 'use client'
 import { NextPage } from 'next'
-import AnalysisInput from '@/components/Input/AnalysisInput'
+import PsiInput from '@/components/PsiInput'
 import AnalysisButton from '@/components/Button/AnalysisButton'
 import { useEffect, useState } from 'react'
 import { PSIDataType } from '@/type'
@@ -138,7 +138,7 @@ export default function ApiTest() {
         </div>
         <div className='flex items-center justify-center space-x-3'>
           <div className='w-full'>
-            <AnalysisInput
+            <PsiInput
               placeholder='https://example.com'
               handleChange={getChangeUrl}
             />

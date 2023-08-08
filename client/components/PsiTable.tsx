@@ -97,7 +97,7 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList}: Props) 
   return (
     <>
       <Title>PSI</Title>
-      <Table className="mt-5">
+      <Table className="mt-5 overflow-visible">
         <TableHead>
           <TableRow>
             <TableHeaderCell>site名</TableHeaderCell>
