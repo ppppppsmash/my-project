@@ -1,8 +1,8 @@
 'use client'
+import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon, CommandLineIcon } from '@heroicons/react/24/outline'
-import Image from 'next/image'
 
 const navigation = [
   { name: 'ホーム', href: '/' },
@@ -11,7 +11,7 @@ const navigation = [
   { name: 'ページ比較', href: '/compare' },
   { name: 'URL分析', href: '/analysis' },
   { name: '登録テスト', href: '/data-register' },
-  { name: 'API叩き', href: '/apitest' },
+  { name: 'グラフ', href: '/apitest' },
 ]
 
 function classNames(...classes: string[]) {
@@ -20,13 +20,17 @@ function classNames(...classes: string[]) {
 
 export default function Navbar() {
   const pathname = usePathname()
+  const [currentNavItem, setCurrentNavItem] = useState(pathname)
+  const handleNavItemClick = (href: string) => {
+    setCurrentNavItem(href)
+  }
 
   return (
     <Disclosure as="nav" className="bg-white shadow-sm">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 justify-between">
+            <div className="flex h-16 justify-center">
               <div className="flex">
                 <div className="flex flex-shrink-0 items-center">
                 <CommandLineIcon className="block h-6 w-6" />
@@ -37,11 +41,12 @@ export default function Navbar() {
                     <a
                       key={item.name}
                       href={item.href}
+                      onClick={() => handleNavItemClick(item.href)} // クリック時にcurrentNavItemを更新
                       className={classNames(
-                        pathname === item.href
-                          ? 'border-slate-500 text-gray-900 text-sm'
+                        item.href === currentNavItem
+                          ? 'border-slate-500 text-gray-900 border-b-2 transition-all duration-350'
                           : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                        'inline-flex items-center px-1 pt-1 border-b-2 text-[12px] font-medium'
+                        'inline-flex items-center px-1 pt-1 text-[12px] font-medium'
                       )}
                       aria-current={pathname === item.href ? 'page' : undefined}
                     >
@@ -51,7 +56,9 @@ export default function Navbar() {
                 </div>
               </div>
               <div className="-mr-2 flex items-center sm:hidden">
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2">
+                <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-white p-2
+                  text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2
+                  focus:ring-slate-500 focus:ring-offset-2">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <XMarkIcon className="block h-6 w-6" aria-hidden="true" />

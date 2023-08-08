@@ -3,7 +3,6 @@ import { PSIDataType } from '@/type'
 import { formatDate } from '@/utils/formatDate'
 import Link from 'next/link'
 import {
-  Card,
   Table,
   TableHead,
   TableRow,
@@ -12,20 +11,23 @@ import {
   TableCell,
   Text,
   Title,
-  Button
+  TextInput
 } from '@tremor/react'
+import { XMarkIcon, CheckIcon, LinkIcon } from '@heroicons/react/24/outline'
 import PsiPopup from '@/components/PsiPopup'
-
+import { patchData } from '@/utils/fetchData'
 
 interface Props {
   getScoreAgain: (url: string, index: number, id: number, device: string) => void
+  //postNameChange: (editName: string, id: number) => void
   deleteItem: (index: number,  id: number) => void
   pageList: PSIDataType[]
 }
 
-export default function PsiTable({ getScoreAgain, deleteItem, pageList}: Props) {
+export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props) {
   const [editName, setEditName] = useState<string[]>([])
-  const [isEdit, setIsEdit] = useState<number | null>(null)
+  const [editIndex, setEditIndex] = useState<number | null>(null)
+  const [isEdited, setIsEdited] = useState<boolean>(false)
   const [visible, setVisible] = useState(false)
   const [loadingVisible, setLoadingVisible] = useState(false)
   const [currentTablePage, setCurrentTablePage] = useState<number>(1)
@@ -37,16 +39,16 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList}: Props) 
     setLoadingVisible(true)
     setSpinningItems((prevState: any) => {
       if (prevState.includes(index)) {
-        return prevState.filter((item: number) => item !== index);
+        return prevState.filter((item: number) => item !== index)
       } else {
-        return [...prevState, index];
+        return [...prevState, index]
       }
     })
 
     getScoreAgain(url, index, id, device)
 
     setTimeout(() => {
-      setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index));
+      setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index))
     }, 2000)
   }
 
@@ -60,7 +62,8 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList}: Props) 
   }
 
   const handleEdit = (index: number) => {
-    setIsEdit(index)
+    setEditIndex(index)
+    setIsEdited(false)
   }
 
   const getDisplayedTableData = () => {
@@ -71,6 +74,12 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList}: Props) 
 
   const handlePageChange = (tablePage: number) => {
     setCurrentTablePage(tablePage)
+  }
+
+  const handleNameChange = async (index: number, id: number) => {
+    await patchData('api', id, {name: editName[index]})
+    setEditIndex(null)
+    setIsEdited(true)
   }
 
   const pagination = () => {
@@ -97,116 +106,76 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList}: Props) 
 
   return (
     <>
-    <Title>PSI</Title>
-        <Table className="mt-5">
-          <TableHead>
-            <TableRow>
-              <TableHeaderCell>site名</TableHeaderCell>
-              <TableHeaderCell>URL</TableHeaderCell>
-              <TableHeaderCell>psi score</TableHeaderCell>
-              <TableHeaderCell>date</TableHeaderCell>
-              <TableHeaderCell>action</TableHeaderCell>
+      <Title>PSI</Title>
+      <Table className="mt-5 overflow-visible">
+        <TableHead>
+          <TableRow>
+            <TableHeaderCell>site名</TableHeaderCell>
+            <TableHeaderCell>URL</TableHeaderCell>
+            <TableHeaderCell>psi score</TableHeaderCell>
+            <TableHeaderCell>date</TableHeaderCell>
+            <TableHeaderCell>action</TableHeaderCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {getDisplayedTableData().map((item, index) => (
+            <TableRow
+              className='hover:bg-gray-100'
+              key={item.id}
+            >
+              <TableCell>
+              {editIndex === index ? (
+                <p className='flex space-x-2 items-center'>
+                  <TextInput
+                    className='w-10'
+                    value={editName[index] || item.name}
+                    onChange={(e) => handleChange(e, index)}
+                  />
+                  <XMarkIcon
+                    className='w-5 h-5 cursor-pointer'
+                    onClick={(e)=>{
+                      e.stopPropagation()
+                      setEditIndex(null)
+                    }}
+                  />
+                  <CheckIcon
+                    className='w-5 h-5 cursor-pointer'
+                    onClick={()=>handleNameChange(index, item.id)}
+                  />
+                </p> ) : (
+                    <Link
+                      className='underline'
+                      href={`/list/${item.id}`}>
+                      {editName[index] || item.name}
+                    </Link>
+                )
+              }
+              </TableCell>
+              <TableCell>
+                <Text>{item.url}</Text>
+              </TableCell>
+              <TableCell>
+                <Text>{item.score}</Text>
+              </TableCell>
+              <TableCell>
+                <Text>{formatDate(item.date)}</Text>
+              </TableCell>
+              <TableCell>
+                <PsiPopup
+                  behaviorEdit={()=>handleEdit(index)}
+                  behaviorScoreAgain={()=>handleClick(item.url, index, item.id, item.device)}
+                  behaviorDelete={()=>deleteItem(index, item.id)}
+                />
+              </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {getDisplayedTableData().map((item) => (
-              <TableRow key={item.id}>
-                <TableCell>
-                  <Link href={`/list/${item.id}`}>
-                    {item.name}
-                  </Link>
-                </TableCell>
-                <TableCell>
-                  <Text>{item.url}</Text>
-                </TableCell>
-                <TableCell>
-                  <Text>{item.score}</Text>
-                </TableCell>
-                <TableCell>
-                  <Text>{item.date}</Text>
-                </TableCell>
-                <TableCell>
-                  <PsiPopup />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      {/* {visible &&
-      <div>
-        <table className='w-full whitespace-nowrap'>
-          <thead className='text-xs font-semibold tracking-wide text-left text-gray-100 dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800'>
-            <tr className='text-left '>
-              <th className='px-4 py-3 text-sm text-center'>サイト名</th>
-              <th className='px-4 py-3 text-sm text-center'>URL</th>
-              <th className='px-4 py-3 text-sm text-center'>スコア</th>
-              <th className='px-4 py-3 text-sm text-center'>取得日時</th>
-              <th className='px-4 py-3 text-sm text-center'></th>
-              <th className='px-4 py-3 text-sm text-center'></th>
-            </tr>
-          </thead>
-          <tbody className='text-gray-800'>
-            {getDisplayedTableData().map((page, index) => (
-              <tr className='border-b hover:text-white hover:bg-gray-900 cursor-default' key={page.id}>
-                <td className='px-4 py-1 font-semibold text-sm text-center underline'>
-                <p className='flex items-center space-x-2'>
-                  {isEdit === index ? (
-                    <>
-                      <input
-                        className='hover:text-gray-900'
-                        value={editName[index] || page.name}
-                        onChange={(e) => handleChange(e, index)}
-                      />
-                      <RxCross2 />
-                      <BsCheckLg />
-                    </>
-                  ) : (
-                    <>
-                      <Link href={`/list/${page.id}`}>{page.name}</Link>
-                      <FiEdit
-                        size={20}
-                        className='cursor-pointer'
-                        onClick={() => handleEdit(index)}
-                      />
-                    </>
-                  )}
-                </p>
-
-                </td>
-                <td className='px-4 py-1 text-sm text-center'>{page.url}</td>
-                <td className='px-4 py-1 text-sm text-center'>{page.score}</td>
-                <td className='px-4 py-1 text-sm text-center whitespace-pre'>{formatDate(page.date)}</td>
-                <td className='px-4 py-1 w-[150px] text-center'>
-                  <p className='flex justify-center'>
-                    <FiRotateCw
-                      className={`cursor-pointer hover:text-white ${
-                        spinningItems.includes(index) ? 'animate-spin' : ''
-                      }`}
-                      size={22}
-                      onClick={()=>handleClick(page.url, index, page.id, page.device)}
-                    />
-                  </p>
-                </td>
-                <td className='px-4 py-1 text-center w-[150px]'>
-                  <p className='flex justify-center'>
-                    <MdOutlineDelete
-                      className='cursor-pointer'
-                      size={25}
-                      onClick={() => deleteItem(index, page.id)}
-                    />
-                  </p>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className='mt-2 text-gray-500 dark:text-gray-400'>
-          <ul className="flex space-x-2 justify-center">
-            {pagination()}
-          </ul>
-        </div>
+          ))}
+        </TableBody>
+      </Table>
+      <div className='mt-2 text-gray-500 dark:text-gray-400'>
+        <ul className="flex space-x-2 justify-center">
+          {pagination()}
+        </ul>
       </div>
-      } */}
     </>
   )
 }

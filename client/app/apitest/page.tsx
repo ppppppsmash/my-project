@@ -1,204 +1,155 @@
 'use client'
-import { NextPage } from 'next'
-import AnalysisInput from '@/components/Input/AnalysisInput'
-import AnalysisButton from '@/components/Button/AnalysisButton'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { PSIDataType } from '@/type'
-import { urlValidate } from '@/utils/urlValidate'
-import { SlScreenSmartphone } from 'react-icons/sl'
-import { RiComputerLine } from 'react-icons/ri'
-import Loading from '@/components/Loading'
-import BarGraph from '@/components/BarGraph'
-import { getDataAll, postData } from '@/utils/fetchData'
+import PsiCheckbox from '@/components/PsiCheckbox'
+import PsiSelect from '@/components/PsiSelect'
+import { getPsiData } from '@/utils/getPsi'
+import Modals from '@/components/Modals'
+import {
+  Card,
+  Title,
+  LineChart
+} from '@tremor/react'
+import PsiInput from '@/components/PsiInput'
+import PsiButton from '@/components/PsiButton'
+import { getDataAll } from '@/utils/fetchData'
+import { formatDate } from '@/utils/formatDate'
 
 interface Props extends PSIDataType {}
 
-export default function ApiTest() {
-  const [id, setId] = useState<number>(0)
+const dataFormatter = (number: number) => {
+  return `${Intl.NumberFormat("ja-JP").format(number).toString()} s`
+}
+
+export default function AddList() {
+  const [pageList, setPageList] = useState<PSIDataType[]>([])
+  const [id, setId] = useState(0)
+  const [name, setName] = useState('')
   const [url, setUrl] = useState('')
 
-  const [results, setResults] = useState<Props>()
-  const [mobileResults, setMobileResults] = useState<Props>()
+  const [selectedDevice, setSelectedDevice] = useState<string[]>([])
 
-  const [selectedDevice, setSelectedDevice] = useState<'mobile' | 'desktop'>('mobile')
+  // const dataFormatter = pageList.map(item => {
+  //   const fcpValue = item.fcp?.split(/\s/)[0] // 半角スペースで分割し、最初の要素を取得
+  //   return {
+  //     ...item,
+  //     fcp: fcpValue
+  //   }
+  // })
 
-  const [visible, setVisible] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const getChangeUrlName = ({target}: ChangeEvent<HTMLInputElement>) => {
+    setName(target.value)
+  }
 
-  const [pageList, setPageList] = useState<Props[]>([])
-  const [mobilePageList, setMobilePageList] = useState<Props[]>([])
-
-  const date = new Date().toLocaleString()
-
-  const getChangeUrl = ({target}: React.ChangeEvent<HTMLInputElement>) => {
+  const getChangeUrl = ({target}: ChangeEvent<HTMLInputElement>) => {
     setUrl(target.value)
   }
 
-  const fetchPsiData = async (url: string, device: string) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}pageSpeedInsights?url=${urlValidate(url)}&strategy=${device}`, {
-      cache: 'no-store'
-    })
-    return res
-  }
-
-  const getPsiInfo = async() => {
-    setLoading(true)
-    const res = await fetchPsiData(url, selectedDevice)
-
-    if (res.ok) {
-      const now = new Date()
-      const data = await res.json()
-      const { result } = data
-      const { lighthouseResult } = result
-      const { categories } = lighthouseResult
-      const { performance } = categories
-      const label = `${now.getMonth() + 1}月${now.getDate()}日`
-      const score = performance.score * 100
-
-      const { audits } = lighthouseResult
-      const metrics = {
-        lcp: audits['largest-contentful-paint'],
-        fid: audits['first-input-delay'],
-        cls: audits['cumulative-layout-shift'],
-        fcp: audits['first-contentful-paint'],
-        tbt: audits['total-blocking-time'],
-        si: audits['speed-index'],
-        fci: audits['first-cpu-idle'],
-        eil: audits['estimated-input-latency'],
-        fmp: audits['first-meaningful-paint'],
-        tti: audits['interactive']
-      }
-
-      const psiData = {
-        id,
-        url,
-        date,
-        score,
-        label,
-        device: selectedDevice,
-        fcp: metrics.fcp.displayValue,
-        lcp: metrics.lcp.numericValue
-      }
-
-      selectedDevice === 'desktop'
-        ? setResults(prevState => ({ ...prevState, ...psiData }))
-        : setMobileResults(prevState => ({ ...prevState, ...psiData }))
-      selectedDevice === 'desktop'
-        ? setPageList(prevState => [...prevState, psiData])
-        : setMobilePageList(prevState => [...prevState, psiData])
-
-        console.log(pageList)
-
-       setVisible(true)
-       setLoading(false)
+  const handleDeviceChange = (value: string) => {
+    if (selectedDevice.includes(value)) {
+      setSelectedDevice(prevState => prevState.filter(device => device !== value))
+    } else {
+      setSelectedDevice(prevState => [...prevState, value])
     }
   }
 
-  const handleDeviceSelection = (device: 'mobile' | 'desktop') => {
-    setSelectedDevice(device);
-  };
+  const handlePsiData = async () => {
+    await getPsiData(selectedDevice, name, url, '/apitest')
+  }
 
-  const postTest = async () => {
-    const score = pageList.map((page) => {
-      return page.score
-    })
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
-    const label = pageList.map((page) => {
-      return page.label
-    })
+  const openModal = () => {
+    setIsModalOpen(true)
+  }
 
-    await postData('postTest', {score, label})
-
+  const closeModal = () => {
+    setIsModalOpen(false)
   }
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const data = await getDataAll('api')
-        setPageList(prevState => {
-          const updatedList = data.map((item: PSIDataType) => ({
-            score: item.score,
-            name: item.name
-          }))
-          return [...prevState, ...updatedList]
-        })
-      } catch (error) {
-        console.log(error)
-      }
+    const getDataByAll = async () => {
+      const data = await getDataAll('api')
+      console.log(data)
+      const updatedList = data.map((item: any) => ({
+        id: item.id,
+        device: item.device,
+        name: item.name,
+        url: item.url,
+        score: item.score,
+        date: formatDate(item.date),
+        lcp: Number(item.lcp.replace(/,/g, '').split(/\s/)[0]),
+        fid: Number(item.fid.replace(/,/g, '').split(/\s/)[0]) / 1000, // ms -> s
+        cls: Number(item.cls.replace(/,/g, '').split(/\s/)[0]),
+        fcp: Number(item.fcp.replace(/,/g, '').split(/\s/)[0]),
+        tbt: Number(item.tbt.replace(/,/g, '').split(/\s/)[0]),
+      }))
+
+      setPageList(updatedList)
+      console.log(pageList)
     }
 
-      getData()
+    getDataByAll()
   }, [])
 
   return (
-    <div className='w-full mx-auto'>
-      <section className='mb-10'>
-        <div className='text-center mb-2'>
-          <h2 className='text-2xl font-semibold'>計測対象URL</h2>
+    <div>
+      <Title>グラフ</Title>
+
+      {isModalOpen && <Modals
+        id={id}
+        getPsiData={handlePsiData}
+        onOpen={openModal}
+        onClose={closeModal}
+      />}
+
+      <Card>
+        <div className='mb-4'>
+          <PsiInput
+            placeholder='site名'
+            handleChange={getChangeUrlName}
+          />
         </div>
-        <div className='flex items-center justify-center space-x-3'>
-          <div className='w-full'>
-            <AnalysisInput
-              placeholder='https://example.com'
-              handleChange={getChangeUrl}
+        <div className='mb-4'>
+          <PsiInput
+            placeholder='https://example.com'
+            handleChange={getChangeUrl}
+          />
+        </div>
+
+        <div className='flex justify-spacebetween items-center space-x-4'>
+          <div className='w-1/2'>
+            <PsiSelect
+              placeholder='PSI自動取得時間指定'
             />
           </div>
-          <div className='w-2/12'>
-            <AnalysisButton
-              id={id}
-              label='分析'
-              getScore={getPsiInfo}
-            />
-          </div>
         </div>
-      </section>
 
-      <section>
-        <div
-            className='w-[250px] flex items-center justify-between mx-auto'
-          >
-            <div
-              className={`flex items-center rounded border border-gray-300 p-2
-              cursor-pointer space-x-2 hover:text-white hover:bg-gray-900
-              ${selectedDevice === 'mobile' ? 'text-white bg-gray-900' : ''}`}
-              onClick={() => handleDeviceSelection('mobile')}
-            >
-              <SlScreenSmartphone size={26} />
-              <p className='text-sm'>携帯電話</p>
-            </div>
-            <div
-              className={`flex items-center rounded border border-gray-300 p-2
-              cursor-pointer space-x-2 hover:text-white hover:bg-gray-900
-              ${selectedDevice === 'desktop' ? 'text-white bg-gray-900' : ''}`}
-              onClick={() => handleDeviceSelection('desktop')}
-            >
-              <RiComputerLine size={26} />
-              <p className='text-sm'>デスクトップ</p>
-            </div>
-          </div>
-          <div>
+        <div className='flex items-start justify-spacebetween space-x-8 mb-2'>
+          <PsiCheckbox device='desktop' checkEvent={handleDeviceChange} />
+          <PsiCheckbox device='mobile' checkEvent={handleDeviceChange} />
+        </div>
 
-             { loading && <Loading /> }
+        <div className='w-2/12'>
+          <PsiButton
+            id={id}
+            label='登録'
+            setOpen={setIsModalOpen}
+          />
+        </div>
 
-            { mobilePageList && selectedDevice === 'mobile' &&
-              <BarGraph pageList={mobilePageList} />
-            }
-
-            { pageList && selectedDevice === 'desktop' &&
-              <BarGraph pageList={pageList} />
-            }
-          </div>
-          <div>
-            <button
-              className='w-full bg-gray-900 hover:bg-gray-700 text-white
-              font-bold py-2 px-4 rounded active:bg-gray-500 active:scale-[1]
-              duration-150 focus:shadow-outline ease-in-out hover:scale-[0.95]'
-              onClick={postTest}
-            >
-              データを保存
-            </button>
-          </div>
-      </section>
+        <div className='mt-[60px]'>
+          <Title>ライン グラフ</Title>
+          <LineChart
+            data={pageList}
+            index='date'
+            categories={['lcp', 'fid', 'fcp', 'tbt']}
+            colors={['emerald', 'rose', 'amber', 'cyan']}
+            valueFormatter={dataFormatter}
+            yAxisWidth={40}
+          />
+        </div>
+      </Card>
     </div>
   )
 }
