@@ -1,7 +1,7 @@
 'use client'
 import { ChangeEvent, useState } from 'react'
 import { PSIDataType } from '@/type'
-import PsiCheckbox from '@/components/Psicheckbox'
+import PsiCheckbox from '@/components/PsiCheckbox'
 import PsiSelect from '@/components/PsiSelect'
 import PageToButton from '@/components/Button/PageToButton'
 import { getPsiData } from '@/utils/getPsi'
