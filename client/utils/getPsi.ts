@@ -47,7 +47,7 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
 
       const psiData = {
         name,
-        url,
+        url: urlValidate(url),
         score,
         schedule,
         lcp: lighthouseResultMetrics.lcp.displayValue,

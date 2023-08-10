@@ -13,10 +13,18 @@ import {
   Title,
   TextInput
 } from '@tremor/react'
-import { XMarkIcon, CheckIcon, LinkIcon, DevicePhoneMobileIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline'
+import {
+  XMarkIcon,
+  CheckIcon,
+  LinkIcon,
+  DevicePhoneMobileIcon,
+  ComputerDesktopIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon
+} from '@heroicons/react/24/outline'
 import PsiPopup from '@/components/PsiPopup'
 import { patchData } from '@/utils/fetchData'
-import PsiSelect from './PsiSelect'
+import PsiSelect from '@/components/PsiSelect'
 
 interface Props {
   getScoreAgain: (url: string, index: number, id: number, device: string) => void
@@ -95,13 +103,13 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
   }
 
   const pagination = () => {
-    const pageNumbers = []
+    const pageNumbers = [];
     for (let i = 1; i <= totalTablePages; i++) {
       pageNumbers.push(
         <li
           key={i}
-          className={`mx-1 px-2 rounded cursor-default hover:text-white hover:bg-gray-900 ${
-            i === currentTablePage ? 'bg-gray-900 text-white' : 'bg-gray-200 text-black'
+          className={`mx-1 px-2 cursor-default hover:text-white hover:bg-gray-400 ${
+            i === currentTablePage ? 'bg-gray-500 text-white' : 'bg-gray-200 text-black'
           }`}
           onClick={() => handlePageChange(i)}
         >
@@ -172,7 +180,11 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
               }
               </TableCell>
               <TableCell>
-                <Text>{item.url}</Text>
+                <Text>
+                  <Link href={{pathname: item.url}} target='_blank'>
+                  {item.url}
+                  </Link>
+                </Text>
               </TableCell>
               <TableCell>
                 <Text>{item.score}</Text>
@@ -199,15 +211,15 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
                     onClick={()=>handleScheduleChange(item.id)}
                   />
                 </p>
-              ) : (
-                item.schedule !== '0' && item.schedule !== 'week' ? (
-                  <Text>{item.schedule} 時間</Text>
-                ) : item.schedule === 'week' ? (
-                  <Text>1週間ごと</Text>
                 ) : (
-                  <Text>なし</Text>
+                  item.schedule !== '0' && item.schedule !== 'week' ? (
+                    <Text>{item.schedule} 時間</Text>
+                  ) : item.schedule === 'week' ? (
+                    <Text>1 週間</Text>
+                  ) : (
+                    <Text>なし</Text>
+                  )
                 )
-              )
               }
               </TableCell>
               <TableCell>
@@ -223,7 +235,23 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
       </Table>
       <div className='mt-2 text-gray-500 dark:text-gray-400'>
         <ul className="flex space-x-2 justify-center">
-          {pagination()}
+            {currentTablePage > 1 && (
+              <li
+                className="flex items-center mx-1 px-2 rounded cursor-default hover:text-white hover:bg-gray-900 bg-gray-200 text-black"
+                onClick={() => handlePageChange(currentTablePage - 1)}
+              >
+                <ChevronLeftIcon className="w-5 h-5" />
+              </li>
+            )}
+            {pagination()}
+            {currentTablePage < totalTablePages && (
+              <li
+                className="flex items-center mx-1 px-2 rounded cursor-default hover:text-white hover:bg-gray-900 bg-gray-200 text-black"
+                onClick={() => handlePageChange(currentTablePage + 1)}
+              >
+                <ChevronRightIcon className="w-5 h-5" />
+              </li>
+            )}
         </ul>
       </div>
     </>
