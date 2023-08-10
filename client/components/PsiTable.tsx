@@ -16,6 +16,7 @@ import {
 import { XMarkIcon, CheckIcon, LinkIcon, DevicePhoneMobileIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline'
 import PsiPopup from '@/components/PsiPopup'
 import { patchData } from '@/utils/fetchData'
+import PsiSelect from './PsiSelect'
 
 interface Props {
   getScoreAgain: (url: string, index: number, id: number, device: string) => void
@@ -27,6 +28,7 @@ interface Props {
 export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props) {
   const [editName, setEditName] = useState<string[]>([])
   const [editIndex, setEditIndex] = useState<number | null>(null)
+  const [schedule, setSchedule] = useState('0')
   const [isEdited, setIsEdited] = useState<boolean>(false)
   const [visible, setVisible] = useState(false)
   const [loadingVisible, setLoadingVisible] = useState(false)
@@ -82,6 +84,16 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
     setIsEdited(true)
   }
 
+  const getChangeSelect = (value: string) => {
+    setSchedule(value)
+  }
+
+  const handleScheduleChange = async (id: number) => {
+    await patchData('api', id, { schedule })
+    setEditIndex(null)
+    setIsEdited(true)
+  }
+
   const pagination = () => {
     const pageNumbers = []
     for (let i = 1; i <= totalTablePages; i++) {
@@ -110,7 +122,7 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
       <Table className="mt-5 overflow-visible">
         <TableHead>
           <TableRow>
-            <TableHeaderCell>site名</TableHeaderCell>
+            <TableHeaderCell>site</TableHeaderCell>
             <TableHeaderCell>URL</TableHeaderCell>
             <TableHeaderCell>psi score</TableHeaderCell>
             <TableHeaderCell>date</TableHeaderCell>
@@ -124,7 +136,7 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
               className='hover:bg-gray-100'
               key={item.id}
             >
-              <TableCell className='flex space-x-2'>
+              <TableCell className='flex items-center space-x-2'>
               {
                 item.device === 'mobile' ? (
                   <DevicePhoneMobileIcon className='w-5 h-5' />
@@ -166,14 +178,37 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
                 <Text>{item.score}</Text>
               </TableCell>
               <TableCell>
-                <Text>{formatDate(item.date)}</Text>
+                <Text>{formatDate(item.updatedAt) || formatDate(item.createdAt)}</Text>
               </TableCell>
               <TableCell>
-              {item.schedule ? (
-                  <Text>{item.schedule}</Text>
+              {editIndex === index ? (
+                <p className='w-full flex space-x-2 items-center'>
+                  <PsiSelect
+                    placeholder='再取得時間を再設定してください'
+                    handleSelectChange={getChangeSelect}
+                  />
+                  <XMarkIcon
+                    className='w-5 h-5 cursor-pointer'
+                    onClick={(e)=>{
+                      e.stopPropagation()
+                      setEditIndex(null)
+                    }}
+                  />
+                  <CheckIcon
+                    className='w-5 h-5 cursor-pointer'
+                    onClick={()=>handleScheduleChange(item.id)}
+                  />
+                </p>
+              ) : (
+                item.schedule !== '0' && item.schedule !== 'week' ? (
+                  <Text>{item.schedule} 時間</Text>
+                ) : item.schedule === 'week' ? (
+                  <Text>1週間ごと</Text>
                 ) : (
                   <Text>なし</Text>
-                )}
+                )
+              )
+              }
               </TableCell>
               <TableCell>
                 <PsiPopup

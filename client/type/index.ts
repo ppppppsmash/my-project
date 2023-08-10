@@ -4,7 +4,8 @@ export interface PSIDataType {
   name?: string
   url: string
   schedule?: string
-  date: string
+  createdAt: string
+  updatedAt: string
   score: number
   label?: string
   lcp?: string

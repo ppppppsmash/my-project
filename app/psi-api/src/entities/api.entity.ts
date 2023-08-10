@@ -24,10 +24,10 @@ export class site_list {
   url: string
   @Column('varchar', { length: 10, nullable: true })
   schedule: string
-  @Column('datetime',{
-    default: () => 'NOW()',
-  })
-  date: Date
+  @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
+  createdAt: Date
+  @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
+  updatedAt: Date
   @Column('varchar', { length: 50, nullable: true })
   lcp?: string
   @Column('varchar', { length: 50, nullable: true })
@@ -43,3 +43,7 @@ export class site_list {
   @Column('int', { nullable: true })
   score: number
 }
+
+// npx typeorm-ts-node-commonjs migration:generate src/migration/CommentMigration -d src/data-source.ts
+// npm run build
+// npx typeorm-ts-node-commonjs migration:run -d src/data-source.ts
