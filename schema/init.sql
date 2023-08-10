@@ -1,4 +1,4 @@
-CREATE TABLE site_list_db (
+CREATE TABLE site_list (
   id INT AUTO_INCREMENT PRIMARY KEY,
   device ENUM('desktop', 'mobile'),
   name VARCHAR(50),

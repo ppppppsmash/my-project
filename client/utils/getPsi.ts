@@ -12,7 +12,7 @@ const fetchPsiData = async (url: string, device: string) => {
   return res
 }
 
-export const getPsiData = async (selectedDevice: string[], name: string, url: string, redirect: string) => {
+export const getPsiData = async (selectedDevice: string[], name: string, url: string, schedule: string, redirect: string) => {
   const psiDataArray = []
 
   for (const device of selectedDevice) {
@@ -47,8 +47,9 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
 
       const psiData = {
         name,
-        url,
+        url: urlValidate(url),
         score,
+        schedule,
         lcp: lighthouseResultMetrics.lcp.displayValue,
         fid: lighthouseResultMetrics.fid.displayValue,
         cls: lighthouseResultMetrics.cls.displayValue,
@@ -72,7 +73,6 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
 export const getPsiDataAgain = async (url: string, index: number, id: number, device: string) => {
   const psiDataArray = []
   const res = await fetchPsiData(url, device)
-  const date = new Date().toLocaleString()
 
     if (res.ok) {
       const result = await res.json()
@@ -97,7 +97,6 @@ export const getPsiDataAgain = async (url: string, index: number, id: number, de
 
       const psiData = {
         url,
-        date,
         score,
         fcp: metrics.fcp.displayValue,
         lcp: metrics.lcp.numericValue,
@@ -106,10 +105,8 @@ export const getPsiDataAgain = async (url: string, index: number, id: number, de
 
       psiDataArray.push(psiData)
 
-      console.log(psiData)
-
-      psiDataArray.map(async () => {
-        await patchData('api', id, { score })
+      psiDataArray.map(async (psiData) => {
+        await patchData('api', id, psiData)
       })
     }
 }

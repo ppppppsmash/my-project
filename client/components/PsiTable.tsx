@@ -13,9 +13,18 @@ import {
   Title,
   TextInput
 } from '@tremor/react'
-import { XMarkIcon, CheckIcon, LinkIcon } from '@heroicons/react/24/outline'
+import {
+  XMarkIcon,
+  CheckIcon,
+  LinkIcon,
+  DevicePhoneMobileIcon,
+  ComputerDesktopIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon
+} from '@heroicons/react/24/outline'
 import PsiPopup from '@/components/PsiPopup'
 import { patchData } from '@/utils/fetchData'
+import PsiSelect from '@/components/PsiSelect'
 
 interface Props {
   getScoreAgain: (url: string, index: number, id: number, device: string) => void
@@ -27,6 +36,7 @@ interface Props {
 export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props) {
   const [editName, setEditName] = useState<string[]>([])
   const [editIndex, setEditIndex] = useState<number | null>(null)
+  const [schedule, setSchedule] = useState('0')
   const [isEdited, setIsEdited] = useState<boolean>(false)
   const [visible, setVisible] = useState(false)
   const [loadingVisible, setLoadingVisible] = useState(false)
@@ -82,14 +92,24 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
     setIsEdited(true)
   }
 
+  const getChangeSelect = (value: string) => {
+    setSchedule(value)
+  }
+
+  const handleScheduleChange = async (id: number) => {
+    await patchData('api', id, { schedule })
+    setEditIndex(null)
+    setIsEdited(true)
+  }
+
   const pagination = () => {
-    const pageNumbers = []
+    const pageNumbers = [];
     for (let i = 1; i <= totalTablePages; i++) {
       pageNumbers.push(
         <li
           key={i}
-          className={`mx-1 px-2 rounded cursor-default hover:text-white hover:bg-gray-900 ${
-            i === currentTablePage ? 'bg-gray-900 text-white' : 'bg-gray-200 text-black'
+          className={`mx-1 px-2 cursor-default hover:text-white hover:bg-gray-400 ${
+            i === currentTablePage ? 'bg-gray-500 text-white' : 'bg-gray-200 text-black'
           }`}
           onClick={() => handlePageChange(i)}
         >
@@ -110,10 +130,11 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
       <Table className="mt-5 overflow-visible">
         <TableHead>
           <TableRow>
-            <TableHeaderCell>site名</TableHeaderCell>
+            <TableHeaderCell>site</TableHeaderCell>
             <TableHeaderCell>URL</TableHeaderCell>
             <TableHeaderCell>psi score</TableHeaderCell>
             <TableHeaderCell>date</TableHeaderCell>
+            <TableHeaderCell>schedule</TableHeaderCell>
             <TableHeaderCell>action</TableHeaderCell>
           </TableRow>
         </TableHead>
@@ -123,7 +144,14 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
               className='hover:bg-gray-100'
               key={item.id}
             >
-              <TableCell>
+              <TableCell className='flex items-center space-x-2'>
+              {
+                item.device === 'mobile' ? (
+                  <DevicePhoneMobileIcon className='w-5 h-5' />
+                ) : (
+                  <ComputerDesktopIcon className='w-5 h-5' />
+                )
+              }
               {editIndex === index ? (
                 <p className='flex space-x-2 items-center'>
                   <TextInput
@@ -152,13 +180,47 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
               }
               </TableCell>
               <TableCell>
-                <Text>{item.url}</Text>
+                <Text>
+                  <Link href={{pathname: item.url}} target='_blank'>
+                  {item.url}
+                  </Link>
+                </Text>
               </TableCell>
               <TableCell>
                 <Text>{item.score}</Text>
               </TableCell>
               <TableCell>
-                <Text>{formatDate(item.date)}</Text>
+                <Text>{formatDate(item.updatedAt) || formatDate(item.createdAt)}</Text>
+              </TableCell>
+              <TableCell>
+              {editIndex === index ? (
+                <p className='w-full flex space-x-2 items-center'>
+                  <PsiSelect
+                    placeholder='再取得時間を再設定してください'
+                    handleSelectChange={getChangeSelect}
+                  />
+                  <XMarkIcon
+                    className='w-5 h-5 cursor-pointer'
+                    onClick={(e)=>{
+                      e.stopPropagation()
+                      setEditIndex(null)
+                    }}
+                  />
+                  <CheckIcon
+                    className='w-5 h-5 cursor-pointer'
+                    onClick={()=>handleScheduleChange(item.id)}
+                  />
+                </p>
+                ) : (
+                  item.schedule !== '0' && item.schedule !== 'week' ? (
+                    <Text>{item.schedule} 時間</Text>
+                  ) : item.schedule === 'week' ? (
+                    <Text>1 週間</Text>
+                  ) : (
+                    <Text>なし</Text>
+                  )
+                )
+              }
               </TableCell>
               <TableCell>
                 <PsiPopup
@@ -173,7 +235,23 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
       </Table>
       <div className='mt-2 text-gray-500 dark:text-gray-400'>
         <ul className="flex space-x-2 justify-center">
-          {pagination()}
+            {currentTablePage > 1 && (
+              <li
+                className="flex items-center mx-1 px-2 rounded cursor-default hover:text-white hover:bg-gray-900 bg-gray-200 text-black"
+                onClick={() => handlePageChange(currentTablePage - 1)}
+              >
+                <ChevronLeftIcon className="w-5 h-5" />
+              </li>
+            )}
+            {pagination()}
+            {currentTablePage < totalTablePages && (
+              <li
+                className="flex items-center mx-1 px-2 rounded cursor-default hover:text-white hover:bg-gray-900 bg-gray-200 text-black"
+                onClick={() => handlePageChange(currentTablePage + 1)}
+              >
+                <ChevronRightIcon className="w-5 h-5" />
+              </li>
+            )}
         </ul>
       </div>
     </>

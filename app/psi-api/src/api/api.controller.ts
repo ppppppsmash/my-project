@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Patch, Delete, Body, Param } from '@nestjs/common'
 import { ApiService } from './api.service'
-import { site_list_db } from '../entities/api.entity'
+import { site_list } from '../entities/api.entity'
 import { InsertResult, UpdateResult, DeleteResult } from 'typeorm'
 
 
@@ -9,12 +9,12 @@ export class ApiController {
   constructor(private readonly service: ApiService) {}
 
   @Get()
-  async getDataList(): Promise<site_list_db[]> {
+  async getDataList(): Promise<site_list[]> {
     return await this.service.findAll()
   }
 
   @Get(':id')
-  async getData(@Param('id') id: number): Promise<site_list_db> {
+  async getData(@Param('id') id: number): Promise<site_list> {
     console.log(id)
     return await this.service.find(id)
   }

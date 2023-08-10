@@ -3,7 +3,6 @@ import { Button } from '@tremor/react'
 interface Props {
   label: string
   setOpen: (value: boolean) => void
-  id: number
 }
 
 export default function PsiButton({label, setOpen}: Props) {
