@@ -13,7 +13,7 @@ import {
   Title,
   TextInput
 } from '@tremor/react'
-import { XMarkIcon, CheckIcon, LinkIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, CheckIcon, LinkIcon, DevicePhoneMobileIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline'
 import PsiPopup from '@/components/PsiPopup'
 import { patchData } from '@/utils/fetchData'
 
@@ -114,6 +114,7 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
             <TableHeaderCell>URL</TableHeaderCell>
             <TableHeaderCell>psi score</TableHeaderCell>
             <TableHeaderCell>date</TableHeaderCell>
+            <TableHeaderCell>schedule</TableHeaderCell>
             <TableHeaderCell>action</TableHeaderCell>
           </TableRow>
         </TableHead>
@@ -123,7 +124,14 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
               className='hover:bg-gray-100'
               key={item.id}
             >
-              <TableCell>
+              <TableCell className='flex space-x-2'>
+              {
+                item.device === 'mobile' ? (
+                  <DevicePhoneMobileIcon className='w-5 h-5' />
+                ) : (
+                  <ComputerDesktopIcon className='w-5 h-5' />
+                )
+              }
               {editIndex === index ? (
                 <p className='flex space-x-2 items-center'>
                   <TextInput
@@ -159,6 +167,13 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
               </TableCell>
               <TableCell>
                 <Text>{formatDate(item.date)}</Text>
+              </TableCell>
+              <TableCell>
+              {item.schedule ? (
+                  <Text>{item.schedule}</Text>
+                ) : (
+                  <Text>なし</Text>
+                )}
               </TableCell>
               <TableCell>
                 <PsiPopup

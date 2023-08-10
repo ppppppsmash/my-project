@@ -16,9 +16,10 @@ import PsiButton from '@/components/PsiButton'
 interface Props extends PSIDataType {}
 
 export default function AddList() {
-  const [id, setId] = useState(0)
+  const id: number = 0
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
+  const [schedule, setSchedule] = useState('0')
 
   const [selectedDevice, setSelectedDevice] = useState<string[]>([])
 
@@ -30,6 +31,10 @@ export default function AddList() {
     setUrl(target.value)
   }
 
+  const getChangeSelect = (value: string) => {
+    setSchedule(value)
+  }
+
   const handleDeviceChange = (value: string) => {
     if (selectedDevice.includes(value)) {
       setSelectedDevice(prevState => prevState.filter(device => device !== value))
@@ -39,7 +44,7 @@ export default function AddList() {
   }
 
   const handlePsiData = async () => {
-    await getPsiData(selectedDevice, name, url, '/list')
+    await getPsiData(selectedDevice, name, url, schedule, '/list')
   }
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -92,7 +97,8 @@ export default function AddList() {
         <div className='flex justify-spacebetween items-center space-x-4'>
           <div className='w-1/2'>
             <PsiSelect
-              placeholder='PSI自動取得時間指定'
+              placeholder='自動で取得時間選択'
+              handleSelectChange={getChangeSelect}
             />
           </div>
         </div>
@@ -104,7 +110,6 @@ export default function AddList() {
 
         <div className='w-2/12'>
           <PsiButton
-            id={id}
             label='登録'
             setOpen={setIsModalOpen}
           />

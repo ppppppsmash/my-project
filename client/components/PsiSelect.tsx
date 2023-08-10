@@ -3,20 +3,23 @@ import { ClockIcon } from '@heroicons/react/24/outline'
 
 interface Props {
   placeholder: string
-  handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  handleSelectChange: (value: string) => void
 }
 
-export default function PsiSelect({ placeholder, handleChange }: Props) {
+export default function PsiSelect({ placeholder, handleSelectChange }: Props) {
   return (
     <div className='max-w-sm space-y-6'>
       <SelectBox
-        onValueChange={(value) => console.log('値：', value)}
-        defaultValue='1'
+        onValueChange={(value) => handleSelectChange(value)}
+        defaultValue='0'
       >
-        <SelectBoxItem value='9' text='9:00' icon={ClockIcon} />
-        <SelectBoxItem value='10' text='10:00' icon={ClockIcon} />
-        <SelectBoxItem value='11' text='11:00' icon={ClockIcon} />
-        <SelectBoxItem value='12' text='12:00' icon={ClockIcon} />
+        <SelectBoxItem value='0' text={placeholder} icon={ClockIcon} />
+        <SelectBoxItem value='1' text='1時間ごと' icon={ClockIcon} />
+        <SelectBoxItem value='2' text='2時間ごと' icon={ClockIcon} />
+        <SelectBoxItem value='4' text='4時間ごと' icon={ClockIcon} />
+        <SelectBoxItem value='12' text='12時間ごと' icon={ClockIcon} />
+        <SelectBoxItem value='24' text='24時間ごと' icon={ClockIcon} />
+        <SelectBoxItem value='week' text='1週間ごと' icon={ClockIcon} />
       </SelectBox>
     </div>
   )

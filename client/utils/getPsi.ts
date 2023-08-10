@@ -12,7 +12,7 @@ const fetchPsiData = async (url: string, device: string) => {
   return res
 }
 
-export const getPsiData = async (selectedDevice: string[], name: string, url: string, redirect: string) => {
+export const getPsiData = async (selectedDevice: string[], name: string, url: string, schedule: string, redirect: string) => {
   const psiDataArray = []
 
   for (const device of selectedDevice) {
@@ -49,6 +49,7 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
         name,
         url,
         score,
+        schedule,
         lcp: lighthouseResultMetrics.lcp.displayValue,
         fid: lighthouseResultMetrics.fid.displayValue,
         cls: lighthouseResultMetrics.cls.displayValue,

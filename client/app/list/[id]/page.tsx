@@ -10,8 +10,8 @@ interface Props {
 }
 
 interface Tracker {
-  color: Color;
-  tooltip: string;
+  color: Color
+  tooltip: string
 }
 
 export default function Slug({ params: { id } }: Props) {
@@ -54,7 +54,8 @@ export default function Slug({ params: { id } }: Props) {
         name: item.name,
         url: item.url,
         score: item.score,
-        date: formatDate(item.date),
+        date: item.date,
+        schedule: item.schedule,
         lcp: Number(item.lcp?.replace(/,/g, '').split(/\s/)[0]),
         fid: Number(item.fid?.replace(/,/g, '').split(/\s/)[0]) / 1000, // ms -> s
         cls: Number(item.cls?.replace(/,/g, '').split(/\s/)[0]),
@@ -75,6 +76,7 @@ export default function Slug({ params: { id } }: Props) {
           <Title>URL: {page.url}</Title>
           <Text>スコア: {page.score}</Text>
           <Text>Date: {formatDate(page.date)}</Text>
+          <Text>Schedule: {page.schedule}</Text>
           <Text>Score: {page.score}</Text>
           <Text>LCP: {page.lcp}</Text>
           <Text>FID: {page.fid}</Text>
