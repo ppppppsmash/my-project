@@ -64,7 +64,7 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
   }
 
     psiDataArray.map(async (psiData) => {
-      const res = await postData('api', psiData)
+      const res = await postData('psi_site_list', psiData)
     })
 
     redirectTo(redirect)
@@ -106,7 +106,7 @@ export const getPsiDataAgain = async (url: string, index: number, id: number, de
       psiDataArray.push(psiData)
 
       psiDataArray.map(async (psiData) => {
-        await patchData('api', id, psiData)
+        await patchData('psi_site_list', id, psiData)
       })
     }
 }

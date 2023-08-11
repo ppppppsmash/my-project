@@ -93,7 +93,7 @@ export default function DataRegister() {
         ? setPageList(prevState => [...prevState, psiData])
         : setMobilePageList(prevState => [...prevState, psiData])
 
-        await postData('api', psiData)
+        await postData('psi_site_list', psiData)
 
        setVisible(true)
        setLoading(false)

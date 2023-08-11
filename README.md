@@ -3,28 +3,31 @@
 ## Build Setup
 
 ```bash
-# install dependencies
+# Dockerを起動
+$ docker-compose up -d
+# クライアントサイド
+$ docker-compose exec client bash
 $ npm install
-
-# serve with hot reload at localhost:3000
+# http://localhost:9998
 $ npm run dev
 
-# build for production and launch server
-$ npm run build
-$ npm run start
 
-# generate static project
-$ npm run generate
+# サーバーサイド
+$ docker-compose exec app bash
+$ cd psi-app
+# http://localhost:9999
+$ cd npm run start:dev
+
+# mysql
+# http://localhost:3310
+$ docker-compose exec db bash
+$ mysql -u root -p (rootpasswd)
+$ use pagespeedinsight; => select * from site_list;
 ```
 
 ## このツールについて
 PageSpeedInsightを自動で計測し、その数値の変動を記録するためのツールにする予定です。
 主にフロントエンドが適宜数値を確認し、施策実施に伴う数値の増減を検証する事に使っていきたいと思っています。
-
-## 現状の実装状況
-- 簡単なレイアウト
-- サンプル（宅配ごはん）の指定URLの数値を自動取得（読み込み時）
-- Firebase上に数値を保持
 
 ## CSSについて
 宅配ごはんの管理ツールをもとにレイアウト調整<br>
@@ -48,9 +51,15 @@ https://console.firebase.google.com/project/page-speed-measurement/database/page
 - 自動取得できるようになったら、一定のスコアを下回った場合アラート通知
 - 毎日のスコアの保存機能<br>
 ↑保存機能を考えるならFirestore Databaseを利用したほうが良さそう
-- Vacelのcron job利用したらバックエンドに頼らずとも自動取得できるかも
+- Vacelのcron job利用したらバックエンドに頼らずとも自動取得できるかも -> (変更点：バックエンドnest.jsのcronjobを試している)
 - スコアの文字色などを実際のPSIに合わせて色分けする
 
+### Stack Information
+- next.js v13.0：https://nextjs.org/
+- nest.js： https://docs.nestjs.com/
+- tailwindcss： https://tailwindcss.com/
+- icon ui：https://react-icons.github.io/react-icons/ && https://heroicons.com/
+- component ui：https://headlessui.com/
 
 ### pagespeed insights 参考URL:
 - https://developers.google.com/speed/docs/insights/v5/get-started?hl=ja

@@ -18,7 +18,7 @@ export default function PsiList() {
   }
 
   const deleteItem = async (index: number, id: number) => {
-    await deleteData('api', id)
+    await deleteData('psi_site_list', id)
 
     setPageList((prevState) => {
       const updatedList = [...prevState]
@@ -29,7 +29,7 @@ export default function PsiList() {
 
   useEffect(()=> {
     const getDataByAll = async () => {
-      const data = await getDataAll('api')
+      const data = await getDataAll('psi_site_list')
       setPageList(data)
     }
     getDataByAll()
