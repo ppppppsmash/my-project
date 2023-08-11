@@ -15,7 +15,7 @@ export default function List() {
   }
 
   const deleteItem = async (index: number, id: number) => {
-    await deleteData('api', id)
+    await deleteData('psi_site_list', id)
 
     setPageList((prevState) => {
       const updatedList = [...prevState];
@@ -26,7 +26,7 @@ export default function List() {
 
   useEffect(() => {
     const getDataByAll = async () => {
-      const data = await getDataAll('api')
+      const data = await getDataAll('psi_site_list')
       console.log(data)
 
       setPageList(prevState => {

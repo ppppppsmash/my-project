@@ -87,7 +87,7 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
   }
 
   const handleNameChange = async (index: number, id: number) => {
-    await patchData('api', id, {name: editName[index]})
+    await patchData('psi_site_list', id, {name: editName[index]})
     setEditIndex(null)
     setIsEdited(true)
   }
@@ -97,7 +97,7 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
   }
 
   const handleScheduleChange = async (id: number) => {
-    await patchData('api', id, { schedule })
+    await patchData('psi_site_list', id, { schedule })
     setEditIndex(null)
     setIsEdited(true)
   }

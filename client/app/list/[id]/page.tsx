@@ -51,7 +51,7 @@ export default function Slug({ params: { id } }: Props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getData('api', id)
+      const data = await getData('psi_site_list', id)
       const updatedList = [data].map((item: PSIDataType) => ({
         id: item.id,
         device: item.device,

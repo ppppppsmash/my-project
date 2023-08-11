@@ -3,7 +3,7 @@ import { PsiSiteListService } from './psi_site_list.service'
 import { site_list } from '../entities/site_list.entity'
 import { InsertResult, UpdateResult, DeleteResult } from 'typeorm'
 
-@Controller('api')
+@Controller('psi_site_list')
 export class PsiSiteListController {
   constructor(
     private readonly service: PsiSiteListService

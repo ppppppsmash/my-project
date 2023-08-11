@@ -69,7 +69,7 @@ export default function AddList() {
 
   useEffect(() => {
     const getDataByAll = async () => {
-      const data = await getDataAll('api')
+      const data = await getDataAll('psi_site_list')
       console.log(data)
       const updatedList = data.map((item: any) => ({
         id: item.id,
