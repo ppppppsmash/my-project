@@ -1,5 +1,5 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
-import { site_list } from '../entities/api.entity'
+import { site_list } from '../entities/site_list.entity'
 import { Repository, InsertResult, UpdateResult, DeleteResult } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Cron, CronExpression, SchedulerRegistry } from '@nestjs/schedule'
@@ -7,10 +7,10 @@ import { PsiService } from '../psi/psi.service'
 import { CronJob } from 'cron'
 
 @Injectable()
-export class ApiService {
-//export class ApiService implements OnModuleInit {
+export class PsiSiteListService {
+//export class PsiSiteListService implements OnModuleInit {
 
-  private readonly logger = new Logger(ApiService.name)
+  private readonly logger = new Logger(PsiSiteListService.name)
 
   constructor(
     @InjectRepository(site_list)

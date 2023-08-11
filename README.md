@@ -14,7 +14,7 @@ $ npm run dev
 
 # サーバーサイド
 $ docker-compose exec app bash
-$ cd psi-api
+$ cd psi-app
 # http://localhost:9999
 $ cd npm run start:dev
 

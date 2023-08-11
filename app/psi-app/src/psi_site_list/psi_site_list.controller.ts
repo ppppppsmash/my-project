@@ -1,12 +1,12 @@
 import { Controller, Get, Post, Patch, Delete, Body, Param } from '@nestjs/common'
-import { ApiService } from './api.service'
-import { site_list } from '../entities/api.entity'
+import { PsiSiteListService } from './psi_site_list.service'
+import { site_list } from '../entities/site_list.entity'
 import { InsertResult, UpdateResult, DeleteResult } from 'typeorm'
 
 @Controller('api')
-export class ApiController {
+export class PsiSiteListController {
   constructor(
-    private readonly service: ApiService
+    private readonly service: PsiSiteListService
   ) {}
 
   @Get()

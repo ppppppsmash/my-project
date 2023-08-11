@@ -1,4 +1,4 @@
-import { site_list } from './entities/api.entity'
+import { site_list } from './entities/site_list.entity'
 import { DataSource } from 'typeorm'
 
 export const AppDataSource = new DataSource({

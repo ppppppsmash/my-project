@@ -4,9 +4,9 @@
 /.vscode/
 
 # /app/
-/app/psi-api/node_modules
-/app/psi-api/src/migration/
-/app/psi-api/dist/
+/app/psi-app/node_modules
+/app/psi-app/src/migration/
+/app/psi-app/dist/
 
 # dependencies
 /client/node_modules
