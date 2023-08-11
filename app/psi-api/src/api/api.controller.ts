@@ -3,10 +3,11 @@ import { ApiService } from './api.service'
 import { site_list } from '../entities/api.entity'
 import { InsertResult, UpdateResult, DeleteResult } from 'typeorm'
 
-
 @Controller('api')
 export class ApiController {
-  constructor(private readonly service: ApiService) {}
+  constructor(
+    private readonly service: ApiService
+  ) {}
 
   @Get()
   async getDataList(): Promise<site_list[]> {
@@ -32,5 +33,10 @@ export class ApiController {
   @Delete(':id')
   async deleteData(@Param('id') id: number): Promise<DeleteResult> {
     return await this.service.delete(id)
+  }
+
+  @Get()
+  async testCron(){
+    return await this.service.testCron()
   }
 }
