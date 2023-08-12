@@ -20,6 +20,10 @@ export class SiteMetrics {
   id: number
 
   @Column('varchar', { length: 50, nullable: true })
+  name: string
+  @Column('varchar', { length: 50, nullable: true })
+  url: string
+  @Column('varchar', { length: 50, nullable: true })
   lcp?: string
   @Column('varchar', { length: 50, nullable: true })
   fid?: string

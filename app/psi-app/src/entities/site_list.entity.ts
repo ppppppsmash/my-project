@@ -21,7 +21,7 @@ export class SiteList {
   @Column('enum', {enum: DeviceType, nullable: true })
   device: DeviceType
   @Column('varchar', { length: 50, nullable: true })
-  name?: string
+  name: string
   @Column('varchar', { length: 50, nullable: true })
   url: string
   @Column('varchar', { length: 10, nullable: true })
@@ -30,7 +30,7 @@ export class SiteList {
   createdAt: Date
   @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
   updatedAt: Date
-  @OneToMany(() => SiteMetrics, siteMetrics => siteMetrics.siteList)
+  @OneToMany(() => SiteMetrics, siteMetrics => siteMetrics.siteList, { cascade: true })
   siteMetrics: SiteMetrics[]
 }
 

@@ -31,7 +31,7 @@ export class PsiSiteListController {
   }
 
   @Delete(':id')
-  async deleteData(@Param('id') id: number): Promise<DeleteResult> {
+  async deleteData(@Param('id') id: number): Promise<any> {
     return await this.psiSiteListService.delete(id)
   }
 

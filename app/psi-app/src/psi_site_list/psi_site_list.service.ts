@@ -114,8 +114,16 @@ export class PsiSiteListService {
     return savedSiteList
   }
 
-  async delete(id: number): Promise<DeleteResult> {
-    return await this.pageRepository.delete(id)
+  // async delete(id: number): Promise<DeleteResult> {
+  //   return await this.pageRepository.delete(id)
+  // }
+
+  async delete(id: number): Promise<void> {
+    const siteList = await this.pageRepository.findOne({ where: { id }, relations: ['siteMetrics'] })
+    for (const siteMetric of siteList.siteMetrics) {
+      await this.metricsRepository.remove(siteMetric)
+    }
+    await this.pageRepository.delete(id)
   }
 
   async getScheduleAuto() {
