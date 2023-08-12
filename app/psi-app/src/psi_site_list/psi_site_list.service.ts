@@ -1,38 +1,117 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
-import { site_list } from '../entities/site_list.entity'
-import { Repository, InsertResult, UpdateResult, DeleteResult } from 'typeorm'
+import { SiteMetrics } from '../entities/site_metrics.entity'
+import { SiteList } from '../entities/site_list.entity'
+import { Repository, InsertResult, UpdateResult, DeleteResult, EntityManager, getRepository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Cron, CronExpression, SchedulerRegistry } from '@nestjs/schedule'
-import { PsiService } from '../psi/psi.service'
 import { CronJob } from 'cron'
 
 @Injectable()
 export class PsiSiteListService {
-//export class PsiSiteListService implements OnModuleInit {
 
   private readonly logger = new Logger(PsiSiteListService.name)
 
   constructor(
-    @InjectRepository(site_list)
-    private readonly pageRepository: Repository<site_list>,
-    private readonly psiService: PsiService,
+    @InjectRepository(SiteList)
+    private readonly pageRepository: Repository<SiteList>,
+
+    @InjectRepository(SiteMetrics)
+    private readonly metricsRepository: Repository<SiteMetrics>,
     private schedulerRegistry: SchedulerRegistry
   ) {}
 
-  async findAll(): Promise<site_list[]> {
-    return await this.pageRepository.find()
+  async findAll(): Promise<SiteList[]> {
+    return await this.pageRepository.find({
+      relations: ['siteMetrics'],
+      order: {
+        id: 'DESC'
+      }
+    })
   }
 
-  async find(id: number): Promise<site_list> | null {
-    return await this.pageRepository.findOne({ where: { id } })
+  async find(id: number): Promise<SiteList | null> {
+    console.log(id)
+    return await this.pageRepository.findOne({
+      where: { id },
+      relations: ['siteMetrics']
+    })
   }
 
-  async create(site_list): Promise<InsertResult> {
-    return await this.pageRepository.insert(site_list)
+  async create(SiteList): Promise<any> {
+    const savedSiteList = await this.pageRepository.save(SiteList)
+    const siteMetrics = SiteList.siteMetrics
+    for (const metric of siteMetrics) {
+      metric.siteList = savedSiteList
+      await this.metricsRepository.save(metric)
+    }
   }
 
-  async patch(id: number, site_list): Promise<UpdateResult> {
-    return await this.pageRepository.update(id, site_list)
+  // async create(site): Promise<any> {
+  //   let siteMetrics = []
+  //   for(let i = 0; i < site.siteMetrics.length; i++) {
+  //     let siteMetric = new SiteMetrics()
+  //     siteMetric.score = site.siteMetrics[i].score
+  //     siteMetric.lcp = site.siteMetrics[i].lcp
+  //     siteMetric.fid = site.siteMetrics[i].fid
+  //     siteMetric.cls = site.siteMetrics[i].cls
+  //     siteMetric.fcp = site.siteMetrics[i].fcp
+  //     siteMetric.tbt = site.siteMetrics[i].tbt
+  //     siteMetric.si = site.siteMetrics[i].si
+  //     siteMetrics.push(siteMetric)
+  //   }
+  //   let siteList = new SiteList()
+  //   siteList.device = site.device
+  //   siteList.name = site.name
+  //   siteList.url = site.url
+  //   siteList.schedule = site.schedule
+  //   siteList.siteMetrics = siteMetrics
+  //   console.log('siteMetrics', siteList)
+  //   await this.pageRepository.save(siteList)
+  // }
+
+  // async patch(id: number, SiteList): Promise<any> {
+  //   const savedSiteList = await this.pageRepository.update(id, SiteList)
+  //   const siteMetrics = SiteList.siteMetrics
+  //   for (const metric of siteMetrics) {
+  //     metric.siteList = savedSiteList
+  //     console.log(metric)
+  //     await this.metricsRepository.update(id, metric)
+  //   }
+  //   // await this.metricsRepository.update(id, updatedData)
+  // }
+
+  // async patch(id: number, siteListData): Promise<any> {
+  //   const savedSiteList = await this.pageRepository.update(id, siteListData);
+  // }
+
+  async patch(id: number, siteListData): Promise<any> {
+    const savedSiteList = await this.pageRepository.findOne({ where: { id }, relations: ['siteMetrics'] })
+
+    if (!savedSiteList) {
+      throw new Error(`SiteList with ID ${id} not found`)
+    }
+
+    if (siteListData.name) {
+      savedSiteList.name = siteListData.name
+    }
+
+    if (siteListData.schedule) {
+      savedSiteList.schedule = siteListData.schedule
+    }
+
+    const siteMetrics = siteListData.siteMetrics
+
+    if (siteMetrics && siteMetrics.length > 0) {
+      for (const metric of siteMetrics) {
+        metric.siteList = savedSiteList;
+        await this.metricsRepository.save(metric)
+      }
+    }
+
+    delete savedSiteList.siteMetrics
+    await this.pageRepository.save(savedSiteList)
+
+    return savedSiteList
   }
 
   async delete(id: number): Promise<DeleteResult> {
