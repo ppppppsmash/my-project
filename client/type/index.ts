@@ -6,14 +6,19 @@ export interface PSIDataType {
   schedule?: string
   createdAt: string
   updatedAt: string
+  siteMetrics: PSIMetrics[]
+}
+
+export interface PSIMetrics {
   score: number
-  label?: string
-  lcp?: string
-  fid?: string
-  cls?: string
-  fcp?: string
-  tbt?: string
-  si?: string
+  lcp?: any
+  fid?: any
+  cls?: any
+  fcp?: any
+  tbt?: any
+  si?: any
+  createdAt: string
+  updatedAt: string
 }
 
 export interface pageList {

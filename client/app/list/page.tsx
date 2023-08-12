@@ -33,6 +33,8 @@ export default function PsiList() {
       setPageList(data)
     }
     getDataByAll()
+
+    console.log(pageList)
   }, [])
 
   return (
