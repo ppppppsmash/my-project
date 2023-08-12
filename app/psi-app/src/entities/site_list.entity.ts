@@ -4,7 +4,9 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from 'typeorm';
+  OneToMany
+} from 'typeorm'
+import { SiteMetrics } from './site_metrics.entity'
 
 export enum DeviceType {
   Desktop = 'desktop',
@@ -12,14 +14,14 @@ export enum DeviceType {
 }
 
 @Entity()
-export class site_list {
+export class SiteList {
   @PrimaryGeneratedColumn()
   id: number
 
   @Column('enum', {enum: DeviceType, nullable: true })
   device: DeviceType
   @Column('varchar', { length: 50, nullable: true })
-  name?: string
+  name: string
   @Column('varchar', { length: 50, nullable: true })
   url: string
   @Column('varchar', { length: 10, nullable: true })
@@ -28,22 +30,10 @@ export class site_list {
   createdAt: Date
   @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
   updatedAt: Date
-  @Column('varchar', { length: 50, nullable: true })
-  lcp?: string
-  @Column('varchar', { length: 50, nullable: true })
-  fid?: string
-  @Column('varchar', { length: 50, nullable: true })
-  cls?: string
-  @Column('varchar', { length: 50, nullable: true })
-  fcp?: string
-  @Column('varchar', { length: 50, nullable: true })
-  tbt?: string
-  @Column('varchar', { length: 50, nullable: true })
-  si?: string
-  @Column('int', { nullable: true })
-  score: number
+  @OneToMany(() => SiteMetrics, siteMetrics => siteMetrics.siteList, { cascade: true })
+  siteMetrics: SiteMetrics[]
 }
 
-// npx typeorm-ts-node-commonjs migration:generate src/migration/CommentMigration -d src/data-source.ts
+// npx typeorm-ts-node-commonjs migration:generate src/migration/PsiMigration -d src/data-source.ts
 // npm run build
 // npx typeorm-ts-node-commonjs migration:run -d src/data-source.ts

@@ -13,7 +13,8 @@ const fetchPsiData = async (url: string, device: string) => {
 }
 
 export const getPsiData = async (selectedDevice: string[], name: string, url: string, schedule: string, redirect: string) => {
-  const psiDataArray = []
+  const psiSiteListArray = []
+  const psiSiteMetricsArray = []
 
   for (const device of selectedDevice) {
     const res = await fetchPsiData(url, device)
@@ -45,29 +46,35 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
         CUMULATIVE_LAYOUT_SHIFT_SCORE: loadingExperienceAudits['CUMULATIVE_LAYOUT_SHIFT_SCORE']
       }
 
-      const psiData = {
-        name,
-        url: urlValidate(url),
+      const psiSiteMetircs = {
         score,
-        schedule,
         lcp: lighthouseResultMetrics.lcp.displayValue,
         fid: lighthouseResultMetrics.fid.displayValue,
         cls: lighthouseResultMetrics.cls.displayValue,
         fcp: lighthouseResultMetrics.fcp.displayValue,
         tbt: lighthouseResultMetrics.tbt.displayValue,
         si: lighthouseResultMetrics.si.displayValue,
-        device
       }
-      psiDataArray.push(psiData)
-      console.log(result)
+
+      const psiSiteList = {
+        name,
+        url: urlValidate(url),
+        schedule,
+        device,
+        siteMetrics: [
+          psiSiteMetircs
+        ]
+      }
+
+      psiSiteListArray.push(psiSiteList)
     }
   }
 
-    psiDataArray.map(async (psiData) => {
-      const res = await postData('psi_site_list', psiData)
-    })
+  for (const psiSite of psiSiteListArray) {
+    await postData('psi_site_list', psiSite);
+  }
 
-    redirectTo(redirect)
+  redirectTo(redirect)
 }
 
 export const getPsiDataAgain = async (url: string, index: number, id: number, device: string) => {
@@ -81,29 +88,40 @@ export const getPsiDataAgain = async (url: string, index: number, id: number, de
       const { performance } = categories
       const score = performance.score * 100
 
-      const { audits } = lighthouseResult
-      const metrics = {
-        lcp: audits['largest-contentful-paint'],
-        fid: audits['first-input-delay'],
-        cls: audits['cumulative-layout-shift'],
-        fcp: audits['first-contentful-paint'],
-        tbt: audits['total-blocking-time'],
-        si: audits['speed-index'],
-        fci: audits['first-cpu-idle'],
-        eil: audits['estimated-input-latency'],
-        fmp: audits['first-meaningful-paint'],
-        tti: audits['interactive']
+      const { audits: lighthouseResultAudits } = lighthouseResult
+      const lighthouseResultMetrics = {
+        lcp: lighthouseResultAudits['largest-contentful-paint'],
+        fid: lighthouseResultAudits['max-potential-fid'],
+        cls: lighthouseResultAudits['cumulative-layout-shift'],
+        fcp: lighthouseResultAudits['first-contentful-paint'],
+        fci: lighthouseResultAudits['first-cpu-idle'],
+        eil: lighthouseResultAudits['estimated-input-latency'],
+        fmp: lighthouseResultAudits['first-meaningful-paint'],
+        tti: lighthouseResultAudits['interactive'],
+        tbt: lighthouseResultAudits['total-blocking-time'],
+        tbf: lighthouseResultAudits['time-to-first-byte'],
+        si: lighthouseResultAudits['speed-index']
       }
 
-      const psiData = {
-        url,
+      const psiSiteMetircs = {
         score,
-        fcp: metrics.fcp.displayValue,
-        lcp: metrics.lcp.numericValue,
-        device
+        lcp: lighthouseResultMetrics.lcp.displayValue,
+        fid: lighthouseResultMetrics.fid.displayValue,
+        cls: lighthouseResultMetrics.cls.displayValue,
+        fcp: lighthouseResultMetrics.fcp.displayValue,
+        tbt: lighthouseResultMetrics.tbt.displayValue,
+        si: lighthouseResultMetrics.si.displayValue,
       }
 
-      psiDataArray.push(psiData)
+      const psiSiteList = {
+        url: urlValidate(url),
+        device,
+        siteMetrics: [
+          psiSiteMetircs
+        ]
+      }
+
+      psiDataArray.push(psiSiteList)
 
       psiDataArray.map(async (psiData) => {
         await patchData('psi_site_list', id, psiData)

@@ -4,7 +4,10 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from 'typeorm';
+  ManyToOne,
+  JoinColumn
+} from 'typeorm'
+import { SiteList } from './site_list.entity'
 
 export enum DeviceType {
   Desktop = 'desktop',
@@ -12,22 +15,14 @@ export enum DeviceType {
 }
 
 @Entity()
-export class site_list {
+export class SiteMetrics {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column('enum', {enum: DeviceType, nullable: true })
-  device: DeviceType
   @Column('varchar', { length: 50, nullable: true })
-  name?: string
+  name: string
   @Column('varchar', { length: 50, nullable: true })
   url: string
-  @Column('varchar', { length: 10, nullable: true })
-  schedule: string
-  @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
-  createdAt: Date
-  @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
-  updatedAt: Date
   @Column('varchar', { length: 50, nullable: true })
   lcp?: string
   @Column('varchar', { length: 50, nullable: true })
@@ -42,8 +37,15 @@ export class site_list {
   si?: string
   @Column('int', { nullable: true })
   score: number
+  @ManyToOne(() => SiteList, siteList => siteList.siteMetrics)
+  @JoinColumn({ name: 'site_list_id' })
+  siteList: SiteList
+  @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
+  createdAt: Date
+  @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
+  updatedAt: Date
 }
 
-// npx typeorm-ts-node-commonjs migration:generate src/migration/CommentMigration -d src/data-source.ts
+// npx typeorm-ts-node-commonjs migration:generate src/migration/PsiMigration -d src/data-source.ts
 // npm run build
 // npx typeorm-ts-node-commonjs migration:run -d src/data-source.ts

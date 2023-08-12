@@ -187,7 +187,9 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
                 </Text>
               </TableCell>
               <TableCell>
-                <Text>{item.score}</Text>
+                {item.siteMetrics.map((i) => (
+                  <Text>{i.score}</Text>
+                ))}
               </TableCell>
               <TableCell>
                 <Text>{formatDate(item.updatedAt) || formatDate(item.createdAt)}</Text>
