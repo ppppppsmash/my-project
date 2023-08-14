@@ -20,7 +20,6 @@ export interface PSIMetrics {
   fcp?: any
   tbt?: any
   si?: any
-  site_list_id: number
   createdAt: string
   updatedAt: string
 }
