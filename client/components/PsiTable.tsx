@@ -1,7 +1,7 @@
+'use client'
+import Link from 'next/link'
 import { useState, useEffect, ChangeEvent } from 'react'
 import { PSIDataType } from '@/type'
-import { formatDate } from '@/utils/formatDate'
-import Link from 'next/link'
 import {
   Table,
   TableHead,
@@ -16,24 +16,19 @@ import {
 import {
   XMarkIcon,
   CheckIcon,
-  LinkIcon,
   DevicePhoneMobileIcon,
   ComputerDesktopIcon,
   ChevronLeftIcon,
   ChevronRightIcon
 } from '@heroicons/react/24/outline'
 import PsiPopup from '@/components/PsiPopup'
-import { getData, patchData } from '@/utils/fetchData'
 import PsiSelect from '@/components/PsiSelect'
+import { deleteData, getData, getDataAll, patchData } from '@/utils/fetchData'
+import { getPsiDataAgain } from '@/utils/getPsi'
+import { formatDate } from '@/utils/formatDate'
 
-interface Props {
-  getScoreAgain: (name: string, url: string, index: number, id: number, device: string) => void
-  //postNameChange: (editName: string, id: number) => void
-  deleteItem: (index: number,  id: number) => void
-  pageList: PSIDataType[]
-}
-
-export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props) {
+export default function PsiTable() {
+  const [pageList, setPageList] = useState<PSIDataType[]>([])
   const [editName, setEditName] = useState<string[]>([])
   const [editIndex, setEditIndex] = useState<number | null>(null)
   const [schedule, setSchedule] = useState('0')
@@ -45,7 +40,8 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
   const LIMIT_ROWS = 10
   const totalTablePages = Math.ceil(pageList.length / LIMIT_ROWS)
 
-  const handleClick = (name: string, url: string, index: number, id: number, device: string) => {
+  // スコア再取得（新しいオブジェクトを増やす）
+  const handleClick = async (name: string, url: string, index: number, id: number, device: string) => {
     setLoadingVisible(true)
     setSpinningItems((prevState: any) => {
       if (prevState.includes(index)) {
@@ -55,7 +51,7 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
       }
     })
 
-    getScoreAgain(name, url, index, id, device)
+    await getPsiDataAgain(name, url, index, id, device)
 
     setTimeout(() => {
       setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index))
@@ -71,21 +67,25 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
     })
   }
 
-  const handleEdit = (index: number) => {
-    setEditIndex(index)
-    setIsEdited(false)
-  }
-
+  // ページごと表示できる項目制限
   const getDisplayedTableData = () => {
     const startIndex = (currentTablePage - 1) * LIMIT_ROWS
     const endIndex = startIndex + LIMIT_ROWS
     return pageList.slice(startIndex, endIndex)
   }
 
+  // カレントページ
   const handlePageChange = (tablePage: number) => {
     setCurrentTablePage(tablePage)
   }
 
+  // Editボタントリガー
+  const handleEdit = (index: number) => {
+    setEditIndex(index)
+    setIsEdited(false)
+  }
+
+  // site名変更処理
   const handleNameChange = async (index: number, id: number) => {
     const siteList = await getData('psi_site_list', id)
     const siteMetrics = siteList.siteMetrics
@@ -99,16 +99,19 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
     setIsEdited(true)
     }
 
+  // セレクトボックスチェンジ
   const getChangeSelect = (value: string) => {
     setSchedule(value)
   }
 
+  // スケジュール変更
   const handleScheduleChange = async (id: number) => {
     await patchData('psi_site_list', id, { schedule })
     setEditIndex(null)
     setIsEdited(true)
   }
 
+  // テーブルのページネーション処理
   const pagination = () => {
     const pageNumbers = [];
     for (let i = 1; i <= totalTablePages; i++) {
@@ -126,6 +129,25 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
     }
     return pageNumbers
   }
+
+  // 登録したサイトの削除処理
+  const deleteItem = async (index: number, id: number) => {
+    await deleteData('psi_site_list', id)
+
+    setPageList((prevState) => {
+      const updatedList = [...prevState]
+      updatedList.splice(index, 1)
+      return updatedList
+    })
+  }
+
+  useEffect(()=> {
+    const getDataByAll = async () => {
+      const data = await getDataAll('psi_site_list')
+      setPageList(data)
+    }
+    getDataByAll()
+  }, [])
 
   useEffect(() => {
     pageList.length ? setVisible(true) : setVisible(false)
@@ -196,10 +218,10 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
                 </Text>
               </TableCell>
               <TableCell>
-                <Text>{item.siteMetrics[0].score}</Text>
+                <Text>{item.siteMetrics.slice().reverse()[0].score}</Text>
               </TableCell>
               <TableCell>
-                <Text>{formatDate(item.siteMetrics[0].updatedAt) || formatDate(item.createdAt)}</Text>
+              <Text>{formatDate(item.siteMetrics.slice().reverse()[0].updatedAt) || formatDate(item.createdAt)}</Text>
               </TableCell>
               <TableCell>
               {editIndex === index ? (
