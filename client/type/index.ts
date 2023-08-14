@@ -1,7 +1,7 @@
 export interface PSIDataType {
   id: number
   device: string
-  name?: string
+  name: string
   url: string
   schedule?: string
   createdAt: string
@@ -10,6 +10,9 @@ export interface PSIDataType {
 }
 
 export interface PSIMetrics {
+  id: number
+  name: string
+  url: string
   score: number
   lcp?: any
   fid?: any
@@ -17,6 +20,7 @@ export interface PSIMetrics {
   fcp?: any
   tbt?: any
   si?: any
+  site_list_id: number
   createdAt: string
   updatedAt: string
 }

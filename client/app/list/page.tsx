@@ -13,8 +13,8 @@ import {
 export default function PsiList() {
   const [pageList, setPageList] = useState<PSIDataType[]>([])
 
-  const handlePsiData = async (url: string, index: number, id: number, device: string) => {
-    await getPsiDataAgain(url, index, id, device)
+  const handlePsiData = async (name: string, url: string, index: number, id: number, device: string) => {
+    await getPsiDataAgain(name, url, index, id, device)
   }
 
   const deleteItem = async (index: number, id: number) => {

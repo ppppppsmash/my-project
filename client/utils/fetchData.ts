@@ -1,4 +1,3 @@
-
 export const getDataAll = async(api: string) => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}${api}/`, {

@@ -23,11 +23,11 @@ import {
   ChevronRightIcon
 } from '@heroicons/react/24/outline'
 import PsiPopup from '@/components/PsiPopup'
-import { patchData } from '@/utils/fetchData'
+import { getData, patchData } from '@/utils/fetchData'
 import PsiSelect from '@/components/PsiSelect'
 
 interface Props {
-  getScoreAgain: (url: string, index: number, id: number, device: string) => void
+  getScoreAgain: (name: string, url: string, index: number, id: number, device: string) => void
   //postNameChange: (editName: string, id: number) => void
   deleteItem: (index: number,  id: number) => void
   pageList: PSIDataType[]
@@ -45,7 +45,7 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
   const LIMIT_ROWS = 10
   const totalTablePages = Math.ceil(pageList.length / LIMIT_ROWS)
 
-  const handleClick = (url: string, index: number, id: number, device: string) => {
+  const handleClick = (name: string, url: string, index: number, id: number, device: string) => {
     setLoadingVisible(true)
     setSpinningItems((prevState: any) => {
       if (prevState.includes(index)) {
@@ -55,7 +55,7 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
       }
     })
 
-    getScoreAgain(url, index, id, device)
+    getScoreAgain(name, url, index, id, device)
 
     setTimeout(() => {
       setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index))
@@ -87,10 +87,17 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
   }
 
   const handleNameChange = async (index: number, id: number) => {
-    await patchData('psi_site_list', id, {name: editName[index]})
+    const siteList = await getData('psi_site_list', id)
+    const siteMetrics = siteList.siteMetrics
+    const updatedSiteMetric = siteMetrics.map((siteMetric: any) => {
+      return {...siteMetric, name: editName[index]}
+    })
+
+    await patchData('psi_site_list', id, {name: editName[index], siteMetrics: updatedSiteMetric})
+
     setEditIndex(null)
     setIsEdited(true)
-  }
+    }
 
   const getChangeSelect = (value: string) => {
     setSchedule(value)
@@ -144,7 +151,8 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
               className='hover:bg-gray-100'
               key={item.id}
             >
-              <TableCell className='flex items-center space-x-2'>
+              <TableCell>
+                <p className='flex items-center space-x-2'>
               {
                 item.device === 'mobile' ? (
                   <DevicePhoneMobileIcon className='w-5 h-5' />
@@ -178,6 +186,7 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
                     </Link>
                 )
               }
+              </p>
               </TableCell>
               <TableCell>
                 <Text>
@@ -187,12 +196,10 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
                 </Text>
               </TableCell>
               <TableCell>
-                {item.siteMetrics.map((i) => (
-                  <Text>{i.score}</Text>
-                ))}
+                <Text>{item.siteMetrics[0].score}</Text>
               </TableCell>
               <TableCell>
-                <Text>{formatDate(item.updatedAt) || formatDate(item.createdAt)}</Text>
+                <Text>{formatDate(item.siteMetrics[0].updatedAt) || formatDate(item.createdAt)}</Text>
               </TableCell>
               <TableCell>
               {editIndex === index ? (
@@ -227,7 +234,7 @@ export default function PsiTable({ getScoreAgain, deleteItem, pageList }: Props)
               <TableCell>
                 <PsiPopup
                   behaviorEdit={()=>handleEdit(index)}
-                  behaviorScoreAgain={()=>handleClick(item.url, index, item.id, item.device)}
+                  behaviorScoreAgain={()=>handleClick(item.name, item.url, index, item.id, item.device)}
                   behaviorDelete={()=>deleteItem(index, item.id)}
                 />
               </TableCell>
