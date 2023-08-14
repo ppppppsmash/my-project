@@ -48,6 +48,8 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
 
       const psiSiteMetircs = {
         score,
+        name,
+        url,
         lcp: lighthouseResultMetrics.lcp.displayValue,
         fid: lighthouseResultMetrics.fid.displayValue,
         cls: lighthouseResultMetrics.cls.displayValue,
@@ -77,7 +79,7 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
   redirectTo(redirect)
 }
 
-export const getPsiDataAgain = async (url: string, index: number, id: number, device: string) => {
+export const getPsiDataAgain = async (name: string, url: string, index: number, id: number, device: string) => {
   const psiDataArray = []
   const res = await fetchPsiData(url, device)
 
@@ -104,6 +106,8 @@ export const getPsiDataAgain = async (url: string, index: number, id: number, de
       }
 
       const psiSiteMetircs = {
+        name,
+        url,
         score,
         lcp: lighthouseResultMetrics.lcp.displayValue,
         fid: lighthouseResultMetrics.fid.displayValue,

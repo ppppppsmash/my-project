@@ -17,7 +17,7 @@ interface Tracker {
 }
 
 export default function Slug({ params: { id } }: Props) {
-  const [pageList, setPageList] = useState<PSIDataType[]>([])
+  const [siteMetrics, setSiteMetrics] = useState<PSIDataType[]>([])
 
   const [scoreStatus, setScoreStatus] = useState<string>('')
 
@@ -52,13 +52,13 @@ export default function Slug({ params: { id } }: Props) {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getData('psi_site_list', id)
-      setPageList([data])
+      setSiteMetrics([data.siteMetrics])
     }
-    console.log(pageList)
+    console.log(siteMetrics)
     fetchData()
   }, [id])
 
-  console.log(pageList)
+  console.log(siteMetrics)
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -95,7 +95,7 @@ export default function Slug({ params: { id } }: Props) {
 
   return (
     <div>
-      {pageList.length > 0 && pageList.map((page, index) => (
+      {siteMetrics.length > 0 && siteMetrics.map((siteMetric, index) => (
         <div key={index}>
           <Grid
             className='gap-6 mt-6 mb-6'
@@ -103,13 +103,13 @@ export default function Slug({ params: { id } }: Props) {
           >
             <Col numColSpanLg={5}>
               <Card>
-                <Title>{page.name}</Title>
+                <Title>{siteMetric.name}</Title>
                 <Subtitle className='flex items-center space-x-2'>
                   <Link
                     target='_blank'
-                    href={{pathname: page.url}}
+                    href={{pathname: siteMetric.url}}
                   >
-                    {page.url}
+                    {siteMetric.url}
                   </Link>
                   <ArrowTopRightOnSquareIcon className='w-4 h-4' />
                 </Subtitle>
@@ -117,12 +117,12 @@ export default function Slug({ params: { id } }: Props) {
                   <Text className='flex items-center space-x-2'>
                     <ClockIcon className='w-4 h-4' />
                     <span>
-                      {formatDate(page.updatedAt) || formatDate(page.createdAt)}
+                      {formatDate(siteMetric.updatedAt) || formatDate(siteMetric.createdAt)}
                     </span>
                   </Text>
 
                   <Text>
-                    {page.device === 'mobile' ? (
+                    {siteMetric.device === 'mobile' ? (
                       <div className='flex items-center space-x-2'>
                         <DevicePhoneMobileIcon className='w-4 h-4' />
                         <span>
@@ -142,7 +142,7 @@ export default function Slug({ params: { id } }: Props) {
                   <Text className='flex items-center space-x-2'>
                     <CalendarDaysIcon className='w-4 h-4' />
                     <span>
-                      {page.schedule}
+                      {siteMetric.schedule}
                     </span>
                   </Text>
                 </div>
@@ -151,7 +151,7 @@ export default function Slug({ params: { id } }: Props) {
             <Col numColSpanLg={1}>
               <Card className='h-full text-center'>
                 <Text>Score</Text>
-                {page.siteMetrics.map((metrics, index) => (
+                {siteMetrics.map((metrics, index) => (
                   <Bold className={`text-[45px] ${metrics.score >= 70 ? 'text-green-500' : 'text-red-500'}`}>{metrics.score}</Bold>
                 ))}
               </Card>
@@ -164,28 +164,28 @@ export default function Slug({ params: { id } }: Props) {
           >
             <Col numColSpanLg={1}>
               <Card>
-              {page.siteMetrics.map((metrics, index) => (
+              {siteMetrics.map((metrics, index) => (
                 <Text>LCP: {metrics.lcp}</Text>
               ))}
               </Card>
             </Col>
             <Col numColSpanLg={1}>
               <Card>
-              {page.siteMetrics.map((metrics, index) => (
+              {siteMetrics.map((metrics, index) => (
                 <Text>FID: {metrics.fid}</Text>
               ))}
               </Card>
             </Col>
             <Col numColSpanLg={1}>
               <Card>
-              {page.siteMetrics.map((metrics, index) => (
+              {siteMetrics.map((metrics, index) => (
                 <Text>CLS: {metrics.cls}</Text>
               ))}
               </Card>
             </Col>
             <Col numColSpanLg={1}>
               <Card>
-              {page.siteMetrics.map((metrics, index) => (
+              {siteMetrics.map((metrics, index) => (
                 <Text>FCP: {metrics.fcp}</Text>
               ))}
               </Card>
@@ -194,17 +194,17 @@ export default function Slug({ params: { id } }: Props) {
 
 
           <Card>
-          {page.siteMetrics.map((metrics, index) => (
+          {siteMetrics.map((metrics, index) => (
             <Text>TBT: {metrics.tbt}</Text>
           ))}
           </Card>
 
           <Flex className='space-x-4 mt-4'>
-            {page.siteMetrics.map((metrics, index) => (
+            {siteMetrics.map((metrics, index) => (
             <Card className='w-full'>
               <Text>LCP: {metrics.lcp}</Text>
               <LineChart
-                data={pageList}
+                data={siteMetrics}
                 index='date'
                 categories={['lcp']}
                 colors={['emerald']}
@@ -212,11 +212,11 @@ export default function Slug({ params: { id } }: Props) {
               />
             </Card>
             ))}
-            {page.siteMetrics.map((metrics, index) => (
+            {siteMetrics.map((metrics, index) => (
               <Card className='w-full'>
                 <Text>FID: {metrics.fid}</Text>
                 <LineChart
-                  data={pageList}
+                  data={siteMetrics}
                   index='date'
                   categories={['fid']}
                   colors={['rose']}
