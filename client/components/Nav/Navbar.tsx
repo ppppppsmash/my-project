@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Disclosure } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon, CommandLineIcon } from '@heroicons/react/24/outline'
 
 const navigation = [
@@ -36,24 +36,24 @@ export default function Navbar() {
                 <CommandLineIcon className="block h-6 w-6" />
 
                 </div>
-                <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
-                  {navigation.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      onClick={() => handleNavItemClick(item.href)} // クリック時にcurrentNavItemを更新
-                      className={classNames(
-                        item.href === currentNavItem
-                          ? 'border-slate-500 text-gray-900 border-b-2 transition-all duration-350'
-                          : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                        'inline-flex items-center px-1 pt-1 text-[12px] font-medium'
-                      )}
-                      aria-current={pathname === item.href ? 'page' : undefined}
-                    >
-                      {item.name}
-                    </a>
-                  ))}
-                </div>
+                  <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
+                    {navigation.map((item, index) => (
+                      <a
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => handleNavItemClick(item.href)} // クリック時にcurrentNavItemを更新
+                        className={classNames(
+                          item.href === currentNavItem
+                            ? 'border-slate-500 text-gray-900 border-b-2 transition-all duration-350'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                          'inline-flex items-center px-1 pt-1 text-[12px] font-medium'
+                        )}
+                        aria-current={pathname === item.href ? 'page' : undefined}
+                      >
+                        {item.name}
+                      </a>
+                    ))}
+                  </div>
               </div>
               <div className="-mr-2 flex items-center sm:hidden">
                 <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-white p-2

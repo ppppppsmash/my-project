@@ -1,55 +1,24 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { getData } from '@/utils/fetchData'
-import { PSIDataType, PSIMetrics } from '@/type'
-import { Grid, Col, Flex, Card, Text, Title, Subtitle, Bold, Italic, LineChart, Tracker, Color } from '@tremor/react'
-import { formatDate } from '@/utils/formatDate'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { PSIDataType, PSIMetrics } from '@/type'
+import { getData } from '@/utils/fetchData'
+import { Grid, Col, Flex, Card, Text, Title, Subtitle, Bold, LineChart, Color } from '@tremor/react'
 import { ArrowTopRightOnSquareIcon, ClockIcon, DevicePhoneMobileIcon, ComputerDesktopIcon, CalendarDaysIcon } from '@heroicons/react/24/outline'
+import { formatDate } from '@/utils/formatDate'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
+import { AnimatePresence, motion } from 'framer-motion'
+import DelaySection from '@/components/DelaySection'
 
 interface Props {
   params: { id: number }
-}
-
-interface Tracker {
-  color: Color
-  tooltip: string
 }
 
 export default function Slug({ params: { id } }: Props) {
   const [siteList, setSiteList] = useState<PSIDataType[]>([])
   const [siteMetrics, setSiteMetrics] = useState<PSIMetrics[]>([])
 
-  const [scoreStatus, setScoreStatus] = useState<string>('')
-
-  const data: Tracker[] = [
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "rose", tooltip: "Downtime" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "gray", tooltip: "Maintenance" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "yellow", tooltip: "Degraded" },
-    { color: "emerald", tooltip: "Operational" },
-  ]
+  const [selectedId, setSelectedId] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,7 +36,7 @@ export default function Slug({ params: { id } }: Props) {
   const metricsNewest = siteMetrics.length > 0 ? siteMetrics[siteMetrics.length - 1] : null
 
   return (
-    <div>
+    <DelaySection delay={0.3}>
       {siteList.length > 0 && siteList.map((list, index) => (
         <Grid key={index}
           className='gap-6 mt-6 mb-6'
@@ -160,16 +129,39 @@ export default function Slug({ params: { id } }: Props) {
           <Text>TBT: {metricsNewest?.tbt}</Text>
         </Card>
 
+        <div className=''>
+            <AnimatePresence>
+              {selectedId && (
+                <motion.div layoutId={selectedId}>
+                  <motion.button onClick={() => setSelectedId(null)} />
+                  <LineChart
+                    data={siteMetrics}
+                    index='createdAt'
+                    categories={['lcp']}
+                    colors={['emerald']}
+                    yAxisWidth={40}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
         <Flex className='space-x-4 mt-4'>
           <Card className='w-full'>
-            <Bold>LCP</Bold>
-            <LineChart
-              data={siteMetrics}
-              index='createdAt'
-              categories={['lcp']}
-              colors={['emerald']}
-              yAxisWidth={40}
-            />
+            <motion.div
+                layoutId='1'
+                onClick={() => setSelectedId('1')}
+              >
+              <Bold>LCP</Bold>
+              <LineChart
+                data={siteMetrics}
+                index='createdAt'
+                categories={['lcp']}
+                colors={['emerald']}
+                yAxisWidth={40}
+              />
+            </motion.div>
+
           </Card>
           <Card className='w-full'>
             <Text>FID</Text>
@@ -182,6 +174,6 @@ export default function Slug({ params: { id } }: Props) {
             />
           </Card>
         </Flex>
-    </div>
+    </DelaySection>
   )
 }

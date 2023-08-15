@@ -1,9 +1,7 @@
 'use client'
-import { NextPage } from 'next'
 import PsiInput from '@/components/PsiInput'
 import PsiButton from '@/components/PsiButton'
 import { useState } from 'react'
-//import { PSIDataType } from '@/type'
 import { urlValidate } from '@/utils/urlValidate'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
@@ -111,8 +109,18 @@ export default function Analysis() {
   }
 
   const handleDeviceSelection = (device: 'mobile' | 'desktop') => {
-    setSelectedDevice(device);
-  };
+    setSelectedDevice(device)
+  }
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+
+  const openModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
 
   return (
     <div className='w-full mx-auto'>
@@ -128,11 +136,10 @@ export default function Analysis() {
             />
           </div>
           <div className='w-2/12'>
-            <PsiButton
-              id={id}
-              label='分析'
-              getScore={getPsiInfo}
-            />
+          <PsiButton
+            label='分析'
+            setOpen={setIsModalOpen}
+          />
           </div>
         </div>
       </section>

@@ -25,9 +25,16 @@ export class PsiSiteListService {
       relations: ['siteMetrics'],
       order: {
         id: 'DESC'
+      },
+      join: {
+        alias: 'siteList',
+        leftJoinAndSelect: {
+          siteMetrics: 'siteList.siteMetrics',
+        }
       }
     })
   }
+  
 
   async find(id: number): Promise<SiteList | null> {
     console.log(id)
