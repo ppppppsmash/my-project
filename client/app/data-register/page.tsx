@@ -9,6 +9,7 @@ import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import { urlValidate } from '@/utils/urlValidate'
 import { postData, patchData, deleteData } from '@/utils/fetchData'
+import PsiTable from '@/components/PsiTable'
 
 
 interface Props extends PSIDataType {}
@@ -38,143 +39,17 @@ export default function DataRegister() {
   }
 
   const handleDeviceSelection = (device: 'mobile' | 'desktop') => {
-    setSelectedDevice(device);
-  };
-
-  const date = new Date().toLocaleString()
-
-  const fetchPsiData = async (url: string, device: string) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}psi?url=${urlValidate(url)}&strategy=${device}`, {
-      cache: 'no-store'
-    })
-    return res
+    setSelectedDevice(device)
   }
 
-  const getPsiInfo = async(id: number) => {
-    setLoading(true)
-    const res = await fetchPsiData(url, selectedDevice)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
-    if (res.ok) {
-      const result = await res.json()
-      const { lighthouseResult } = result
-      const { categories } = lighthouseResult
-      const { performance } = categories
-      const score = performance.score * 100
-
-      const { audits } = lighthouseResult
-      const metrics = {
-        lcp: audits['largest-contentful-paint'],
-        fid: audits['first-input-delay'],
-        cls: audits['cumulative-layout-shift'],
-        fcp: audits['first-contentful-paint'],
-        tbt: audits['total-blocking-time'],
-        si: audits['speed-index'],
-        fci: audits['first-cpu-idle'],
-        eil: audits['estimated-input-latency'],
-        fmp: audits['first-meaningful-paint'],
-        tti: audits['interactive']
-      }
-
-      const psiData = {
-        id,
-        name,
-        url,
-        date,
-        score,
-        device: selectedDevice,
-        fcp: metrics.fcp.displayValue,
-        lcp: metrics.lcp.numericValue
-      }
-
-      selectedDevice === 'desktop'
-        ? setResults(prevState => ({ ...prevState, ...psiData }))
-        : setMobileResults(prevState => ({ ...prevState, ...psiData }))
-      selectedDevice === 'desktop'
-        ? setPageList(prevState => [...prevState, psiData])
-        : setMobilePageList(prevState => [...prevState, psiData])
-
-        await postData('psi_site_list', psiData)
-
-       setVisible(true)
-       setLoading(false)
-    }
+  const openModal = () => {
+    setIsModalOpen(true)
   }
 
-  const getScoreAgain = async (url: string, index: number, id: number) => {
-    setLoading(true)
-
-    const res = await fetchPsiData(url, selectedDevice)
-
-    if (res.ok) {
-      const data = await res.json()
-      const { result } = data
-      const { lighthouseResult } = result
-      const { categories } = lighthouseResult
-      const { performance } = categories
-      const score = performance.score * 100
-
-      const { audits } = lighthouseResult
-      const metrics = {
-        lcp: audits['largest-contentful-paint'],
-        fid: audits['first-input-delay'],
-        cls: audits['cumulative-layout-shift'],
-        fcp: audits['first-contentful-paint'],
-        tbt: audits['total-blocking-time'],
-        si: audits['speed-index'],
-        fci: audits['first-cpu-idle'],
-        eil: audits['estimated-input-latency'],
-        fmp: audits['first-meaningful-paint'],
-        tti: audits['interactive']
-      }
-
-      const psiData = {
-        id,
-        name,
-        url,
-        date,
-        score,
-        device: selectedDevice,
-        fcp: metrics.fcp.displayValue,
-        lcp: metrics.lcp.numericValue
-      }
-
-      selectedDevice === 'desktop'
-      ? setResults(prevState => ({ ...prevState, ...psiData }))
-      : setMobileResults(prevState => ({ ...prevState, ...psiData }))
-
-      selectedDevice === 'desktop'
-        ? setPageList(prevState =>
-          prevState.map((item, idx) => {
-            if (index === idx) {
-              return { ...item, score: psiData.score, date }
-            }
-            return item
-          })
-        )
-        : setMobilePageList(prevState =>
-          prevState.map((item, idx) => {
-            if (index === idx) {
-              return { ...item, score: psiData.score, date }
-            }
-            return item
-          })
-        )
-
-      await patchData('pageList', id, { score })
-
-      setVisible(true)
-      setLoading(false)
-    }
-  }
-
-  const deleteItem = async (index: number, id: number) => {
-    await deleteData('pageList', id)
-
-    setPageList((prevState) => {
-      const updatedList = [...prevState];
-      updatedList.splice(index, 1);
-      return updatedList;
-    });
+  const closeModal = () => {
+    setIsModalOpen(false)
   }
 
   useEffect(() => {
@@ -230,9 +105,8 @@ export default function DataRegister() {
         <div>
           <div className='w-2/12'>
             <PsiButton
-              id={id}
               label='登録'
-              getScore={getPsiInfo}
+              setOpen={setIsModalOpen}
             />
           </div>
         </div>
@@ -266,19 +140,11 @@ export default function DataRegister() {
         { loading && <Loading /> }
         {/* mobile */}
         { !loading && selectedDevice === 'mobile' &&
-          <AnalysisTableList
-            pageList={mobilePageList}
-            getScoreAgain={getScoreAgain}
-            deleteItem={deleteItem}
-          />
+          <PsiTable />
         }
         {/* desktop */}
         { !loading && selectedDevice === 'desktop' &&
-          <AnalysisTableList
-            pageList={pageList}
-            getScoreAgain={getScoreAgain}
-            deleteItem={deleteItem}
-          />
+          <PsiTable />
         }
         </div>
     </section>
