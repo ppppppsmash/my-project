@@ -1,5 +1,5 @@
 import { postData, patchData } from '@/utils/fetchData'
-import { urlValidate } from '@/utils/urlValidate'
+import { urlValidate } from '@/utils/validation'
 
 const redirectTo = (url: any) => {
   window.location.href = url
