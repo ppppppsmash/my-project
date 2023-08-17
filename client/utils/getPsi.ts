@@ -1,5 +1,5 @@
 import { postData, patchData } from '@/utils/fetchData'
-import { urlValidate } from '@/utils/urlValidate'
+import { urlValidate } from '@/utils/validation'
 
 const redirectTo = (url: any) => {
   window.location.href = url
@@ -75,8 +75,8 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
   for (const psiSite of psiSiteListArray) {
     await postData('psi_site_list', psiSite);
   }
-
-  redirectTo(redirect)
+  console.log(redirect)
+//  redirectTo(redirect)
 }
 
 export const getPsiDataAgain = async (name: string, url: string, index: number, id: number, device: string) => {

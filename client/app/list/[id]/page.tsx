@@ -64,19 +64,19 @@ export default function Slug({ params: { id } }: Props) {
 
                 <Text>
                   {list.device === 'mobile' ? (
-                    <div className='flex items-center space-x-2'>
+                    <span className='flex items-center space-x-2'>
                       <DevicePhoneMobileIcon className='w-4 h-4' />
                       <span>
                         MOBILE
                       </span>
-                    </div>
+                    </span>
                     ) : (
-                      <div className='flex items-center space-x-2'>
+                      <span className='flex items-center space-x-2'>
                         <ComputerDesktopIcon className='w-4 h-4' />
                         <span>
                           COMPUTER
                         </span>
-                      </div>
+                      </span>
                     )
                   }
                 </Text>
