@@ -56,16 +56,22 @@ export default function PsiTabContent({ mode }: Props) {
     let newSingleErrorInfo = []
     let newMultiErrorInfo = []
 
-    if (checkboxValidation) {
-      newSingleErrorInfo.push(checkboxValidation)
-    }
+    if (mode === 'single') {
+      if (checkboxValidation) {
+        newSingleErrorInfo.push(checkboxValidation)
+      }
 
-    if (inputValidation) {
-      newSingleErrorInfo.push(inputValidation)
-    }
+      if (inputValidation) {
+        newSingleErrorInfo.push(inputValidation)
+      }
+    } else if (mode === 'multiple') {
+      if (checkboxValidation) {
+        newMultiErrorInfo.push(checkboxValidation)
+      }
 
-    if(textareaValidation) {
-      newMultiErrorInfo.push(textareaValidation)
+      if(textareaValidation) {
+        newMultiErrorInfo.push(textareaValidation)
+      }
     }
 
     if (newSingleErrorInfo.length > 0 || newMultiErrorInfo.length > 0) {
@@ -134,7 +140,6 @@ export default function PsiTabContent({ mode }: Props) {
           ))
         )
       )}
-
 
       {isModalOpen && <Modals
         id={id}
