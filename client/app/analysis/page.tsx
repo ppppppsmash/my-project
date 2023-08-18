@@ -2,7 +2,7 @@
 import PsiInput from '@/components/PsiInput'
 import PsiButton from '@/components/PsiButton'
 import { useState } from 'react'
-import { urlValidate } from '@/utils/urlValidate'
+import { urlValidate } from '@/utils/validation'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
 import Loading from '@/components/Loading'

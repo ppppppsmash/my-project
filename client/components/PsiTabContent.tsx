@@ -6,6 +6,9 @@ import { getPsiData } from '@/utils/getPsi'
 import Modals from '@/components/Modals'
 import PsiInput from '@/components/PsiInput'
 import PsiButton from '@/components/PsiButton'
+import PsiDialog from '@/components/PsiDialog'
+import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/solid"
+import { checkboxValidate, inputValidate, textareaValidate } from '@/utils/validation'
 
 interface Props {
   mode: string
@@ -13,14 +16,14 @@ interface Props {
 
 export default function PsiTabContent({ mode }: Props) {
   const id: number = 0
-  const [name, setName] = useState('')
-  const [url, setUrl] = useState('')
+  const [name, setName] = useState<string>('')
+  const [url, setUrl] = useState<string>('')
+  const [dialogErr, setDialogErr] = useState<boolean>(false)
+  const [singleErrorInfo, setSingleErrorInfo] = useState<string[]>([])
+  const [multiErrorInfo, setMultiErrorInfo] = useState<string[]>([])
 
   const [names, setNames] = useState<string[]>([])
-  const [urls, setUrls] = useState<string[]>([])
-
-  const [schedule, setSchedule] = useState('0')
-
+  const [schedule, setSchedule] = useState<string>('0')
   const [selectedDevice, setSelectedDevice] = useState<string[]>([])
 
   // 単体サイト
@@ -47,7 +50,34 @@ export default function PsiTabContent({ mode }: Props) {
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const openModal = () => {
-    setIsModalOpen(true)
+    const checkboxValidation = checkboxValidate(selectedDevice.join(','))
+    const inputValidation = inputValidate(name)
+    const textareaValidation = textareaValidate(names)
+    let newSingleErrorInfo = []
+    let newMultiErrorInfo = []
+
+    if (checkboxValidation) {
+      newSingleErrorInfo.push(checkboxValidation)
+    }
+
+    if (inputValidation) {
+      newSingleErrorInfo.push(inputValidation)
+    }
+
+    if(textareaValidation) {
+      newMultiErrorInfo.push(textareaValidation)
+    }
+
+    if (newSingleErrorInfo.length > 0 || newMultiErrorInfo.length > 0) {
+      setDialogErr(true)
+      setSingleErrorInfo(newSingleErrorInfo)
+      setMultiErrorInfo(newMultiErrorInfo)
+    } else {
+      setDialogErr(false)
+      setSingleErrorInfo([])
+      setMultiErrorInfo([])
+      setIsModalOpen(true)
+    }
   }
 
   const closeModal = () => {
@@ -58,8 +88,8 @@ export default function PsiTabContent({ mode }: Props) {
     if (mode === 'single') {
       await getPsiData(selectedDevice, name, url, schedule, '/list')
     } else if (mode === 'multiple') {
-      const siteList = names.map((line) => {
-        const [name, url] = line.split(/\s+/)
+      const siteList = names.map((separate) => {
+        const [name, url] = separate.split(/\s+/)
         return { name, url }
       })
 
@@ -75,14 +105,41 @@ export default function PsiTabContent({ mode }: Props) {
 
   const handleSiteDataChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const value = event.target.value
-    const lines = value.split('\n')
-    setNames(lines)
+    const separatedValue = value.split('\n')
+    setNames(separatedValue)
   }
 
   return (
     <div>
+      {dialogErr && (
+        mode === 'single' ? (
+          singleErrorInfo.map((info, index) => (
+          <PsiDialog
+            key={index}
+            className='h-12 my-4'
+            title={info}
+            color='rose'
+            icon={ExclamationTriangleIcon}
+          />
+          ))
+        ) : (
+          multiErrorInfo.map((info, index) => (
+            <PsiDialog
+              key={index}
+              className='h-12 my-4'
+              title={info}
+              color='rose'
+              icon={ExclamationTriangleIcon}
+            />
+          ))
+        )
+      )}
+
+
       {isModalOpen && <Modals
         id={id}
+        name={mode === 'single' ? name : names}
+        url={mode === 'single' ? url : ''}
         getPsiData={handlePsiData}
         onOpen={openModal}
         onClose={closeModal}
@@ -108,13 +165,13 @@ export default function PsiTabContent({ mode }: Props) {
       {mode === 'multiple' && (
         <div>
           <div className='mb-4'>
-          <textarea
-            placeholder='example http://example.com（サイトとURLの間にスペース入り）'
-            rows={10}
-            onChange={handleSiteDataChange}
-            value={names.join('\n')}
-            className='w-full p-2 border rounded'
-          />
+            <textarea
+              placeholder='example http://example.com（サイトとURLの間にスペース入り）'
+              rows={10}
+              onChange={handleSiteDataChange}
+              value={names.join('\n')}
+              className='w-full p-2 border rounded'
+            />
           </div>
         </div>
       )}
@@ -135,7 +192,7 @@ export default function PsiTabContent({ mode }: Props) {
         <div className='w-2/12'>
           <PsiButton
             label='登録'
-            setOpen={setIsModalOpen}
+            setOpen={openModal}
           />
         </div>
 

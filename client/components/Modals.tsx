@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { urlValidate } from '@/utils/validation'
 import { RxCross2 } from 'react-icons/rx'
 
 interface Props {
@@ -7,9 +7,11 @@ interface Props {
   onClose(): void
   getPsiData(id: number): void
   id: number
+  name: string | string[]
+  url: string
 }
 
-export default function Modals({ onOpen, onClose, getPsiData, id }: Props) {
+export default function Modals({ onClose, getPsiData, id, name, url }: Props) {
   const handleClick = () => {
     getPsiData(id)
     onClose()
@@ -27,10 +29,22 @@ export default function Modals({ onOpen, onClose, getPsiData, id }: Props) {
           </button>
         </header>
         <p className='mt-4 mb-2 text-lg font-semibold text-gray-900 dark:text-gray-900'>
-          登録しますか？
+          サイトを登録しますか？
         </p>
         <div className='mb-6 text-sm text-gray-700 dark:text-gray-400'>
-          テキストテキスト
+          {typeof name === 'string' ? (
+            <p>
+              サイト名: {name} <br/>
+              URL: {urlValidate(url)}
+            </p>
+          ) : (
+            name.map((x, index) => (
+              <div key={index}>
+                サイト名: {x.split(/\s+/)[0]} <br />
+                {x.split(/\s+/)[1] && `URL: ${urlValidate(x.split(/\s+/)[1])}`}
+              </div>
+            ))
+          ) }
         </div>
         <footer className='flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-100'>
           <div className='hidden sm:block'>

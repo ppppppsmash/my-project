@@ -2,12 +2,12 @@ import { Button } from '@tremor/react'
 
 interface Props {
   label: string
-  setOpen: (value: boolean) => void
+  setOpen: () => void
 }
 
 export default function PsiButton({label, setOpen}: Props) {
   const handleClick = () => {
-    setOpen(true)
+    setOpen()
   }
 
   return (

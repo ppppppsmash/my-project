@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
-import './globals.css'
 import Nav from '@/components/Nav/Navbar'
 import DelaySection from '@/components/DelaySection'
+import './globals.css'
 
 export default function RootLayout({
   children,
@@ -11,12 +11,12 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className='h-full'>
-        <Suspense fallback="...">
           <Nav />
-        </Suspense>
         <main className="p-4 md:p-10 mx-auto max-w-7xl">
           <DelaySection delay={0.2}>
-            {children}
+            <Suspense fallback="Loading...🌀">
+              {children}
+            </Suspense>
           </DelaySection>
         </main>
       </body>

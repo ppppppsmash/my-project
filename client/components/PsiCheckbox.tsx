@@ -18,15 +18,15 @@ export default function PsiCheckbox({ device, checkEvent }: Props) {
   }
 
   return (
-    <div className="flex items-center space-x-2 py-6">
+    <div className="flex items-center space-x-3 py-6">
       <input
+        className='border-gray-300 rounded h-6 w-6 accent-gray-900'
         type="checkbox"
-        className="border-gray-300 rounded h-5 w-5 accent-gray-900"
         value={device}
         checked={isChecked}
         onChange={handleCheck}
       />
-      <p>{device}</p>
+      <p className='text-sm'>{device}</p>
     </div>
   )
 }

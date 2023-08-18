@@ -7,7 +7,7 @@ import Loading from '@/components/Loading'
 import AnalysisTableList from '@/components/PsiTable'
 import { SlScreenSmartphone } from 'react-icons/sl'
 import { RiComputerLine } from 'react-icons/ri'
-import { urlValidate } from '@/utils/urlValidate'
+import { urlValidate } from '@/utils/validation'
 import { postData, patchData, deleteData } from '@/utils/fetchData'
 import PsiTable from '@/components/PsiTable'
 

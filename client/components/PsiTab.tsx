@@ -26,7 +26,7 @@ export default function PsiTab() {
   return (
     <div className='w-full max-w py-2 sm:px-0'>
       <Tab.Group>
-        <Tab.List className='flex space-x-1 rounded-xl bg-gray-900/20 p-1'>
+        <Tab.List className='flex space-x-1 rounded-xl bg-gray-800/[.04] p-1'>
         {Object.keys(categories).map((category) => (
           <Tab
           key={category}
@@ -36,7 +36,7 @@ export default function PsiTab() {
               'ring-white ring-opacity-40 ring-offset-2 ring-offset-gray-400 focus:outline-none focus:ring-2',
             selected
               ? 'bg-white shadow'
-              : 'text-blue-100 hover:text-white'
+              : 'text-blue-100 hover:text-gray-500 hover:bg-white'
             )
           }
           >
