@@ -9,6 +9,7 @@ import PsiButton from '@/components/PsiButton'
 import PsiDialog from '@/components/PsiDialog'
 import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/solid"
 import { checkboxValidate, inputValidate, textareaValidate } from '@/utils/validation'
+import Loading from '@/components/Loading'
 
 interface Props {
   mode: string
@@ -25,6 +26,8 @@ export default function PsiTabContent({ mode }: Props) {
   const [names, setNames] = useState<string[]>([])
   const [schedule, setSchedule] = useState<string>('0')
   const [selectedDevice, setSelectedDevice] = useState<string[]>([])
+
+  const [loading, setLoading] = useState<boolean>(false)
 
   // 単体サイト
   const getChangeUrlName = ({target}: ChangeEvent<HTMLInputElement>) => {
@@ -91,6 +94,8 @@ export default function PsiTabContent({ mode }: Props) {
   }
 
   const handlePsiData = async () => {
+    setLoading(true)
+
     if (mode === 'single') {
       await getPsiData(selectedDevice, name, url, schedule, '/list')
     } else if (mode === 'multiple') {
@@ -107,6 +112,8 @@ export default function PsiTabContent({ mode }: Props) {
         await getPsiData(selectedDevice, site.name, site.url, schedule, '/list')
       }
     }
+
+    setLoading(false)
   }
 
   const handleSiteDataChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -117,6 +124,10 @@ export default function PsiTabContent({ mode }: Props) {
 
   return (
     <div>
+      { loading &&
+        <Loading />
+      }
+
       {dialogErr && (
         mode === 'single' ? (
           singleErrorInfo.map((info, index) => (

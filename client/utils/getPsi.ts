@@ -75,8 +75,8 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
   for (const psiSite of psiSiteListArray) {
     await postData('psi_site_list', psiSite);
   }
-  console.log(redirect)
-//  redirectTo(redirect)
+
+ redirectTo(redirect)
 }
 
 export const getPsiDataAgain = async (name: string, url: string, index: number, id: number, device: string) => {
