@@ -73,7 +73,8 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
 
       if (score < 70) {
         const message = `登録した ${name}-(${device}) のスコアが70未満です。 スコア: ${score}`
-        await sendSlackAlert(message)
+      //  await sendSlackAlert(message)
+        console.log(message)
       }
 
     }
@@ -136,7 +137,8 @@ export const getPsiDataAgain = async (name: string, url: string, index: number, 
 
       if (score < 70) {
         const message = `${name}-(${device}) は再取得したスコアが70未満です。 スコア: ${score}`
-        await sendSlackAlert(message)
+      //  await sendSlackAlert(message)
+        alert(message)
       }
 
       psiDataArray.map(async (psiData) => {
