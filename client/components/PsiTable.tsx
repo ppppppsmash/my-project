@@ -26,6 +26,7 @@ import PsiSelect from '@/components/PsiSelect'
 import { deleteData, getData, getDataAll, patchData } from '@/utils/fetchData'
 import { getPsiDataAgain } from '@/utils/getPsi'
 import { formatDate } from '@/utils/formatDate'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 
 export default function PsiTable() {
   const [pageList, setPageList] = useState<PSIDataType[]>([])
@@ -218,7 +219,13 @@ export default function PsiTable() {
                 </Text>
               </TableCell>
               <TableCell>
-                <Text>{item.siteMetrics.slice().reverse()[0].score}</Text>
+                {spinningItems.includes(index) ? (
+                  <AiOutlineLoading3Quarters
+                    className='animate-spin'
+                  />
+                ) : (
+                  <Text>{item.siteMetrics.slice().reverse()[0].score}</Text>
+                )}
               </TableCell>
               <TableCell>
               <Text>{formatDate(item.siteMetrics.slice().reverse()[0].updatedAt) || formatDate(item.createdAt)}</Text>

@@ -3,12 +3,12 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { PSIDataType, PSIMetrics } from '@/type'
 import { getData } from '@/utils/fetchData'
-import { Grid, Col, Flex, Card, Text, Title, Subtitle, Bold, LineChart, Color } from '@tremor/react'
+import { Grid, Col, Card, Text, Title, Subtitle, Bold } from '@tremor/react'
 import { ArrowTopRightOnSquareIcon, ClockIcon, DevicePhoneMobileIcon, ComputerDesktopIcon, CalendarDaysIcon } from '@heroicons/react/24/outline'
 import { formatDate } from '@/utils/formatDate'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
-import { AnimatePresence, motion } from 'framer-motion'
 import DelaySection from '@/components/DelaySection'
+import PsiMotionModals from '@/components/PsiMotionModals'
 
 interface Props {
   params: { id: number }
@@ -129,51 +129,9 @@ export default function Slug({ params: { id } }: Props) {
           <Text>TBT: {metricsNewest?.tbt}</Text>
         </Card>
 
-        <div className=''>
-            <AnimatePresence>
-              {selectedId && (
-                <motion.div layoutId={selectedId}>
-                  <motion.button onClick={() => setSelectedId(null)} />
-                  <LineChart
-                    data={siteMetrics}
-                    index='createdAt'
-                    categories={['lcp']}
-                    colors={['emerald']}
-                    yAxisWidth={40}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-        <Flex className='space-x-4 mt-4'>
-          <Card className='w-full'>
-            <motion.div
-                layoutId='1'
-                onClick={() => setSelectedId('1')}
-              >
-              <Bold>LCP</Bold>
-              <LineChart
-                data={siteMetrics}
-                index='createdAt'
-                categories={['lcp']}
-                colors={['emerald']}
-                yAxisWidth={40}
-              />
-            </motion.div>
-
-          </Card>
-          <Card className='w-full'>
-            <Text>FID</Text>
-            <LineChart
-              data={siteMetrics}
-              index='createdAt'
-              categories={['fid']}
-              colors={['rose']}
-              yAxisWidth={40}
-            />
-          </Card>
-        </Flex>
+        <div className='mt-4'>
+          <PsiMotionModals siteMetrics={siteMetrics}/>
+        </div>
     </DelaySection>
   )
 }

@@ -1,5 +1,6 @@
 import { postData, patchData } from '@/utils/fetchData'
 import { urlValidate } from '@/utils/validation'
+import { sendSlackAlert } from './slackAlert'
 
 const redirectTo = (url: any) => {
   window.location.href = url
@@ -69,11 +70,18 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
       }
 
       psiSiteListArray.push(psiSiteList)
+
+      if (score < 70) {
+        const message = `登録した ${name}-(${device}) のスコアが70未満です。 スコア: ${score}`
+      //  await sendSlackAlert(message)
+        console.log(message)
+      }
+
     }
   }
 
   for (const psiSite of psiSiteListArray) {
-    await postData('psi_site_list', psiSite);
+    await postData('psi_site_list', psiSite)
   }
 
  redirectTo(redirect)
@@ -126,6 +134,12 @@ export const getPsiDataAgain = async (name: string, url: string, index: number, 
       }
 
       psiDataArray.push(psiSiteList)
+
+      if (score < 70) {
+        const message = `${name}-(${device}) は再取得したスコアが70未満です。 スコア: ${score}`
+      //  await sendSlackAlert(message)
+        alert(message)
+      }
 
       psiDataArray.map(async (psiData) => {
         await patchData('psi_site_list', id, psiData)
