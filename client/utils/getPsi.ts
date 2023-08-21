@@ -73,7 +73,7 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
   }
 
   for (const psiSite of psiSiteListArray) {
-    await postData('psi_site_list', psiSite);
+    await postData('psi_site_list', psiSite)
   }
 
  redirectTo(redirect)
