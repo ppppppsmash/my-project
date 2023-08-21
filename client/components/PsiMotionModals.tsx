@@ -15,9 +15,9 @@ export default function PsiMotionModals({ siteMetrics }: Props) {
   const colors: TremorColor[] = ['rose', 'emerald', 'orange', 'lime', 'violet', 'pink']
 
   return (
-    <Flex className='w-full flex-wrap box-border p-2 -mx-2'>
+    <Flex className='w-full flex-wrap justify-start box-border p-2 -mx-2'>
       {categories.map((category, index) => (
-        <div className='w-1/3 p-2' key={index}>
+        <div className='w-1/4 p-2' key={index}>
           <motion.div
             layoutId={index.toString()}
             onClick={() => setSelectedId(index.toString())}
