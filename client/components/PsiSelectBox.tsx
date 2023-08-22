@@ -40,7 +40,8 @@ export default function PsiSelectBox({ siteList, onSiteSelect }: Props) {
         {siteList.map((site, index) => (
           <SelectBoxItem
             key={site.id}
-            value={site.name}
+            text={site.device + ' - ' + site.name}
+            value={(site.id).toString()}
             icon={site.device === 'mobile' ? DevicePhoneMobileIcon : ComputerDesktopIcon}
           >
           </SelectBoxItem>
