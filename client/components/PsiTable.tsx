@@ -212,7 +212,7 @@ export default function PsiTable() {
               </p>
               </TableCell>
               <TableCell>
-                <Text>
+                <Text className='underline decoration-dotted'>
                   <Link href={{pathname: item.url}} target='_blank'>
                   {item.url}
                   </Link>
