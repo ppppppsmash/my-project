@@ -16,9 +16,10 @@ import {
 
 interface Props {
   siteList: PSIDataType[]
+  onSiteSelect(value: string): void
 }
 
-export default function PsiSelectBox({ siteList }: Props) {
+export default function PsiSelectBox({ siteList, onSiteSelect }: Props) {
   const handleSelectChange = (value: string) => {
     const selectedSite = siteList.find(site => site.name === value)
     if (selectedSite) {
@@ -33,7 +34,8 @@ export default function PsiSelectBox({ siteList }: Props) {
   return (
     <>
       <SelectBox
-        onValueChange={handleSelectChange}
+        placeholder='サイトを選択してください'
+        onValueChange={onSiteSelect}
       >
         {siteList.map((site, index) => (
           <SelectBoxItem
