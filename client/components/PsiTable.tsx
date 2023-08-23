@@ -11,7 +11,9 @@ import {
   TableCell,
   Text,
   Title,
-  TextInput
+  TextInput,
+  MultiSelectBox,
+  MultiSelectBoxItem
 } from '@tremor/react'
 import {
   XMarkIcon,
@@ -29,6 +31,7 @@ import { formatDate } from '@/utils/formatDate'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 
 export default function PsiTable() {
+  const [selectedNames, setSelectedNames] = useState<string[]>([])
   const [pageList, setPageList] = useState<PSIDataType[]>([])
   const [editName, setEditName] = useState<string[]>([])
   const [editIndex, setEditIndex] = useState<number | null>(null)
@@ -40,6 +43,11 @@ export default function PsiTable() {
   const [spinningItems, setSpinningItems] = useState<any[]>([])
   const LIMIT_ROWS = 10
   const totalTablePages = Math.ceil(pageList.length / LIMIT_ROWS)
+
+  const isSalesSiteSelected = (siteList: PSIDataType) => {
+    if (selectedNames.length === 0) return true
+    return selectedNames.includes(siteList.name)
+  }
 
   // スコア再取得（新しいオブジェクトを増やす）
   const handleClick = async (name: string, url: string, index: number, id: number, device: string) => {
@@ -156,8 +164,24 @@ export default function PsiTable() {
 
   return (
     <>
-      <Title>PSI</Title>
-      <Table className="mt-5 overflow-visible">
+      <MultiSelectBox
+      onValueChange={setSelectedNames}
+        //onValueChange={setSelectedNames}
+        placeholder="検索..."
+        className="max-w-xs ml-4 mt-8"
+      >
+        {pageList.map((item) => (
+          <MultiSelectBoxItem
+            key={item.id}
+            value={(item.name).toString()}
+            text={item.name}
+          >
+            {item.name}
+          </MultiSelectBoxItem>
+        ))}
+      </MultiSelectBox>
+
+      <Table className="mt-2 overflow-visible">
         <TableHead>
           <TableRow>
             <TableHeaderCell>site</TableHeaderCell>
@@ -169,7 +193,8 @@ export default function PsiTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {getDisplayedTableData().map((item, index) => (
+          {/* {getDisplayedTableData().map((item, index) => ( */}
+          {pageList.filter((item) => isSalesSiteSelected(item)).map((item, index) => (
             <TableRow
               className='hover:bg-gray-100'
               key={item.id}
@@ -271,7 +296,7 @@ export default function PsiTable() {
           ))}
         </TableBody>
       </Table>
-      <div className='mt-2 text-gray-500 dark:text-gray-400'>
+      {/* <div className='mt-2 text-gray-500 dark:text-gray-400'>
         <ul className="flex space-x-2 justify-center">
             {currentTablePage > 1 && (
               <li
@@ -291,7 +316,7 @@ export default function PsiTable() {
               </li>
             )}
         </ul>
-      </div>
+      </div> */}
     </>
   )
 }
