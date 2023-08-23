@@ -8,7 +8,8 @@ import { ArrowTopRightOnSquareIcon, ClockIcon, DevicePhoneMobileIcon, ComputerDe
 import { formatDate } from '@/utils/formatDate'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
 import DelaySection from '@/components/DelaySection'
-import PsiMotionModals from '@/components/PsiMotionModals'
+import PsiMotionModals from '@/components/PsiMotionModalsChart'
+import PsiMotionModalsChart from '@/components/PsiMotionModalsChart'
 
 interface Props {
   params: { id: number }
@@ -130,7 +131,7 @@ export default function Slug({ params: { id } }: Props) {
         </Card>
 
         <div className='mt-4'>
-          <PsiMotionModals siteMetrics={siteMetrics}/>
+          <PsiMotionModalsChart siteMetrics={siteMetrics}/>
         </div>
     </DelaySection>
   )

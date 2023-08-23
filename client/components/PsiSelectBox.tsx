@@ -9,10 +9,9 @@ import {
 } from '@tremor/react'
 import { PSIDataType, PSIMetrics } from '@/type'
 import {
-  DocumentTextIcon,
   DevicePhoneMobileIcon,
   ComputerDesktopIcon
-} from "@heroicons/react/24/outline"
+} from '@heroicons/react/24/outline'
 
 interface Props {
   siteList: PSIDataType[]
@@ -40,7 +39,7 @@ export default function PsiSelectBox({ siteList, onSiteSelect }: Props) {
         {siteList.map((site, index) => (
           <SelectBoxItem
             key={site.id}
-            text={site.device + ' - ' + site.name}
+            text={site.name}
             value={(site.id).toString()}
             icon={site.device === 'mobile' ? DevicePhoneMobileIcon : ComputerDesktopIcon}
           >

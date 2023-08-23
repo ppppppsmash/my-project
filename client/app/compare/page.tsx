@@ -6,6 +6,8 @@ import { PSIDataType, PSIMetrics } from '@/type'
 import { getDataAll } from '@/utils/fetchData'
 import PsiCompareList from '@/components/PsiCompareList'
 import { ArrowSmallUpIcon, ArrowSmallDownIcon, FaceSmileIcon } from '@heroicons/react/24/outline'
+import PsiMotionModalsChartTotal from '@/components/PsiMotionModalsChartTotal'
+import { metricsFormatter } from '@/utils/graphDataFormatter'
 
 interface Props {}
 
@@ -29,6 +31,9 @@ export default function Compare() {
   const [selectedSiteRight, setSelectedSiteRight] = useState<PSIDataType | null>(null)
   const [compareResultLeft, setCompareResultLeft] = useState<any>({})
   const [compareResultRight, setCompareResultRight] = useState<any>({})
+  const [siteMetrics, setSiteMetrics] = useState<PSIMetrics[]>([])
+
+  console.log(compareResultLeft)
 
   const compareMetrics = (
     siteA: PSIDataType | null,
@@ -55,11 +60,11 @@ export default function Compare() {
 
   const compareMark = (valueA: number, valueB: number) => {
     if (valueA > valueB) {
-      return <ArrowSmallUpIcon className="w-5 h-5 text-green-700" />
+      return <ArrowSmallUpIcon className='w-5 h-5 text-green-700' />
     } else if (valueA < valueB) {
-      return <ArrowSmallDownIcon className="w-5 h-5 text-red-700" />
+      return <ArrowSmallDownIcon className='w-5 h-5 text-red-700' />
     } else {
-      return <FaceSmileIcon className="w-5 h-5 text-yellow-400" />
+      return <FaceSmileIcon className='w-5 h-5 text-yellow-400' />
     }
   }
 
@@ -80,6 +85,8 @@ export default function Compare() {
     compareMetrics(selectedSiteLeft, selectedSiteRight, setCompareResultLeft)
     compareMetrics(selectedSiteRight, selectedSiteLeft, setCompareResultRight)
   }, [selectedSiteLeft, selectedSiteRight])
+
+  console.log(selectedSiteLeft)
 
   return (
     <>
@@ -106,6 +113,14 @@ export default function Compare() {
           )}
         </Card>
       </Flex>
+      <Card className="mt-6">
+        {selectedSiteLeft &&
+          <PsiMotionModalsChartTotal siteMetrics={metricsFormatter(selectedSiteLeft.siteMetrics)} />
+        }
+        {selectedSiteRight &&
+          <PsiMotionModalsChartTotal siteMetrics={metricsFormatter(selectedSiteRight.siteMetrics)} />
+        }
+      </Card>
     </>
   )
 }
