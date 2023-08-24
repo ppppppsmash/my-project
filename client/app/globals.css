@@ -8,13 +8,13 @@
   --background-end-rgb: 255, 255, 255;
 } */
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
+@media (prefers-color-scheme: dark) {
+  /* :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
-  }
-} */
+  } */
+}
 
 body {
   /* color: rgb(var(--foreground-rgb));
@@ -29,3 +29,14 @@ body {
 .space-y-6 > :not([hidden]) ~ :not([hidden]) {
   margin-top: 0
 }
+
+/* .dark {
+  .tremor-MultiSelectBox-button {
+    background-color: rgb(3, 7, 18, 1);
+    color: #fff;
+
+    &:hover {
+      background-color: rgb(3, 7, 18, 1);
+    }
+  }
+} */

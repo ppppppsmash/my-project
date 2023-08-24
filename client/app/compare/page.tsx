@@ -5,7 +5,7 @@ import { Card, Title, Flex } from '@tremor/react'
 import { PSIDataType, PSIMetrics } from '@/type'
 import { getDataAll } from '@/utils/fetchData'
 import PsiCompareList from '@/components/PsiCompareList'
-import { ArrowSmallUpIcon, ArrowSmallDownIcon, FaceSmileIcon } from '@heroicons/react/24/outline'
+import { ArrowSmallUpIcon, ArrowSmallDownIcon, FaceSmileIcon, FaceFrownIcon, ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
 import PsiMotionModalsChartTotal from '@/components/PsiMotionModalsChartTotal'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
 
@@ -60,11 +60,11 @@ export default function Compare() {
 
   const compareMark = (valueA: number, valueB: number) => {
     if (valueA > valueB) {
-      return <ArrowSmallUpIcon className='w-5 h-5 text-green-700' />
+      return <FaceSmileIcon className='w-5 h-5 text-green-500' />
     } else if (valueA < valueB) {
-      return <ArrowSmallDownIcon className='w-5 h-5 text-red-700' />
+      return <FaceFrownIcon className='w-5 h-5 text-red-400' />
     } else {
-      return <FaceSmileIcon className='w-5 h-5 text-yellow-400' />
+      return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400' />
     }
   }
 
@@ -90,11 +90,11 @@ export default function Compare() {
 
   return (
     <>
-      <Title>ページ比較</Title>
+      <Title className='dark:text-white'>ページ比較</Title>
 
-      <Flex className="space-x-4 items-start">
-        <Card className="mt-6">
-          <Flex className="mb-8 space-x-4">
+      <Flex className='space-x-4 items-start'>
+        <Card className='mt-6 shadow-md'>
+          <Flex className='mb-8 space-x-4'>
             <PsiSelectBox siteList={siteList} onSiteSelect={(value) => handleSelectChange(value, setSelectedSiteLeft)} />
           </Flex>
 
@@ -103,8 +103,8 @@ export default function Compare() {
           )}
         </Card>
 
-        <Card className="mt-6">
-          <Flex className="mb-8 space-x-4">
+        <Card className='mt-6 shadow-md'>
+          <Flex className='mb-8 space-x-4'>
             <PsiSelectBox siteList={siteList} onSiteSelect={(value) => handleSelectChange(value, setSelectedSiteRight)} />
           </Flex>
 
@@ -113,13 +113,18 @@ export default function Compare() {
           )}
         </Card>
       </Flex>
-      <Card className="mt-6">
-        {selectedSiteLeft &&
-          <PsiMotionModalsChartTotal siteMetrics={metricsFormatter(selectedSiteLeft.siteMetrics)} />
+      <Card className='mt-6 shadow-md'>
+        {selectedSiteLeft && selectedSiteRight &&
+          //<PsiMotionModalsChartTotal siteMetrics={metricsFormatter(selectedSiteLeft.siteMetrics)} />
+
+          <PsiMotionModalsChartTotal
+            siteMetricsLeft={metricsFormatter(selectedSiteLeft.siteMetrics)}
+            siteMetricsRight={metricsFormatter(selectedSiteRight.siteMetrics)}
+          />
         }
-        {selectedSiteRight &&
+        {/* {selectedSiteRight &&
           <PsiMotionModalsChartTotal siteMetrics={metricsFormatter(selectedSiteRight.siteMetrics)} />
-        }
+        } */}
       </Card>
     </>
   )

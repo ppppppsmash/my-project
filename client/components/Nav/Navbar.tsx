@@ -26,7 +26,7 @@ export default function Navbar() {
   }
 
   return (
-    <Disclosure as="nav" className="bg-white shadow-sm">
+    <Disclosure as="nav" className="bg-white shadow dark:bg-gray-950 dark:text-white dark:border-b-[1px] dark:border-slate-700">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -44,8 +44,8 @@ export default function Navbar() {
                         onClick={() => handleNavItemClick(item.href)} // クリック時にcurrentNavItemを更新
                         className={classNames(
                           item.href === currentNavItem
-                            ? 'border-slate-500 text-gray-900 border-b-2 transition-all duration-350'
-                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                            ? 'border-slate-500 dark:border-white text-gray-900 dark:text-white border-b-2 transition-all duration-350'
+                            : 'border-transparent text-gray-500 dark:text-white hover:text-gray-700 hover:border-gray-300',
                           'inline-flex items-center px-1 pt-1 text-[12px] font-medium'
                         )}
                         aria-current={pathname === item.href ? 'page' : undefined}

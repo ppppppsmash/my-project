@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { PSIMetrics } from '@/type'
 import { Flex, Card, Text, LineChart, Color as TremorColor } from '@tremor/react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { XCircleIcon } from '@heroicons/react/24/outline'
+import { ArrowsPointingInIcon, XCircleIcon } from '@heroicons/react/24/outline'
 
 interface Props {
   siteMetrics: PSIMetrics[]
@@ -37,10 +37,16 @@ export default function PsiMotionModalsChart({ siteMetrics }: Props) {
       ))}
       <AnimatePresence>
         {selectedId && (
-          <Card className='fixed top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 -webkit-transform mx-auto w-[800px] z-10'>
-            <motion.div layoutId={selectedId}>
-              <motion.button whileTap={{ scale: 1.5 }} onClick={() => setSelectedId(null)}>
-                <XCircleIcon className='w-5 h-5' />
+          <Card className='fixed top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 -webkit-transform mx-auto w-[1000px] z-10'>
+            <motion.div
+              className='relative p-4'
+              layoutId={selectedId}>
+              <motion.button
+                className='absolute -top-4 right-0'
+                whileTap={{ scale: 1.5 }}
+                onClick={() => setSelectedId(null)}
+              >
+                <ArrowsPointingInIcon className='w-5 h-5 text-gray-600 hover:scale-[0.9]' />
               </motion.button>
               <LineChart
                 data={siteMetrics}
