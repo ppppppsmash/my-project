@@ -163,43 +163,44 @@ export default function PsiTable() {
   }, [pageList])
 
   return (
-    <>
+    <div className='dark:bg-gray-950'>
       <MultiSelectBox
-      onValueChange={setSelectedNames}
+        onValueChange={setSelectedNames}
         //onValueChange={setSelectedNames}
         placeholder="検索..."
-        className="max-w-xs ml-4 mt-8"
+        className="max-w-xs ml-4 mt-8 dark:bg-gray-950"
       >
         {pageList.map((item) => (
           <MultiSelectBoxItem
             key={item.id}
             value={(item.name).toString()}
             text={item.name}
+            className='dark:bg-gray-950 dark:text-white'
           >
             {item.name}
           </MultiSelectBoxItem>
         ))}
       </MultiSelectBox>
 
-      <Table className="mt-2 overflow-visible">
+      <Table className='mt-2 overflow-visible'>
         <TableHead>
           <TableRow>
-            <TableHeaderCell>site</TableHeaderCell>
-            <TableHeaderCell>URL</TableHeaderCell>
-            <TableHeaderCell>psi score</TableHeaderCell>
-            <TableHeaderCell>date</TableHeaderCell>
-            <TableHeaderCell>schedule</TableHeaderCell>
-            <TableHeaderCell>action</TableHeaderCell>
+            <TableHeaderCell className='dark:text-white'>Site</TableHeaderCell>
+            <TableHeaderCell className='dark:text-white'>URL</TableHeaderCell>
+            <TableHeaderCell className='dark:text-white'>PSI score</TableHeaderCell>
+            <TableHeaderCell className='dark:text-white'>Date</TableHeaderCell>
+            <TableHeaderCell className='dark:text-white'>Schedule</TableHeaderCell>
+            <TableHeaderCell className='dark:text-white'>Action</TableHeaderCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody className='dark:text-white'>
           {/* {getDisplayedTableData().map((item, index) => ( */}
           {pageList.filter((item) => isSalesSiteSelected(item)).map((item, index) => (
             <TableRow
-              className='hover:bg-gray-100'
+              className='hover:bg-gray-100 dark:hover:bg-gray-700'
               key={item.id}
             >
-              <TableCell>
+              <TableCell className='dark:text-white'>
                 <p className='flex items-center space-x-2'>
               {
                 item.device === 'mobile' ? (
@@ -237,7 +238,7 @@ export default function PsiTable() {
               </p>
               </TableCell>
               <TableCell>
-                <Text className='underline decoration-dotted'>
+                <Text className='underline decoration-dotted dark:text-white'>
                   <Link href={{pathname: item.url}} target='_blank'>
                   {item.url}
                   </Link>
@@ -249,11 +250,11 @@ export default function PsiTable() {
                     className='animate-spin'
                   />
                 ) : (
-                  <Text>{item.siteMetrics.slice().reverse()[0].score}</Text>
+                  <Text className='dark:text-white'>{item.siteMetrics.slice().reverse()[0].score}</Text>
                 )}
               </TableCell>
               <TableCell>
-              <Text>{formatDate(item.siteMetrics.slice().reverse()[0].updatedAt) || formatDate(item.createdAt)}</Text>
+              <Text className='dark:text-white'>{formatDate(item.siteMetrics.slice().reverse()[0].updatedAt) || formatDate(item.createdAt)}</Text>
               </TableCell>
               <TableCell>
               {editIndex === index ? (
@@ -276,11 +277,11 @@ export default function PsiTable() {
                 </p>
                 ) : (
                   item.schedule !== '0' && item.schedule !== 'week' ? (
-                    <Text>{item.schedule} 時間</Text>
+                    <Text className='dark:text-white'>{item.schedule} 時間</Text>
                   ) : item.schedule === 'week' ? (
-                    <Text>1 週間</Text>
+                    <Text className='dark:text-white'>1 週間</Text>
                   ) : (
-                    <Text>なし</Text>
+                    <Text className='dark:text-white'>なし</Text>
                   )
                 )
               }
@@ -317,6 +318,6 @@ export default function PsiTable() {
             )}
         </ul>
       </div> */}
-    </>
+    </div>
   )
 }

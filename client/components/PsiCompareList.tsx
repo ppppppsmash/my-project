@@ -5,6 +5,8 @@ import {
   ComputerDesktopIcon
 } from '@heroicons/react/24/outline'
 import { formatDate } from '@/utils/formatDate'
+import Link from 'next/link'
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid'
 
 interface Props {
   siteList: PSIDataType
@@ -12,7 +14,8 @@ interface Props {
 }
 
 export default function PsiCompareList({ siteList, compareResult }: Props) {
-  const metricsNewest = siteList.siteMetrics[0]
+  // siteMetricsを昇順に
+  const metricsNewest = siteList.siteMetrics.reverse()[0]
   const {
     score,
     lcp,
@@ -29,11 +32,21 @@ export default function PsiCompareList({ siteList, compareResult }: Props) {
     <List key={siteList.id}>
       <ListItem>
         <span>サイト：</span>
-        <span>{siteList.name}</span>
+        <Link href={{pathname: `/list/${siteList.id}`}}>
+          <span className='flex gap-1 items-center underline decoration-dotted'>
+            {siteList.name}
+            <ArrowTopRightOnSquareIcon className='w-4 h-4' />
+          </span>
+        </Link>
       </ListItem>
       <ListItem>
         <span>URL：</span>
-        <span><a className='underline decoration-dotted' href={siteList.url} target='_blank'>{siteList.url}</a></span>
+        <a className='underline decoration-dotted' href={siteList.url} target='_blank'>
+          <span className='flex gap-1 items-center'>
+            {siteList.url}
+            <ArrowTopRightOnSquareIcon className='w-4 h-4' />
+          </span>
+        </a>
       </ListItem>
       <ListItem>
         <span>デバイス：</span>
