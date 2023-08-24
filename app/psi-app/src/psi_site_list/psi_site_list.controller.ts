@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query } from '@nestjs/common'
+import { Controller, Get, Post, Patch, Delete, Body, Param } from '@nestjs/common'
 import { PsiSiteListService } from './psi_site_list.service'
 import { SiteList } from '../entities/site_list.entity'
 import { InsertResult, UpdateResult, DeleteResult, Transaction, EntityManager } from 'typeorm'
