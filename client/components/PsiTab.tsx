@@ -20,6 +20,11 @@ export default function PsiTab() {
       {
         mode: 'multiple',
       },
+    ],
+    'CSV登録': [
+      {
+        mode: 'csv',
+      },
     ]
   })
 

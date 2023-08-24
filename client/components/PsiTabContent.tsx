@@ -1,5 +1,5 @@
 'use client'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useState } from 'react'
 import PsiCheckbox from '@/components/PsiCheckbox'
 import PsiSelect from '@/components/PsiSelect'
 import { getPsiData } from '@/utils/getPsi'
@@ -10,6 +10,7 @@ import PsiDialog from '@/components/PsiDialog'
 import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/solid"
 import { checkboxValidate, inputValidate, textareaValidate } from '@/utils/validation'
 import Loading from '@/components/Loading'
+import { Button } from '@tremor/react'
 
 interface Props {
   mode: string
@@ -27,6 +28,8 @@ export default function PsiTabContent({ mode }: Props) {
   const [schedule, setSchedule] = useState<string>('0')
   const [selectedDevice, setSelectedDevice] = useState<string[]>([])
 
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+
   const [loading, setLoading] = useState<boolean>(false)
 
   // 単体サイト
@@ -40,6 +43,43 @@ export default function PsiTabContent({ mode }: Props) {
 
   const getChangeSelect = (value: string) => {
     setSchedule(value)
+  }
+
+  // csv
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      setSelectedFile(event.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!selectedFile) {
+      return;
+    }
+
+    const formData = new FormData()
+    formData.append('csvFile', selectedFile)
+
+    console.log(selectedFile)
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}upload/`, {
+        method: 'POST',
+        body: formData,
+      })
+
+      console.log(response)
+
+      if (response.ok) {
+        console.log('CSVファイルのアップロードが成功しました。');
+      } else {
+        console.error('CSVファイルのアップロード中にエラーが発生しました。');
+      }
+    } catch (error) {
+      console.error('CSVファイルのアップロード中にエラーが発生しました。', error);
+    }
   }
 
   // デバイス選択
@@ -111,6 +151,8 @@ export default function PsiTabContent({ mode }: Props) {
 
         await getPsiData(selectedDevice, site.name, site.url, schedule, '/list')
       }
+    } else if (mode === 'csv') {
+
     }
 
     setLoading(false)
@@ -191,6 +233,36 @@ export default function PsiTabContent({ mode }: Props) {
           </div>
         </div>
       )}
+      {mode === 'csv' && (
+        <div>
+          <div className='mb-4'>
+          <form onSubmit={handleSubmit}>
+            <label
+              className="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
+            >
+              CSVファイルをアップロードしてください.
+            </label>
+            <input
+              className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
+              type='file'
+              name='csvFile'
+              onChange={handleFileChange}
+              id="formFile" />
+            <Button
+              className='w-[150px] bg-gray-900 hover:bg-gray-700
+              py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
+              duration-150 focus:shadow-outline ease-in-out'
+              color='gray'
+              type='submit'
+            >
+              アップロード
+            </Button>
+          </form>
+          </div>
+        </div>
+      )
+
+      }
       <div className='flex justify-spacebetween items-center space-x-4'>
         <div className='w-1/2'>
           <PsiSelect
