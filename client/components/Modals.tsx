@@ -51,7 +51,7 @@ export default function Modals({ onClose, getPsiData, id, name, url }: Props) {
             <button className='align-bottom inline-flex items-center justify-center cursor-pointer
               leading-5 transition-colors duration-150 font-medium focus:outline-none px-4 py-2
               rounded-lg text-sm text-gray-600 border-gray-300 border dark:text-gray-400
-              focus:outline-none active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:ring focus:ring-gray-300'
+              active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:ring focus:ring-gray-300'
               onClick={()=>onClose()}
             >
               キャンセル

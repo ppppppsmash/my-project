@@ -72,9 +72,9 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
       psiSiteListArray.push(psiSiteList)
 
       if (score < 70) {
-        const message = `登録した ${name}-(${device}) のスコアが70未満です。 スコア: ${score}`
-      //  await sendSlackAlert(message)
-        console.log(message)
+        const message = `CSVファイルで登録した ${name}-(${device}) のスコアが70未満です。 スコア: ${score}`
+        await sendSlackAlert(message)
+       // console.log(message)
       }
 
     }
@@ -84,6 +84,7 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
     await postData('psi_site_list', psiSite)
   }
 
+  //console.log(redirect)
  redirectTo(redirect)
 }
 
