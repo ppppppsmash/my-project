@@ -5,7 +5,6 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import * as csvParser from 'csv-parser'
 import * as fs from 'fs-extra'
 
-
 @Controller('upload')
 export class PsiUploadController {
   @Post()
@@ -20,7 +19,8 @@ export class PsiUploadController {
       stream
         .pipe(csvParser())
         .on('data', (data) => {
-          results.push(data)
+          const filteredData = Object.fromEntries(Object.entries(data).filter(([key, value]) => key !== ''))
+          results.push(filteredData)
           console.log(results)
         })
         .on('end', () => resolve(results))
