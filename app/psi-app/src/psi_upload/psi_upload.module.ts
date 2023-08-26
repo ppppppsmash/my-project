@@ -1,9 +1,7 @@
-import { Module } from '@nestjs/common';
-import { PsiUploadController } from './psi_upload.controller';
-import { PsiUploadService } from './psi_upload.service';
+import { Module } from '@nestjs/common'
+import { PsiUploadController } from './psi_upload.controller'
 
 @Module({
-  controllers: [PsiUploadController],
-  providers: [PsiUploadService]
+  controllers: [PsiUploadController]
 })
 export class PsiUploadModule {}
