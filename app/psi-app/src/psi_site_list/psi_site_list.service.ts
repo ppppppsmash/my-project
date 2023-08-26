@@ -34,7 +34,6 @@ export class PsiSiteListService {
       }
     })
   }
-  
 
   async find(id: number): Promise<SiteList | null> {
     console.log(id)
@@ -47,49 +46,12 @@ export class PsiSiteListService {
   async create(SiteList): Promise<any> {
     const savedSiteList = await this.pageRepository.save(SiteList)
     const siteMetrics = SiteList.siteMetrics
-    for (const metric of siteMetrics) {
+
+    await Promise.all(siteMetrics.map(async (metric) => {
       metric.siteList = savedSiteList
       await this.metricsRepository.save(metric)
-    }
+    }))
   }
-
-  // async create(site): Promise<any> {
-  //   let siteMetrics = []
-  //   for(let i = 0; i < site.siteMetrics.length; i++) {
-  //     let siteMetric = new SiteMetrics()
-  //     siteMetric.score = site.siteMetrics[i].score
-  //     siteMetric.lcp = site.siteMetrics[i].lcp
-  //     siteMetric.fid = site.siteMetrics[i].fid
-  //     siteMetric.cls = site.siteMetrics[i].cls
-  //     siteMetric.fcp = site.siteMetrics[i].fcp
-  //     siteMetric.tbt = site.siteMetrics[i].tbt
-  //     siteMetric.si = site.siteMetrics[i].si
-  //     siteMetrics.push(siteMetric)
-  //   }
-  //   let siteList = new SiteList()
-  //   siteList.device = site.device
-  //   siteList.name = site.name
-  //   siteList.url = site.url
-  //   siteList.schedule = site.schedule
-  //   siteList.siteMetrics = siteMetrics
-  //   console.log('siteMetrics', siteList)
-  //   await this.pageRepository.save(siteList)
-  // }
-
-  // async patch(id: number, SiteList): Promise<any> {
-  //   const savedSiteList = await this.pageRepository.update(id, SiteList)
-  //   const siteMetrics = SiteList.siteMetrics
-  //   for (const metric of siteMetrics) {
-  //     metric.siteList = savedSiteList
-  //     console.log(metric)
-  //     await this.metricsRepository.update(id, metric)
-  //   }
-  //   // await this.metricsRepository.update(id, updatedData)
-  // }
-
-  // async patch(id: number, siteListData): Promise<any> {
-  //   const savedSiteList = await this.pageRepository.update(id, siteListData);
-  // }
 
   async patch(id: number, siteListData): Promise<any> {
     const savedSiteList = await this.pageRepository.findOne({ where: { id }, relations: ['siteMetrics'] })
@@ -120,10 +82,6 @@ export class PsiSiteListService {
 
     return savedSiteList
   }
-
-  // async delete(id: number): Promise<DeleteResult> {
-  //   return await this.pageRepository.delete(id)
-  // }
 
   async delete(id: number): Promise<void> {
     const siteList = await this.pageRepository.findOne({ where: { id }, relations: ['siteMetrics'] })
