@@ -10,8 +10,14 @@ export const urlValidate = (url: string) => {
     finalUrl = new URL('https://' + url)
   }
 
+  if (finalUrl.pathname) {
+    return finalUrl.origin + finalUrl.pathname
+  }
+
   return finalUrl.origin
 }
+
+urlValidate('https://zba.jp/tsu-shin-highschool/')
 
 export const inputValidate = (value: string) => {
   if(!value) {
