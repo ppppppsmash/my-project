@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { AppDataSource } from './data-source'
 import { PsiModule } from './psi/psi.module'
 import { PsiUploadModule } from './psi_upload/psi_upload.module'
+import { LinkPreviewModule } from './link_preview/link_preview.module'
 import { ScheduleModule } from '@nestjs/schedule'
 
 @Module({
@@ -14,6 +15,7 @@ import { ScheduleModule } from '@nestjs/schedule'
     PsiSiteListModule,
     PsiModule,
     PsiUploadModule,
+    LinkPreviewModule,
     ScheduleModule.forRoot(),
   ],
   controllers: [AppController],

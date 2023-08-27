@@ -77,7 +77,7 @@ export class PsiSiteListService {
       }
     }
 
-    delete savedSiteList.siteMetrics
+    //delete savedSiteList.siteMetrics
     await this.pageRepository.save(savedSiteList)
 
     return savedSiteList
