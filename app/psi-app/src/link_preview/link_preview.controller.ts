@@ -7,7 +7,7 @@ export class LinkPreviewController {
 
   @Get()
   // async getLinkPreview(@Query() params: { q: string }) {
-  async getLinkPreview(@Query('q') url: string ) {
+  async getLinkPreview(@Query('url') url: string ) {
     return this.linkPreviewService.linkPreview(url)
   }
 }

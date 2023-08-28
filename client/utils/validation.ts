@@ -17,8 +17,6 @@ export const urlValidate = (url: string) => {
   return finalUrl.origin
 }
 
-urlValidate('https://zba.jp/tsu-shin-highschool/')
-
 export const inputValidate = (value: string) => {
   if(!value) {
     return 'サイト名を入力してください'
