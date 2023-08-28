@@ -169,7 +169,6 @@ export default function PsiTable() {
     <div className='dark:bg-gray-950'>
       <MultiSelectBox
         onValueChange={setSelectedNames}
-        //onValueChange={setSelectedNames}
         placeholder="検索..."
         className="max-w-xs ml-4 mt-8 dark:bg-gray-950"
       >

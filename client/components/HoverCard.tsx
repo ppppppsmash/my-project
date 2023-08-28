@@ -37,12 +37,17 @@ const HoverCard = ({children, url}: {children: React.ReactNode, url: string}) =>
         <HoverCardPrimitive.Arrow className='fill-current text-white dark:text-gray-800' />
 
         <div className='flex h-full w-full space-x-4'>
-          <img
-            src={imageUrl}
-            width={200}
-            height={100}
-            alt='test'
-          />
+          {imageUrl ? (
+            <img
+              src={imageUrl}
+              width={500}
+              height={300}
+              alt='プレビューイメージ'
+            />
+            ) : (
+              <p>🌀Loading...</p>
+            )
+          }
         </div>
       </HoverCardPrimitive.Content>
     </HoverCardPrimitive.Root>
