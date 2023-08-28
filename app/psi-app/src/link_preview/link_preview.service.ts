@@ -5,11 +5,11 @@ import axios from 'axios'
 export class LinkPreviewService {
   constructor() {}
   async linkPreview(url: string): Promise<any> {
-    const API_KEY = 'bb3b66ec4667270bea95cf8996842c1b'
-    const API_BASE_URL = `https://api.linkpreview.net/?key=${API_KEY}`
+    const LINK_PREVIEW_API_KEY = process.env.LINK_PREVIEW_API_KEY
+    const LINK_PREVIEW_API_URL = `${process.env.LINK_PREVIEW_API_URL}?key=${LINK_PREVIEW_API_KEY}`
 
     try {
-      const { data } = await axios.get(`${API_BASE_URL}&q=${url}`)
+      const { data } = await axios.get(`${LINK_PREVIEW_API_URL}&q=${url}`)
       return data
     } catch (error) {
       console.error(error)
