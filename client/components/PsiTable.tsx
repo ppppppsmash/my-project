@@ -29,6 +29,9 @@ import { deleteData, getData, getDataAll, patchData } from '@/utils/fetchData'
 import { getPsiDataAgain } from '@/utils/getPsi'
 import { formatDate } from '@/utils/formatDate'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { fetchLinkPreview } from '@/utils/getLinkPreview'
+import Image from 'next/image'
+import { HoverCard } from './HoverCard'
 
 export default function PsiTable() {
   const [selectedNames, setSelectedNames] = useState<string[]>([])
@@ -42,7 +45,6 @@ export default function PsiTable() {
   const [currentTablePage, setCurrentTablePage] = useState<number>(1)
   const [spinningItems, setSpinningItems] = useState<any[]>([])
   const LIMIT_ROWS = 10
-  const totalTablePages = Math.ceil(pageList.length / LIMIT_ROWS)
 
   const isSalesSiteSelected = (siteList: PSIDataType) => {
     if (selectedNames.length === 0) return true
@@ -121,23 +123,23 @@ export default function PsiTable() {
   }
 
   // テーブルのページネーション処理
-  const pagination = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= totalTablePages; i++) {
-      pageNumbers.push(
-        <li
-          key={i}
-          className={`mx-1 px-2 cursor-default hover:text-white hover:bg-gray-400 ${
-            i === currentTablePage ? 'bg-gray-500 text-white' : 'bg-gray-200 text-black'
-          }`}
-          onClick={() => handlePageChange(i)}
-        >
-          {i}
-        </li>
-      )
-    }
-    return pageNumbers
-  }
+  // const pagination = () => {
+  //   const pageNumbers = [];
+  //   for (let i = 1; i <= totalTablePages; i++) {
+  //     pageNumbers.push(
+  //       <li
+  //         key={i}
+  //         className={`mx-1 px-2 cursor-default hover:text-white hover:bg-gray-400 ${
+  //           i === currentTablePage ? 'bg-gray-500 text-white' : 'bg-gray-200 text-black'
+  //         }`}
+  //         onClick={() => handlePageChange(i)}
+  //       >
+  //         {i}
+  //       </li>
+  //     )
+  //   }
+  //   return pageNumbers
+  // }
 
   // 登録したサイトの削除処理
   const deleteItem = async (index: number, id: number) => {
@@ -155,6 +157,7 @@ export default function PsiTable() {
       const data = await getDataAll('psi_site_list')
       setPageList(data)
     }
+
     getDataByAll()
   }, [])
 
@@ -239,9 +242,11 @@ export default function PsiTable() {
               </TableCell>
               <TableCell>
                 <Text className='underline decoration-dotted dark:text-white'>
-                  <Link href={{pathname: item.url}} target='_blank'>
-                  {item.url}
-                  </Link>
+                  <HoverCard url={item.url}>
+                    <Link href={{pathname: item.url}} target='_blank'>
+                      {item.url}
+                    </Link>
+                  </HoverCard>
                 </Text>
               </TableCell>
               <TableCell>

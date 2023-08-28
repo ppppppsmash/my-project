@@ -1,5 +1,4 @@
 'use client'
-import PsiSearchMultipleBox from '@/components/PsiSearchMultipleBox'
 import PsiTable from '@/components/PsiTable'
 import {
   Card,
