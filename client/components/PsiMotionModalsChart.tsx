@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { PSIMetrics } from '@/type'
 import { Flex, Card, Text, LineChart, Color as TremorColor } from '@tremor/react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowsPointingInIcon, XCircleIcon } from '@heroicons/react/24/outline'
+import { ArrowsPointingInIcon, XCircleIcon, ViewFinderCircleIcon } from '@heroicons/react/24/outline'
 
 interface Props {
   siteMetrics: PSIMetrics[]
@@ -19,6 +19,11 @@ export default function PsiMotionModalsChart({ siteMetrics }: Props) {
       {categories.map((category, index) => (
         <div className='w-1/4 p-2' key={index}>
           <motion.div
+            whileHover={{
+              y: -10,
+              transition: { duration: 0.3 },
+              // children: <ViewFinderCircleIcon style={{ width: "10px"; }} />
+            }}
             layoutId={index.toString()}
             onClick={() => setSelectedId(index.toString())}
           >

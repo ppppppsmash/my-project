@@ -42,10 +42,10 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
         si: lighthouseResultAudits['speed-index']
       }
 
-      const { metrics: loadingExperienceAudits } = loadingExperience
-      const loadingExperienceMetrics = {
-        CUMULATIVE_LAYOUT_SHIFT_SCORE: loadingExperienceAudits['CUMULATIVE_LAYOUT_SHIFT_SCORE']
-      }
+      // const { metrics: loadingExperienceAudits } = loadingExperience
+      // const loadingExperienceMetrics = {
+      //   CUMULATIVE_LAYOUT_SHIFT_SCORE: loadingExperienceAudits['CUMULATIVE_LAYOUT_SHIFT_SCORE']
+      // }
 
       const psiSiteMetircs = {
         score,

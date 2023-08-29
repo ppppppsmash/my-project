@@ -45,7 +45,7 @@ const HoverCard = ({children, url}: {children: React.ReactNode, url: string}) =>
               alt='プレビューイメージ'
             />
             ) : (
-              <p>🌀Loading...</p>
+              <span>🌀Loading...</span>
             )
           }
         </div>
