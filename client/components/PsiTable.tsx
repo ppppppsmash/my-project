@@ -28,7 +28,7 @@ import PsiSelect from '@/components/PsiSelect'
 import { deleteData, getData, getDataAll, patchData } from '@/utils/fetchData'
 import { getPsiDataAgain } from '@/utils/getPsi'
 import { formatDate } from '@/utils/formatDate'
-import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { FiLoader } from 'react-icons/fi'
 import { fetchLinkPreview } from '@/utils/getLinkPreview'
 import Image from 'next/image'
 import { HoverCard } from './HoverCard'
@@ -250,8 +250,8 @@ export default function PsiTable() {
               </TableCell>
               <TableCell>
                 {spinningItems.includes(index) ? (
-                  <AiOutlineLoading3Quarters
-                    className='animate-spin'
+                  <FiLoader
+                    className='animate-spin w-5 text-gray-950'
                   />
                 ) : (
                   <Text className='dark:text-white'>{item.siteMetrics.slice().reverse()[0].score}</Text>
