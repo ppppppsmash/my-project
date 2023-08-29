@@ -1,8 +1,17 @@
-CREATE TABLE site_list (
+CREATE TABLE pagespeedinsights.site_list (
   id INT AUTO_INCREMENT PRIMARY KEY,
   device ENUM('desktop', 'mobile'),
   name VARCHAR(50),
   url VARCHAR(50),
+  schedule VARCHAR(10),
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE pagespeedinsights.site_metrics (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  FOREIGHT KEY site_list_id REFERENCES pagespeedinsights.site_list.id
   score INT,
   schedule VARCHAR(10),
   date DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -11,5 +20,5 @@ CREATE TABLE site_list (
   cls VARCHAR(10),
   fcp VARCHAR(10),
   tbt VARCHAR(10),
-  si VARCHAR(10),
+  si VARCHAR(10)
 );
