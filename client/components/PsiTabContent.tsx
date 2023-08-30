@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import PsiCheckbox from '@/components/PsiCheckbox'
 import PsiSelect from '@/components/PsiSelect'
@@ -83,6 +84,23 @@ export default function PsiTabContent({ mode }: Props) {
       }
     } catch (error) {
       console.error('CSVファイルのアップロード中にエラーが発生しました。', error)
+    }
+  }
+
+  const handleDownload = async() => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv`)
+      const blob = await response.blob()
+
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', 'test.csv')
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    } catch (error) {
+      console.error('CSVダウンロードエラー:', error)
     }
   }
 
@@ -244,6 +262,17 @@ export default function PsiTabContent({ mode }: Props) {
       {mode === 'csv' && (
         <div>
           <div className='mb-4'>
+            <Button
+              className='w-[150px] bg-gray-900 hover:bg-gray-700
+              py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
+              duration-150 focus:shadow-outline ease-in-out'
+              color='gray'
+              type='button'
+              onClick={handleDownload}
+            >
+              ダウンロード
+            </Button>
+
             <form onSubmit={handleSubmit}>
               <Text className="mb-2 inline-block text-neutral-700 dark:text-neutral-200">
                 CSVファイルをアップロードしてください.
