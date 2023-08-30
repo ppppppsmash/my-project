@@ -1,9 +1,11 @@
 
 import { Multer } from 'multer'
-import { Controller, Post, UploadedFile, UseInterceptors, BadRequestException } from '@nestjs/common'
+import { Controller, Post, Get, Param, Res, UploadedFile, UseInterceptors, BadRequestException } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import * as csvParser from 'csv-parser'
 import * as fs from 'fs-extra'
+import axios from 'axios'
+import { Response } from 'express'
 
 @Controller('upload')
 export class PsiUploadController {
@@ -26,5 +28,28 @@ export class PsiUploadController {
         .on('end', () => resolve(results))
         .on('error', (error) => reject(error))
     })
+  }
+}
+
+@Controller('download')
+// export class PsiDownloadController {
+//   @Get(':filename')
+//   async downloadFile(@Param('filename') filename: string, @Res() res: Response) {
+//     const filePath = `./files/${filename}`
+//     res.download(filePath)
+//   }
+// }
+export class PsiDownloadController {
+  @Get(':filename')
+  async downloadFile(@Param('filename') filename: string, @Res() res: Response) {
+    try {
+      const fileStream = fs.createReadStream(`./files/${filename}`); // アップロードされたファイルのパス
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`); // ダウンロード時のファイル名を指定
+      fileStream.pipe(res);
+    } catch (error) {
+      console.error('CSVファイルのダウンロードエラー:', error);
+      res.status(500).send('CSVファイルのダウンロード中にエラーが発生しました。');
+    }
   }
 }
