@@ -1,10 +1,12 @@
 'use client'
-import PsiTable from '@/components/PsiTable'
+import dynamicImport from 'next/dynamic'
 import {
   Card,
   Title,
   Button
 } from '@tremor/react'
+
+const DynamicComponent = dynamicImport(() => import('@/components/PsiTable'))
 
 export default function PsiList() {
   return (
@@ -14,7 +16,7 @@ export default function PsiList() {
       <Card className='mt-6 shadow-lg dark:bg-gray-950'>
         <Title className='dark:text-white'>PSI</Title>
         {/* <PsiSearchMultipleBox /> */}
-        <PsiTable />
+        {DynamicComponent()}
       </Card>
 
       <div className='mt-5'>
