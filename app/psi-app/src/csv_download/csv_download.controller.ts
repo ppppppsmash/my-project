@@ -1,25 +1,30 @@
-import { Controller, Get, Res } from '@nestjs/common'
+import { Controller, Get, Res, Param } from '@nestjs/common'
 import { Response } from 'express'
 import * as path from 'path'
 import * as fs from 'fs-extra'
 
 @Controller('download')
 export class CsvDownloadController {
-  @Get('csv')
-  async downloadCsv(@Res() res: Response) {
+  // selectからcsvファイル一覧
+  @Get('csv-list')
+  async getCsvList(@Res() res: Response) {
     const filesDirectory = path.join(__dirname, '..', '..', './files')
 
-    const files = await fs.readdir(filesDirectory);
+    const files = await fs.readdir(filesDirectory)
     files.sort((a, b) => {
       const aStats = fs.statSync(path.join(filesDirectory, a))
       const bStats = fs.statSync(path.join(filesDirectory, b))
       return aStats.mtime.getTime() - bStats.mtime.getTime()
-    });
+    })
 
-    // 最終的にアップしたファイルを取得
-    const latestFileName = files[files.length - 1]
+    res.send(files)
+  }
 
-    const filePath = path.join(filesDirectory, latestFileName)
+  // selectで選択したファイルをダウンロード
+  @Get('csv/:filename')
+  async downloadCsv(@Res() res: Response, @Param('filename') filename: string) {
+    const filesDirectory = path.join(__dirname, '..', '..', './files')
+    const filePath = path.join(filesDirectory, filename)
 
     if (!fs.existsSync(filePath)) {
       res.status(404).send('CSV file not found')
@@ -27,7 +32,7 @@ export class CsvDownloadController {
     }
 
     res.setHeader('Content-Type', 'text/csv')
-    res.setHeader('Content-Disposition', `attachment; filename="${latestFileName}"`)
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
 
     fs.createReadStream(filePath).pipe(res)
   }

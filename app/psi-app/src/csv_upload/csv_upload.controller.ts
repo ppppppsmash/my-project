@@ -8,7 +8,7 @@ import axios from 'axios'
 import { Response } from 'express'
 
 @Controller('upload')
-export class PsiUploadController {
+export class CsvUploadController {
   @Post()
   @UseInterceptors(FileInterceptor('csvFile', { dest: './files' }))
   async uploadFile(@UploadedFile() file: Multer.File) {
