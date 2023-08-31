@@ -30,6 +30,7 @@ export default function PsiTabContent({ mode }: Props) {
   const [schedule, setSchedule] = useState<string>('0')
   const [selectedDevice, setSelectedDevice] = useState<string[]>([])
 
+  const [isUploaded, setIsUploaded] = useState<boolean>(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [csvData, setCsvData] = useState<any[]>([])
 
@@ -52,6 +53,7 @@ export default function PsiTabContent({ mode }: Props) {
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       setSelectedFile(event.target.files[0]);
+      setIsUploaded(true)
     }
   };
 
@@ -263,7 +265,37 @@ export default function PsiTabContent({ mode }: Props) {
       {mode === 'csv' && (
         <div>
 
-          <div className='mb-4 flex gap-6 justify-end'>
+            <form className='w-full' onSubmit={handleSubmit}>
+              <Text className="inline-block text-neutral-700 dark:text-neutral-200">
+                CSVファイルをアップロードしてください.
+              </Text>
+              <div className={`relative w-full h-[180px] overflow-hidden mb-4
+                before:flex before:items-center before:justify-center before:absolute before:top-[10px]
+                before:bottom-[12px] before:left-[24px] before:right-[24px] before:border-dashed
+                before:border-2 before:rounded-lg before:border-black before:text-black before:text-sm
+                ${ isUploaded ? `before:content-["ファイルをアップしました"]` : `before:content-["ドロップ&ドラッグ"]` }`}>
+                  <input
+                  className='absolute top-0 left-0 w-full h-full opacity-0'
+                  type='file'
+                  name='csvFile'
+                  onChange={handleFileChange}
+                  id="formFile" />
+              </div>
+
+              { isUploaded &&
+              <Button
+                className='w-[120px] -mt-8 mb-8 ml-[24px] bg-gray-900 hover:bg-gray-700
+                py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
+                duration-150 focus:shadow-outline ease-in-out text-right'
+                color='gray'
+                type='submit'
+              >
+                アップロード
+              </Button>
+              }
+            </form>
+
+          <div className='mb-4 flex gap-6 items-end'>
             <div className='flex w-1/2 gap-2 h-[36px]'>
               <div className="mx-auto space-y-6 w-full">
                 <SelectBox>
@@ -285,36 +317,13 @@ export default function PsiTabContent({ mode }: Props) {
               </Button>
 
             </div>
-
-            <form onSubmit={handleSubmit}>
-              <Text className="mb-2 inline-block text-neutral-700 dark:text-neutral-200">
-                CSVファイルをアップロードしてください.
-              </Text>
-              <div className='flex gap-2'>
-                <input
-                  className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
-                  type='file'
-                  name='csvFile'
-                  onChange={handleFileChange}
-                  id="formFile" />
-                <Button
-                  className='w-[120px] bg-gray-900 hover:bg-gray-700
-                  py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
-                  duration-150 focus:shadow-outline ease-in-out'
-                  color='gray'
-                  type='submit'
-                >
-                  アップロード
-                </Button>
-              </div>
-            </form>
           </div>
 
         </div>
       )}
 
       <div className='flex justify-spacebetween items-center space-x-4'>
-        <div className='w-1/2'>
+        <div>
           <PsiSelect
             placeholder='自動で取得時間選択'
             handleSelectChange={getChangeSelect}
