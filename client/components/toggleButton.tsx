@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useState } from 'react'
 import { Switch } from '@headlessui/react'
 import { SunIcon, MoonIcon } from '@heroicons/react/24/solid'

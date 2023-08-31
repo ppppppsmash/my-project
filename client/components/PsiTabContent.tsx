@@ -8,9 +8,10 @@ import Modals from '@/components/Modals'
 import PsiInput from '@/components/PsiInput'
 import PsiButton from '@/components/PsiButton'
 import PsiDialog from '@/components/PsiDialog'
-import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/solid"
+import { ExclamationTriangleIcon, CheckCircleIcon, DocumentChartBarIcon } from "@heroicons/react/24/solid"
 import { checkboxValidate, inputValidate, textareaValidate } from '@/utils/validation'
 import Loading from '@/components/Loading'
+import { SelectBox, SelectBoxItem } from '@tremor/react'
 import { Button, Text } from '@tremor/react'
 
 interface Props {
@@ -261,23 +262,35 @@ export default function PsiTabContent({ mode }: Props) {
       )}
       {mode === 'csv' && (
         <div>
-          <div className='mb-4'>
-            <Button
-              className='w-[150px] bg-gray-900 hover:bg-gray-700
-              py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
-              duration-150 focus:shadow-outline ease-in-out'
-              color='gray'
-              type='button'
-              onClick={handleDownload}
-            >
-              ダウンロード
-            </Button>
+
+          <div className='mb-4 flex gap-6 justify-end'>
+            <div className='flex w-1/2 gap-2 h-[36px]'>
+              <div className="mx-auto space-y-6 w-full">
+                <SelectBox>
+                  <SelectBoxItem value="1" icon={DocumentChartBarIcon}>
+                    テスト
+                  </SelectBoxItem>
+                </SelectBox>
+              </div>
+
+              <Button
+                className='w-[120px] bg-gray-900 hover:bg-gray-700
+                py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
+                duration-150 focus:shadow-outline ease-in-out'
+                color='gray'
+                type='button'
+                onClick={handleDownload}
+              >
+                ダウンロード
+              </Button>
+
+            </div>
 
             <form onSubmit={handleSubmit}>
               <Text className="mb-2 inline-block text-neutral-700 dark:text-neutral-200">
                 CSVファイルをアップロードしてください.
               </Text>
-              <div className='flex gap-4'>
+              <div className='flex gap-2'>
                 <input
                   className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
                   type='file'
@@ -285,7 +298,7 @@ export default function PsiTabContent({ mode }: Props) {
                   onChange={handleFileChange}
                   id="formFile" />
                 <Button
-                  className='w-[150px] bg-gray-900 hover:bg-gray-700
+                  className='w-[120px] bg-gray-900 hover:bg-gray-700
                   py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
                   duration-150 focus:shadow-outline ease-in-out'
                   color='gray'
@@ -296,6 +309,7 @@ export default function PsiTabContent({ mode }: Props) {
               </div>
             </form>
           </div>
+
         </div>
       )}
 
