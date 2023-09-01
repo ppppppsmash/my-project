@@ -9,7 +9,7 @@ import PsiInput from '@/components/PsiInput'
 import PsiButton from '@/components/PsiButton'
 import PsiDialog from '@/components/PsiDialog'
 import { ExclamationTriangleIcon, CheckCircleIcon, DocumentChartBarIcon } from "@heroicons/react/24/solid"
-import { checkboxValidate, inputValidate, textareaValidate } from '@/utils/validation'
+import { checkboxValidate, inputValidate, textareaValidate, csvValidate } from '@/utils/validation'
 import Loading from '@/components/Loading'
 import { SelectBox, SelectBoxItem } from '@tremor/react'
 import { Button, Text } from '@tremor/react'
@@ -25,6 +25,7 @@ export default function PsiTabContent({ mode }: Props) {
   const [dialogErr, setDialogErr] = useState<boolean>(false)
   const [singleErrorInfo, setSingleErrorInfo] = useState<string[]>([])
   const [multiErrorInfo, setMultiErrorInfo] = useState<string[]>([])
+  const [csvErrorInfo, setCsvErrorInfo] = useState<string[]>([])
 
   const [names, setNames] = useState<string[]>([])
   const [schedule, setSchedule] = useState<string>('0')
@@ -130,8 +131,10 @@ export default function PsiTabContent({ mode }: Props) {
     const checkboxValidation = checkboxValidate(selectedDevice.join(','))
     const inputValidation = inputValidate(name)
     const textareaValidation = textareaValidate(names)
+    const csvValidation = csvValidate(isUploaded)
     let newSingleErrorInfo = []
     let newMultiErrorInfo = []
+    let newCsvErrorInfo = []
 
     if (mode === 'single') {
       if (checkboxValidation) {
@@ -149,16 +152,26 @@ export default function PsiTabContent({ mode }: Props) {
       if(textareaValidation) {
         newMultiErrorInfo.push(textareaValidation)
       }
+    } else if (mode === 'csv') {
+      if (csvValidation) {
+        newCsvErrorInfo.push(csvValidation)
+      }
+
+      if (checkboxValidation) {
+        newCsvErrorInfo.push(checkboxValidation)
+      }
     }
 
-    if (newSingleErrorInfo.length > 0 || newMultiErrorInfo.length > 0) {
+    if (newSingleErrorInfo.length > 0 || newMultiErrorInfo.length > 0 || newCsvErrorInfo.length > 0) {
       setDialogErr(true)
       setSingleErrorInfo(newSingleErrorInfo)
       setMultiErrorInfo(newMultiErrorInfo)
+      setCsvErrorInfo(newCsvErrorInfo)
     } else {
       setDialogErr(false)
       setSingleErrorInfo([])
       setMultiErrorInfo([])
+      setCsvErrorInfo([])
       setIsModalOpen(true)
     }
   }
@@ -227,17 +240,20 @@ export default function PsiTabContent({ mode }: Props) {
       }
 
       {dialogErr && (
-        mode === 'single' ? (
+        <>
+        {mode === 'single' && (
           singleErrorInfo.map((info, index) => (
-          <PsiDialog
-            key={index}
-            className='h-12 my-4'
-            title={info}
-            color='rose'
-            icon={ExclamationTriangleIcon}
-          />
+            <PsiDialog
+              key={index}
+              className='h-12 my-4'
+              title={info}
+              color='rose'
+              icon={ExclamationTriangleIcon}
+            />
           ))
-        ) : (
+        )}
+
+        {mode === 'multiple' && (
           multiErrorInfo.map((info, index) => (
             <PsiDialog
               key={index}
@@ -247,7 +263,20 @@ export default function PsiTabContent({ mode }: Props) {
               icon={ExclamationTriangleIcon}
             />
           ))
-        )
+        )}
+
+        {mode === 'csv' && (
+          csvErrorInfo.map((info, index) => (
+            <PsiDialog
+              key={index}
+              className='h-12 my-4'
+              title={info}
+              color='rose'
+              icon={ExclamationTriangleIcon}
+            />
+          ))
+        )}
+        </>
       )}
 
       {isModalOpen && <Modals
@@ -383,6 +412,7 @@ export default function PsiTabContent({ mode }: Props) {
           <PsiButton
             label='登録'
             setOpen={openModal}
+            disabled={!isUploaded}
           />
         </div>
 

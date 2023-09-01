@@ -148,7 +148,7 @@ export default function PsiTable() {
       refetchInterval: 10000
   })
 
-  if(isLoading) return (<h1 className='text-lg'>!!!!!!!!!</h1>)
+  if(isLoading) return (<h1 className='text-lg text-center'>🌀Loading...</h1>)
 
   return (
     <div className='dark:bg-gray-950'>

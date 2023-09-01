@@ -55,6 +55,7 @@ export class PsiSiteListService {
 
   async patch(id: number, siteListData): Promise<any> {
     const savedSiteList = await this.pageRepository.findOne({ where: { id }, relations: ['siteMetrics'] })
+    console.log(id)
 
     if (!savedSiteList) {
       throw new Error(`SiteList with ID ${id} not found`)
@@ -72,12 +73,13 @@ export class PsiSiteListService {
 
     if (siteMetrics && siteMetrics.length > 0) {
       for (const metric of siteMetrics) {
-        metric.siteList = savedSiteList;
+        metric.siteList = savedSiteList
+        console.log(metric)
         await this.metricsRepository.save(metric)
       }
     }
 
-    //delete savedSiteList.siteMetrics
+    delete savedSiteList.siteMetrics
     await this.pageRepository.save(savedSiteList)
 
     return savedSiteList

@@ -47,3 +47,11 @@ export const textareaValidate = (value: string[]) => {
 
   return ''
 }
+
+export const csvValidate = (value: boolean) => {
+  if (!value) {
+    return 'CSVファイルをアップロードしてください'
+  }
+
+  return ''
+}
