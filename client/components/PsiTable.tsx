@@ -1,4 +1,5 @@
 'use client'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useState, useEffect, ChangeEvent } from 'react'
 import { PSIDataType } from '@/type'
@@ -26,7 +27,7 @@ import {
 import PsiPopup from '@/components/PsiPopup'
 import PsiSelect from '@/components/PsiSelect'
 import { deleteData, getData, getDataAll, patchData } from '@/utils/fetchData'
-import { getPsiDataAgain } from '@/utils/getPsi'
+import { fetchPsiData, getPsiDataAgain } from '@/utils/getPsi'
 import { formatDate } from '@/utils/formatDate'
 import { FiLoader } from 'react-icons/fi'
 import { fetchLinkPreview } from '@/utils/getLinkPreview'
@@ -46,12 +47,12 @@ export default function PsiTable() {
   const [spinningItems, setSpinningItems] = useState<any[]>([])
   const LIMIT_ROWS = 10
 
-  const isSalesSiteSelected = (siteList: PSIDataType) => {
+  const isSiteSelected = (siteList: PSIDataType) => {
     if (selectedNames.length === 0) return true
     return selectedNames.includes(siteList.name)
   }
 
-  // スコア再取得（新しいオブジェクトを増やす）
+  // スコア再取得
   const handleClick = async (name: string, url: string, index: number, id: number, device: string) => {
     setLoadingVisible(true)
     setSpinningItems((prevState: any) => {
@@ -62,12 +63,13 @@ export default function PsiTable() {
       }
     })
 
-    await getPsiDataAgain(name, url, index, id, device)
+   await getPsiDataAgain(name, url, index, id, device)
 
     setTimeout(() => {
       setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index))
     }, 2000)
   }
+
 
   const handleChange = ({ target }: ChangeEvent<HTMLInputElement>, index: number) => {
     const value = target.value
@@ -122,25 +124,6 @@ export default function PsiTable() {
     setIsEdited(true)
   }
 
-  // テーブルのページネーション処理
-  // const pagination = () => {
-  //   const pageNumbers = [];
-  //   for (let i = 1; i <= totalTablePages; i++) {
-  //     pageNumbers.push(
-  //       <li
-  //         key={i}
-  //         className={`mx-1 px-2 cursor-default hover:text-white hover:bg-gray-400 ${
-  //           i === currentTablePage ? 'bg-gray-500 text-white' : 'bg-gray-200 text-black'
-  //         }`}
-  //         onClick={() => handlePageChange(i)}
-  //       >
-  //         {i}
-  //       </li>
-  //     )
-  //   }
-  //   return pageNumbers
-  // }
-
   // 登録したサイトの削除処理
   const deleteItem = async (index: number, id: number) => {
     await deleteData('psi_site_list', id)
@@ -152,18 +135,20 @@ export default function PsiTable() {
     })
   }
 
-  useEffect(()=> {
-    const getDataByAll = async () => {
-      const data = await getDataAll('psi_site_list')
-      setPageList(data)
-    }
+  const queryClient = useQueryClient()
 
-    getDataByAll()
-  }, [])
+  const getDataByAll = async () => {
+    const data = await getDataAll('psi_site_list')
+    return data
+  }
 
-  useEffect(() => {
-    pageList.length ? setVisible(true) : setVisible(false)
-  }, [pageList])
+  const { data: result, isLoading } = useQuery<PSIDataType[]>({
+    queryKey: ['result'],
+    queryFn: getDataByAll,
+      refetchInterval: 10000
+  })
+
+  if(isLoading) return (<h1 className='text-lg text-center'>🌀Loading...</h1>)
 
   return (
     <div className='dark:bg-gray-950'>
@@ -172,14 +157,14 @@ export default function PsiTable() {
         placeholder="検索..."
         className="max-w-xs ml-4 mt-8 dark:bg-gray-950"
       >
-        {pageList.map((item) => (
+        {result?.map((item) => (
           <MultiSelectBoxItem
-            key={item.id}
-            value={(item.name).toString()}
-            text={item.name}
+            key={item?.id}
+            value={(item?.name).toString()}
+            text={item?.name}
             className='dark:bg-gray-950 dark:text-white'
           >
-            {item.name}
+            {item?.name}
           </MultiSelectBoxItem>
         ))}
       </MultiSelectBox>
@@ -196,8 +181,7 @@ export default function PsiTable() {
           </TableRow>
         </TableHead>
         <TableBody className='dark:text-white'>
-          {/* {getDisplayedTableData().map((item, index) => ( */}
-          {pageList.filter((item) => isSalesSiteSelected(item)).map((item, index) => (
+          {result?.filter((item) => isSiteSelected(item)).map((item, index) => (
             <TableRow
               className='hover:bg-gray-100 dark:hover:bg-gray-700'
               key={item.id}
@@ -301,27 +285,6 @@ export default function PsiTable() {
           ))}
         </TableBody>
       </Table>
-      {/* <div className='mt-2 text-gray-500 dark:text-gray-400'>
-        <ul className="flex space-x-2 justify-center">
-            {currentTablePage > 1 && (
-              <li
-                className="flex items-center mx-1 px-2 rounded cursor-default hover:text-white hover:bg-gray-900 bg-gray-200 text-black"
-                onClick={() => handlePageChange(currentTablePage - 1)}
-              >
-                <ChevronLeftIcon className="w-5 h-5" />
-              </li>
-            )}
-            {pagination()}
-            {currentTablePage < totalTablePages && (
-              <li
-                className="flex items-center mx-1 px-2 rounded cursor-default hover:text-white hover:bg-gray-900 bg-gray-200 text-black"
-                onClick={() => handlePageChange(currentTablePage + 1)}
-              >
-                <ChevronRightIcon className="w-5 h-5" />
-              </li>
-            )}
-        </ul>
-      </div> */}
     </div>
   )
 }

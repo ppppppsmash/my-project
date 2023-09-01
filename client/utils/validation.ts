@@ -19,7 +19,7 @@ export const urlValidate = (url: string) => {
 
 export const inputValidate = (value: string) => {
   if(!value) {
-    return 'サイト名を入力してください'
+    return 'サイト名を入力してください.'
   }
 
   return ''
@@ -27,7 +27,7 @@ export const inputValidate = (value: string) => {
 
 export const checkboxValidate = (value: string) => {
   if(!value) {
-    return 'チェックボックスは少なくとも1つを選択してください'
+    return 'チェックボックスは少なくとも1つを選択してください.'
   }
 
   return ''
@@ -35,14 +35,26 @@ export const checkboxValidate = (value: string) => {
 
 export const textareaValidate = (value: string[]) => {
   if (!value || value.length === 0) {
-    return 'サイト名とURLを入力してください'
+    return 'サイト名とURLを入力してください.'
   }
 
   for (const forcedLine of value) {
     const [name, url] = forcedLine.split(/\s+/)
     if (!name || !url) {
-      return 'サイト名とURLはスペースで区切って入力してください'
+      return 'サイト名とURLはスペースで区切って入力してください.'
     }
+  }
+
+  return ''
+}
+
+export const csvValidate = (uploaded: boolean, file: boolean): string | null => {
+  if (!uploaded) {
+    return 'CSVファイルがアップロードされていません.'
+  }
+
+  if (!file) {
+    return 'アップロードボタンをクリックしてください.'
   }
 
   return ''

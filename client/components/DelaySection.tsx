@@ -13,7 +13,18 @@ export default function DelaySection ({
       initial={{ y: 10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, delay }}
-      className="mb-6"
+      // animate={{ y: 0, opacity: 1, scale: 1 }}
+      // transition={{
+      //   duration: 0.3,
+      //   ease: [0, 0.71, 0.2, 1.01],
+      //   scale: {
+      //     type: "spring",
+      //     damping: 5,
+      //     stiffness: 100,
+      //     restDelta: 0.001
+      //   }
+      // }}
+      className='mb-6'
     >
       {children}
     </motion.div>
