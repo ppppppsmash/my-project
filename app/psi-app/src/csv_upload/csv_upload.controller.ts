@@ -15,7 +15,11 @@ export class CsvUploadController {
       throw new BadRequestException('CSVファイルが指定されていません。')
     }
 
-    const dateTime = format(new Date(), 'yyyyMMddHHmm')
+    const timeZoneOffset = 9 * 60
+    const now = new Date()
+    now.setTime(now.getTime() + timeZoneOffset * 60 * 1000)
+    const dateTime = format(now, 'yyyyMMddHHmm')
+
     const fileName = path.parse(file.originalname).name
     const newFileName = `${fileName}-${dateTime}${path.extname(file.originalname)}`
 
