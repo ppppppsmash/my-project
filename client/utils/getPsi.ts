@@ -69,7 +69,7 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
         ]
       }
 
-      psiSiteListArray.pus(psiSiteList)
+      psiSiteListArray.push(psiSiteList)
 
       if (score < 70) {
         const message = `CSVファイルで登録した ${name}（${urlValidate(url)}）--(${device}) のスコアが70未満です。 スコア: ${score}`

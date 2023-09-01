@@ -47,7 +47,7 @@ export default function PsiTable() {
   const [spinningItems, setSpinningItems] = useState<any[]>([])
   const LIMIT_ROWS = 10
 
-  const isSalesSiteSelected = (siteList: PSIDataType) => {
+  const isSiteSelected = (siteList: PSIDataType) => {
     if (selectedNames.length === 0) return true
     return selectedNames.includes(siteList.name)
   }
@@ -181,8 +181,7 @@ export default function PsiTable() {
           </TableRow>
         </TableHead>
         <TableBody className='dark:text-white'>
-          {/* {getDisplayedTableData().map((item, index) => ( */}
-          {result?.filter((item) => isSalesSiteSelected(item)).map((item, index) => (
+          {result?.filter((item) => isSiteSelected(item)).map((item, index) => (
             <TableRow
               className='hover:bg-gray-100 dark:hover:bg-gray-700'
               key={item.id}

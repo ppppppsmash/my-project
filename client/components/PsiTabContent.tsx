@@ -31,6 +31,7 @@ export default function PsiTabContent({ mode }: Props) {
   const [schedule, setSchedule] = useState<string>('0')
   const [selectedDevice, setSelectedDevice] = useState<string[]>([])
 
+  const [isFileExist, setIsfileExist] = useState<boolean>(false)
   const [isUploaded, setIsUploaded] = useState<boolean>(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [csvData, setCsvData] = useState<any[]>([])
@@ -57,12 +58,17 @@ export default function PsiTabContent({ mode }: Props) {
   const handleFileChangeUpload = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       setSelectedFile(event.target.files[0])
-      setIsUploaded(true)
+      setIsfileExist(true)
     }
   }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setIsUploaded(true)
+
+    if (!isFileExist) {
+      return
+    }
 
     if (!selectedFile) {
       return
@@ -131,7 +137,7 @@ export default function PsiTabContent({ mode }: Props) {
     const checkboxValidation = checkboxValidate(selectedDevice.join(','))
     const inputValidation = inputValidate(name)
     const textareaValidation = textareaValidate(names)
-    const csvValidation = csvValidate(isUploaded)
+    const csvValidation = csvValidate(isUploaded, isFileExist)
     let newSingleErrorInfo = []
     let newMultiErrorInfo = []
     let newCsvErrorInfo = []
@@ -239,6 +245,17 @@ export default function PsiTabContent({ mode }: Props) {
         <Loading />
       }
 
+      {isUploaded && (
+        <>
+          <PsiDialog
+            className='h-12 my-4'
+            title='ファイルを無事にアップできました.'
+            color='green'
+            icon={CheckCircleIcon}
+          />
+        </>
+      )}
+
       {dialogErr && (
         <>
         {mode === 'single' && (
@@ -329,9 +346,9 @@ export default function PsiTabContent({ mode }: Props) {
                 before:flex before:items-center before:justify-center before:absolute before:top-[10px]
                 before:bottom-[12px] before:left-[24px] before:right-[24px] before:border-dashed
                 before:border-2 before:rounded-lg  before:text-black before:text-sm
-                ${isUploaded ? `before:border-black` : `before:border-gray-400`}
+                ${isFileExist ? `before:border-black` : `before:border-gray-400`}
                 `}>
-                  {isUploaded ? (
+                  {isFileExist ? (
                     <Text className="flex items-center justify-center top-0 left-0 w-full h-full p-2 text-center text-black text-sm">
                       ファイルをアップしました: {selectedFile?.name}
                     </Text>
@@ -341,14 +358,15 @@ export default function PsiTabContent({ mode }: Props) {
                     </Text>
                   )}
                   <input
-                  className='absolute top-0 left-0 w-full h-full opacity-0'
-                  type='file'
-                  name='csvFile'
-                  onChange={handleFileChangeUpload}
-                  id="formFile" />
+                    className='absolute top-0 left-0 w-full h-full opacity-0'
+                    type='file'
+                    name='csvFile'
+                    onChange={handleFileChangeUpload}
+                    id="formFile"
+                  />
               </div>
 
-              { isUploaded &&
+              { isFileExist &&
               <Button
                 className='w-[120px] -mt-8 mb-8 ml-[24px] bg-gray-900 hover:bg-gray-700
                 py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
@@ -412,7 +430,7 @@ export default function PsiTabContent({ mode }: Props) {
           <PsiButton
             label='登録'
             setOpen={openModal}
-            disabled={!isUploaded}
+            disabled={!isFileExist}
           />
         </div>
 
