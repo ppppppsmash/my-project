@@ -69,7 +69,7 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
         ]
       }
 
-      psiSiteListArray.push(psiSiteList)
+      psiSiteListArray.pus(psiSiteList)
 
       if (score < 70) {
         const message = `CSVファイルで登録した ${name}（${urlValidate(url)}）--(${device}) のスコアが70未満です。 スコア: ${score}`
@@ -83,9 +83,6 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
   for (const psiSite of psiSiteListArray) {
     await postData('psi_site_list', psiSite)
   }
-
-  //console.log(redirect)
- //redirectTo(redirect)
 }
 
 export const getPsiDataAgain = async (name: string, url: string, index: number, id: number, device: string) => {
