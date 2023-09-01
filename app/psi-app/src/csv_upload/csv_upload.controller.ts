@@ -1,11 +1,10 @@
-
 import { Multer } from 'multer'
 import { Controller, Post, Get, Param, Res, UploadedFile, UseInterceptors, BadRequestException } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import * as csvParser from 'csv-parser'
+import * as path from 'path'
 import * as fs from 'fs-extra'
-import axios from 'axios'
-import { Response } from 'express'
+import { format } from 'date-fns'
 
 @Controller('upload')
 export class CsvUploadController {
@@ -15,9 +14,19 @@ export class CsvUploadController {
     if (!file) {
       throw new BadRequestException('CSVファイルが指定されていません。')
     }
+
+    const dateTime = format(new Date(), 'yyyyMMddHHmm')
+    const fileName = path.parse(file.originalname).name
+    const newFileName = `${fileName}-${dateTime}${path.extname(file.originalname)}`
+
+    const filePath = path.join('./files', file.filename)
+    const newFilePath = path.join('./files', newFileName)
+
+    await fs.rename(filePath, newFilePath)
+
     const results = []
     return new Promise((resolve, reject) => {
-      const stream = fs.createReadStream(file.path)
+      const stream = fs.createReadStream(newFilePath)
       stream
         .pipe(csvParser())
         .on('data', (data) => {
@@ -28,28 +37,5 @@ export class CsvUploadController {
         .on('end', () => resolve(results))
         .on('error', (error) => reject(error))
     })
-  }
-}
-
-@Controller('download')
-// export class PsiDownloadController {
-//   @Get(':filename')
-//   async downloadFile(@Param('filename') filename: string, @Res() res: Response) {
-//     const filePath = `./files/${filename}`
-//     res.download(filePath)
-//   }
-// }
-export class PsiDownloadController {
-  @Get(':filename')
-  async downloadFile(@Param('filename') filename: string, @Res() res: Response) {
-    try {
-      const fileStream = fs.createReadStream(`./files/${filename}`); // アップロードされたファイルのパス
-      res.setHeader('Content-Type', 'text/csv');
-      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`); // ダウンロード時のファイル名を指定
-      fileStream.pipe(res);
-    } catch (error) {
-      console.error('CSVファイルのダウンロードエラー:', error);
-      res.status(500).send('CSVファイルのダウンロード中にエラーが発生しました。');
-    }
   }
 }
