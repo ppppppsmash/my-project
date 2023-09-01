@@ -28,7 +28,7 @@ export class CsvDownloadController {
 
     if (!fs.existsSync(filePath)) {
       res.status(404).send('CSV file not found')
-      return;
+      return
     }
 
     res.setHeader('Content-Type', 'text/csv')

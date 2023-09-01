@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useState, useEffect } from 'react'
 import PsiCheckbox from '@/components/PsiCheckbox'
 import PsiSelect from '@/components/PsiSelect'
 import { getPsiData } from '@/utils/getPsi'
@@ -36,6 +36,9 @@ export default function PsiTabContent({ mode }: Props) {
 
   const [loading, setLoading] = useState<boolean>(false)
 
+  const [csvFiles, setCsvFiles] = useState<string[]>([])
+  const [selectedFileName, setSelectedFileName] = useState<string>('')
+
   // 単体サイト
   const getChangeUrlName = ({target}: ChangeEvent<HTMLInputElement>) => {
     setName(target.value)
@@ -50,18 +53,18 @@ export default function PsiTabContent({ mode }: Props) {
   }
 
   // csv
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChangeUpload = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      setSelectedFile(event.target.files[0]);
+      setSelectedFile(event.target.files[0])
       setIsUploaded(true)
     }
-  };
+  }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault()
 
     if (!selectedFile) {
-      return;
+      return
     }
 
     const formData = new FormData()
@@ -83,22 +86,27 @@ export default function PsiTabContent({ mode }: Props) {
         console.log(data)
         setCsvData(data)
       } else {
-        console.error('CSVファイルのアップロード中にエラーが発生しました。')
+        console.error('CSVダウンロードエラー')
       }
     } catch (error) {
-      console.error('CSVファイルのアップロード中にエラーが発生しました。', error)
+      console.error('CSVダウンロードエラー:', error)
     }
   }
 
-  const handleDownload = async() => {
+  const handleDownload = async () => {
+    if (!selectedFileName) {
+      return
+    }
+
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv`)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv/${selectedFileName}`)
+
       const blob = await response.blob()
 
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
-      link.setAttribute('download', 'test.csv')
+      link.setAttribute('download', selectedFileName)
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
@@ -106,6 +114,7 @@ export default function PsiTabContent({ mode }: Props) {
       console.error('CSVダウンロードエラー:', error)
     }
   }
+
 
   // デバイス選択
   const handleDeviceChange = (value: string) => {
@@ -193,6 +202,24 @@ export default function PsiTabContent({ mode }: Props) {
     setNames(separatedValue)
   }
 
+  useEffect(() => {
+    const fetchCsvFiles = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv-list`)
+        if (response.ok) {
+          const data = await response.json()
+          setCsvFiles(data)
+        } else {
+          console.error('Error fetching CSV files:', response.status)
+        }
+      } catch (error) {
+        console.error('Error fetching CSV files:', error)
+      }
+    }
+
+    fetchCsvFiles()
+  }, [])
+
   return (
     <div>
       { loading &&
@@ -269,16 +296,26 @@ export default function PsiTabContent({ mode }: Props) {
               <Text className="inline-block text-neutral-700 dark:text-neutral-200">
                 CSVファイルをアップロードしてください.
               </Text>
-              <div className={`relative w-full h-[180px] overflow-hidden mb-4
+              <div className={`flex justify-center relative w-full h-[180px] overflow-hidden mb-4
                 before:flex before:items-center before:justify-center before:absolute before:top-[10px]
                 before:bottom-[12px] before:left-[24px] before:right-[24px] before:border-dashed
-                before:border-2 before:rounded-lg before:border-black before:text-black before:text-sm
-                ${ isUploaded ? `before:content-["ファイルをアップしました"]` : `before:content-["ドロップ&ドラッグ"]` }`}>
+                before:border-2 before:rounded-lg  before:text-black before:text-sm
+                ${isUploaded ? `before:border-black` : `before:border-gray-400`}
+                `}>
+                  {isUploaded ? (
+                    <Text className="flex items-center justify-center top-0 left-0 w-full h-full p-2 text-center text-black text-sm">
+                      ファイルをアップしました: {selectedFile?.name}
+                    </Text>
+                  ) : (
+                    <Text className="flex items-center justify-center top-0 left-0 w-full h-full p-2 text-center text-gray-400 text-sm">
+                      ドロップ&ドラッグ
+                    </Text>
+                  )}
                   <input
                   className='absolute top-0 left-0 w-full h-full opacity-0'
                   type='file'
                   name='csvFile'
-                  onChange={handleFileChange}
+                  onChange={handleFileChangeUpload}
                   id="formFile" />
               </div>
 
@@ -298,10 +335,16 @@ export default function PsiTabContent({ mode }: Props) {
           <div className='mb-4 flex gap-6 items-end'>
             <div className='flex w-1/2 gap-2 h-[36px]'>
               <div className="mx-auto space-y-6 w-full">
-                <SelectBox>
-                  <SelectBoxItem value="1" icon={DocumentChartBarIcon}>
-                    テスト
+                <SelectBox value={selectedFileName} onValueChange={setSelectedFileName}>
+                {csvFiles.map((file, index) => (
+                  <SelectBoxItem
+                    key={index}
+                    value={file}
+                    icon={DocumentChartBarIcon}
+                  >
+                    {file}
                   </SelectBoxItem>
+                ))}
                 </SelectBox>
               </div>
 
