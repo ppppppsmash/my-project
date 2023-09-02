@@ -101,12 +101,12 @@ export default function AddList() {
     <div>
       <Title>グラフ</Title>
 
-      {isModalOpen && <Modals
+      {/* {isModalOpen && <Modals
         id={id}
         getPsiData={handlePsiData}
         onOpen={openModal}
         onClose={closeModal}
-      />}
+      />} */}
 
       <Card>
         <div className='mb-4'>
@@ -137,10 +137,10 @@ export default function AddList() {
         </div>
 
         <div className='w-2/12'>
-          <PsiButton
+          {/* <PsiButton
             label='登録'
             setOpen={setIsModalOpen}
-          />
+          /> */}
         </div>
 
         <div className='mt-[60px]'>

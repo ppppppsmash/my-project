@@ -9,7 +9,7 @@ export default function AddList() {
     <div>
       <Title className='dark:text-white'>ページ登録</Title>
       <Card className='mt-6 shadow-lg dark:bg-gray-950 dark:text-white'>
-        {DynamicComponent()}
+        <DynamicComponent />
       </Card>
     </div>
   )

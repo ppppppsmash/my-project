@@ -1,4 +1,5 @@
 'use client'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import PsiInput from '@/components/PsiInput'
 import PsiButton from '@/components/PsiButton'
 import { useEffect, useState } from 'react'
@@ -10,7 +11,7 @@ import { RiComputerLine } from 'react-icons/ri'
 import { urlValidate } from '@/utils/validation'
 import { postData, patchData, deleteData } from '@/utils/fetchData'
 import PsiTable from '@/components/PsiTable'
-
+const queryClient = new QueryClient()
 
 interface Props extends PSIDataType {}
 
@@ -83,72 +84,74 @@ export default function DataRegister() {
   }, [])
 
   return (
-    <div className='w-full mx-auto'>
-      <section className='mb-10'>
-        <div className='text-center mb-2'>
-          <h2 className='text-2xl font-semibold'></h2>
-        </div>
-        <div className=''>
-          <div className='mb-2'>
-            <PsiInput
-              placeholder='サイト名'
-              handleChange={getChangeUrlName}
-            />
+    <QueryClientProvider client={queryClient}>
+      <div className='w-full mx-auto'>
+        <section className='mb-10'>
+          <div className='text-center mb-2'>
+            <h2 className='text-2xl font-semibold'></h2>
           </div>
-          <div className='mb-2'>
-            <PsiInput
-              placeholder='https://example.com'
-              handleChange={getChangeUrl}
-            />
+          <div className=''>
+            <div className='mb-2'>
+              <PsiInput
+                placeholder='サイト名'
+                handleChange={getChangeUrlName}
+              />
+            </div>
+            <div className='mb-2'>
+              <PsiInput
+                placeholder='https://example.com'
+                handleChange={getChangeUrl}
+              />
+            </div>
           </div>
-        </div>
-        <div>
-          <div className='w-2/12'>
-            <PsiButton
-              label='登録'
-              setOpen={setIsModalOpen}
-            />
+          <div>
+            <div className='w-2/12'>
+              {/* <PsiButton
+                label='登録'
+                setOpen={setIsModalOpen}
+              /> */}
+            </div>
           </div>
-        </div>
+        </section>
+
+        <section>
+          <div
+            className='w-[250px] flex items-center justify-between mx-auto'
+          >
+            <div
+              className={`flex items-center rounded border border-gray-300 p-2
+              cursor-pointer space-x-2 hover:text-white hover:bg-gray-900
+              ${selectedDevice === 'mobile' ? 'text-white bg-gray-900' : ''}`}
+              onClick={() => handleDeviceSelection('mobile')}
+            >
+              <SlScreenSmartphone size={26} />
+              <p className='text-sm'>携帯電話</p>
+            </div>
+            <div
+              className={`flex items-center rounded border border-gray-300 p-2
+              cursor-pointer space-x-2 hover:text-white hover:bg-gray-900
+              ${selectedDevice === 'desktop' ? 'text-white bg-gray-900' : ''}`}
+              onClick={() => handleDeviceSelection('desktop')}
+            >
+              <RiComputerLine size={26} />
+              <p className='text-sm'>デスクトップ</p>
+            </div>
+          </div>
+          <div>
+          {/* loading */}
+          { loading && <Loading /> }
+          {/* mobile */}
+          { !loading && selectedDevice === 'mobile' &&
+            <PsiTable />
+          }
+          {/* desktop */}
+          { !loading && selectedDevice === 'desktop' &&
+            <PsiTable />
+          }
+          </div>
       </section>
 
-      <section>
-        <div
-          className='w-[250px] flex items-center justify-between mx-auto'
-        >
-          <div
-            className={`flex items-center rounded border border-gray-300 p-2
-            cursor-pointer space-x-2 hover:text-white hover:bg-gray-900
-            ${selectedDevice === 'mobile' ? 'text-white bg-gray-900' : ''}`}
-            onClick={() => handleDeviceSelection('mobile')}
-          >
-            <SlScreenSmartphone size={26} />
-            <p className='text-sm'>携帯電話</p>
-          </div>
-          <div
-            className={`flex items-center rounded border border-gray-300 p-2
-            cursor-pointer space-x-2 hover:text-white hover:bg-gray-900
-            ${selectedDevice === 'desktop' ? 'text-white bg-gray-900' : ''}`}
-            onClick={() => handleDeviceSelection('desktop')}
-          >
-            <RiComputerLine size={26} />
-            <p className='text-sm'>デスクトップ</p>
-          </div>
-        </div>
-        <div>
-        {/* loading */}
-        { loading && <Loading /> }
-        {/* mobile */}
-        { !loading && selectedDevice === 'mobile' &&
-          <PsiTable />
-        }
-        {/* desktop */}
-        { !loading && selectedDevice === 'desktop' &&
-          <PsiTable />
-        }
-        </div>
-    </section>
-
-  </div>
+    </div>
+  </QueryClientProvider>
   )
 }

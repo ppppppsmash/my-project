@@ -135,12 +135,6 @@ export default function Analysis() {
               handleChange={getChangeUrl}
             />
           </div>
-          <div className='w-2/12'>
-          <PsiButton
-            label='分析'
-            setOpen={setIsModalOpen}
-          />
-          </div>
         </div>
       </section>
 
