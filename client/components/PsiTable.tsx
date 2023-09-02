@@ -27,7 +27,7 @@ import {
 import PsiPopup from '@/components/PsiPopup'
 import PsiSelect from '@/components/PsiSelect'
 import { deleteData, getData, getDataAll, patchData } from '@/utils/fetchData'
-import { fetchPsiData, getPsiDataAgain } from '@/utils/getPsi'
+import { getPsiData, getPsiDataAgain } from '@/utils/getPsi'
 import { formatDate } from '@/utils/formatDate'
 import { FiLoader } from 'react-icons/fi'
 import { fetchLinkPreview } from '@/utils/getLinkPreview'
@@ -145,10 +145,11 @@ export default function PsiTable() {
   const { data: result, isLoading } = useQuery<PSIDataType[]>({
     queryKey: ['result'],
     queryFn: getDataByAll,
-      refetchInterval: 10000
+    refetchInterval: 10000
   })
 
   if(isLoading) return (<h1 className='text-lg text-center'>🌀Loading...</h1>)
+  if (!result) return <h1 className='text-lg text-center'>データがありません。</h1>
 
   return (
     <div className='dark:bg-gray-950'>
@@ -157,7 +158,7 @@ export default function PsiTable() {
         placeholder="検索..."
         className="max-w-xs ml-4 mt-8 dark:bg-gray-950"
       >
-        {result?.map((item) => (
+        {result.map((item) => (
           <MultiSelectBoxItem
             key={item?.id}
             value={(item?.name).toString()}

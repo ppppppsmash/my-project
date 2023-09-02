@@ -1,4 +1,3 @@
-import QueryClient from '@/components/QueryClient'
 import { Suspense } from 'react'
 import Nav from '@/components/Nav/Navbar'
 import DelaySection from '@/components/DelaySection'
