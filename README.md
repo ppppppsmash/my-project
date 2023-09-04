@@ -80,16 +80,17 @@ CREATE TABLE pagespeedinsights.site_list (
 
 CREATE TABLE pagespeedinsights.site_metrics (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  FOREIGHT KEY site_list_id REFERENCES pagespeedinsights.site_list.id
+  site_list_id INT,
   score INT,
   schedule VARCHAR(10),
   date DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  lcp VARCHAR(10),
-  fid VARCHAR(10),
-  cls VARCHAR(10),
-  fcp VARCHAR(10),
-  tbt VARCHAR(10),
-  si VARCHAR(10)
+  lcp VARCHAR(20),
+  fid VARCHAR(20),
+  cls VARCHAR(20),
+  fcp VARCHAR(20),
+  tbt VARCHAR(20),
+  si VARCHAR(20),
+  FOREIGN KEY (site_list_id) REFERENCES pagespeedinsights.site_list(id)
 );
 ```
 
