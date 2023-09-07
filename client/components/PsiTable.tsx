@@ -47,6 +47,7 @@ export default function PsiTable() {
   const [spinningItems, setSpinningItems] = useState<any[]>([])
   const LIMIT_ROWS = 10
 
+
   const isSiteSelected = (siteList: PSIDataType) => {
     if (selectedNames.length === 0) return true
     return selectedNames.includes(siteList.name)
@@ -124,17 +125,6 @@ export default function PsiTable() {
     setIsEdited(true)
   }
 
-  // 登録したサイトの削除処理
-  const deleteItem = async (index: number, id: number) => {
-    await deleteData('psi_site_list', id)
-
-    setPageList((prevState) => {
-      const updatedList = [...prevState]
-      updatedList.splice(index, 1)
-      return updatedList
-    })
-  }
-
   const queryClient = useQueryClient()
 
   const getDataByAll = async () => {
@@ -147,6 +137,13 @@ export default function PsiTable() {
     queryFn: getDataByAll,
     refetchInterval: 10000
   })
+
+  const deleteItem = async (index: number, id: number) => {
+    await deleteData('psi_site_list', id)
+
+    const newResult = result.filter(item => item.id !== id)
+    queryClient.setQueryData(['result'], newResult)
+  }
 
   if(isLoading) return (<h1 className='text-lg text-center'>🌀Loading...</h1>)
   if (!result) return <h1 className='text-lg text-center'>データがありません。</h1>

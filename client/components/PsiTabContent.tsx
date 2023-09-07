@@ -430,7 +430,7 @@ export default function PsiTabContent({ mode }: Props) {
           <PsiButton
             label='登録'
             setOpen={openModal}
-            disabled={!isFileExist}
+          //  disabled={!isFileExist}
           />
         </div>
 
