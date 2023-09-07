@@ -12,6 +12,7 @@ import { SiteMetrics } from 'src/entities/site_metrics.entity'
     ScheduleModule.forRoot()
   ],
   providers: [PsiSiteListService],
+  exports: [PsiSiteListService],
   controllers: [PsiSiteListController]
 })
 export class PsiSiteListModule {}

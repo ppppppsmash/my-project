@@ -3,8 +3,6 @@ import { SiteMetrics } from '../entities/site_metrics.entity'
 import { SiteList } from '../entities/site_list.entity'
 import { Repository, InsertResult, UpdateResult, DeleteResult, EntityManager, getRepository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Cron, CronExpression, SchedulerRegistry } from '@nestjs/schedule'
-import { CronJob } from 'cron'
 
 @Injectable()
 export class PsiSiteListService {
@@ -17,7 +15,7 @@ export class PsiSiteListService {
 
     @InjectRepository(SiteMetrics)
     private readonly metricsRepository: Repository<SiteMetrics>,
-    private schedulerRegistry: SchedulerRegistry
+    //private schedulerRegistry: SchedulerRegistry
   ) {}
 
   async findAll(): Promise<SiteList[]> {
@@ -93,13 +91,13 @@ export class PsiSiteListService {
     await this.pageRepository.delete(id)
   }
 
-  async getScheduleAuto() {
-    const datas = await this.findAll()
-    for(const data of datas) {
-      const {schedule} = data
-      return schedule
-    }
-  }
+  // async getScheduleAuto() {
+  //   const datas = await this.findAll()
+  //   for(const data of datas) {
+  //     const {schedule} = data
+  //     return schedule
+  //   }
+  // }
 
 //   async cronAuto() {
 //     const datas = await this.findAll()
@@ -151,14 +149,14 @@ export class PsiSiteListService {
 // }
 
 
-async testCron() {
-  const job = new CronJob('2 * * * * *', () => {
-    this.logger.log('My cron running...')
-  })
+// async testCron() {
+//   const job = new CronJob('2 * * * * *', () => {
+//     this.logger.log('My cron running...')
+//   })
 
-  this.schedulerRegistry.addCronJob('sec', job)
-  job.start()
-}
+//   this.schedulerRegistry.addCronJob('sec', job)
+//   job.start()
+// }
   // async onModuleInit() {
   //   await this.cronAuto()
   // //  await this.getCrons()
