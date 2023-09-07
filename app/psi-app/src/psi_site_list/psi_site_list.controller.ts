@@ -34,9 +34,4 @@ export class PsiSiteListController {
   async deleteData(@Param('id') id: number): Promise<any> {
     return await this.psiSiteListService.delete(id)
   }
-
-  @Get()
-  async testCron(){
-    return await this.psiSiteListService.testCron()
-  }
 }
