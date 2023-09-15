@@ -1,14 +1,17 @@
 import { Injectable, Logger, SetMetadata } from '@nestjs/common'
-import { Cron } from '@nestjs/schedule'
+import { Cron, SchedulerRegistry } from '@nestjs/schedule'
+import { CronJob } from 'cron'
 import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid'
 
 @Injectable()
 export class AutoRunService {
+  constructor(private readonly schedulerRegistry: SchedulerRegistry) {}
+
   private readonly logger = new Logger(AutoRunService.name)
 
-  private async executeJob(name: string, schedule: string, url: string, device: string, id: number) {
-    this.logger.debug(`Executing cron job for ${name} (${schedule})`)
-    // ここで指定された schedule に基づいて何か処理を行う
+  private async executeJob(name: string, url: string, device: string, id: number) {
+    this.logger.debug(`Executing cron job for ${name}`)
 
     try {
       this.logger.debug('実行するよ！')
@@ -49,7 +52,6 @@ export class AutoRunService {
       const psiSiteList = {
         name,
         url,
-        schedule,
         device,
         siteMetrics: [
           psiSiteMetircs
@@ -57,7 +59,7 @@ export class AutoRunService {
       }
 
       console.log(psiSiteList)
-      // PUTリクエストを送信して psi_site_list を更新
+      // PATCHリクエストを送信して psi_site_list を更新
       await axios.patch(`http://localhost:3000/psi_site_list/${id}`, psiSiteList)
 
     } catch (error) {
@@ -70,11 +72,39 @@ export class AutoRunService {
     return new Date(Date.now() + parseInt(schedule)*60*60*1000)
   }
 
-  @Cron('0 40 14 * * *', {
-    timeZone: 'Asia/Tokyo'
+  async createDynamicCronJob(name: string, schedule: string, url: string, device: string, id: number) {
+    const jobName = `${name}-${uuidv4()}`
+    const cronExpression = `*/${schedule} * * * *` // 例: scheduleが10の場合は、毎分10秒ごとに実行
+
+    if (this.schedulerRegistry.getCronJob(jobName)) {
+      this.logger.warn(`Cron job for ${name} already exists.`)
+      return
+    }
+
+    const job = new CronJob(cronExpression, () => this.executeJob(name, url, device, id))
+    this.schedulerRegistry.addCronJob(jobName, job)
+
+    this.logger.debug(`Scheduled cron job for ${name} (${schedule})`)
+    job.start()
+  }
+
+  addCronJob(name: string, schedule: string, url: string, device: string, id: number) {
+    const jobName = `${name}-${uuidv4()}`
+    const job = new CronJob(`${schedule} * * * * *`, () => this.executeJob(name, url, device, id))
+
+    this.schedulerRegistry.addCronJob(jobName, job)
+    job.start()
+
+    this.logger.warn(
+      `job ${name} added for each minute at ${schedule} seconds!`,
+    )
+  }
+
+  @Cron('0 28 16 * * *', {
+    timeZone: 'Asia/Tokyo',
   })
   async handleCron() {
-    this.logger.debug('Called when the second is 15')
+    this.logger.debug('Called when the second is 0')
 
     try {
       const url = 'http://localhost:3000/psi_site_list' // 既存のエンドポイントのURL
@@ -88,7 +118,8 @@ export class AutoRunService {
           `Next execution time for ${name}, schedule: ${schedule}: ${nextExecutionTime.toISOString()}`,
         )
 
-        this.executeJob(name, schedule, url, device, id)
+        // ジョブを動的にスケジュールする
+        this.addCronJob(name, schedule, url, device, id)
       })
 
       return data
