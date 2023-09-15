@@ -10,6 +10,8 @@ export class AutoRunService {
 
   private readonly logger = new Logger(AutoRunService.name)
 
+  private readonly jobs: { [name: string]: CronJob } = {}
+
   private async executeJob(name: string, url: string, device: string, id: number) {
     this.logger.debug(`Executing cron job for ${name}`)
 
@@ -72,35 +74,31 @@ export class AutoRunService {
     return new Date(Date.now() + parseInt(schedule)*60*60*1000)
   }
 
-  async createDynamicCronJob(name: string, schedule: string, url: string, device: string, id: number) {
-    const jobName = `${name}-${uuidv4()}`
-    const cronExpression = `*/${schedule} * * * *` // 例: scheduleが10の場合は、毎分10秒ごとに実行
-
-    if (this.schedulerRegistry.getCronJob(jobName)) {
-      this.logger.warn(`Cron job for ${name} already exists.`)
-      return
+  // cron jobを停止するメソッド
+  private stopCronJob(name: string) {
+    const job = this.jobs[name]
+    if (job) {
+      job.stop()
+      this.logger.warn(`Cron job for ${name} has been stopped.`)
     }
-
-    const job = new CronJob(cronExpression, () => this.executeJob(name, url, device, id))
-    this.schedulerRegistry.addCronJob(jobName, job)
-
-    this.logger.debug(`Scheduled cron job for ${name} (${schedule})`)
-    job.start()
   }
 
-  addCronJob(name: string, schedule: string, url: string, device: string, id: number) {
+  private addCronJob(name: string, schedule: string, url: string, device: string, id: number) {
     const jobName = `${name}-${uuidv4()}`
     const job = new CronJob(`${schedule} * * * * *`, () => this.executeJob(name, url, device, id))
 
+    // 以前のジョブが存在する場合は停止してから新しいジョブを追加
+    this.stopCronJob(jobName)
+
     this.schedulerRegistry.addCronJob(jobName, job)
     job.start()
 
-    this.logger.warn(
-      `job ${name} added for each minute at ${schedule} seconds!`,
-    )
+    this.logger.warn(`Job ${name} added for each minute at ${schedule} seconds!`)
+
+    this.jobs[jobName] = job
   }
 
-  @Cron('0 28 16 * * *', {
+  @Cron('0 0 18 * * *', {
     timeZone: 'Asia/Tokyo',
   })
   async handleCron() {
@@ -118,8 +116,13 @@ export class AutoRunService {
           `Next execution time for ${name}, schedule: ${schedule}: ${nextExecutionTime.toISOString()}`,
         )
 
-        // ジョブを動的にスケジュールする
-        this.addCronJob(name, schedule, url, device, id)
+        if (schedule === '0') {
+          this.stopCronJob(name)
+          console.log(name)
+        } else {
+          this.addCronJob(name, schedule, url, device, id)
+          console.log(name)
+        }
       })
 
       return data
