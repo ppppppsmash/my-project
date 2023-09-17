@@ -41,13 +41,21 @@ export const postData = async (api: string, args: any) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({...args})
-    })
-    console.log(args)
-    return response
+    });
+
+    if (!response.ok) {
+      // レスポンスがエラーを示す場合は例外を投げる
+      throw new Error(`APIリクエストが失敗しました。ステータスコード: ${response.status}`);
+    }
+
+    console.log(args);
+    return response;
   } catch (error) {
-    console.log(error)
+    // 例外が発生した場合はエラーを投げる
+    throw new Error(`APIリクエストでエラーが発生しました: ${error.message}`);
   }
 }
+
 
 export const patchData = async (api: string, id: number, args: any) => {
   try {

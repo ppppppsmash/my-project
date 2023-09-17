@@ -99,11 +99,14 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
+# cloud sql proxy
+RUN wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
+RUN chmod +x cloud_sql_proxy
+
 # Copy local code to the container image.
 COPY . ./
 
 # Build the application
 RUN npm run build
-
 # Run the web service on container startup.
 CMD [ "npm", "run", "start:prod" ]
