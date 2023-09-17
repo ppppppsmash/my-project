@@ -141,7 +141,7 @@ export default function PsiTable() {
   const deleteItem = async (index: number, id: number) => {
     await deleteData('psi_site_list', id)
 
-    const newResult = result.filter(item => item.id !== id)
+    const newResult = result?.filter(item => item.id !== id)
     queryClient.setQueryData(['result'], newResult)
   }
 
