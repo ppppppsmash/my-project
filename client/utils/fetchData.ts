@@ -52,7 +52,7 @@ export const postData = async (api: string, args: any) => {
     return response;
   } catch (error) {
     // 例外が発生した場合はエラーを投げる
-    throw new Error(`APIリクエストでエラーが発生しました: ${error.message}`);
+    throw new Error('APIリクエストでエラーが発生しました.');
   }
 }
 
