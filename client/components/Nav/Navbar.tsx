@@ -1,8 +1,9 @@
 'use client'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useCallback, MouseEvent } from 'react'
 import { usePathname } from 'next/navigation'
 import { Disclosure } from '@headlessui/react'
+import { motion, useMotionTemplate, useMotionValue } from 'framer-motion'
 import { Bars3Icon, XMarkIcon, CommandLineIcon } from '@heroicons/react/24/outline'
 
 const navigation = [
@@ -19,12 +20,28 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
+
 export default function Navbar() {
   const pathname = usePathname()
   const [currentNavItem, setCurrentNavItem] = useState(pathname)
   const handleNavItemClick = (href: string) => {
     setCurrentNavItem(href)
   }
+
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const radius = useMotionValue(0)
+
+  const handleMouseMove = useCallback(
+    ({ clientX, clientY, currentTarget }: MouseEvent) => {
+      const bounds = currentTarget.getBoundingClientRect()
+      mouseX.set(clientX - bounds.left)
+      mouseY.set(clientY - bounds.top)
+      radius.set(Math.sqrt(bounds.width ** 2 + bounds.height ** 2) / 2.5)
+    }, [mouseX, mouseY, radius]
+  )
+
+  const background = useMotionTemplate`radial-gradient(${radius}px circle at ${mouseX}px ${mouseY}px, var(--spotlight-color) 0%, transparent 65%)`
 
   return (
     <Disclosure as="nav" className="bg-white shadow dark:bg-gray-950 dark:text-white dark:border-b-[1px] dark:border-slate-700">
@@ -37,21 +54,26 @@ export default function Navbar() {
                 <CommandLineIcon className="block h-6 w-6" />
 
                 </div>
-                  <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
+                  <div
+                    className='hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8'
+                    onMouseMove={handleMouseMove}
+                  >
                     {navigation.map((item, index) => (
                       <a
                         key={item.name}
                         href={item.href}
                         onClick={() => handleNavItemClick(item.href)} // クリック時にcurrentNavItemを更新
-                        className={classNames(
-                          item.href === currentNavItem
-                            ? 'border-slate-500 dark:border-white text-gray-900 dark:text-white border-b-2 transition-all duration-350'
-                            : 'border-transparent text-gray-500 dark:text-white hover:text-gray-700 hover:border-gray-300',
-                          'inline-flex items-center px-1 pt-1 text-[12px] font-medium'
-                        )}
+                        className='relative border-transparent text-gray-500 dark:text-white hover:text-gray-700 hover:border-gray-300
+                        inline-flex items-center px-1 pt-1 text-[12px] font-medium'
                         aria-current={pathname === item.href ? 'page' : undefined}
                       >
                         {item.name}
+                        {item.href === currentNavItem &&
+                        <motion.span
+                          className='absolute inset-x-1 -bottom-px h-px bg-gradient-to-r border-slate-500 dark:border-white text-gray-900 dark:text-white border-b-2'
+                          layoutId='active-nav-item'
+                        />
+                      }
                       </a>
                     ))}
                   </div>
