@@ -3,11 +3,7 @@ import { useEffect, useState } from 'react'
 import { Switch } from '@headlessui/react'
 import { SunIcon, MoonIcon } from '@heroicons/react/24/solid'
 
-interface Props {
-    className: string
-}
-
-export default function ToggleButton({ className }: Props) {
+export default function ToggleButton() {
   const [darkMode, setDarkMode] = useState(false)
 
   useEffect(() => {
@@ -34,7 +30,7 @@ export default function ToggleButton({ className }: Props) {
   }
 
   return (
-    <div className={className}>
+    <div className='absolute top-6 right-6'>
       <Switch.Group>
         <div className='flex items-center'>
           <Switch

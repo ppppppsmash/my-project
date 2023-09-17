@@ -1,10 +1,13 @@
 import { SiteList } from '../entities/site_list.entity'
 import { SiteMetrics } from '../entities/site_metrics.entity'
 
-export default () => ({
+  export default () => ({
     port: parseInt(process.env.PORT, 10) || 8080,
     database: {
       type: 'mysql',
+      extra: {
+        socketPath: process.env.DATABASE_CLOUD_SQL_EXTRA
+      },
       host: process.env.DATABASE_HOST, // docker-compose.yml で指定したコンテナの service 名
       port: Number(process.env.DATABASE_PORT), // ポート番号
       username: process.env.DATABASE_USER, // docker-compose.yml の MYSQL_USER
