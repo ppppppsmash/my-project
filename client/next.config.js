@@ -4,7 +4,7 @@ const nextConfig = {
     appDir: true,
     typedRoutes: true,
     serverComponentsExternalPackages: ['mysql2', '@tremor/react'],
-    output: 'standalone'
+    outputStandalone: true,
   },
   images: {
     domains: ['avatars.githubusercontent.com', 'avatar.vercel.sh']
