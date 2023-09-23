@@ -24,7 +24,7 @@ export default function Slug({ params: { id } }: Props) {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getData('psi_site_list', id)
-      const formattedMetrics = metricsFormatter(data.siteMetrics)
+      const formattedMetrics = data.siteMetrics
       setSiteList([data])
       setSiteMetrics(formattedMetrics)
     }
@@ -99,39 +99,86 @@ export default function Slug({ params: { id } }: Props) {
         </Grid>
         ))}
 
+        <Title>ユーザー体験パフォーマンス</Title>
         <Grid
           className='gap-6 mt-6 mb-6'
-          numColsLg={4}
+          numColsLg={6}
         >
-          <Col numColSpanLg={1}>
+          <Col numColSpanLg={2}>
             <Card>
-              <Text>LCP: {metricsNewest?.lcp}</Text>
+              <Text>First Contentful Paint (FCP): <strong>{metricsNewest?.user_fcp / 1000} s</strong></Text>
             </Card>
           </Col>
-          <Col numColSpanLg={1}>
+          <Col numColSpanLg={2}>
             <Card>
-              <Text>TTI: {metricsNewest?.tti}</Text>
+              <Text>Largest Contentful Paint (LCP): <strong>{metricsNewest?.user_lcp / 1000} s</strong></Text>
             </Card>
           </Col>
-          <Col numColSpanLg={1}>
+          <Col numColSpanLg={2}>
             <Card>
-              <Text>CLS: {metricsNewest?.cls}</Text>
+              <Text>First Input Delay (FID): <strong>{metricsNewest?.user_fid} ms</strong></Text>
             </Card>
           </Col>
-          <Col numColSpanLg={1}>
+          <Col numColSpanLg={2}>
             <Card>
-              <Text>FCP: {metricsNewest?.fcp}</Text>
+              <Text>Cumulative Layout Shift (CLS): <strong>{metricsNewest?.user_cls}</strong></Text>
+            </Card>
+          </Col>
+          <Col numColSpanLg={2}>
+            <Card>
+              <Text>Interaction to Next Paint (INP): <strong>{metricsNewest?.user_inp / 1000} s</strong></Text>
+            </Card>
+          </Col>
+          <Col numColSpanLg={2}>
+            <Card>
+              <Text>Time to First Byte (TTFB): <strong>{metricsNewest?.user_ttfb / 1000} s</strong></Text>
             </Card>
           </Col>
         </Grid>
 
 
-        <Card>
-          <Text>TBT: {metricsNewest?.tbt}</Text>
-        </Card>
+        <Title>ラボスパフォーマンス</Title>
+        <Grid
+          className='gap-6 mt-6 mb-6'
+          numColsLg={6}
+        >
+          <Col numColSpanLg={2}>
+            <Card>
+              <Text>Largest Contentful Paint: <strong>{metricsNewest?.lcp}</strong></Text>
+            </Card>
+          </Col>
+          <Col numColSpanLg={2}>
+            <Card>
+              <Text>Time to Interactive: <strong>{metricsNewest?.tti}</strong></Text>
+            </Card>
+          </Col>
+          <Col numColSpanLg={2}>
+            <Card>
+              <Text>Cumulative Layout Shift Score: <strong>{metricsNewest?.cls}</strong></Text>
+            </Card>
+          </Col>
+          <Col numColSpanLg={2}>
+            <Card>
+              <Text>First Contentful Paint: <strong>{metricsNewest?.fcp}</strong></Text>
+            </Card>
+          </Col>
+          <Col numColSpanLg={2}>
+            <Card>
+              <Text>Total Blocking Time: <strong>{metricsNewest?.tbt}</strong></Text>
+            </Card>
+          </Col>
+          <Col numColSpanLg={2}>
+            <Card>
+              <Text>Speed Index: <strong>{metricsNewest?.si}</strong></Text>
+            </Card>
+          </Col>
+        </Grid>
 
         <div className='mt-4'>
-          <PsiMotionModalsChart siteMetrics={siteMetrics}/>
+          <PsiMotionModalsChart
+            categories={['lcp', 'tti', 'cls', 'fcp', 'tbt', 'si']}
+            siteMetrics={metricsFormatter(siteMetrics)}
+          />
         </div>
     </DelaySection>
   )

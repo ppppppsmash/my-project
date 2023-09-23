@@ -7,17 +7,24 @@ import { ArrowsPointingInIcon, XCircleIcon } from '@heroicons/react/24/outline'
 
 interface Props {
   siteMetrics: PSIMetrics[]
+  categories: {
+    lcp: number
+    tti: number
+    cls: number
+    fcp: number
+    tbt: number
+    si: number
+  }
 }
 
-export default function PsiMotionModalsChart({ siteMetrics }: Props) {
+export default function PsiMotionModalsChart({ categories, siteMetrics }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  const categories = ['lcp', 'fid', 'cls', 'fcp', 'tbt', 'si']
   const colors: TremorColor[] = ['rose', 'emerald', 'orange', 'lime', 'violet', 'pink']
 
   return (
     <Flex className='w-full flex-wrap justify-start box-border p-2 -mx-2'>
       {categories.map((category, index) => (
-        <div className='w-1/4 p-2' key={index}>
+        <div className='w-1/3 p-2' key={index}>
           <motion.div
             whileHover={{
               y: -10,
@@ -28,7 +35,7 @@ export default function PsiMotionModalsChart({ siteMetrics }: Props) {
             onClick={() => setSelectedId(index.toString())}
           >
             <Card>
-              <Text>{category}-{index}</Text>
+              <Text>{category}</Text>
               <LineChart
                 data={siteMetrics}
                 index='createdAt'
