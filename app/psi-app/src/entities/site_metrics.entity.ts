@@ -26,7 +26,7 @@ export class SiteMetrics {
   @Column('varchar', { length: 50, nullable: true })
   lcp?: string
   @Column('varchar', { length: 50, nullable: true })
-  fid?: string
+  tti?: string
   @Column('varchar', { length: 50, nullable: true })
   cls?: string
   @Column('varchar', { length: 50, nullable: true })
@@ -35,6 +35,18 @@ export class SiteMetrics {
   tbt?: string
   @Column('varchar', { length: 50, nullable: true })
   si?: string
+  @Column('int', { nullable: true })
+  user_fcp?: string
+  @Column('int', { nullable: true })
+  user_lcp?: string
+  @Column('int', { nullable: true })
+  user_fid?: string
+  @Column('int', { nullable: true })
+  user_cls?: string
+  @Column('int', { nullable: true })
+  user_inp?: string
+  @Column('int', { nullable: true })
+  user_ttfb?: string
   @Column('int', { nullable: true })
   score: number
   @ManyToOne(() => SiteList, siteList => siteList.siteMetrics)

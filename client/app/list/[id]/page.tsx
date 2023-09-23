@@ -110,7 +110,7 @@ export default function Slug({ params: { id } }: Props) {
           </Col>
           <Col numColSpanLg={1}>
             <Card>
-              <Text>FID: {metricsNewest?.fid}</Text>
+              <Text>TTI: {metricsNewest?.tti}</Text>
             </Card>
           </Col>
           <Col numColSpanLg={1}>
