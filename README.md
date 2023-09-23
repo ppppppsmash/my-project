@@ -73,24 +73,32 @@ CREATE TABLE pagespeedinsights.site_list (
   name VARCHAR(50),
   url VARCHAR(50),
   schedule VARCHAR(10),
-  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 
 CREATE TABLE pagespeedinsights.site_metrics (
   id INT AUTO_INCREMENT PRIMARY KEY,
+  nama VARCHAR(50),
+  url VARCHAR(50),
   site_list_id INT,
   score INT,
-  schedule VARCHAR(10),
-  date DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  lcp VARCHAR(20),
-  fid VARCHAR(20),
-  cls VARCHAR(20),
-  fcp VARCHAR(20),
-  tbt VARCHAR(20),
-  si VARCHAR(20),
-  FOREIGN KEY (site_list_id) REFERENCES pagespeedinsights.site_list(id)
+  lcp VARCHAR(50),
+  fid VARCHAR(50),
+  cls VARCHAR(50),
+  fcp VARCHAR(50),
+  tbt VARCHAR(50),
+  si VARCHAR(50),
+  user_fcp: int,
+  user_lcp: int,
+  user_fid: int,
+  user_cls: int,
+  user_inp: int,
+  user_ttfb: int,
+  FOREIGN KEY (site_list_id) REFERENCES pagespeedinsights.site_list(id),
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 );
 ```
 
@@ -105,3 +113,9 @@ CREATE TABLE pagespeedinsights.site_metrics (
 - http://localhost:9999/upload
 **リンクプレビュー**
 - http://localhost:9999/link_preview?url=${url}
+
+
+production client url:
+https://page-speed-measurement-nextapp-oclbewqdfa-an.a.run.app
+production api url:
+https://page-speed-measurement-nextapp-api-oclbewqdfa-an.a.run.app

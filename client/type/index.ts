@@ -14,12 +14,18 @@ export interface PSIMetrics {
   name: string
   url: string
   score: number
-  lcp?: any
-  fid?: any
-  cls?: any
-  fcp?: any
-  tbt?: any
-  si?: any
+  lcp?: string
+  tti?: string
+  cls?: string
+  fcp?: string
+  tbt?: string
+  si?: string
+  user_fcp?: number
+  user_lcp?: number
+  user_fid?: number
+  user_cls?: number
+  user_inp?: number
+  user_ttfb?: number
   createdAt: string
   updatedAt: string
 }

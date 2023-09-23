@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { PSIDataType, PSIMetrics } from '@/type'
 import { getData } from '@/utils/fetchData'
-import { Grid, Col, Card, Text, Title, Subtitle, Bold } from '@tremor/react'
+import { Grid, Col, Card, Text, Title, Subtitle, Bold, DonutChart } from '@tremor/react'
 import { ArrowTopRightOnSquareIcon, ClockIcon, DevicePhoneMobileIcon, ComputerDesktopIcon, CalendarDaysIcon } from '@heroicons/react/24/outline'
 import { formatDate } from '@/utils/formatDate'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
@@ -24,7 +24,7 @@ export default function Slug({ params: { id } }: Props) {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getData('psi_site_list', id)
-      const formattedMetrics = metricsFormatter(data.siteMetrics)
+      const formattedMetrics = data.siteMetrics
       setSiteList([data])
       setSiteMetrics(formattedMetrics)
     }
@@ -36,6 +36,22 @@ export default function Slug({ params: { id } }: Props) {
 
   const metricsNewest = siteMetrics.length > 0 ? siteMetrics[siteMetrics.length - 1] : null
 
+  const restScore = 100 - metricsNewest?.score
+
+  const createDonutScore = (data) => {
+    // 新しいデータの作成
+    const newData = data.map((item) => ({
+      ...item,
+      score: 100 - item.score,
+    }))
+
+    const combinedData = [...data, ...newData];
+    return combinedData;
+  }
+
+  const valueFormatter = (number: number) => `$ ${Intl.NumberFormat("us").format(number).toString()}`
+
+
   return (
     <DelaySection delay={0.3}>
       {siteList.length > 0 && siteList.map((list, index) => (
@@ -43,7 +59,7 @@ export default function Slug({ params: { id } }: Props) {
           className='gap-6 mt-6 mb-6'
           numColsLg={6}
         >
-          <Col numColSpanLg={5}>
+          <Col numColSpanLg={4} numItemsLg={1}>
             <Card>
               <Title>{list.name}</Title>
               <Subtitle className='flex items-center space-x-2'>
@@ -75,7 +91,7 @@ export default function Slug({ params: { id } }: Props) {
                       <span className='flex items-center space-x-2'>
                         <ComputerDesktopIcon className='w-4 h-4' />
                         <span>
-                          COMPUTER
+                          DESKTOP
                         </span>
                       </span>
                     )
@@ -90,49 +106,127 @@ export default function Slug({ params: { id } }: Props) {
               </div>
             </Card>
           </Col>
-          <Col numColSpanLg={1}>
+          <Col numColSpanLg={2} numItemsLg={1}>
             <Card className='h-full text-center'>
               <Text>Score</Text>
-                <Bold className={`text-[45px] ${metricsNewest && metricsNewest.score >= 70 ? 'text-green-500' : 'text-red-500'}`}>{metricsNewest?.score}</Bold>
+                { metricsNewest && metricsNewest.score >= 70 ?
+                (
+                  <DonutChart
+                    data={createDonutScore(siteMetrics)}
+                    showTooltip={false}
+                    category="score"
+                    index="index"
+                    valueFormatter={(number: number) =>
+                      `${Intl.NumberFormat("us").format(number) - restScore}`
+                    }
+                    className='mt-2'
+                    colors={["emerald", "slate"]}
+                  />
+                ) : (
+                  <DonutChart
+                    data={createDonutScore(siteMetrics)}
+                    showTooltip={false}
+                    category="score"
+                    index="index"
+                    valueFormatter={(number: number) =>
+                      `${Intl.NumberFormat("us").format(number) - restScore}`
+                    }
+                    className='mt-2'
+                    colors={["rose", "slate"]}
+                  />
+                )}
             </Card>
           </Col>
         </Grid>
         ))}
 
+        <Title className='mt-10'>ユーザー体験パフォーマンス</Title>
         <Grid
           className='gap-6 mt-6 mb-6'
-          numColsLg={4}
+          numColsLg={6}
         >
-          <Col numColSpanLg={1}>
+          <Col numColSpanLg={2}>
             <Card>
-              <Text>LCP: {metricsNewest?.lcp}</Text>
+              <Text>First Contentful Paint (FCP): <strong>{metricsNewest?.user_fcp / 1000} s</strong></Text>
             </Card>
           </Col>
-          <Col numColSpanLg={1}>
+          <Col numColSpanLg={2}>
             <Card>
-              <Text>FID: {metricsNewest?.fid}</Text>
+              <Text>Largest Contentful Paint (LCP): <strong>{metricsNewest?.user_lcp / 1000} s</strong></Text>
             </Card>
           </Col>
-          <Col numColSpanLg={1}>
+          <Col numColSpanLg={2}>
             <Card>
-              <Text>CLS: {metricsNewest?.cls}</Text>
+              <Text>First Input Delay (FID): <strong>{metricsNewest?.user_fid} ms</strong></Text>
             </Card>
           </Col>
-          <Col numColSpanLg={1}>
+          <Col numColSpanLg={2}>
             <Card>
-              <Text>FCP: {metricsNewest?.fcp}</Text>
+              <Text>Cumulative Layout Shift (CLS): <strong>{metricsNewest?.user_cls}</strong></Text>
+            </Card>
+          </Col>
+          <Col numColSpanLg={2}>
+            <Card>
+              <Text>Interaction to Next Paint (INP): <strong>{metricsNewest?.user_inp / 1000} s</strong></Text>
+            </Card>
+          </Col>
+          <Col numColSpanLg={2}>
+            <Card>
+              <Text>Time to First Byte (TTFB): <strong>{metricsNewest?.user_ttfb / 1000} s</strong></Text>
             </Card>
           </Col>
         </Grid>
 
-
-        <Card>
-          <Text>TBT: {metricsNewest?.tbt}</Text>
-        </Card>
-
         <div className='mt-4'>
-          <PsiMotionModalsChart siteMetrics={siteMetrics}/>
+          <PsiMotionModalsChart
+            categories={['user_lcp', 'user_lcp', 'user_cls', 'user_fcp', 'user_inp', 'user_ttfb']}
+            siteMetrics={siteMetrics}
+          />
         </div>
+
+        <Title className='mt-10'>ラボスパフォーマンス</Title>
+        <Grid
+          className='gap-6 mt-6 mb-6'
+          numColsLg={6}
+        >
+          <Col numColSpanLg={2}>
+            <Card>
+              <Text>Largest Contentful Paint: <strong>{metricsNewest?.lcp}</strong></Text>
+            </Card>
+          </Col>
+          <Col numColSpanLg={2}>
+            <Card>
+              <Text>Time to Interactive: <strong>{metricsNewest?.tti}</strong></Text>
+            </Card>
+          </Col>
+          <Col numColSpanLg={2}>
+            <Card>
+              <Text>Cumulative Layout Shift Score: <strong>{metricsNewest?.cls}</strong></Text>
+            </Card>
+          </Col>
+          <Col numColSpanLg={2}>
+            <Card>
+              <Text>First Contentful Paint: <strong>{metricsNewest?.fcp}</strong></Text>
+            </Card>
+          </Col>
+          <Col numColSpanLg={2}>
+            <Card>
+              <Text>Total Blocking Time: <strong>{metricsNewest?.tbt}</strong></Text>
+            </Card>
+          </Col>
+          <Col numColSpanLg={2}>
+            <Card>
+              <Text>Speed Index: <strong>{metricsNewest?.si}</strong></Text>
+            </Card>
+          </Col>
+        </Grid>
+
+        {/* <div className='mt-4'>
+          <PsiMotionModalsChart
+            categories={['lcp', 'tti', 'cls', 'fcp', 'tbt', 'si']}
+            siteMetrics={metricsFormatter(siteMetrics)}
+          />
+        </div> */}
     </DelaySection>
   )
 }
