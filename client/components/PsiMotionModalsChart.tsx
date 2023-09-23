@@ -7,14 +7,6 @@ import { ArrowsPointingInIcon, XCircleIcon } from '@heroicons/react/24/outline'
 
 interface Props {
   siteMetrics: PSIMetrics[]
-  categories: {
-    lcp: number
-    tti: number
-    cls: number
-    fcp: number
-    tbt: number
-    si: number
-  }
 }
 
 export default function PsiMotionModalsChart({ categories, siteMetrics }: Props) {
@@ -29,7 +21,6 @@ export default function PsiMotionModalsChart({ categories, siteMetrics }: Props)
             whileHover={{
               y: -10,
               transition: { duration: 0.3 },
-              // children: <ViewFinderCircleIcon style={{ width: "10px"; }} />
             }}
             layoutId={index.toString()}
             onClick={() => setSelectedId(index.toString())}
