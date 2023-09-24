@@ -24,8 +24,8 @@ COPY . .
 
 ARG NEXT_PUBLIC_NEST_URL
 ARG NEXT_PUBLIC_SLACK_WEBHOOK
-ENV NEXT_PUBLIC_NEST_URL=$NEXT_PUBLIC_NEST_URL
-ENV NEXT_PUBLIC_SLACK_WEBHOOK=$NEXT_PUBLIC_SLACK_WEBHOOK
+ENV NEXT_PUBLIC_NEST_URL="https://page-speed-measurement-nextapp-api-oclbewqdfa-an.a.run.app/"
+ENV NEXT_PUBLIC_SLACK_WEBHOOK="https://hooks.slack.com/services/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"
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
