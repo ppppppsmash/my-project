@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.18",
     "@radix-ui/react-hover-card": "^1.0.6",
@@ -19,6 +21,7 @@
     "@types/react-dom": "18.0.11",
     "autoprefixer": "10.4.14",
     "chart.js": "^4.3.0",
+    "clsx": "^2.0.0",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
     "framer-motion": "^10.12.16",

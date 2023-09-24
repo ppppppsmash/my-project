@@ -10,10 +10,7 @@ const navigation = [
   { name: 'ホーム', href: '/' },
   { name: 'ページ登録', href: '/list/add' },
   { name: 'ページ一覧', href: '/list' },
-  { name: 'ページ比較', href: '/compare' },
-  { name: 'URL分析', href: '/analysis' },
-  { name: '登録テスト', href: '/data-register' },
-  { name: 'グラフ', href: '/apitest' },
+  { name: 'ページ比較', href: '/compare' }
 ]
 
 function classNames(...classes: string[]) {

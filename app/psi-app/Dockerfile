@@ -1,13 +1,16 @@
 FROM node:18-alpine as build
 WORKDIR /app
+RUN npm install -g pnpm
 COPY package*.json ./
-RUN npm install
+COPY pnpm-lock.yaml ./
+RUN pnpm install
 COPY . .
-RUN npm run build
+RUN pnpm run build
 
 FROM node:18-alpine
 WORKDIR /app
 COPY package.json .
+RUN npm install -g pnpm
 RUN npm install --only=production
 COPY --from=build /app/dist ./dist
-CMD npm run start:prod
+CMD pnpm run start:prod
