@@ -20,12 +20,12 @@ export interface PSIMetrics {
   fcp?: string
   tbt?: string
   si?: string
-  user_fcp?: number
-  user_lcp?: number
-  user_fid?: number
-  user_cls?: number
-  user_inp?: number
-  user_ttfb?: number
+  user_fcp: number
+  user_lcp: number
+  user_fid: number
+  user_cls: number
+  user_inp: number
+  user_ttfb: number
   createdAt: string
   updatedAt: string
 }

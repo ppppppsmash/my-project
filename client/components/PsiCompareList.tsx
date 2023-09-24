@@ -19,7 +19,7 @@ export default function PsiCompareList({ siteList, compareResult }: Props) {
   const {
     score,
     lcp,
-    fid,
+    tti,
     cls,
     fcp,
     tbt,
@@ -74,8 +74,8 @@ export default function PsiCompareList({ siteList, compareResult }: Props) {
         <span className='flex'>{metricsNewest.lcp} {lcp}</span>
       </ListItem>
       <ListItem>
-        <span>FID：</span>
-        <span className='flex'>{metricsNewest.fid} {fid}</span>
+        <span>TTI：</span>
+        <span className='flex'>{metricsNewest.tti} {tti}</span>
       </ListItem>
       <ListItem>
         <span>CLS：</span>

@@ -36,17 +36,19 @@ export default function Slug({ params: { id } }: Props) {
 
   const metricsNewest = siteMetrics.length > 0 ? siteMetrics[siteMetrics.length - 1] : null
 
-  const restScore = 100 - metricsNewest?.score
+  const restScore = 100 - (metricsNewest?.score ?? 0)
 
-  const createDonutScore = (data) => {
-    // 新しいデータの作成
-    const newData = data.map((item) => ({
+  const createDonutScore = (data: any) => {
+    const newData = data.map((item: any) => ({
       ...item,
-      score: 100 - item.score,
+      score: item.score,
     }))
+    const latestItemInNewData = newData[newData.length - 1]
+    const restScore = 100 - (metricsNewest?.score ?? 0)
 
-    const combinedData = [...data, ...newData];
-    return combinedData;
+    const resultData = [latestItemInNewData, { score: restScore }]
+
+    return resultData
   }
 
   const valueFormatter = (number: number) => `$ ${Intl.NumberFormat("us").format(number).toString()}`
@@ -59,7 +61,14 @@ export default function Slug({ params: { id } }: Props) {
           className='gap-6 mt-6 mb-6'
           numColsLg={6}
         >
-          <Col numColSpanLg={4} numItemsLg={1}>
+          <Col numColSpanLg={4}>
+
+            <div className='flex gap-x-2 mb-6'>
+              <Text><Link className='underline decoration-dotted' href='/list'>ページ一覧</Link></Text>
+              <Text> / </Text>
+              <Text>{list.name}</Text>
+            </div>
+
             <Card>
               <Title>{list.name}</Title>
               <Subtitle className='flex items-center space-x-2'>
@@ -106,7 +115,7 @@ export default function Slug({ params: { id } }: Props) {
               </div>
             </Card>
           </Col>
-          <Col numColSpanLg={2} numItemsLg={1}>
+          <Col numColSpanLg={2}>
             <Card className='h-full text-center'>
               <Text>Score</Text>
                 { metricsNewest && metricsNewest.score >= 70 ?
@@ -117,7 +126,7 @@ export default function Slug({ params: { id } }: Props) {
                     category="score"
                     index="index"
                     valueFormatter={(number: number) =>
-                      `${Intl.NumberFormat("us").format(number) - restScore}`
+                      `${Number(Intl.NumberFormat("us").format(number)) - restScore}`
                     }
                     className='mt-2'
                     colors={["emerald", "slate"]}
@@ -129,7 +138,7 @@ export default function Slug({ params: { id } }: Props) {
                     category="score"
                     index="index"
                     valueFormatter={(number: number) =>
-                      `${Intl.NumberFormat("us").format(number) - restScore}`
+                      `${Number(Intl.NumberFormat("us").format(number)) - restScore}`
                     }
                     className='mt-2'
                     colors={["rose", "slate"]}
@@ -147,32 +156,32 @@ export default function Slug({ params: { id } }: Props) {
         >
           <Col numColSpanLg={2}>
             <Card>
-              <Text>First Contentful Paint (FCP): <strong>{metricsNewest?.user_fcp / 1000} s</strong></Text>
+              <Text>First Contentful Paint (FCP): <strong>{metricsNewest && metricsNewest?.user_fcp / 1000} s</strong></Text>
             </Card>
           </Col>
           <Col numColSpanLg={2}>
             <Card>
-              <Text>Largest Contentful Paint (LCP): <strong>{metricsNewest?.user_lcp / 1000} s</strong></Text>
+              <Text>Largest Contentful Paint (LCP): <strong>{metricsNewest && metricsNewest?.user_lcp / 1000} s</strong></Text>
             </Card>
           </Col>
           <Col numColSpanLg={2}>
             <Card>
-              <Text>First Input Delay (FID): <strong>{metricsNewest?.user_fid} ms</strong></Text>
+              <Text>First Input Delay (FID): <strong>{metricsNewest && metricsNewest?.user_fid} ms</strong></Text>
             </Card>
           </Col>
           <Col numColSpanLg={2}>
             <Card>
-              <Text>Cumulative Layout Shift (CLS): <strong>{metricsNewest?.user_cls}</strong></Text>
+              <Text>Cumulative Layout Shift (CLS): <strong>{metricsNewest && metricsNewest?.user_cls}</strong></Text>
             </Card>
           </Col>
           <Col numColSpanLg={2}>
             <Card>
-              <Text>Interaction to Next Paint (INP): <strong>{metricsNewest?.user_inp / 1000} s</strong></Text>
+              <Text>Interaction to Next Paint (INP): <strong>{metricsNewest && metricsNewest?.user_inp / 1000} s</strong></Text>
             </Card>
           </Col>
           <Col numColSpanLg={2}>
             <Card>
-              <Text>Time to First Byte (TTFB): <strong>{metricsNewest?.user_ttfb / 1000} s</strong></Text>
+              <Text>Time to First Byte (TTFB): <strong>{metricsNewest && metricsNewest?.user_ttfb / 1000} s</strong></Text>
             </Card>
           </Col>
         </Grid>

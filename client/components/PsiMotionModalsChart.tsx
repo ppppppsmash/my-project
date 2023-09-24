@@ -7,6 +7,7 @@ import { ArrowsPointingInIcon, XCircleIcon } from '@heroicons/react/24/outline'
 
 interface Props {
   siteMetrics: PSIMetrics[]
+  categories: string[]
 }
 
 export default function PsiMotionModalsChart({ categories, siteMetrics }: Props) {

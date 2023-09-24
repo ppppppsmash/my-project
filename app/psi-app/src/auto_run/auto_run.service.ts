@@ -98,7 +98,7 @@ export class AutoRunService {
     this.jobs[jobName] = job
   }
 
-  @Cron('0 0 18 * * *', {
+  @Cron('0 0 9 * * *', {
     timeZone: 'Asia/Tokyo',
   })
   async handleCron() {

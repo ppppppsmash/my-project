@@ -14,7 +14,7 @@ interface Props {}
 enum MetricType {
   Score = 'score',
   Lcp = 'lcp',
-  Fid = 'fid',
+  Tti = 'tti',
   Cls = 'cls',
   Fcp = 'fcp',
   Tbt = 'tbt',
@@ -48,8 +48,8 @@ export default function Compare() {
       for (const metricType in latestMetricsA) {
         if (latestMetricsA.hasOwnProperty(metricType) && latestMetricsB.hasOwnProperty(metricType)) {
           result[metricType as MetricType] = compareMark(
-            latestMetricsA[metricType as MetricType],
-            latestMetricsB[metricType as MetricType]
+            Number(latestMetricsA[metricType as MetricType]),
+            Number(latestMetricsB[metricType as MetricType])
           )
         }
       }
