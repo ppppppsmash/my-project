@@ -52,7 +52,6 @@ PageSpeedInsightを自動で計測し、その数値の変動を記録するた�
 - スケジュール設定 + CronJob
 - アップ済みのCSVファイルのダウンロード機能
 - PSIの数値種類と出力したい項目を整理（MetricsやLightHouseなど）
-- インフラ環境構築 && デプロイ
 
 ### Stack Information
 - next.js v13.0：https://nextjs.org/
@@ -90,12 +89,12 @@ CREATE TABLE pagespeedinsights.site_metrics (
   fcp VARCHAR(50),
   tbt VARCHAR(50),
   si VARCHAR(50),
-  user_fcp: int,
-  user_lcp: int,
-  user_fid: int,
-  user_cls: int,
-  user_inp: int,
-  user_ttfb: int,
+  user_fcp: INT,
+  user_lcp: INT,
+  user_fid: INT,
+  user_cls: INT,
+  user_inp: INT,
+  user_ttfb: INT,
   FOREIGN KEY (site_list_id) REFERENCES pagespeedinsights.site_list(id),
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -109,11 +108,24 @@ CREATE TABLE pagespeedinsights.site_metrics (
 - http://localhost:9999/psi_site_list/[id]
 **psi score**
 - http://localhost:9999/psi?url=${url}&strategy=${device}
-**CSVファイル**
+**CSVファイルアップロード**
 - http://localhost:9999/upload
+**csvファイルダウンロード**
+- http://localhost:9999/download
 **リンクプレビュー**
 - http://localhost:9999/link_preview?url=${url}
 
+
+
+## GCP prod環境
+### フロント (Cloud Run)
+https://page-speed-measurement-nextapp-oclbewqdfa-an.a.run.app/
+
+### API (Cloud Run)
+https://page-speed-measurement-nextapp-api-oclbewqdfa-an.a.run.app
+
+### mysql (Cloud SQL)
+devteam-1341:asia-northeast1:pagespeed-insights-db
 
 production client url:
 https://page-speed-measurement-nextapp-oclbewqdfa-an.a.run.app

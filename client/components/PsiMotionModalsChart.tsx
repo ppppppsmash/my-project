@@ -19,6 +19,23 @@ export default function PsiMotionModalsChart({ categories, siteMetrics }: Props)
     createdAt: formatDate(new Date(metric.createdAt)),
   }))
 
+  const formattedCategories = (category: string) : string => {
+    switch (category) {
+      case 'user_lcp':
+        return 'Largest Contentful Paint (LCP)'
+      case 'user_cls':
+        return 'Cumulative Layout Shift (CLS)'
+      case 'user_fcp':
+        return 'First Contentful Paint (FCP)'
+      case 'user_inp':
+        return 'Interaction to Next Paint (INP)'
+      case 'user_ttfb':
+        return 'Time to First Byte (TTFB)'
+      default:
+        return category
+    }
+  }
+
   return (
     <Flex className='w-full flex-wrap justify-start box-border p-2 -mx-2'>
       {categories.map((category, index) => (
@@ -32,7 +49,7 @@ export default function PsiMotionModalsChart({ categories, siteMetrics }: Props)
             onClick={() => setSelectedId(index.toString())}
           >
             <Card>
-              <Text>{category}</Text>
+              <Text>{formattedCategories(category)}</Text>
               <LineChart
                 data={formattedSiteMetrics}
                 index='createdAt'
