@@ -4,6 +4,7 @@ import { PSIMetrics } from '@/type'
 import { Flex, Card, Text, LineChart, Color as TremorColor } from '@tremor/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowsPointingInIcon, XCircleIcon } from '@heroicons/react/24/outline'
+import { formatDate } from '@/utils/formatDate'
 
 interface Props {
   siteMetrics: PSIMetrics[]
@@ -13,6 +14,27 @@ interface Props {
 export default function PsiMotionModalsChart({ categories, siteMetrics }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const colors: TremorColor[] = ['rose', 'emerald', 'orange', 'lime', 'violet', 'pink']
+  const formattedSiteMetrics = siteMetrics.map(metric => ({
+    ...metric,
+    createdAt: formatDate(new Date(metric.createdAt)),
+  }))
+
+  const formattedCategories = (category: string) : string => {
+    switch (category) {
+      case 'user_lcp':
+        return 'Largest Contentful Paint (LCP)'
+      case 'user_cls':
+        return 'Cumulative Layout Shift (CLS)'
+      case 'user_fcp':
+        return 'First Contentful Paint (FCP)'
+      case 'user_inp':
+        return 'Interaction to Next Paint (INP)'
+      case 'user_ttfb':
+        return 'Time to First Byte (TTFB)'
+      default:
+        return category
+    }
+  }
 
   return (
     <Flex className='w-full flex-wrap justify-start box-border p-2 -mx-2'>
@@ -27,9 +49,9 @@ export default function PsiMotionModalsChart({ categories, siteMetrics }: Props)
             onClick={() => setSelectedId(index.toString())}
           >
             <Card>
-              <Text>{category}</Text>
+              <Text>{formattedCategories(category)}</Text>
               <LineChart
-                data={siteMetrics}
+                data={formattedSiteMetrics}
                 index='createdAt'
                 categories={[category]}
                 colors={[colors[index]]}
@@ -53,7 +75,7 @@ export default function PsiMotionModalsChart({ categories, siteMetrics }: Props)
                 <ArrowsPointingInIcon className='w-5 h-5 text-gray-600 hover:scale-[0.9]' />
               </motion.button>
               <LineChart
-                data={siteMetrics}
+                data={formattedSiteMetrics}
                 index='createdAt'
                 categories={[categories[parseInt(selectedId)]]}
                 colors={[colors[parseInt(selectedId)]]}

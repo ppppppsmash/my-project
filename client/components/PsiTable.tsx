@@ -236,11 +236,11 @@ export default function PsiTable() {
                     className='animate-spin w-5 text-gray-950'
                   />
                 ) : (
-                  <Text className='dark:text-white'>{item.siteMetrics.slice().reverse()[0].score}</Text>
+                  <Text className='dark:text-white'>{item.siteMetrics[0].score}</Text>
                 )}
               </TableCell>
               <TableCell>
-              <Text className='dark:text-white'>{formatDate(item.siteMetrics.slice().reverse()[0].updatedAt) || formatDate(item.createdAt)}</Text>
+              <Text className='dark:text-white'>{formatDate(item.siteMetrics[0].updatedAt) || formatDate(item.createdAt)}</Text>
               </TableCell>
               <TableCell>
               {editIndex === index ? (
