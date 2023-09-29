@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import { Card, Title, Flex, Button, SelectBox, SelectBoxItem } from '@tremor/react'
 import { PSIDataType, PSIMetrics } from '@/type'
@@ -7,7 +9,6 @@ import { formatDate } from '@/utils/formatDate'
 interface Props {
   siteList: PSIDataType[]
   onSiteSelect(value: string, selectedDate: string): void
-  //onSiteSelect(value: string): void
 }
 
 export default function PsiSelectBox({ siteList, onSiteSelect }: Props) {
@@ -19,8 +20,7 @@ export default function PsiSelectBox({ siteList, onSiteSelect }: Props) {
     const selectedSite = siteList.find((site) => site.id.toString() === value)
 
     if (selectedSite) {
-      const metrics = selectedSite.siteMetrics.map((metrics) => metrics)
-      setSelectedSiteMetrics(metrics)
+      setSelectedSiteMetrics(selectedSite.siteMetrics)
       setSelectedSiteId(value)
     }
 
@@ -31,13 +31,6 @@ export default function PsiSelectBox({ siteList, onSiteSelect }: Props) {
   const handleDateSelectChange = (value: string) => {
     setSelectedDate(value)
     onSiteSelect(selectedSiteId, value)
-
-    const selectedSite = siteList.find((site) => site.id.toString() === selectedSiteId)
-
-    if (selectedSite) {
-      const metrics = selectedSite.siteMetrics.map((metrics) => metrics)
-      setSelectedSiteMetrics(metrics)
-    }
   }
 
   return (
@@ -66,5 +59,3 @@ export default function PsiSelectBox({ siteList, onSiteSelect }: Props) {
     </div>
   )
 }
-
-

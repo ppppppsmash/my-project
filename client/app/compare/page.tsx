@@ -10,8 +10,6 @@ import { ArrowSmallUpIcon, ArrowSmallDownIcon, FaceSmileIcon, FaceFrownIcon, Arr
 import PsiMotionModalsChartTotal from '@/components/PsiMotionModalsChartTotal'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
 
-interface Props {}
-
 enum MetricType {
   Score = 'score',
   Lcp = 'lcp',
@@ -25,7 +23,7 @@ enum MetricType {
   UserFid = 'user_fid',
   UserCls = 'user_cls',
   UserInp = 'user_inp',
-  UserTtfb = 'user_ttfb'
+  UserTtfb = 'user_ttfb',
 }
 
 type CompareResult = {
@@ -36,11 +34,32 @@ export default function Compare() {
   const [siteList, setSiteList] = useState<PSIDataType[]>([])
   const [selectedSiteLeft, setSelectedSiteLeft] = useState<PSIDataType | null>(null)
   const [selectedSiteRight, setSelectedSiteRight] = useState<PSIDataType | null>(null)
-  const [compareResultLeft, setCompareResultLeft] = useState<any>({})
-  const [compareResultRight, setCompareResultRight] = useState<any>({})
-  const [siteMetrics, setSiteMetrics] = useState<PSIMetrics[]>([])
+  const [selectedDateLeft, setSelectedDateLeft] = useState<string>('')
+  const [selectedDateRight, setSelectedDateRight] = useState<string>('')
+  const [compareResultLeft, setCompareResultLeft] = useState<CompareResult>({})
+  const [compareResultRight, setCompareResultRight] = useState<CompareResult>({})
 
-  console.log(compareResultLeft)
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getDataAll('psi_site_list')
+      setSiteList(data)
+    }
+    getData()
+  }, [])
+
+  const handleSiteSelect = (
+    value: string,
+    setSelectedSite: React.Dispatch<React.SetStateAction<PSIDataType | null>>,
+    selectedDate: string,
+    setSelectedDate: React.Dispatch<React.SetStateAction<string>>,
+    setResult: React.Dispatch<React.SetStateAction<CompareResult>>,
+    selectedSiteOpposite: PSIDataType | null
+  ) => {
+    const selectedSite = siteList.find((site) => site.id.toString() === value) || null
+    setSelectedSite(selectedSite)
+    setSelectedDate(selectedDate)
+    compareMetrics(selectedSite, selectedSiteOpposite, setResult)
+  }
 
   const compareMetrics = (
     siteA: PSIDataType | null,
@@ -48,12 +67,13 @@ export default function Compare() {
     setResult: React.Dispatch<React.SetStateAction<CompareResult>>
   ) => {
     if (siteA && siteB) {
-      const latestMetricsA = siteA?.siteMetrics[0]
-      const latestMetricsB = siteB?.siteMetrics[0]
-      console.log(latestMetricsB)
+      const latestMetricsA = siteA.siteMetrics.find((metrics) => metrics.createdAt === selectedDateLeft)
+      const latestMetricsB = siteB.siteMetrics.find((metrics) => metrics.createdAt === selectedDateRight)
+
+      console.log(selectedDateLeft, selectedDateRight)
       const result: CompareResult = {}
 
-      if(latestMetricsA && latestMetricsB) {
+      if (latestMetricsA && latestMetricsB) {
         for (const metricType in latestMetricsA) {
           if (latestMetricsA.hasOwnProperty(metricType) && latestMetricsB.hasOwnProperty(metricType)) {
             result[metricType as MetricType] = compareMark(
@@ -64,7 +84,6 @@ export default function Compare() {
           }
         }
       }
-
       setResult(result)
     }
   }
@@ -99,68 +118,40 @@ export default function Compare() {
       }
     }
   }
-
     return null
   }
-
-  const handleSelectChange = (value: string, setSelectedSite: React.Dispatch<React.SetStateAction<PSIDataType | null>>) => {
-    const selectedSite = siteList.find((site) => site.id.toString() === value) || null
-    setSelectedSite(selectedSite)
-  }
-
-  useEffect(() => {
-    const getDataByAll = async () => {
-      const data = await getDataAll('psi_site_list')
-      setSiteList(data)
-    }
-    getDataByAll()
-  }, [])
-
-  useEffect(() => {
-    compareMetrics(selectedSiteLeft, selectedSiteRight, setCompareResultLeft)
-    compareMetrics(selectedSiteRight, selectedSiteLeft, setCompareResultRight)
-  }, [selectedSiteLeft, selectedSiteRight])
-
-  console.log(selectedSiteLeft)
 
   return (
     <>
       <Title className='dark:text-white'>ページ比較</Title>
-
       <Flex className='space-x-4 items-start'>
         <Card className='mt-6 shadow-md'>
           <Flex className='mb-8 space-x-4'>
-            <PsiSelectBox siteList={siteList} onSiteSelect={(value) => handleSelectChange(value, setSelectedSiteLeft)} />
+            <PsiSelectBox
+              siteList={siteList}
+              onSiteSelect={(value, selectedDate) =>
+                handleSiteSelect(value, setSelectedSiteLeft, selectedDate, setSelectedDateLeft, setCompareResultLeft, selectedSiteRight)
+              }
+            />
           </Flex>
-
           {selectedSiteLeft && (
-            <PsiCompareList siteList={selectedSiteLeft} compareResult={compareResultLeft} />
+            <PsiCompareList siteList={selectedSiteLeft} compareResult={compareResultLeft} selectedDate={selectedDateLeft} />
           )}
         </Card>
-
         <Card className='mt-6 shadow-md'>
           <Flex className='mb-8 space-x-4'>
-            <PsiSelectBox siteList={siteList} onSiteSelect={(value) => handleSelectChange(value, setSelectedSiteRight)} />
+            <PsiSelectBox
+              siteList={siteList}
+              onSiteSelect={(value, selectedDate) =>
+                handleSiteSelect(value, setSelectedSiteRight, selectedDate, setSelectedDateRight, setCompareResultRight, selectedSiteLeft)
+              }
+            />
           </Flex>
-
           {selectedSiteRight && (
-            <PsiCompareList siteList={selectedSiteRight} compareResult={compareResultRight} />
+            <PsiCompareList siteList={selectedSiteRight} compareResult={compareResultRight} selectedDate={selectedDateRight} />
           )}
         </Card>
       </Flex>
-      <Card className='mt-6 shadow-md'>
-        {selectedSiteLeft && selectedSiteRight &&
-          //<PsiMotionModalsChartTotal siteMetrics={metricsFormatter(selectedSiteLeft.siteMetrics)} />
-
-          <PsiMotionModalsChartTotal
-            siteMetricsLeft={metricsFormatter(selectedSiteLeft.siteMetrics)}
-            siteMetricsRight={metricsFormatter(selectedSiteRight.siteMetrics)}
-          />
-        }
-        {/* {selectedSiteRight &&
-          <PsiMotionModalsChartTotal siteMetrics={metricsFormatter(selectedSiteRight.siteMetrics)} />
-        } */}
-      </Card>
     </>
   )
 }

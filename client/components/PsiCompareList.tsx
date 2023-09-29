@@ -2,7 +2,7 @@ import { List, ListItem } from '@tremor/react'
 import { PSIDataType, PSIMetrics } from '@/type'
 import {
   DevicePhoneMobileIcon,
-  ComputerDesktopIcon
+  ComputerDesktopIcon,
 } from '@heroicons/react/24/outline'
 import { formatDate } from '@/utils/formatDate'
 import Link from 'next/link'
@@ -11,13 +11,14 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid'
 interface Props {
   siteList: PSIDataType
   compareResult: PSIMetrics
-  //selectedDate: string
+  selectedDate: string
 }
 
-export default function PsiCompareList({ siteList, compareResult }: Props) {
-//  const metricsForSelectedDate = siteList.siteMetrics.find((metrics) => metrics.createdAt === selectedDate)
-//const metricsNewest = metricsForSelectedDate || (siteList.siteMetrics.length > 0 ? siteList.siteMetrics[0] : null)
-  const metricsNewest = siteList.siteMetrics[0]
+export default function PsiCompareList({ siteList, compareResult, selectedDate }: Props) {
+  const metricsForSelectedDate = siteList.siteMetrics.find((metrics) => metrics.createdAt === selectedDate)
+  console.log(metricsForSelectedDate)
+  const metricsNewest = metricsForSelectedDate || (siteList.siteMetrics.length > 0 ? siteList.siteMetrics[0] : null)
+  //const metricsNewest = siteList.siteMetrics[0]
 
   const {
     score,
