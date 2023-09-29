@@ -26,29 +26,41 @@ export class AutoRunService {
       const score = performance.score * 100
 
       const { audits: lighthouseResultAudits } = lighthouseResult
+      const { metrics: loadingExperienceAudits } = loadingExperience
+      const loadingExperienceMetrics = {
+        user_fcp: loadingExperienceAudits['FIRST_CONTENTFUL_PAINT_MS'],
+        user_lcp: loadingExperienceAudits['LARGEST_CONTENTFUL_PAINT_MS'],
+        user_fid: loadingExperienceAudits['FIRST_INPUT_DELAY_MS'],
+        user_cls: loadingExperienceAudits['CUMULATIVE_LAYOUT_SHIFT_SCORE'],
+        user_inp: loadingExperienceAudits['EXPERIMENTAL_INTERACTION_TO_NEXT_PAINT'],
+        user_ttfb: loadingExperienceAudits['EXPERIMENTAL_TIME_TO_FIRST_BYTE']
+      }
+
       const lighthouseResultMetrics = {
-        lcp: lighthouseResultAudits['largest-contentful-paint'],
-        fid: lighthouseResultAudits['max-potential-fid'],
-        cls: lighthouseResultAudits['cumulative-layout-shift'],
+        si: lighthouseResultAudits['speed-index'],
         fcp: lighthouseResultAudits['first-contentful-paint'],
-        fci: lighthouseResultAudits['first-cpu-idle'],
-        eil: lighthouseResultAudits['estimated-input-latency'],
-        fmp: lighthouseResultAudits['first-meaningful-paint'],
+        lcp: lighthouseResultAudits['largest-contentful-paint'],
         tti: lighthouseResultAudits['interactive'],
         tbt: lighthouseResultAudits['total-blocking-time'],
-        tbf: lighthouseResultAudits['time-to-first-byte'],
-        si: lighthouseResultAudits['speed-index']
+        cls: lighthouseResultAudits['cumulative-layout-shift'],
       }
+
       const psiSiteMetircs = {
         score,
         name,
         url,
         lcp: lighthouseResultMetrics.lcp.displayValue,
-        fid: lighthouseResultMetrics.fid.displayValue,
+        tti: lighthouseResultMetrics.tti.displayValue,
         cls: lighthouseResultMetrics.cls.displayValue,
         fcp: lighthouseResultMetrics.fcp.displayValue,
         tbt: lighthouseResultMetrics.tbt.displayValue,
         si: lighthouseResultMetrics.si.displayValue,
+        user_fcp: loadingExperienceMetrics.user_fcp.percentile,
+        user_lcp: loadingExperienceMetrics.user_lcp.percentile,
+        user_fid: loadingExperienceMetrics.user_fid.percentile,
+        user_cls: loadingExperienceMetrics.user_cls.percentile,
+        user_inp: loadingExperienceMetrics.user_inp.percentile,
+        user_ttfb: loadingExperienceMetrics.user_ttfb.percentile
       }
 
       const psiSiteList = {
@@ -85,7 +97,7 @@ export class AutoRunService {
 
   private addCronJob(name: string, schedule: string, url: string, device: string, id: number) {
     const jobName = `${name}-${uuidv4()}`
-    const job = new CronJob(`${schedule} * * * * *`, () => this.executeJob(name, url, device, id))
+    const job = new CronJob(`* ${schedule} * * * *`, () => this.executeJob(name, url, device, id))
 
     // 以前のジョブが存在する場合は停止してから新しいジョブを追加
     this.stopCronJob(jobName)

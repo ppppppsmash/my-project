@@ -2,7 +2,7 @@ import { List, ListItem } from '@tremor/react'
 import { PSIDataType, PSIMetrics } from '@/type'
 import {
   DevicePhoneMobileIcon,
-  ComputerDesktopIcon
+  ComputerDesktopIcon,
 } from '@heroicons/react/24/outline'
 import { formatDate } from '@/utils/formatDate'
 import Link from 'next/link'
@@ -11,11 +11,15 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid'
 interface Props {
   siteList: PSIDataType
   compareResult: PSIMetrics
+  selectedDate: string
 }
 
-export default function PsiCompareList({ siteList, compareResult }: Props) {
-  // siteMetricsを昇順に
-  const metricsNewest = siteList.siteMetrics.reverse()[0]
+export default function PsiCompareList({ siteList, compareResult, selectedDate }: Props) {
+  const metricsForSelectedDate = siteList.siteMetrics.find((metrics) => metrics.createdAt === selectedDate)
+  console.log(metricsForSelectedDate)
+  const metricsNewest = metricsForSelectedDate || (siteList.siteMetrics.length > 0 ? siteList.siteMetrics[0] : null)
+  //const metricsNewest = siteList.siteMetrics[0]
+
   const {
     score,
     lcp,
@@ -24,9 +28,13 @@ export default function PsiCompareList({ siteList, compareResult }: Props) {
     fcp,
     tbt,
     si,
+    user_fcp,
+    user_lcp,
+    user_fid,
+    user_cls,
+    user_inp,
+    user_ttfb
   } = compareResult
-
-  console.log(metricsNewest)
 
   return (
     <List key={siteList.id}>
@@ -40,7 +48,7 @@ export default function PsiCompareList({ siteList, compareResult }: Props) {
         </Link>
       </ListItem>
       <ListItem>
-        <span>URL：</span>
+        <span>URL:</span>
         <a className='underline decoration-dotted' href={siteList.url} target='_blank'>
           <span className='flex gap-1 items-center'>
             {siteList.url}
@@ -59,40 +67,66 @@ export default function PsiCompareList({ siteList, compareResult }: Props) {
         )}
       </ListItem>
 
+
       <ListItem>
         <span>取得時間：</span>
-        <span className='flex'>{formatDate(metricsNewest.updatedAt)}</span>
+        <span className="flex">{formatDate(metricsNewest.updatedAt)}</span>
       </ListItem>
 
-      {/* Metricsデータ */}
       <ListItem>
-        <span>スコア：</span>
+        <span>Score:</span>
         <span className='flex'>{metricsNewest.score} {score}</span>
       </ListItem>
       <ListItem>
-        <span>LCP：</span>
-        <span className='flex'>{metricsNewest.lcp} {lcp}</span>
-      </ListItem>
-      <ListItem>
-        <span>TTI：</span>
-        <span className='flex'>{metricsNewest.tti} {tti}</span>
-      </ListItem>
-      <ListItem>
-        <span>CLS：</span>
-        <span className='flex'>{metricsNewest.cls} {cls}</span>
-      </ListItem>
-      <ListItem>
-        <span>FCP：</span>
+        <span>First Contentful Paint:</span>
         <span className='flex'>{metricsNewest.fcp} {fcp}</span>
       </ListItem>
       <ListItem>
-        <span>TBT：</span>
+        <span>Largest Contentful Paint:</span>
+        <span className='flex'>{metricsNewest.lcp} {lcp}</span>
+      </ListItem>
+      <ListItem>
+        <span>Time to Interactive:</span>
+        <span className='flex'>{metricsNewest.tti} {tti}</span>
+      </ListItem>
+      <ListItem>
+        <span>Total Blocking Time:</span>
         <span className='flex'>{metricsNewest.tbt} {tbt}</span>
       </ListItem>
       <ListItem>
-        <span>SI：</span>
+        <span>Cumulative Layout Shift:</span>
+        <span className='flex'>{metricsNewest.cls} {cls}</span>
+      </ListItem>
+      <ListItem>
+        <span>Speed Index:</span>
         <span className='flex'>{metricsNewest.si} {si}</span>
       </ListItem>
+
+      <ListItem>
+        <span>（User）First Contentful Paint:</span>
+        <span className='flex'>{metricsNewest.user_fcp / 1000} s {user_lcp}</span>
+      </ListItem>
+      <ListItem>
+        <span>（User）Largest Contentful Paint:</span>
+        <span className='flex'>{metricsNewest.user_lcp / 1000} s {user_lcp}</span>
+      </ListItem>
+      <ListItem>
+        <span>（User）First Input Delay:</span>
+        <span className='flex'>{metricsNewest.user_fid} ms {user_fid}</span>
+      </ListItem>
+      <ListItem>
+        <span>（User）Cumulative Layout Shif:</span>
+        <span className='flex'>{metricsNewest.user_cls} {user_cls}</span>
+      </ListItem>
+      <ListItem>
+        <span>（User）Interaction to Next Paint:</span>
+        <span className='flex'>{metricsNewest.user_inp / 1000} s {user_inp}</span>
+      </ListItem>
+      <ListItem>
+        <span>（User）Time to First Byte:</span>
+        <span className='flex'>{metricsNewest.user_ttfb / 1000} s {user_ttfb}</span>
+      </ListItem>
+
     </List>
   )
 }

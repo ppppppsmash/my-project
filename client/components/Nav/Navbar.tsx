@@ -45,7 +45,7 @@ export default function Navbar() {
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 justify-center">
+            <div className="flex h-16 md:justify-center">
               <div className="flex">
                 <div className="flex flex-shrink-0 items-center">
                 <CommandLineIcon className="block h-6 w-6" />
