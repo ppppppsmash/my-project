@@ -9,6 +9,7 @@ import { formatDate } from '@/utils/formatDate'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
 import DelaySection from '@/components/DelaySection'
 import PsiMotionModals from '@/components/PsiMotionModalsChart'
+import PsiMotionUserModalsChart from '@/components/PsiMotionUserModalsChart'
 import PsiMotionModalsChart from '@/components/PsiMotionModalsChart'
 
 interface Props {
@@ -24,7 +25,7 @@ export default function Slug({ params: { id } }: Props) {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getData('psi_site_list', id)
-      const formattedMetrics = data.siteMetrics
+      const formattedMetrics = metricsFormatter(data.siteMetrics)
       setSiteList([data])
       setSiteMetrics(formattedMetrics)
     }
@@ -154,44 +155,37 @@ export default function Slug({ params: { id } }: Props) {
           className='gap-6 mt-6 mb-6'
           numColsLg={6}
         >
-          <Col numColSpanLg={2}>
+          <Col numColSpanLg={3}>
             <Card>
               <Text>First Contentful Paint (FCP): <strong>{metricsNewest && metricsNewest?.user_fcp / 1000} s</strong></Text>
             </Card>
           </Col>
-          <Col numColSpanLg={2}>
+          <Col numColSpanLg={3}>
             <Card>
               <Text>Largest Contentful Paint (LCP): <strong>{metricsNewest && metricsNewest?.user_lcp / 1000} s</strong></Text>
             </Card>
           </Col>
-          <Col numColSpanLg={2}>
+          <Col numColSpanLg={3}>
             <Card>
               <Text>First Input Delay (FID): <strong>{metricsNewest && metricsNewest?.user_fid} ms</strong></Text>
             </Card>
           </Col>
-          <Col numColSpanLg={2}>
+          <Col numColSpanLg={3}>
             <Card>
               <Text>Cumulative Layout Shift (CLS): <strong>{metricsNewest && metricsNewest?.user_cls}</strong></Text>
             </Card>
           </Col>
-          <Col numColSpanLg={2}>
+          <Col numColSpanLg={3}>
             <Card>
               <Text>Interaction to Next Paint (INP): <strong>{metricsNewest && metricsNewest?.user_inp / 1000} s</strong></Text>
             </Card>
           </Col>
-          <Col numColSpanLg={2}>
+          <Col numColSpanLg={3}>
             <Card>
               <Text>Time to First Byte (TTFB): <strong>{metricsNewest && metricsNewest?.user_ttfb / 1000} s</strong></Text>
             </Card>
           </Col>
         </Grid>
-
-        <div className='mt-4'>
-          <PsiMotionModalsChart
-            categories={['user_lcp', 'user_lcp', 'user_cls', 'user_fcp', 'user_inp', 'user_ttfb']}
-            siteMetrics={siteMetrics}
-          />
-        </div>
 
         <Title className='mt-10'>ラボスパフォーマンス</Title>
         <Grid
@@ -200,12 +194,12 @@ export default function Slug({ params: { id } }: Props) {
         >
           <Col numColSpanLg={2}>
             <Card>
-              <Text>Largest Contentful Paint: <strong>{metricsNewest?.lcp}</strong></Text>
+              <Text>Largest Contentful Paint: <strong>{metricsNewest?.lcp} s</strong></Text>
             </Card>
           </Col>
           <Col numColSpanLg={2}>
             <Card>
-              <Text>Time to Interactive: <strong>{metricsNewest?.tti}</strong></Text>
+              <Text>Time to Interactive: <strong>{metricsNewest?.tti} s</strong></Text>
             </Card>
           </Col>
           <Col numColSpanLg={2}>
@@ -215,27 +209,27 @@ export default function Slug({ params: { id } }: Props) {
           </Col>
           <Col numColSpanLg={2}>
             <Card>
-              <Text>First Contentful Paint: <strong>{metricsNewest?.fcp}</strong></Text>
+              <Text>First Contentful Paint: <strong>{metricsNewest?.fcp} s</strong></Text>
             </Card>
           </Col>
           <Col numColSpanLg={2}>
             <Card>
-              <Text>Total Blocking Time: <strong>{metricsNewest?.tbt}</strong></Text>
+              <Text>Total Blocking Time: <strong>{metricsNewest?.tbt} ms</strong></Text>
             </Card>
           </Col>
           <Col numColSpanLg={2}>
             <Card>
-              <Text>Speed Index: <strong>{metricsNewest?.si}</strong></Text>
+              <Text>Speed Index: <strong>{metricsNewest?.si} s</strong></Text>
             </Card>
           </Col>
         </Grid>
 
-        {/* <div className='mt-4'>
+        <div className='mt-4'>
           <PsiMotionModalsChart
             categories={['lcp', 'tti', 'cls', 'fcp', 'tbt', 'si']}
-            siteMetrics={metricsFormatter(siteMetrics)}
+            siteMetrics={siteMetrics}
           />
-        </div> */}
+        </div>
     </DelaySection>
   )
 }

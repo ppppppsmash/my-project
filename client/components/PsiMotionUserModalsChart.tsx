@@ -11,24 +11,28 @@ interface Props {
   categories: string[]
 }
 
-export default function PsiMotionModalsChart({ categories, siteMetrics }: Props) {
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+export default function PsiMotionUserModalsChart({ categories, siteMetrics }: Props) {
+  const [userSelectedId, setUserSelectedId] = useState<string | null>(null)
   const colors: TremorColor[] = ['rose', 'emerald', 'orange', 'lime', 'violet', 'pink']
+  const formattedSiteMetrics = siteMetrics.map(metric => ({
+    ...metric,
+    createdAt: formatDate(metric.createdAt),
+  }))
 
   const formattedCategories = (category: string) : string => {
     switch (category) {
-      case 'lcp':
-        return 'Largest Contentful Paint'
-      case 'fcp':
-        return 'First Contentful Paint'
-      case 'cls':
-        return 'Cumulative Layout Shift'
-      case 'tbt':
-        return 'Total Blocking Time'
-      case 'tti':
-        return 'Time to Interactive'
-      case 'si':
-        return 'Speed Index'
+      case 'user_lcp':
+        return 'Largest Contentful Paint (LCP)'
+      case 'user_fid':
+        return 'First Input Delay (FID)'
+      case 'user_cls':
+        return 'Cumulative Layout Shift (CLS)'
+      case 'user_fcp':
+        return 'First Contentful Paint (FCP)'
+      case 'user_inp':
+        return 'Interaction to Next Paint (INP)'
+      case 'user_ttfb':
+        return 'Time to First Byte (TTFB)'
       default:
         return category
     }
@@ -44,12 +48,12 @@ export default function PsiMotionModalsChart({ categories, siteMetrics }: Props)
               transition: { duration: 0.3 },
             }}
             layoutId={index.toString()}
-            onClick={() => setSelectedId(index.toString())}
+            onClick={() => setUserSelectedId(index.toString())}
           >
             <Card>
               <Text>{formattedCategories(category)}</Text>
               <LineChart
-                data={siteMetrics}
+                data={formattedSiteMetrics}
                 index='createdAt'
                 categories={[category]}
                 colors={[colors[index]]}
@@ -60,23 +64,23 @@ export default function PsiMotionModalsChart({ categories, siteMetrics }: Props)
         </div>
       ))}
       <AnimatePresence>
-        {selectedId && (
+        {userSelectedId && (
           <Card className='fixed top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 -webkit-transform mx-auto w-[1000px] z-10'>
             <motion.div
               className='relative p-4'
-              layoutId={selectedId}>
+              layoutId={userSelectedId}>
               <motion.button
                 className='absolute -top-4 right-0'
                 whileTap={{ scale: 1.5 }}
-                onClick={() => setSelectedId(null)}
+                onClick={() => setUserSelectedId(null)}
               >
                 <ArrowsPointingInIcon className='w-5 h-5 text-gray-600 hover:scale-[0.9]' />
               </motion.button>
               <LineChart
-                data={siteMetrics}
+                data={formattedSiteMetrics}
                 index='createdAt'
-                categories={[categories[parseInt(selectedId)]]}
-                colors={[colors[parseInt(selectedId)]]}
+                categories={[categories[parseInt(userSelectedId)]]}
+                colors={[colors[parseInt(userSelectedId)]]}
                 yAxisWidth={40}
               />
             </motion.div>
