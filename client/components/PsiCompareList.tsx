@@ -11,11 +11,14 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid'
 interface Props {
   siteList: PSIDataType
   compareResult: PSIMetrics
+  //selectedDate: string
 }
 
 export default function PsiCompareList({ siteList, compareResult }: Props) {
-  // siteMetricsを昇順に
+//  const metricsForSelectedDate = siteList.siteMetrics.find((metrics) => metrics.createdAt === selectedDate)
+//const metricsNewest = metricsForSelectedDate || (siteList.siteMetrics.length > 0 ? siteList.siteMetrics[0] : null)
   const metricsNewest = siteList.siteMetrics[0]
+
   const {
     score,
     lcp,
@@ -31,8 +34,6 @@ export default function PsiCompareList({ siteList, compareResult }: Props) {
     user_inp,
     user_ttfb
   } = compareResult
-
-  console.log(metricsNewest)
 
   return (
     <List key={siteList.id}>
@@ -65,12 +66,12 @@ export default function PsiCompareList({ siteList, compareResult }: Props) {
         )}
       </ListItem>
 
+
       <ListItem>
         <span>取得時間：</span>
-        <span className='flex'>{formatDate(metricsNewest.updatedAt)}</span>
+        <span className="flex">{formatDate(metricsNewest.updatedAt)}</span>
       </ListItem>
 
-      {/* Metricsデータ */}
       <ListItem>
         <span>Score:</span>
         <span className='flex'>{metricsNewest.score} {score}</span>
@@ -124,6 +125,7 @@ export default function PsiCompareList({ siteList, compareResult }: Props) {
         <span>（User）Time to First Byte:</span>
         <span className='flex'>{metricsNewest.user_ttfb / 1000} s {user_ttfb}</span>
       </ListItem>
+
     </List>
   )
 }

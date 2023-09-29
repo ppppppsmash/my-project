@@ -48,19 +48,20 @@ export default function Compare() {
     setResult: React.Dispatch<React.SetStateAction<CompareResult>>
   ) => {
     if (siteA && siteB) {
-      const latestMetricsA = siteA.siteMetrics[0]
-      const latestMetricsB = siteB.siteMetrics[0]
+      const latestMetricsA = siteA?.siteMetrics[0]
+      const latestMetricsB = siteB?.siteMetrics[0]
       console.log(latestMetricsB)
       const result: CompareResult = {}
 
-
-      for (const metricType in latestMetricsA) {
-        if (latestMetricsA.hasOwnProperty(metricType) && latestMetricsB.hasOwnProperty(metricType)) {
-          result[metricType as MetricType] = compareMark(
-            latestMetricsA[metricType as MetricType],
-            latestMetricsB[metricType as MetricType],
-            metricType
-          )
+      if(latestMetricsA && latestMetricsB) {
+        for (const metricType in latestMetricsA) {
+          if (latestMetricsA.hasOwnProperty(metricType) && latestMetricsB.hasOwnProperty(metricType)) {
+            result[metricType as MetricType] = compareMark(
+              latestMetricsA[metricType as MetricType],
+              latestMetricsB[metricType as MetricType],
+              metricType
+            )
+          }
         }
       }
 
@@ -68,31 +69,33 @@ export default function Compare() {
     }
   }
 
-  const compareMark = (valueA: number | string, valueB: number | string, metricType: MetricType) => {
-    const numericValueA = parseFloat(valueA.toString().replace(/,/g, '').split(/\s/)[0])
-    const numericValueB = parseFloat(valueB.toString().replace(/,/g, '').split(/\s/)[0])
+  const compareMark = (valueA: number | string | undefined, valueB: number | string | undefined, metricType: string) => {
+    if(valueA && valueB) {
+      const numericValueA = parseFloat(valueA.toString().replace(/,/g, '').split(/\s/)[0])
+      const numericValueB = parseFloat(valueB.toString().replace(/,/g, '').split(/\s/)[0])
 
-    if (metricType === MetricType.Score) {
+      if (metricType === MetricType.Score) {
+        if (!isNaN(numericValueA) && !isNaN(numericValueB)) {
+          if (numericValueA > numericValueB) {
+            console.log(numericValueA, numericValueB)
+            return <FaceSmileIcon className='w-5 h-5 text-green-500' />
+          } else if (numericValueA < numericValueB) {
+            return <FaceFrownIcon className='w-5 h-5 text-red-400' />
+          } else {
+            return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400' />
+          }
+        }
+      } else {
+
       if (!isNaN(numericValueA) && !isNaN(numericValueB)) {
         if (numericValueA > numericValueB) {
           console.log(numericValueA, numericValueB)
-          return <FaceSmileIcon className='w-5 h-5 text-green-500' />
-        } else if (numericValueA < numericValueB) {
           return <FaceFrownIcon className='w-5 h-5 text-red-400' />
+        } else if (numericValueA < numericValueB) {
+          return <FaceSmileIcon className='w-5 h-5 text-green-500' />
         } else {
           return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400' />
         }
-      }
-    } else {
-
-    if (!isNaN(numericValueA) && !isNaN(numericValueB)) {
-      if (numericValueA > numericValueB) {
-        console.log(numericValueA, numericValueB)
-        return <FaceFrownIcon className='w-5 h-5 text-red-400' />
-      } else if (numericValueA < numericValueB) {
-        return <FaceSmileIcon className='w-5 h-5 text-green-500' />
-      } else {
-        return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400' />
       }
     }
   }

@@ -97,7 +97,7 @@ export class AutoRunService {
 
   private addCronJob(name: string, schedule: string, url: string, device: string, id: number) {
     const jobName = `${name}-${uuidv4()}`
-    const job = new CronJob(`${schedule} * * * * *`, () => this.executeJob(name, url, device, id))
+    const job = new CronJob(`* ${schedule} * * * *`, () => this.executeJob(name, url, device, id))
 
     // 以前のジョブが存在する場合は停止してから新しいジョブを追加
     this.stopCronJob(jobName)

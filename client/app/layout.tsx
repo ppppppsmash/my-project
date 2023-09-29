@@ -3,6 +3,14 @@ import Nav from '@/components/Nav/Navbar'
 import DelaySection from '@/components/DelaySection'
 import './globals.css'
 import ToggleButton from '@/components/ToggleButton'
+import type { Metadata } from 'next'
+import Favicon from '@/public/favicon.ico'
+
+export const metadata: Metadata = {
+  title: 'Page Speed Measurement',
+  description: 'created by liming.pei',
+  icons: [{ rel: 'icon', url: Favicon.src }]
+}
 
 export default function RootLayout({
   children,
