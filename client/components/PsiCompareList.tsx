@@ -15,7 +15,7 @@ interface Props {
 
 export default function PsiCompareList({ siteList, compareResult }: Props) {
   // siteMetricsを昇順に
-  const metricsNewest = siteList.siteMetrics.reverse()[0]
+  const metricsNewest = siteList.siteMetrics[0]
   const {
     score,
     lcp,
@@ -24,6 +24,12 @@ export default function PsiCompareList({ siteList, compareResult }: Props) {
     fcp,
     tbt,
     si,
+    user_fcp,
+    user_lcp,
+    user_fid,
+    user_cls,
+    user_inp,
+    user_ttfb
   } = compareResult
 
   console.log(metricsNewest)
@@ -40,7 +46,7 @@ export default function PsiCompareList({ siteList, compareResult }: Props) {
         </Link>
       </ListItem>
       <ListItem>
-        <span>URL：</span>
+        <span>URL:</span>
         <a className='underline decoration-dotted' href={siteList.url} target='_blank'>
           <span className='flex gap-1 items-center'>
             {siteList.url}
@@ -66,32 +72,57 @@ export default function PsiCompareList({ siteList, compareResult }: Props) {
 
       {/* Metricsデータ */}
       <ListItem>
-        <span>スコア：</span>
+        <span>Score:</span>
         <span className='flex'>{metricsNewest.score} {score}</span>
       </ListItem>
       <ListItem>
-        <span>LCP：</span>
-        <span className='flex'>{metricsNewest.lcp} {lcp}</span>
-      </ListItem>
-      <ListItem>
-        <span>TTI：</span>
-        <span className='flex'>{metricsNewest.tti} {tti}</span>
-      </ListItem>
-      <ListItem>
-        <span>CLS：</span>
-        <span className='flex'>{metricsNewest.cls} {cls}</span>
-      </ListItem>
-      <ListItem>
-        <span>FCP：</span>
+        <span>First Contentful Paint:</span>
         <span className='flex'>{metricsNewest.fcp} {fcp}</span>
       </ListItem>
       <ListItem>
-        <span>TBT：</span>
+        <span>Largest Contentful Paint:</span>
+        <span className='flex'>{metricsNewest.lcp} {lcp}</span>
+      </ListItem>
+      <ListItem>
+        <span>Time to Interactive:</span>
+        <span className='flex'>{metricsNewest.tti} {tti}</span>
+      </ListItem>
+      <ListItem>
+        <span>Total Blocking Time:</span>
         <span className='flex'>{metricsNewest.tbt} {tbt}</span>
       </ListItem>
       <ListItem>
-        <span>SI：</span>
+        <span>Cumulative Layout Shift:</span>
+        <span className='flex'>{metricsNewest.cls} {cls}</span>
+      </ListItem>
+      <ListItem>
+        <span>Speed Index:</span>
         <span className='flex'>{metricsNewest.si} {si}</span>
+      </ListItem>
+
+      <ListItem>
+        <span>（User）Largest Contentful Paint:</span>
+        <span className='flex'>{metricsNewest.user_fcp} {user_fcp}</span>
+      </ListItem>
+      <ListItem>
+        <span>（User）Time to Interactive:</span>
+        <span className='flex'>{metricsNewest.user_lcp} {user_lcp}</span>
+      </ListItem>
+      <ListItem>
+        <span>（User）Cumulative Layout Shift:</span>
+        <span className='flex'>{metricsNewest.user_fid} {user_fid}</span>
+      </ListItem>
+      <ListItem>
+        <span>（User）First Contentful Paint:</span>
+        <span className='flex'>{metricsNewest.user_cls} {user_cls}</span>
+      </ListItem>
+      <ListItem>
+        <span>（User）Total Blocking Time:</span>
+        <span className='flex'>{metricsNewest.user_inp} {user_inp}</span>
+      </ListItem>
+      <ListItem>
+        <span>（User）Speed Index:</span>
+        <span className='flex'>{metricsNewest.user_ttfb} {user_ttfb}</span>
       </ListItem>
     </List>
   )

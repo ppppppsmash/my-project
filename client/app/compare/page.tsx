@@ -1,4 +1,5 @@
 'use client'
+
 import { useEffect, useState } from 'react'
 import PsiSelectBox from '@/components/PsiSelectBox'
 import { Card, Title, Flex } from '@tremor/react'
@@ -19,6 +20,12 @@ enum MetricType {
   Fcp = 'fcp',
   Tbt = 'tbt',
   Si = 'si',
+  UserFcp = 'user_fcp',
+  UserLcp = 'user_lcp',
+  UserFid = 'user_fid',
+  UserCls = 'user_cls',
+  UserInp = 'user_inp',
+  UserTtfb = 'user_ttfb'
 }
 
 type CompareResult = {
@@ -41,15 +48,17 @@ export default function Compare() {
     setResult: React.Dispatch<React.SetStateAction<CompareResult>>
   ) => {
     if (siteA && siteB) {
-      const latestMetricsA = siteA.siteMetrics[siteA.siteMetrics.length - 1]
-      const latestMetricsB = siteB.siteMetrics[siteB.siteMetrics.length - 1]
+      const latestMetricsA = siteA.siteMetrics[0]
+      const latestMetricsB = siteB.siteMetrics[0]
+      console.log(latestMetricsB)
       const result: CompareResult = {}
+
 
       for (const metricType in latestMetricsA) {
         if (latestMetricsA.hasOwnProperty(metricType) && latestMetricsB.hasOwnProperty(metricType)) {
           result[metricType as MetricType] = compareMark(
-            Number(latestMetricsA[metricType as MetricType]),
-            Number(latestMetricsB[metricType as MetricType])
+            latestMetricsA[metricType as MetricType],
+            latestMetricsB[metricType as MetricType]
           )
         }
       }
@@ -58,14 +67,23 @@ export default function Compare() {
     }
   }
 
-  const compareMark = (valueA: number, valueB: number) => {
-    if (valueA > valueB) {
-      return <FaceSmileIcon className='w-5 h-5 text-green-500' />
-    } else if (valueA < valueB) {
-      return <FaceFrownIcon className='w-5 h-5 text-red-400' />
-    } else {
-      return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400' />
+  const compareMark = (valueA: number | string, valueB: number | string) => {
+    const numericValueA = parseFloat(valueA.toString().replace(/,/g, '').split(/\s/)[0])
+    const numericValueB = parseFloat(valueB.toString().replace(/,/g, '').split(/\s/)[0])
+
+
+    if (!isNaN(numericValueA) && !isNaN(numericValueB)) {
+      if (numericValueA > numericValueB) {
+        console.log(numericValueA, numericValueB)
+        return <FaceSmileIcon className='w-5 h-5 text-green-500' />;
+      } else if (numericValueA < numericValueB) {
+        return <FaceFrownIcon className='w-5 h-5 text-red-400' />;
+      } else {
+        return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400' />;
+      }
     }
+
+    return null;
   }
 
   const handleSelectChange = (value: string, setSelectedSite: React.Dispatch<React.SetStateAction<PSIDataType | null>>) => {
