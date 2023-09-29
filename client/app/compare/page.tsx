@@ -58,7 +58,8 @@ export default function Compare() {
         if (latestMetricsA.hasOwnProperty(metricType) && latestMetricsB.hasOwnProperty(metricType)) {
           result[metricType as MetricType] = compareMark(
             latestMetricsA[metricType as MetricType],
-            latestMetricsB[metricType as MetricType]
+            latestMetricsB[metricType as MetricType],
+            metricType
           )
         }
       }
@@ -67,23 +68,36 @@ export default function Compare() {
     }
   }
 
-  const compareMark = (valueA: number | string, valueB: number | string) => {
+  const compareMark = (valueA: number | string, valueB: number | string, metricType: MetricType) => {
     const numericValueA = parseFloat(valueA.toString().replace(/,/g, '').split(/\s/)[0])
     const numericValueB = parseFloat(valueB.toString().replace(/,/g, '').split(/\s/)[0])
 
+    if (metricType === MetricType.Score) {
+      if (!isNaN(numericValueA) && !isNaN(numericValueB)) {
+        if (numericValueA > numericValueB) {
+          console.log(numericValueA, numericValueB)
+          return <FaceSmileIcon className='w-5 h-5 text-green-500' />
+        } else if (numericValueA < numericValueB) {
+          return <FaceFrownIcon className='w-5 h-5 text-red-400' />
+        } else {
+          return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400' />
+        }
+      }
+    } else {
 
     if (!isNaN(numericValueA) && !isNaN(numericValueB)) {
       if (numericValueA > numericValueB) {
         console.log(numericValueA, numericValueB)
-        return <FaceSmileIcon className='w-5 h-5 text-green-500' />;
+        return <FaceFrownIcon className='w-5 h-5 text-red-400' />
       } else if (numericValueA < numericValueB) {
-        return <FaceFrownIcon className='w-5 h-5 text-red-400' />;
+        return <FaceSmileIcon className='w-5 h-5 text-green-500' />
       } else {
-        return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400' />;
+        return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400' />
       }
     }
+  }
 
-    return null;
+    return null
   }
 
   const handleSelectChange = (value: string, setSelectedSite: React.Dispatch<React.SetStateAction<PSIDataType | null>>) => {

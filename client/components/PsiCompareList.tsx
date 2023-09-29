@@ -101,28 +101,28 @@ export default function PsiCompareList({ siteList, compareResult }: Props) {
       </ListItem>
 
       <ListItem>
-        <span>（User）Largest Contentful Paint:</span>
-        <span className='flex'>{metricsNewest.user_fcp} {user_fcp}</span>
-      </ListItem>
-      <ListItem>
-        <span>（User）Time to Interactive:</span>
-        <span className='flex'>{metricsNewest.user_lcp} {user_lcp}</span>
-      </ListItem>
-      <ListItem>
-        <span>（User）Cumulative Layout Shift:</span>
-        <span className='flex'>{metricsNewest.user_fid} {user_fid}</span>
-      </ListItem>
-      <ListItem>
         <span>（User）First Contentful Paint:</span>
+        <span className='flex'>{metricsNewest.user_fcp / 1000} s {user_lcp}</span>
+      </ListItem>
+      <ListItem>
+        <span>（User）Largest Contentful Paint:</span>
+        <span className='flex'>{metricsNewest.user_lcp / 1000} s {user_lcp}</span>
+      </ListItem>
+      <ListItem>
+        <span>（User）First Input Delay:</span>
+        <span className='flex'>{metricsNewest.user_fid} ms {user_fid}</span>
+      </ListItem>
+      <ListItem>
+        <span>（User）Cumulative Layout Shif:</span>
         <span className='flex'>{metricsNewest.user_cls} {user_cls}</span>
       </ListItem>
       <ListItem>
-        <span>（User）Total Blocking Time:</span>
-        <span className='flex'>{metricsNewest.user_inp} {user_inp}</span>
+        <span>（User）Interaction to Next Paint:</span>
+        <span className='flex'>{metricsNewest.user_inp / 1000} s {user_inp}</span>
       </ListItem>
       <ListItem>
-        <span>（User）Speed Index:</span>
-        <span className='flex'>{metricsNewest.user_ttfb} {user_ttfb}</span>
+        <span>（User）Time to First Byte:</span>
+        <span className='flex'>{metricsNewest.user_ttfb / 1000} s {user_ttfb}</span>
       </ListItem>
     </List>
   )
