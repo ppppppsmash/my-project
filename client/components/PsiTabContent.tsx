@@ -1,4 +1,5 @@
 'use client'
+
 import Link from 'next/link'
 import { ChangeEvent, FormEvent, useState, useEffect } from 'react'
 import PsiCheckbox from '@/components/PsiCheckbox'
@@ -13,6 +14,7 @@ import { checkboxValidate, inputValidate, textareaValidate, csvValidate } from '
 import Loading from '@/components/Loading'
 import { SelectBox, SelectBoxItem } from '@tremor/react'
 import { Button, Text } from '@tremor/react'
+import { useRouter } from 'next/navigation'
 
 interface Props {
   mode: string
@@ -40,6 +42,8 @@ export default function PsiTabContent({ mode }: Props) {
 
   const [csvFiles, setCsvFiles] = useState<string[]>([])
   const [selectedFileName, setSelectedFileName] = useState<string>('')
+
+  const router = useRouter()
 
   // 単体サイト
   const getChangeUrlName = ({target}: ChangeEvent<HTMLInputElement>) => {
@@ -213,6 +217,7 @@ export default function PsiTabContent({ mode }: Props) {
     }
 
     setLoading(false)
+    router.push('/list')
   }
 
   const handleSiteDataChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
