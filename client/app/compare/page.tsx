@@ -99,9 +99,19 @@ export default function Compare() {
       if (metricType === MetricType.Score) {
         if (!isNaN(numericValueA) && !isNaN(numericValueB)) {
           if (numericValueA > numericValueB) {
-            return <FaceSmileIcon className='w-5 h-5 text-green-500' />
+            return (
+              <>
+                <FaceSmileIcon className='w-5 h-5 text-green-500 mr-2' />
+                <span className='text-green-500'>+{numericValueA - numericValueB}</span>
+              </>
+            )
           } else if (numericValueA < numericValueB) {
-            return <FaceFrownIcon className='w-5 h-5 text-red-400' />
+            return (
+              <>
+                <FaceFrownIcon className='w-5 h-5 text-red-400 mr-2' />
+                <span className='text-red-400'>-{numericValueB - numericValueA}</span>
+              </>
+            )
           } else {
             return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400' />
           }
@@ -109,9 +119,19 @@ export default function Compare() {
       } else {
         if (!isNaN(numericValueA) && !isNaN(numericValueB)) {
           if (numericValueA > numericValueB) {
-            return <FaceFrownIcon className='w-5 h-5 text-red-400' />
+            return (
+              <>
+                <FaceFrownIcon className='w-5 h-5 text-red-400 mr-2' />
+                <span className='text-red-400'>+{Math.floor((numericValueA - numericValueB) * 1000) / 1000}</span>
+              </>
+            )
           } else if (numericValueA < numericValueB) {
-            return <FaceSmileIcon className='w-5 h-5 text-green-500' />
+            return (
+              <>
+                <FaceSmileIcon className='w-5 h-5 text-green-500 mr-2' />
+                <span className='text-green-500'>-{Math.floor((numericValueB - numericValueA) * 1000) / 1000}</span>
+              </>
+            )
           } else {
             return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400' />
           }

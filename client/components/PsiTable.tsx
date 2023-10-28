@@ -147,7 +147,7 @@ export default function PsiTable() {
     queryClient.setQueryData(['result'], newResult)
   }
 
-  if(isLoading) return (<h1 className='flex items-center justify-center'><MoonLoader /></h1>)
+  if(isLoading) return (<h1 className='flex items-center justify-center my-4'><MoonLoader size={22} /></h1>)
   if (!result) return <h1 className='text-md text-center'>データがありません。</h1>
 
   return (

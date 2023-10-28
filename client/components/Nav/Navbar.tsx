@@ -7,6 +7,12 @@ import { motion, useMotionTemplate, useMotionValue } from 'framer-motion'
 import { Bars3Icon, XMarkIcon, CommandLineIcon } from '@heroicons/react/24/outline'
 import { TbDeviceAnalytics } from 'react-icons/tb'
 import ToggleButton from '@/components/ToggleButton'
+import { Inter } from 'next/font/google'
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 const navigation = [
   { name: 'ホーム', href: '/' },
@@ -18,7 +24,6 @@ const navigation = [
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
-
 
 export default function Navbar() {
   const pathname = usePathname()
@@ -51,7 +56,7 @@ export default function Navbar() {
             <div className="absolute sm:top-5 top-4">
               <Link className='flex items-center gap-x-2' href='/'>
                 <TbDeviceAnalytics className="block h-8 w-8 text-gray-900" />
-                <span className='text-sm font-bold md:block hidden'>page speed insights計測ツール</span>
+                <span className={inter.className}>PSI Measurement</span>
               </Link>
             </div>
 
