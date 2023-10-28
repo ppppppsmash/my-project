@@ -38,7 +38,9 @@ export interface pageList {
   date: string
 }
 
-export interface Month {
-  label: string
-  days: number
+export interface SortType {
+  name: string
+  schedule: string
+  createdAt: string
+  score: string
 }
