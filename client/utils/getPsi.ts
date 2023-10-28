@@ -32,7 +32,7 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
         user_lcp: loadingExperienceAudits['LARGEST_CONTENTFUL_PAINT_MS'],
         user_fid: loadingExperienceAudits['FIRST_INPUT_DELAY_MS'],
         user_cls: loadingExperienceAudits['CUMULATIVE_LAYOUT_SHIFT_SCORE'],
-        user_inp: loadingExperienceAudits['EXPERIMENTAL_INTERACTION_TO_NEXT_PAINT'],
+        user_inp: loadingExperienceAudits['INTERACTION_TO_NEXT_PAINT'],
         user_ttfb: loadingExperienceAudits['EXPERIMENTAL_TIME_TO_FIRST_BYTE']
       }
 
@@ -43,14 +43,7 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
         tti: lighthouseResultAudits['interactive'],
         tbt: lighthouseResultAudits['total-blocking-time'],
         cls: lighthouseResultAudits['cumulative-layout-shift'],
-        // fid: lighthouseResultAudits['max-potential-fid'],
-        // fci: lighthouseResultAudits['first-cpu-idle'],
-        // eil: lighthouseResultAudits['estimated-input-latency'],
-        // fmp: lighthouseResultAudits['first-meaningful-paint'],
-        // tbf: lighthouseResultAudits['time-to-first-byte'],
       }
-
-      console.log(loadingExperienceMetrics)
 
       const psiSiteMetircs = {
         score,
@@ -112,7 +105,7 @@ export const getPsiDataAgain = async (name: string, url: string, index: number, 
         user_lcp: loadingExperienceAudits['LARGEST_CONTENTFUL_PAINT_MS'],
         user_fid: loadingExperienceAudits['FIRST_INPUT_DELAY_MS'],
         user_cls: loadingExperienceAudits['CUMULATIVE_LAYOUT_SHIFT_SCORE'],
-        user_inp: loadingExperienceAudits['EXPERIMENTAL_INTERACTION_TO_NEXT_PAINT'],
+        user_inp: loadingExperienceAudits['INTERACTION_TO_NEXT_PAINT'],
         user_ttfb: loadingExperienceAudits['EXPERIMENTAL_TIME_TO_FIRST_BYTE']
       }
 

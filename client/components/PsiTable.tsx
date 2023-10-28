@@ -33,6 +33,8 @@ import { FiLoader } from 'react-icons/fi'
 import { fetchLinkPreview } from '@/utils/getLinkPreview'
 import Image from 'next/image'
 import { HoverCard } from './HoverCard'
+import ClockLoader from 'react-spinners/ClockLoader'
+import MoonLoader from 'react-spinners/MoonLoader'
 
 export default function PsiTable() {
   const [selectedNames, setSelectedNames] = useState<string[]>([])
@@ -145,8 +147,8 @@ export default function PsiTable() {
     queryClient.setQueryData(['result'], newResult)
   }
 
-  if(isLoading) return (<h1 className='text-lg text-center'>🌀Loading...</h1>)
-  if (!result) return <h1 className='text-lg text-center'>データがありません。</h1>
+  if(isLoading) return (<h1 className='flex items-center justify-center'><MoonLoader /></h1>)
+  if (!result) return <h1 className='text-md text-center'>データがありません。</h1>
 
   return (
     <div className='dark:bg-gray-950'>
@@ -232,9 +234,7 @@ export default function PsiTable() {
               </TableCell>
               <TableCell>
                 {spinningItems.includes(index) ? (
-                  <FiLoader
-                    className='animate-spin w-5 text-gray-950'
-                  />
+                  <ClockLoader size='15' />
                 ) : (
                   <Text className='dark:text-white'>{item.siteMetrics[0].score}</Text>
                 )}

@@ -3,6 +3,7 @@ import { clsx } from 'clsx'
 import React, { useState } from 'react'
 import { fetchLinkPreview } from '@/utils/getLinkPreview'
 import { motion } from 'framer-motion'
+import CircleLoader from 'react-spinners/CircleLoader'
 
 const { Root, Trigger, Portal } = HoverCardPrimitive
 
@@ -79,7 +80,10 @@ const HoverCard = ({children, url}: {children: React.ReactNode, url: string}) =>
                 />
               </div>
               ) : (
-                <span>🌀Loading...</span>
+                <div className='flex items-center justify-center'>
+                  <CircleLoader size='20' />
+                  <span>Loading...</span>
+                </div>
               )
             }
           </div>
