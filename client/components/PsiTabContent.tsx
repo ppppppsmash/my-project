@@ -14,7 +14,7 @@ import { checkboxValidate, inputValidate, textareaValidate, csvValidate } from '
 import Loading from '@/components/Loading'
 import { SelectBox, SelectBoxItem } from '@tremor/react'
 import { Button, Text } from '@tremor/react'
-import { useRouter } from 'next/navigation'
+import ModalsConfirm from '@/components/ModalsConfirm'
 
 interface Props {
   mode: string
@@ -43,7 +43,7 @@ export default function PsiTabContent({ mode }: Props) {
   const [csvFiles, setCsvFiles] = useState<string[]>([])
   const [selectedFileName, setSelectedFileName] = useState<string>('')
 
-  const router = useRouter()
+  const [isConfirm, setIsConfirm] = useState<boolean>(false)
 
   // 単体サイト
   const getChangeUrlName = ({target}: ChangeEvent<HTMLInputElement>) => {
@@ -217,7 +217,8 @@ export default function PsiTabContent({ mode }: Props) {
     }
 
     setLoading(false)
-    router.push('/list')
+    // router.push('/list')
+    setIsConfirm(true)
   }
 
   const handleSiteDataChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -438,6 +439,8 @@ export default function PsiTabContent({ mode }: Props) {
           //  disabled={!isFileExist}
           />
         </div>
+
+        {isConfirm && <ModalsConfirm />}
 
       </div>
     </div>
