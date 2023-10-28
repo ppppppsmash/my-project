@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation'
 import { Disclosure } from '@headlessui/react'
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion'
 import { Bars3Icon, XMarkIcon, CommandLineIcon } from '@heroicons/react/24/outline'
+import { TbDeviceAnalytics } from 'react-icons/tb'
+import ToggleButton from '@/components/ToggleButton'
 
 const navigation = [
   { name: 'ホーム', href: '/' },
@@ -41,39 +43,43 @@ export default function Navbar() {
   const background = useMotionTemplate`radial-gradient(${radius}px circle at ${mouseX}px ${mouseY}px, var(--spotlight-color) 0%, transparent 65%)`
 
   return (
-    <Disclosure as="nav" className="bg-white shadow dark:bg-gray-950 dark:text-white dark:border-b-[1px] dark:border-slate-700">
+    <Disclosure as="nav" className="fixed w-full z-50 top-0 bg-white shadow dark:bg-gray-950 dark:text-white dark:border-b-[1px] dark:border-slate-700">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 md:justify-center">
-              <div className="flex">
-                <div className="flex flex-shrink-0 items-center">
-                <CommandLineIcon className="block h-6 w-6" />
 
+            <div className="absolute sm:top-5 top-4">
+              <Link className='flex items-center gap-x-2' href='/'>
+                <TbDeviceAnalytics className="block h-8 w-8 text-gray-900" />
+                <span className='text-sm font-bold md:block hidden'>page speed insights計測ツール</span>
+              </Link>
+            </div>
+
+            <div className="relative flex h-16 md:justify-center md:mr-0 justify-end">
+              <div className="flex">
+                <div
+                  className='hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8'
+                  onMouseMove={handleMouseMove}
+                >
+                  {navigation.map((item, index) => (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => handleNavItemClick(item.href)} // クリック時にcurrentNavItemを更新
+                      className='relative border-transparent text-gray-500 dark:text-white hover:text-gray-700 hover:border-gray-300
+                      inline-flex items-center px-1 pt-1 text-[12px] font-medium'
+                      aria-current={pathname === item.href ? 'page' : undefined}
+                    >
+                      {item.name}
+                      {item.href === currentNavItem &&
+                      <motion.span
+                        className='absolute inset-x-1 -bottom-px h-px bg-gradient-to-r border-slate-500 dark:border-white text-gray-900 dark:text-white border-b-2'
+                        layoutId='active-nav-item'
+                      />
+                    }
+                    </a>
+                  ))}
                 </div>
-                  <div
-                    className='hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8'
-                    onMouseMove={handleMouseMove}
-                  >
-                    {navigation.map((item, index) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        onClick={() => handleNavItemClick(item.href)} // クリック時にcurrentNavItemを更新
-                        className='relative border-transparent text-gray-500 dark:text-white hover:text-gray-700 hover:border-gray-300
-                        inline-flex items-center px-1 pt-1 text-[12px] font-medium'
-                        aria-current={pathname === item.href ? 'page' : undefined}
-                      >
-                        {item.name}
-                        {item.href === currentNavItem &&
-                        <motion.span
-                          className='absolute inset-x-1 -bottom-px h-px bg-gradient-to-r border-slate-500 dark:border-white text-gray-900 dark:text-white border-b-2'
-                          layoutId='active-nav-item'
-                        />
-                      }
-                      </a>
-                    ))}
-                  </div>
               </div>
               <div className="-mr-2 flex items-center sm:hidden">
                 <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-white p-2
@@ -87,7 +93,10 @@ export default function Navbar() {
                   )}
                 </Disclosure.Button>
               </div>
+
+              <ToggleButton />
             </div>
+
           </div>
 
           <Disclosure.Panel className="sm:hidden">

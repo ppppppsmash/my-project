@@ -32,7 +32,7 @@ export class AutoRunService {
         user_lcp: loadingExperienceAudits['LARGEST_CONTENTFUL_PAINT_MS'],
         user_fid: loadingExperienceAudits['FIRST_INPUT_DELAY_MS'],
         user_cls: loadingExperienceAudits['CUMULATIVE_LAYOUT_SHIFT_SCORE'],
-        user_inp: loadingExperienceAudits['EXPERIMENTAL_INTERACTION_TO_NEXT_PAINT'],
+        user_inp: loadingExperienceAudits['INTERACTION_TO_NEXT_PAINT'],
         user_ttfb: loadingExperienceAudits['EXPERIMENTAL_TIME_TO_FIRST_BYTE']
       }
 

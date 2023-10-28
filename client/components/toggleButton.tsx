@@ -30,7 +30,7 @@ export default function ToggleButton() {
   }
 
   return (
-    <div className='absolute top-6 right-6'>
+    <div className='absolute top-5 sm:right-2 right-10'>
       <Switch.Group>
         <div className='flex items-center'>
           <Switch

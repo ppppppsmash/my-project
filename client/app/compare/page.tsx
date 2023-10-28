@@ -135,10 +135,10 @@ export default function Compare() {
   }, [selectedSiteLeft, selectedSiteRight, selectedDateLeft, selectedDateRight])
 
   return (
-    <>
+    <div>
       <Title className='dark:text-white'>ページ比較</Title>
-      <Flex className='space-x-4 items-start'>
-        <Card className='mt-6 shadow-md'>
+      <Flex className='sm:space-x-4 items-start sm:flex block space-x-0'>
+        <Card className='mt-6 shadow-md overflow-x-scroll sm:overflow-visible sm:h-auto h-[400px]'>
           <Flex className='mb-8 space-x-4'>
             <PsiSelectBox
               siteList={siteList}
@@ -155,7 +155,7 @@ export default function Compare() {
             />
           )}
         </Card>
-        <Card className='mt-6 shadow-md'>
+        <Card className='mt-6 shadow-md overflow-x-scroll sm:overflow-visible sm:h-auto h-[400px]'>
           <Flex className='mb-8 space-x-4'>
             <PsiSelectBox
               siteList={siteList}
@@ -173,6 +173,6 @@ export default function Compare() {
           )}
         </Card>
       </Flex>
-    </>
+    </div>
   )
 }

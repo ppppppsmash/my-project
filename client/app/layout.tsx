@@ -20,9 +20,8 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className='h-full dark:bg-gray-950 dark:text-white'>
-        <div>
+        <div className='mb-16'>
           <Nav />
-          <ToggleButton />
         </div>
         <main className="p-4 md:p-10 mx-auto max-w-7xl">
           <DelaySection delay={0.2}>

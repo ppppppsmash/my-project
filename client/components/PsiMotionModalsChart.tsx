@@ -37,7 +37,7 @@ export default function PsiMotionModalsChart({ categories, siteMetrics }: Props)
   return (
     <Flex className='w-full flex-wrap justify-start box-border p-2 -mx-2'>
       {categories.map((category, index) => (
-        <div className='w-1/3 p-2' key={index}>
+        <div className='sm:w-1/3 w-full p-2' key={index}>
           <motion.div
             whileHover={{
               y: -10,
@@ -61,7 +61,7 @@ export default function PsiMotionModalsChart({ categories, siteMetrics }: Props)
       ))}
       <AnimatePresence>
         {selectedId && (
-          <Card className='fixed top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 -webkit-transform mx-auto w-[1000px] z-10'>
+          <Card className='sm:fixed w-full sm:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 -webkit-transform mx-auto sm:w-[1000px] z-10'>
             <motion.div
               className='relative p-4'
               layoutId={selectedId}>

@@ -130,7 +130,7 @@ export default function Slug({ params: { id } }: Props) {
                       `${Number(Intl.NumberFormat("us").format(number)) - restScore}`
                     }
                     className='mt-2'
-                    colors={["emerald", "zinc"]}
+                    colors={["emerald", "neutral"]}
                   />
                 ) : (
                   <DonutChart
@@ -142,7 +142,7 @@ export default function Slug({ params: { id } }: Props) {
                       `${Number(Intl.NumberFormat("us").format(number)) - restScore}`
                     }
                     className='mt-2'
-                    colors={["rose", "zinc"]}
+                    colors={["rose", "neutral"]}
                   />
                 )}
             </Card>
