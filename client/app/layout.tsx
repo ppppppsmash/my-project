@@ -5,6 +5,7 @@ import './globals.css'
 import ToggleButton from '@/components/ToggleButton'
 import type { Metadata } from 'next'
 import Favicon from '@/public/favicon.ico'
+import MoonLoader from 'react-spinners/MoonLoader'
 
 export const metadata: Metadata = {
   title: 'Page Speed Measurement',
@@ -25,7 +26,7 @@ export default function RootLayout({
         </div>
         <main className="p-4 md:p-10 mx-auto max-w-7xl">
           <DelaySection delay={0.2}>
-            <Suspense fallback='Loading...🌀'>
+            <Suspense fallback={<h1 className='flex items-center justify-center my-4'><MoonLoader size={22} /></h1>}>
               {children}
             </Suspense>
           </DelaySection>

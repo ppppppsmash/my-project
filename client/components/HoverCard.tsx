@@ -72,7 +72,7 @@ const HoverCard = ({children, url}: {children: React.ReactNode, url: string}) =>
                 <h2 className='text-lg mb-4'>{title}</h2>
                 <p className='whitespace-normal mb-4'>{description}</p>
                 <img
-                  className='w-10/12 mx-auto'
+                  className='w-1/2 mx-auto'
                   src={imageUrl}
                   width={500}
                   height={300}

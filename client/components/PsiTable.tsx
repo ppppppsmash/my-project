@@ -2,7 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useState, useEffect, ChangeEvent } from 'react'
-import { PSIDataType } from '@/type'
+import { PSIDataType, SortType } from '@/type'
 import {
   Table,
   TableHead,
@@ -22,7 +22,9 @@ import {
   DevicePhoneMobileIcon,
   ComputerDesktopIcon,
   ChevronLeftIcon,
-  ChevronRightIcon
+  ChevronRightIcon,
+  ArrowSmallUpIcon,
+  ArrowSmallDownIcon
 } from '@heroicons/react/24/outline'
 import PsiPopup from '@/components/PsiPopup'
 import PsiSelect from '@/components/PsiSelect'
@@ -36,9 +38,13 @@ import { HoverCard } from './HoverCard'
 import ClockLoader from 'react-spinners/ClockLoader'
 import MoonLoader from 'react-spinners/MoonLoader'
 
+interface NewPSIDataType extends PSIDataType {
+  score?: string
+}
+
 export default function PsiTable() {
   const [selectedNames, setSelectedNames] = useState<string[]>([])
-  const [pageList, setPageList] = useState<PSIDataType[]>([])
+  const [pageList, setPageList] = useState<NewPSIDataType[]>([])
   const [editName, setEditName] = useState<string[]>([])
   const [editIndex, setEditIndex] = useState<number | null>(null)
   const [schedule, setSchedule] = useState('0')
@@ -47,10 +53,11 @@ export default function PsiTable() {
   const [loadingVisible, setLoadingVisible] = useState(false)
   const [currentTablePage, setCurrentTablePage] = useState<number>(1)
   const [spinningItems, setSpinningItems] = useState<any[]>([])
+  const [sortColumn, setSortColumn] = useState<string>('')
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
   const LIMIT_ROWS = 10
 
-
-  const isSiteSelected = (siteList: PSIDataType) => {
+  const isSiteSelected = (siteList: NewPSIDataType) => {
     if (selectedNames.length === 0) return true
     return selectedNames.includes(siteList.name)
   }
@@ -66,13 +73,20 @@ export default function PsiTable() {
       }
     })
 
-   await getPsiDataAgain(name, url, index, id, device)
-
+    await getPsiDataAgain(name, url, index, id, device)
     setTimeout(() => {
       setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index))
-    }, 2000)
-  }
+    }, 1000)
+   }
 
+  const handleSort = (columnName: string) => {
+    if (sortColumn === columnName) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortColumn(columnName)
+      setSortDirection('asc')
+    }
+  }
 
   const handleChange = ({ target }: ChangeEvent<HTMLInputElement>, index: number) => {
     const value = target.value
@@ -83,25 +97,15 @@ export default function PsiTable() {
     })
   }
 
-  // ページごと表示できる項目制限
-  const getDisplayedTableData = () => {
-    const startIndex = (currentTablePage - 1) * LIMIT_ROWS
-    const endIndex = startIndex + LIMIT_ROWS
-    return pageList.slice(startIndex, endIndex)
-  }
-
-  // カレントページ
   const handlePageChange = (tablePage: number) => {
     setCurrentTablePage(tablePage)
   }
 
-  // Editボタントリガー
   const handleEdit = (index: number) => {
     setEditIndex(index)
     setIsEdited(false)
   }
 
-  // site名変更処理
   const handleNameChange = async (index: number, id: number) => {
     const siteList = await getData('psi_site_list', id)
     const siteMetrics = siteList.siteMetrics
@@ -113,14 +117,12 @@ export default function PsiTable() {
 
     setEditIndex(null)
     setIsEdited(true)
-    }
+  }
 
-  // セレクトボックスチェンジ
   const getChangeSelect = (value: string) => {
     setSchedule(value)
   }
 
-  // スケジュール変更
   const handleScheduleChange = async (id: number) => {
     await patchData('psi_site_list', id, { schedule })
     setEditIndex(null)
@@ -134,7 +136,7 @@ export default function PsiTable() {
     return data
   }
 
-  const { data: result, isLoading } = useQuery<PSIDataType[]>({
+  const { data: result, isLoading } = useQuery<NewPSIDataType[]>({
     queryKey: ['result'],
     queryFn: getDataByAll,
     refetchInterval: 10000
@@ -145,6 +147,25 @@ export default function PsiTable() {
 
     const newResult = result?.filter(item => item.id !== id)
     queryClient.setQueryData(['result'], newResult)
+  }
+
+  const sortedData = result ? [...result] : []
+
+  if (sortColumn) {
+    sortedData.sort((a, b) => {
+      const aValue = sortColumn === 'score' ? String(a.siteMetrics[0]?.score) : a[sortColumn as keyof SortType]
+      const bValue = sortColumn === 'score' ? String(b.siteMetrics[0]?.score) : b[sortColumn as keyof SortType]
+
+      if (aValue === undefined || bValue === undefined) {
+        return 0
+      }
+
+      if (sortDirection === 'asc') {
+        return aValue.localeCompare(bValue)
+      } else {
+        return bValue.localeCompare(aValue)
+      }
+    })
   }
 
   if(isLoading) return (<h1 className='flex items-center justify-center my-4'><MoonLoader size={22} /></h1>)
@@ -172,16 +193,42 @@ export default function PsiTable() {
       <Table className='mt-2 overflow-visible'>
         <TableHead>
           <TableRow>
-            <TableHeaderCell className='dark:text-white'>Site</TableHeaderCell>
-            <TableHeaderCell className='dark:text-white'>URL</TableHeaderCell>
-            <TableHeaderCell className='dark:text-white'>PSI score</TableHeaderCell>
-            <TableHeaderCell className='dark:text-white'>Date</TableHeaderCell>
-            <TableHeaderCell className='dark:text-white'>Schedule</TableHeaderCell>
+            <TableHeaderCell
+              className='dark:text-white cursor-pointer'
+              onClick={() => handleSort('name')}
+            >
+              <span className='flex gap-x-2 items-center'>
+              Site
+              </span>
+            </TableHeaderCell>
+            <TableHeaderCell
+              className='dark:text-white cursor-pointer'
+            >
+              URL
+            </TableHeaderCell>
+            <TableHeaderCell
+              className='dark:text-white cursor-pointer'
+              onClick={() => handleSort('score')} // PSI score カラムにソートを追加
+            >
+              PSI score
+            </TableHeaderCell>
+            <TableHeaderCell
+              className='dark:text-white cursor-pointer'
+              onClick={() => handleSort('updatedAt')} // Date カラムにソートを追加
+            >
+              Date
+            </TableHeaderCell>
+            <TableHeaderCell
+              className='dark:text-white cursor-pointer'
+              onClick={() => handleSort('schedule')} // Schedule カラムにソートを追加
+            >
+              Schedule
+            </TableHeaderCell>
             <TableHeaderCell className='dark:text-white'>Action</TableHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody className='dark:text-white'>
-          {result?.filter((item) => isSiteSelected(item)).map((item, index) => (
+          {sortedData?.filter((item) => isSiteSelected(item)).map((item, index) => (
             <TableRow
               className='hover:bg-gray-100 dark:hover:bg-gray-700'
               key={item.id}

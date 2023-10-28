@@ -1,28 +1,26 @@
-'use client'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
-import { urlValidate } from '@/utils/validation'
-import { RxCross2 } from 'react-icons/rx'
+import { useRouter } from 'next/navigation'
 
-interface Props {
-  onOpen(): void
-  onClose(): void
-  getPsiData(id: number): void
-  id: number
-  name: string | string[]
-  url: string
-}
-
-export default function Modals({ onClose, getPsiData, id, name, url }: Props) {
+export default function ModalsConfirm() {
   let [isOpen, setIsOpen] = useState(true)
+
+  const router = useRouter()
 
   function closeModal() {
     setIsOpen(false)
   }
 
-  const handleClick = () => {
-    getPsiData(id)
-    onClose()
+  function openModal() {
+    setIsOpen(true)
+  }
+
+  const navigateTo = (path: any) => {
+    router.push(path)
+  }
+
+  const navigateFresh = (path: string) => {
+    window.location.href = path
   }
 
   return (
@@ -57,31 +55,19 @@ export default function Modals({ onClose, getPsiData, id, name, url }: Props) {
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    サイトを登録しますか？
+                    サイトを登録し続けますか？
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      {typeof name === 'string' ? (
-                        <p>
-                          サイト名: {name} <br/>
-                          URL: {urlValidate(url)}
-                        </p>
-                      ) : (
-                        name.map((x, index) => (
-                          <div key={index}>
-                            サイト名: {x.split(/\s+/)[0]} <br />
-                            {x.split(/\s+/)[1] && `URL: ${urlValidate(x.split(/\s+/)[1])}`}
-                          </div>
-                        ))
-                      ) }
+                      登録が終わる場合ページ一覧に遷移します。
                     </p>
                   </div>
 
-                  <div className='flex gap-x-4 pt-8 items-center justify-end px-6 py-3 -mx-6 -mb-4 sm:space-y-0 sm:space-x-6 sm:flex-row'>
+                  <div className='flex gap-x-4 sm:gap-x-0 pt-8 items-center justify-end px-6 py-3 -mx-6 -mb-4 sm:space-y-0 sm:space-x-6 sm:flex-row'>
                     <button
                     type="button"
                     className="inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 focus-visible:ring-offset-2"
-                    onClick={()=>onClose()}
+                    onClick={()=>navigateTo('/list')}
                     >
                     いいえ
                     </button>
@@ -89,7 +75,7 @@ export default function Modals({ onClose, getPsiData, id, name, url }: Props) {
                     <button
                     type="button"
                     className="inline-flex justify-center rounded-md border transition text-white hover:text-gray-900 border-transparent bg-gray-900 px-4 py-2 text-sm font-medium hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
-                    onClick={handleClick}
+                    onClick={()=>navigateFresh('/list/add')}
                     >
                     はい
                     </button>
