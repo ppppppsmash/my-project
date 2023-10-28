@@ -20,12 +20,13 @@ export default function PsiSelectBox({ siteList, onSiteSelect }: Props) {
     const selectedSite = siteList.find((site) => site.id.toString() === value)
 
     if (selectedSite) {
-      setSelectedSiteMetrics(selectedSite.siteMetrics)
       setSelectedSiteId(value)
+      setSelectedSiteMetrics(selectedSite.siteMetrics)
+      const result = selectedSite.siteMetrics.map((metrics, index) => {
+        return metrics
+      })
+      return result
     }
-
-    setSelectedDate('')
-    onSiteSelect(value, '')
   }
 
   const handleDateSelectChange = (value: string) => {

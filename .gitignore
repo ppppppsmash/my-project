@@ -51,3 +51,5 @@ MEMO.md
 
 # csv file
 /app/psi-app/files
+.pnpm-store
+*/.pnpm-store

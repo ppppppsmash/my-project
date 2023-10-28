@@ -36,41 +36,44 @@ export default function Compare() {
   const [selectedSiteRight, setSelectedSiteRight] = useState<PSIDataType | null>(null)
   const [selectedDateLeft, setSelectedDateLeft] = useState<string>('')
   const [selectedDateRight, setSelectedDateRight] = useState<string>('')
-  const [compareResultLeft, setCompareResultLeft] = useState<CompareResult>({})
-  const [compareResultRight, setCompareResultRight] = useState<CompareResult>({})
-
-  useEffect(() => {
-    const getData = async () => {
-      const data = await getDataAll('psi_site_list')
-      setSiteList(data)
-    }
-    getData()
-  }, [])
+  const [compareResultLeft, setCompareResultLeft] = useState<any>({})
+  const [compareResultRight, setCompareResultRight] = useState<any>({})
 
   const handleSiteSelect = (
     value: string,
     setSelectedSite: React.Dispatch<React.SetStateAction<PSIDataType | null>>,
     selectedDate: string,
     setSelectedDate: React.Dispatch<React.SetStateAction<string>>,
-    setResult: React.Dispatch<React.SetStateAction<CompareResult>>,
-    selectedSiteOpposite: PSIDataType | null
   ) => {
     const selectedSite = siteList.find((site) => site.id.toString() === value) || null
+
+    // ここで selectedDateLeft と selectedDateRight の値を逆転させる
+    if (selectedDateLeft === selectedDate) {
+      setSelectedDateRight(selectedDate)
+    } else if (selectedDateRight === selectedDate) {
+      setSelectedDateLeft(selectedDate)
+    }
+
     setSelectedSite(selectedSite)
     setSelectedDate(selectedDate)
-    compareMetrics(selectedSite, selectedSiteOpposite, setResult)
+  }
+
+  const handleSelectChange = (value: string, setSelectedSite: React.Dispatch<React.SetStateAction<PSIDataType | null>>) => {
+    const selectedSite = siteList.find((site) => site.id.toString() === value) || null
+    setSelectedSite(selectedSite)
   }
 
   const compareMetrics = (
     siteA: PSIDataType | null,
     siteB: PSIDataType | null,
-    setResult: React.Dispatch<React.SetStateAction<CompareResult>>
+    setResult: React.Dispatch<React.SetStateAction<CompareResult>>,
+    dateA: string,
+    dateB: string
   ) => {
     if (siteA && siteB) {
-      const latestMetricsA = siteA.siteMetrics.find((metrics) => metrics.createdAt === selectedDateLeft)
-      const latestMetricsB = siteB.siteMetrics.find((metrics) => metrics.createdAt === selectedDateRight)
+      const latestMetricsA = siteA.siteMetrics.find((metrics) => metrics.createdAt === dateA)
+      const latestMetricsB = siteB.siteMetrics.find((metrics) => metrics.createdAt === dateB)
 
-      console.log(selectedDateLeft, selectedDateRight)
       const result: CompareResult = {}
 
       if (latestMetricsA && latestMetricsB) {
@@ -89,14 +92,13 @@ export default function Compare() {
   }
 
   const compareMark = (valueA: number | string | undefined, valueB: number | string | undefined, metricType: string) => {
-    if(valueA && valueB) {
+    if (valueA && valueB) {
       const numericValueA = parseFloat(valueA.toString().replace(/,/g, '').split(/\s/)[0])
       const numericValueB = parseFloat(valueB.toString().replace(/,/g, '').split(/\s/)[0])
 
       if (metricType === MetricType.Score) {
         if (!isNaN(numericValueA) && !isNaN(numericValueB)) {
           if (numericValueA > numericValueB) {
-            console.log(numericValueA, numericValueB)
             return <FaceSmileIcon className='w-5 h-5 text-green-500' />
           } else if (numericValueA < numericValueB) {
             return <FaceFrownIcon className='w-5 h-5 text-red-400' />
@@ -105,21 +107,32 @@ export default function Compare() {
           }
         }
       } else {
-
-      if (!isNaN(numericValueA) && !isNaN(numericValueB)) {
-        if (numericValueA > numericValueB) {
-          console.log(numericValueA, numericValueB)
-          return <FaceFrownIcon className='w-5 h-5 text-red-400' />
-        } else if (numericValueA < numericValueB) {
-          return <FaceSmileIcon className='w-5 h-5 text-green-500' />
-        } else {
-          return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400' />
+        if (!isNaN(numericValueA) && !isNaN(numericValueB)) {
+          if (numericValueA > numericValueB) {
+            return <FaceFrownIcon className='w-5 h-5 text-red-400' />
+          } else if (numericValueA < numericValueB) {
+            return <FaceSmileIcon className='w-5 h-5 text-green-500' />
+          } else {
+            return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400' />
+          }
         }
       }
     }
-  }
     return null
   }
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getDataAll('psi_site_list')
+      setSiteList(data)
+    }
+    getData()
+  }, [])
+
+  useEffect(() => {
+    compareMetrics(selectedSiteLeft, selectedSiteRight, setCompareResultLeft, selectedDateLeft, selectedDateRight)
+    compareMetrics(selectedSiteRight, selectedSiteLeft, setCompareResultRight, selectedDateRight, selectedDateLeft)
+  }, [selectedSiteLeft, selectedSiteRight, selectedDateLeft, selectedDateRight])
 
   return (
     <>
@@ -129,26 +142,34 @@ export default function Compare() {
           <Flex className='mb-8 space-x-4'>
             <PsiSelectBox
               siteList={siteList}
-              onSiteSelect={(value, selectedDate) =>
-                handleSiteSelect(value, setSelectedSiteLeft, selectedDate, setSelectedDateLeft, setCompareResultLeft, selectedSiteRight)
+              onSiteSelect={(value, selectedDateLeft) =>
+                handleSiteSelect(value, setSelectedSiteLeft, selectedDateLeft, setSelectedDateLeft)
               }
             />
           </Flex>
           {selectedSiteLeft && (
-            <PsiCompareList siteList={selectedSiteLeft} compareResult={compareResultLeft} selectedDate={selectedDateLeft} />
+            <PsiCompareList
+              siteList={selectedSiteLeft}
+              compareResult={compareResultLeft}
+              selectedDate={selectedDateLeft}
+            />
           )}
         </Card>
         <Card className='mt-6 shadow-md'>
           <Flex className='mb-8 space-x-4'>
             <PsiSelectBox
               siteList={siteList}
-              onSiteSelect={(value, selectedDate) =>
-                handleSiteSelect(value, setSelectedSiteRight, selectedDate, setSelectedDateRight, setCompareResultRight, selectedSiteLeft)
+              onSiteSelect={(value, selectedDateRight) =>
+                handleSiteSelect(value, setSelectedSiteRight, selectedDateRight, setSelectedDateRight)
               }
             />
           </Flex>
           {selectedSiteRight && (
-            <PsiCompareList siteList={selectedSiteRight} compareResult={compareResultRight} selectedDate={selectedDateRight} />
+            <PsiCompareList
+              siteList={selectedSiteRight}
+              compareResult={compareResultRight}
+              selectedDate={selectedDateRight}
+            />
           )}
         </Card>
       </Flex>
