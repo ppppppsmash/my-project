@@ -24,7 +24,8 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ArrowSmallUpIcon,
-  ArrowSmallDownIcon
+  ArrowSmallDownIcon,
+  EyeIcon
 } from '@heroicons/react/24/outline'
 import PsiPopup from '@/components/PsiPopup'
 import PsiSelect from '@/components/PsiSelect'
@@ -34,7 +35,8 @@ import { formatDate } from '@/utils/formatDate'
 import { FiLoader } from 'react-icons/fi'
 import { fetchLinkPreview } from '@/utils/getLinkPreview'
 import Image from 'next/image'
-import { HoverCard } from './HoverCard'
+import { HoverCard } from '@/components/HoverCard'
+import PsiSiteHoverCard from '@/components/PsiSiteHoverCard'
 import ClockLoader from 'react-spinners/ClockLoader'
 import MoonLoader from 'react-spinners/MoonLoader'
 
@@ -200,9 +202,9 @@ export default function PsiTable() {
               <span className='flex group gap-x-2 items-center'>
                 Site
                 {sortDirection === 'asc' ? (
-                  <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out' />
+                  <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
                 ) : (
-                  <ArrowSmallDownIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out' />
+                  <ArrowSmallDownIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
                 )}
               </span>
             </TableHeaderCell>
@@ -218,9 +220,9 @@ export default function PsiTable() {
               <span className='flex group gap-x-2 items-center'>
                 PSI score
                 {sortDirection === 'asc' ? (
-                  <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out' />
+                  <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
                 ) : (
-                  <ArrowSmallDownIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out' />
+                  <ArrowSmallDownIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
                 )}
               </span>
             </TableHeaderCell>
@@ -231,9 +233,9 @@ export default function PsiTable() {
               <span className='flex group gap-x-2 items-center'>
                 Date
                 {sortDirection === 'asc' ? (
-                  <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out' />
+                  <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
                 ) : (
-                  <ArrowSmallDownIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out' />
+                  <ArrowSmallDownIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
                 )}
               </span>
             </TableHeaderCell>
@@ -244,9 +246,9 @@ export default function PsiTable() {
               <span className='flex group gap-x-2 items-center'>
                 Schedule
                 {sortDirection === 'asc' ? (
-                  <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out' />
+                  <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
                 ) : (
-                  <ArrowSmallDownIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out' />
+                  <ArrowSmallDownIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
                 )}
               </span>
             </TableHeaderCell>
@@ -287,11 +289,13 @@ export default function PsiTable() {
                     onClick={()=>handleNameChange(index, item.id)}
                   />
                 </p> ) : (
+                  <PsiSiteHoverCard>
                     <Link
                       className='underline'
                       href={`/list/${item.id}`}>
                       {editName[index] || item.name}
                     </Link>
+                  </PsiSiteHoverCard>
                 )
               }
               </p>
@@ -299,9 +303,12 @@ export default function PsiTable() {
               <TableCell>
                 <Text className='underline decoration-dotted dark:text-white'>
                   <HoverCard url={item.url}>
-                    <Link href={{pathname: item.url}} target='_blank'>
-                      {item.url}
-                    </Link>
+                    <div className='flex gap-x-1 items-center group'>
+                      <EyeIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
+                      <Link href={{pathname: item.url}} target='_blank'>
+                        {item.url}
+                      </Link>
+                    </div>
                   </HoverCard>
                 </Text>
               </TableCell>

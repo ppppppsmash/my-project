@@ -9,7 +9,7 @@ import Modals from '@/components/Modals'
 import PsiInput from '@/components/PsiInput'
 import PsiButton from '@/components/PsiButton'
 import PsiDialog from '@/components/PsiDialog'
-import { ExclamationTriangleIcon, CheckCircleIcon, DocumentChartBarIcon } from "@heroicons/react/24/solid"
+import { ExclamationTriangleIcon, CheckCircleIcon, DocumentChartBarIcon } from '@heroicons/react/24/solid'
 import { checkboxValidate, inputValidate, textareaValidate, csvValidate } from '@/utils/validation'
 import Loading from '@/components/Loading'
 import { SelectBox, SelectBoxItem } from '@tremor/react'
