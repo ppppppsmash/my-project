@@ -197,8 +197,13 @@ export default function PsiTable() {
               className='dark:text-white cursor-pointer'
               onClick={() => handleSort('name')}
             >
-              <span className='flex gap-x-2 items-center'>
-              Site
+              <span className='flex group gap-x-2 items-center'>
+                Site
+                {sortDirection === 'asc' ? (
+                  <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out' />
+                ) : (
+                  <ArrowSmallDownIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out' />
+                )}
               </span>
             </TableHeaderCell>
             <TableHeaderCell
@@ -208,21 +213,42 @@ export default function PsiTable() {
             </TableHeaderCell>
             <TableHeaderCell
               className='dark:text-white cursor-pointer'
-              onClick={() => handleSort('score')} // PSI score カラムにソートを追加
+              onClick={() => handleSort('score')}
             >
-              PSI score
+              <span className='flex group gap-x-2 items-center'>
+                PSI score
+                {sortDirection === 'asc' ? (
+                  <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out' />
+                ) : (
+                  <ArrowSmallDownIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out' />
+                )}
+              </span>
             </TableHeaderCell>
             <TableHeaderCell
               className='dark:text-white cursor-pointer'
-              onClick={() => handleSort('updatedAt')} // Date カラムにソートを追加
+              onClick={() => handleSort('updatedAt')}
             >
-              Date
+              <span className='flex group gap-x-2 items-center'>
+                Date
+                {sortDirection === 'asc' ? (
+                  <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out' />
+                ) : (
+                  <ArrowSmallDownIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out' />
+                )}
+              </span>
             </TableHeaderCell>
             <TableHeaderCell
               className='dark:text-white cursor-pointer'
-              onClick={() => handleSort('schedule')} // Schedule カラムにソートを追加
+              onClick={() => handleSort('schedule')}
             >
-              Schedule
+              <span className='flex group gap-x-2 items-center'>
+                Schedule
+                {sortDirection === 'asc' ? (
+                  <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out' />
+                ) : (
+                  <ArrowSmallDownIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out' />
+                )}
+              </span>
             </TableHeaderCell>
             <TableHeaderCell className='dark:text-white'>Action</TableHeaderCell>
           </TableRow>
