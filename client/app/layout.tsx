@@ -24,7 +24,7 @@ export default function RootLayout({
         <div className='mb-16'>
           <Nav />
         </div>
-        <main className="p-4 md:p-10 mx-auto max-w-7xl">
+        <main className="p-4 md:py-10 md:px-16 mx-auto max-w-full">
           <DelaySection delay={0.2}>
             <Suspense fallback={<h1 className='flex items-center justify-center my-4'><MoonLoader size={22} /></h1>}>
               {children}

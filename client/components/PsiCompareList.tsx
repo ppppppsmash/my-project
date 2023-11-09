@@ -37,7 +37,7 @@ export default function PsiCompareList({ siteList, compareResult, selectedDate }
   console.log(lcp)
 
   return (
-    <List key={siteList.id}>
+    <List key={siteList.id} className='dark:text-white'>
       <ListItem>
         <span>サイト：</span>
         <Link href={{pathname: `/list/${siteList.id}`}}>

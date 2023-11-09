@@ -51,11 +51,11 @@ export default function Navbar() {
     <Disclosure as="nav" className="fixed w-full z-50 top-0 bg-white shadow dark:bg-gray-950 dark:text-white dark:border-b-[1px] dark:border-slate-700">
       {({ open }) => (
         <>
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-full px-4 md:px-16">
 
             <div className="absolute sm:top-5 top-4">
               <Link className='flex items-center gap-x-2' href='/'>
-                <TbDeviceAnalytics className="block h-8 w-8 text-gray-900" />
+                <TbDeviceAnalytics className="block h-8 w-8 text-gray-900 dark:text-white" />
                 <span className={inter.className}>PSI Measurement</span>
               </Link>
             </div>
