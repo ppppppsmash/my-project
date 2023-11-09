@@ -46,14 +46,15 @@ export default function PsiMotionModalsChart({ categories, siteMetrics }: Props)
             layoutId={index.toString()}
             onClick={() => setSelectedId(index.toString())}
           >
-            <Card>
-              <Text>{formattedCategories(category)}</Text>
+            <Card className='dark:bg-gray-950'>
+              <Text className='dark:text-white'>{formattedCategories(category)}</Text>
               <LineChart
                 data={siteMetrics}
                 index='createdAt'
                 categories={[category]}
                 colors={[colors[index]]}
                 yAxisWidth={40}
+                className='dark:text-white'
               />
             </Card>
           </motion.div>
@@ -61,7 +62,8 @@ export default function PsiMotionModalsChart({ categories, siteMetrics }: Props)
       ))}
       <AnimatePresence>
         {selectedId && (
-          <Card className='sm:fixed w-full sm:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 -webkit-transform mx-auto sm:w-[1000px] z-10'>
+          <Card className='sm:fixed w-full sm:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2
+            -webkit-transform mx-auto sm:w-[1000px] z-10 dark:bg-gray-950'>
             <motion.div
               className='relative p-4'
               layoutId={selectedId}>

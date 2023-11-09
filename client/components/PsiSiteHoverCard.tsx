@@ -25,7 +25,7 @@ const PsiSiteHoverCard = ({children}: {children: React.ReactNode}) => (
         )} sideOffset={5}>
           <div className='flex gap-x-2 items-center'>
             <SparklesIcon className='w-5 h-5 text-[#FFC042]' />
-            <Text className='text-sm'>
+            <Text className='text-sm dark:text-white'>
               詳細ページへ遷移できるよ
             </Text>
           </div>

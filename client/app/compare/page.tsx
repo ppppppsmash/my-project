@@ -101,19 +101,19 @@ export default function Compare() {
           if (numericValueA > numericValueB) {
             return (
               <>
-                <FaceSmileIcon className='w-5 h-5 text-green-500 mr-2' />
+                <FaceSmileIcon className='w-5 h-5 text-green-500 ml-2' />
                 <span className='text-green-500'>+{numericValueA - numericValueB}</span>
               </>
             )
           } else if (numericValueA < numericValueB) {
             return (
               <>
-                <FaceFrownIcon className='w-5 h-5 text-red-400 mr-2' />
+                <FaceFrownIcon className='w-5 h-5 text-red-400 ml-2' />
                 <span className='text-red-400'>-{numericValueB - numericValueA}</span>
               </>
             )
           } else {
-            return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400' />
+            return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400 ml-2' />
           }
         }
       } else {
@@ -121,19 +121,19 @@ export default function Compare() {
           if (numericValueA > numericValueB) {
             return (
               <>
-                <FaceFrownIcon className='w-5 h-5 text-red-400 mr-2' />
+                <FaceFrownIcon className='w-5 h-5 text-red-400 ml-2' />
                 <span className='text-red-400'>+{Math.floor((numericValueA - numericValueB) * 1000) / 1000}</span>
               </>
             )
           } else if (numericValueA < numericValueB) {
             return (
               <>
-                <FaceSmileIcon className='w-5 h-5 text-green-500 mr-2' />
+                <FaceSmileIcon className='w-5 h-5 text-green-500 ml-2' />
                 <span className='text-green-500'>-{Math.floor((numericValueB - numericValueA) * 1000) / 1000}</span>
               </>
             )
           } else {
-            return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400' />
+            return <ArrowsRightLeftIcon className='w-5 h-5 text-yellow-400 ml-2' />
           }
         }
       }
@@ -158,7 +158,7 @@ export default function Compare() {
     <div>
       <Title className='dark:text-white'>ページ比較</Title>
       <Flex className='sm:space-x-4 items-start sm:flex block space-x-0'>
-        <Card className='mt-6 shadow-md overflow-x-scroll sm:overflow-visible sm:h-auto h-[400px]'>
+        <Card className='mt-6 shadow-md overflow-x-scroll sm:overflow-visible sm:h-auto h-[400px] dark:bg-black'>
           <Flex className='mb-8 space-x-4'>
             <PsiSelectBox
               siteList={siteList}
@@ -175,7 +175,7 @@ export default function Compare() {
             />
           )}
         </Card>
-        <Card className='mt-6 shadow-md overflow-x-scroll sm:overflow-visible sm:h-auto h-[400px]'>
+        <Card className='mt-6 shadow-md overflow-x-scroll sm:overflow-visible sm:h-auto h-[400px] dark:bg-black'>
           <Flex className='mb-8 space-x-4'>
             <PsiSelectBox
               siteList={siteList}
