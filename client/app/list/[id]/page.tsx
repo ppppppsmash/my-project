@@ -150,7 +150,7 @@ export default function Slug({ params: { id } }: Props) {
         </>
       ))}
 
-      <Title className='mt-10 dark:text-white'>ユーザー体験パフォーマンス</Title>
+      <Title className='mt-10 dark:text-white border-b-2 border-b-black dark:border-b-white'>ユーザー体験パフォーマンス</Title>
       <Grid
         className='gap-6 mt-6 mb-6'
         numColsLg={6}
@@ -187,7 +187,7 @@ export default function Slug({ params: { id } }: Props) {
         </Col>
       </Grid>
 
-      <Title className='mt-10 dark:text-white'>ラボスパフォーマンス</Title>
+      <Title className='mt-10 dark:text-white border-b-2 border-b-black dark:border-b-white'>ラボスパフォーマンス</Title>
       <Grid
         className='gap-6 mt-6 mb-6'
         numColsLg={6}

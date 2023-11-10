@@ -174,7 +174,7 @@ export default function PsiTable() {
   if (!result) return <h1 className='text-md text-center'>データがありません。</h1>
 
   return (
-    <div className='dark:bg-gray-950'>
+    <div className={`dark:bg-gray-950`}>
       <MultiSelectBox
         onValueChange={setSelectedNames}
         placeholder="検索..."
@@ -303,8 +303,8 @@ export default function PsiTable() {
               <TableCell>
                 <Text className='underline decoration-dotted dark:text-white'>
                   <HoverCard url={item.url}>
-                    <div className='flex gap-x-1 items-center group'>
-                      <EyeIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
+                    <div className='flex relative gap-x-1 items-center group'>
+                      <EyeIcon className='absolute -left-5 w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-500 ease-in-out' />
                       <Link href={{pathname: item.url}} target='_blank'>
                         {item.url}
                       </Link>
