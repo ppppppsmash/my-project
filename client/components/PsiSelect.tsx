@@ -19,7 +19,6 @@ export default function PsiSelect({ placeholder, handleSelectChange }: Props) {
         <SelectBoxItem value='4' text='4時間ごと' icon={ClockIcon} />
         <SelectBoxItem value='12' text='12時間ごと' icon={ClockIcon} />
         <SelectBoxItem value='24' text='24時間ごと' icon={ClockIcon} />
-        <SelectBoxItem value='week' text='1週間ごと' icon={ClockIcon} />
       </SelectBox>
     </div>
   )

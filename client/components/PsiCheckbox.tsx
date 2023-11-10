@@ -20,7 +20,7 @@ export default function PsiCheckbox({ device, checkEvent }: Props) {
   return (
     <div className="flex items-center space-x-3 py-6">
       <input
-        className='border-gray-300 rounded h-6 w-6 accent-gray-900'
+        className='border-gray-300 rounded h-4 w-4 accent-gray-900 transition duration-700'
         type="checkbox"
         value={device}
         checked={isChecked}

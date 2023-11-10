@@ -14,7 +14,9 @@ import {
   Title,
   TextInput,
   MultiSelectBox,
-  MultiSelectBoxItem
+  MultiSelectBoxItem,
+  Badge,
+  BadgeDelta
 } from '@tremor/react'
 import {
   XMarkIcon,
@@ -174,11 +176,11 @@ export default function PsiTable() {
   if (!result) return <h1 className='text-md text-center'>データがありません。</h1>
 
   return (
-    <div className='dark:bg-gray-950'>
+    <div className={`dark:bg-gray-950`}>
       <MultiSelectBox
         onValueChange={setSelectedNames}
         placeholder="検索..."
-        className="max-w-xs ml-4 mt-8 dark:bg-gray-950"
+        className="max-w-xs mt-8 dark:bg-gray-950"
       >
         {result.map((item) => (
           <MultiSelectBoxItem
@@ -192,14 +194,14 @@ export default function PsiTable() {
         ))}
       </MultiSelectBox>
 
-      <Table className='mt-2 overflow-visible'>
+      <Table className='mt-2 overflow-visible border-gray-750 border-[1px] rounded-lg overflow-x-scroll'>
         <TableHead>
-          <TableRow>
+          <TableRow className='border-b-[1px]  border-gray-750'>
             <TableHeaderCell
               className='dark:text-white cursor-pointer'
               onClick={() => handleSort('name')}
             >
-              <span className='flex group gap-x-2 items-center'>
+              <span className='flex group gap-x-2 items-center font-light'>
                 Site
                 {sortDirection === 'asc' ? (
                   <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
@@ -209,7 +211,7 @@ export default function PsiTable() {
               </span>
             </TableHeaderCell>
             <TableHeaderCell
-              className='dark:text-white cursor-pointer'
+              className='dark:text-white font-light'
             >
               URL
             </TableHeaderCell>
@@ -217,8 +219,8 @@ export default function PsiTable() {
               className='dark:text-white cursor-pointer'
               onClick={() => handleSort('score')}
             >
-              <span className='flex group gap-x-2 items-center'>
-                PSI score
+              <span className='flex group gap-x-2 items-center font-light'>
+                PSI Score
                 {sortDirection === 'asc' ? (
                   <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
                 ) : (
@@ -230,7 +232,7 @@ export default function PsiTable() {
               className='dark:text-white cursor-pointer'
               onClick={() => handleSort('updatedAt')}
             >
-              <span className='flex group gap-x-2 items-center'>
+              <span className='flex group gap-x-2 items-center font-light'>
                 Date
                 {sortDirection === 'asc' ? (
                   <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
@@ -243,7 +245,7 @@ export default function PsiTable() {
               className='dark:text-white cursor-pointer'
               onClick={() => handleSort('schedule')}
             >
-              <span className='flex group gap-x-2 items-center'>
+              <span className='flex group gap-x-2 items-center font-light'>
                 Schedule
                 {sortDirection === 'asc' ? (
                   <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
@@ -252,13 +254,13 @@ export default function PsiTable() {
                 )}
               </span>
             </TableHeaderCell>
-            <TableHeaderCell className='dark:text-white'>Action</TableHeaderCell>
+            <TableHeaderCell className='dark:text-white font-light'>Action</TableHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody className='dark:text-white'>
           {sortedData?.filter((item) => isSiteSelected(item)).map((item, index) => (
             <TableRow
-              className='hover:bg-gray-100 dark:hover:bg-gray-700'
+              className='hover:bg-gray-50 dark:hover:bg-gray-700'
               key={item.id}
             >
               <TableCell className='dark:text-white'>
@@ -303,8 +305,8 @@ export default function PsiTable() {
               <TableCell>
                 <Text className='underline decoration-dotted dark:text-white'>
                   <HoverCard url={item.url}>
-                    <div className='flex gap-x-1 items-center group'>
-                      <EyeIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
+                    <div className='flex relative gap-x-1 items-center group'>
+                      <EyeIcon className='absolute -left-5 w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-500 ease-in-out' />
                       <Link href={{pathname: item.url}} target='_blank'>
                         {item.url}
                       </Link>
@@ -316,7 +318,26 @@ export default function PsiTable() {
                 {spinningItems.includes(index) ? (
                   <ClockLoader size='15' />
                 ) : (
+                  <div className='flex items-center gap-x-2'>
                   <Text className='dark:text-white'>{item.siteMetrics[0].score}</Text>
+                  {item.siteMetrics[1] && (
+                    <>
+                      {item.siteMetrics[0].score > item.siteMetrics[1].score ? (
+                        <BadgeDelta deltaType="increase">
+                          {item.siteMetrics[0].score - item.siteMetrics[1].score}
+                        </BadgeDelta>
+                      ) : item.siteMetrics[0].score < item.siteMetrics[1].score ? (
+                        <BadgeDelta deltaType="decrease">
+                          {item.siteMetrics[1].score - item.siteMetrics[0].score}
+                        </BadgeDelta>
+                      ) : (
+                        <BadgeDelta deltaType="unchanged">
+                          0
+                        </BadgeDelta>
+                      )}
+                    </>
+                  )}
+                  </div>
                 )}
               </TableCell>
               <TableCell>

@@ -316,7 +316,7 @@ export default function PsiTabContent({ mode }: Props) {
         <div>
           <div className='mb-4'>
             <PsiInput
-              placeholder='site名'
+              placeholder='example'
               handleChange={getChangeUrlName}
             />
           </div>
@@ -332,11 +332,12 @@ export default function PsiTabContent({ mode }: Props) {
         <div>
           <div className='mb-4'>
             <textarea
-              placeholder='example http://example.com（サイトとURLの間にスペース入り）'
+              placeholder='example http://example.com（サイト名とURLの間に半角スペースを入れてください.）'
               rows={10}
               onChange={handleSiteDataChange}
               value={names.join('\n')}
-              className='w-full p-2 border rounded'
+              className='w-full p-2 border rounded ring-blue-300 ring-0 focus:ring-2
+              focus:ring-blue-200 focus:outline-none border-gray-300'
             />
           </div>
         </div>

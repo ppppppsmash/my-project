@@ -9,6 +9,7 @@ import PsiCompareList from '@/components/PsiCompareList'
 import { ArrowSmallUpIcon, ArrowSmallDownIcon, FaceSmileIcon, FaceFrownIcon, ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
 import PsiMotionModalsChartTotal from '@/components/PsiMotionModalsChartTotal'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
+import { zenKaku } from '@/utils/font'
 
 enum MetricType {
   Score = 'score',
@@ -156,7 +157,8 @@ export default function Compare() {
 
   return (
     <div>
-      <Title className='dark:text-white'>ページ比較</Title>
+      <Title className={`dark:text-white ${zenKaku.className} relative md:text-xl dark:text-white dark:after:from-white after:block after:bg-bottom
+          after:bg-gradient-to-r after:from-gray-700 after:via-gray-300 after:to-transparent after:h-[1px]`}>ページ比較</Title>
       <Flex className='sm:space-x-4 items-start sm:flex block space-x-0'>
         <Card className='mt-6 shadow-md overflow-x-scroll sm:overflow-visible sm:h-auto h-[400px] dark:bg-black'>
           <Flex className='mb-8 space-x-4'>

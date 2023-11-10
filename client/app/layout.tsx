@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body className='h-full dark:bg-gray-950 dark:text-white'>
+      <body className='h-full bg-gray-50 dark:bg-gray-950 dark:text-white'>
         <div className='mb-16'>
           <Nav />
         </div>
