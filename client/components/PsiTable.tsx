@@ -178,7 +178,7 @@ export default function PsiTable() {
       <MultiSelectBox
         onValueChange={setSelectedNames}
         placeholder="検索..."
-        className="max-w-xs ml-4 mt-8 dark:bg-gray-950"
+        className="max-w-xs mt-8 dark:bg-gray-950"
       >
         {result.map((item) => (
           <MultiSelectBoxItem
@@ -192,14 +192,14 @@ export default function PsiTable() {
         ))}
       </MultiSelectBox>
 
-      <Table className='mt-2 overflow-visible'>
+      <Table className='mt-2 overflow-visible border-gray-750 border-[1px] rounded-lg'>
         <TableHead>
-          <TableRow>
+          <TableRow className='border-b-[1px]  border-gray-750'>
             <TableHeaderCell
               className='dark:text-white cursor-pointer'
               onClick={() => handleSort('name')}
             >
-              <span className='flex group gap-x-2 items-center'>
+              <span className='flex group gap-x-2 items-center font-light'>
                 Site
                 {sortDirection === 'asc' ? (
                   <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
@@ -209,7 +209,7 @@ export default function PsiTable() {
               </span>
             </TableHeaderCell>
             <TableHeaderCell
-              className='dark:text-white cursor-pointer'
+              className='dark:text-white font-light'
             >
               URL
             </TableHeaderCell>
@@ -217,7 +217,7 @@ export default function PsiTable() {
               className='dark:text-white cursor-pointer'
               onClick={() => handleSort('score')}
             >
-              <span className='flex group gap-x-2 items-center'>
+              <span className='flex group gap-x-2 items-center font-light'>
                 PSI score
                 {sortDirection === 'asc' ? (
                   <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
@@ -230,7 +230,7 @@ export default function PsiTable() {
               className='dark:text-white cursor-pointer'
               onClick={() => handleSort('updatedAt')}
             >
-              <span className='flex group gap-x-2 items-center'>
+              <span className='flex group gap-x-2 items-center font-light'>
                 Date
                 {sortDirection === 'asc' ? (
                   <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
@@ -243,7 +243,7 @@ export default function PsiTable() {
               className='dark:text-white cursor-pointer'
               onClick={() => handleSort('schedule')}
             >
-              <span className='flex group gap-x-2 items-center'>
+              <span className='flex group gap-x-2 items-center font-light'>
                 Schedule
                 {sortDirection === 'asc' ? (
                   <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
@@ -252,13 +252,13 @@ export default function PsiTable() {
                 )}
               </span>
             </TableHeaderCell>
-            <TableHeaderCell className='dark:text-white'>Action</TableHeaderCell>
+            <TableHeaderCell className='dark:text-white font-light'>Action</TableHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody className='dark:text-white'>
           {sortedData?.filter((item) => isSiteSelected(item)).map((item, index) => (
             <TableRow
-              className='hover:bg-gray-100 dark:hover:bg-gray-700'
+              className='hover:bg-gray-50 dark:hover:bg-gray-700'
               key={item.id}
             >
               <TableCell className='dark:text-white'>

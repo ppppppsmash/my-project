@@ -57,7 +57,7 @@ export default function PsiPopup({ behaviorEdit, behaviorScoreAgain, behaviorDel
         <>
           <Menu.Button
             className={`
-              ${open ? '' : 'text-opacity-90'}
+              ${open ? 'bg-gray-100 dark:bg-gray-700 rounded' : 'text-opacity-90'}
               focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
           >
             <EllipsisHorizontalIcon
@@ -73,18 +73,18 @@ export default function PsiPopup({ behaviorEdit, behaviorScoreAgain, behaviorDel
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 translate-y-1"
           >
-            <Menu.Item as='div' className='absolute top-2 left-5 z-10 mt-3 max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-xl w-[100px] cursor-pointer'>
+            <Menu.Item as='div' className='absolute top-4 -left-6 z-10 mt-3 max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-xl w-[100px] cursor-pointer'>
               <div className='overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5'>
                 <div className='relative block bg-white py-4'>
                   {actions.map((item) => (
                     <a
                       key={item.name}
                       className='mx-1 flex items-center rounded-lg p-2 transition duration-150 ease-in-out
-                        hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500
+                        hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500
                         focus-visible:ring-opacity-50'
                       onClick={()=>handleClick(item.name)}
                     >
-                      <div className="w-4 h-4 mr-2">
+                      <div className="w-4 h-4 mr-2 dark:text-gray-950">
                         <item.icon aria-hidden="true" />
                       </div>
                       <p className='text-sm font-medium text-gray-900'>

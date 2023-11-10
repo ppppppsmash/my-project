@@ -157,7 +157,7 @@ export default function Compare() {
 
   return (
     <div>
-      <Title className={`dark:text-white ${zenKaku.className} relative text-2xl dark:text-white dark:after:from-white after:block after:bg-bottom
+      <Title className={`dark:text-white ${zenKaku.className} relative md:text-2xl dark:text-white dark:after:from-white after:block after:bg-bottom
           after:bg-gradient-to-r after:from-gray-700 after:to-transparent after:h-[1px]`}>ページ比較</Title>
       <Flex className='sm:space-x-4 items-start sm:flex block space-x-0'>
         <Card className='mt-6 shadow-md overflow-x-scroll sm:overflow-visible sm:h-auto h-[400px] dark:bg-black'>
