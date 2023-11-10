@@ -14,7 +14,9 @@ import {
   Title,
   TextInput,
   MultiSelectBox,
-  MultiSelectBoxItem
+  MultiSelectBoxItem,
+  Badge,
+  BadgeDelta
 } from '@tremor/react'
 import {
   XMarkIcon,
@@ -192,7 +194,7 @@ export default function PsiTable() {
         ))}
       </MultiSelectBox>
 
-      <Table className='mt-2 overflow-visible border-gray-750 border-[1px] rounded-lg'>
+      <Table className='mt-2 overflow-visible border-gray-750 border-[1px] rounded-lg overflow-x-scroll'>
         <TableHead>
           <TableRow className='border-b-[1px]  border-gray-750'>
             <TableHeaderCell
@@ -218,7 +220,7 @@ export default function PsiTable() {
               onClick={() => handleSort('score')}
             >
               <span className='flex group gap-x-2 items-center font-light'>
-                PSI score
+                PSI Score
                 {sortDirection === 'asc' ? (
                   <ArrowSmallUpIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
                 ) : (
@@ -316,7 +318,26 @@ export default function PsiTable() {
                 {spinningItems.includes(index) ? (
                   <ClockLoader size='15' />
                 ) : (
+                  <div className='flex items-center gap-x-2'>
                   <Text className='dark:text-white'>{item.siteMetrics[0].score}</Text>
+                  {item.siteMetrics[1] && (
+                    <>
+                      {item.siteMetrics[0].score > item.siteMetrics[1].score ? (
+                        <BadgeDelta deltaType="increase">
+                          {item.siteMetrics[0].score - item.siteMetrics[1].score}
+                        </BadgeDelta>
+                      ) : item.siteMetrics[0].score < item.siteMetrics[1].score ? (
+                        <BadgeDelta deltaType="decrease">
+                          {item.siteMetrics[1].score - item.siteMetrics[0].score}
+                        </BadgeDelta>
+                      ) : (
+                        <BadgeDelta deltaType="unchanged">
+                          0
+                        </BadgeDelta>
+                      )}
+                    </>
+                  )}
+                  </div>
                 )}
               </TableCell>
               <TableCell>

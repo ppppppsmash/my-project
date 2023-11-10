@@ -16,8 +16,8 @@ export default function PsiList() {
   return (
     <QueryClientProvider client={queryClient}>
       <div>
-        <Title className={`${zenKaku.className} relative md:text-2xl dark:text-white dark:after:from-white after:block after:bg-bottom
-          after:bg-gradient-to-r after:from-gray-700 after:to-transparent after:h-[1px]`}>ページ一覧</Title>
+        <Title className={`${zenKaku.className} relative md:text-xl dark:text-white dark:after:from-white after:block after:bg-bottom
+          after:bg-gradient-to-r after:from-gray-700 after:via-gray-300 after:to-transparent after:h-[1px]`}>ページ一覧</Title>
 
         <div className='mt-5 text-right'>
           <Button
@@ -32,7 +32,7 @@ export default function PsiList() {
           </Button>
         </div>
 
-        <Card className='mt-6 shadow-lg dark:bg-gray-950 overflow-x-scroll'>
+        <Card className='mt-6 shadow-lg dark:bg-gray-950'>
           <Title className='dark:text-white'>PSI</Title>
           {/* <PsiSearchMultipleBox /> */}
           <DynamicComponent />
