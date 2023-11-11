@@ -33,7 +33,6 @@ export default function PsiList() {
         </div>
 
         <Card className='mt-6 shadow-lg dark:bg-gray-950'>
-          <Title className='dark:text-white'>PSI</Title>
           {/* <PsiSearchMultipleBox /> */}
           <DynamicComponent />
         </Card>
