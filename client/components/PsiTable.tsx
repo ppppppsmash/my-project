@@ -27,7 +27,8 @@ import {
   ChevronRightIcon,
   ArrowSmallUpIcon,
   ArrowSmallDownIcon,
-  EyeIcon
+  EyeIcon,
+  ChevronUpDownIcon
 } from '@heroicons/react/24/outline'
 import PsiPopup from '@/components/PsiPopup'
 import PsiSelect from '@/components/PsiSelect'
@@ -173,7 +174,7 @@ export default function PsiTable() {
   }
 
   if(isLoading) return (<h1 className='flex items-center justify-center my-4'><MoonLoader size={22} /></h1>)
-  if (!result) return <h1 className='text-md text-center'>データがありません。</h1>
+  if (!result) return <h1 className='text-md text-center'>データがありません.</h1>
 
   return (
     <div className={`dark:bg-gray-950`}>
@@ -194,7 +195,7 @@ export default function PsiTable() {
         ))}
       </MultiSelectBox>
 
-      <Table className='mt-2 overflow-visible border-gray-750 border-[1px] rounded-lg overflow-x-scroll'>
+      <Table className='mt-2 border-gray-750 border-[1px] rounded-lg overflow-visible overflow-x-scroll'>
         <TableHead>
           <TableRow className='border-b-[1px]  border-gray-750'>
             <TableHeaderCell
@@ -208,6 +209,7 @@ export default function PsiTable() {
                 ) : (
                   <ArrowSmallDownIcon className='w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out' />
                 )}
+                {/* <ChevronUpDownIcon className='w-4 h-4' /> */}
               </span>
             </TableHeaderCell>
             <TableHeaderCell
@@ -375,9 +377,10 @@ export default function PsiTable() {
               </TableCell>
               <TableCell>
                 <PsiPopup
-                  behaviorEdit={()=>handleEdit(index)}
-                  behaviorScoreAgain={()=>handleClick(item.name, item.url, index, item.id, item.device)}
-                  behaviorDelete={()=>deleteItem(index, item.id)}
+                  className={index === sortedData.length - 1 || index === sortedData.length -2 ? 'bottom-8 -left-6' : 'top-4 -left-6'}
+                  behaviorEdit={() => handleEdit(index)}
+                  behaviorScoreAgain={() => handleClick(item.name, item.url, index, item.id, item.device)}
+                  behaviorDelete={() => deleteItem(index, item.id)}
                 />
               </TableCell>
             </TableRow>
