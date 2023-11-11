@@ -8,7 +8,6 @@ interface Props {
 export default function PsiInput({placeholder, handleChange}: Props) {
   return (
     <TextInput
-      className='ring-gray-950 focus:ring-gray-800'
       placeholder={placeholder}
       onChange={handleChange}
     />

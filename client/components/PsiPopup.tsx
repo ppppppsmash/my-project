@@ -6,7 +6,6 @@ interface Props {
   behaviorEdit(): void
   behaviorScoreAgain(): void
   behaviorDelete(): void
-  className: string
 }
 
 const iconEdit = () => {
@@ -42,7 +41,7 @@ const actions = [
   },
 ]
 
-export default function PsiPopup({ behaviorEdit, behaviorScoreAgain, behaviorDelete, className }: Props) {
+export default function PsiPopup({ behaviorEdit, behaviorScoreAgain, behaviorDelete }: Props) {
   const handleClick = (action: string) => {
     if(action === 'Edit') {
       behaviorEdit()
@@ -74,8 +73,7 @@ export default function PsiPopup({ behaviorEdit, behaviorScoreAgain, behaviorDel
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 translate-y-1"
           >
-            <Menu.Item as='div' className={`absolute ${className} z-50 mt-3 max-w-sm -translate-x-1/2
-              transform px-4 sm:px-0 lg:max-w-xl cursor-pointer`}>
+            <Menu.Item as='div' className='absolute top-4 -left-6 z-10 mt-3 max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-xl w-[100px] cursor-pointer'>
               <div className='overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5'>
                 <div className='relative block bg-white py-4'>
                   {actions.map((item) => (

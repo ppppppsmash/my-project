@@ -6,6 +6,8 @@ import ToggleButton from '@/components/ToggleButton'
 import type { Metadata } from 'next'
 import Favicon from '@/public/favicon.ico'
 import MoonLoader from 'react-spinners/MoonLoader'
+import Providers from './Providers'
+import { SessionProvider } from 'next-auth/react'
 
 export const metadata: Metadata = {
   title: 'Page Speed Measurement',
@@ -21,16 +23,18 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className='h-full bg-gray-50 dark:bg-gray-950 dark:text-white'>
-        <div className='mb-16'>
-          <Nav />
-        </div>
-        <main className="p-4 md:py-10 md:px-16 mx-auto max-w-full">
-          <DelaySection delay={0.2}>
-            <Suspense fallback={<h1 className='flex items-center justify-center my-4'><MoonLoader size={22} /></h1>}>
-              {children}
-            </Suspense>
-          </DelaySection>
-        </main>
+        <Providers>
+          <div className='mb-16'>
+            <Nav />
+          </div>
+          <main className="p-4 md:py-10 md:px-16 mx-auto max-w-full">
+            <DelaySection delay={0.2}>
+              <Suspense fallback={<h1 className='flex items-center justify-center my-4'><MoonLoader size={22} /></h1>}>
+                {children}
+              </Suspense>
+            </DelaySection>
+          </main>
+        </Providers>
       </body>
     </html>
   )

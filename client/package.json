@@ -42,6 +42,7 @@
     "styled-components": "^6.0.1",
     "tailwindcss": "3.3.1",
     "typeorm": "^0.3.17",
+    "typeorm-naming-strategies": "^4.1.0",
     "typescript": "5.0.4"
   },
   "devDependencies": {
