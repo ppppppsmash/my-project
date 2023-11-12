@@ -13,7 +13,7 @@ export default function LoginPage() {
 
   const router = useRouter()
 
-  const onSubmit = async () => {
+  const onLogin = async () => {
     const emailValue = email.current?.value || ''
     const passwordValue = password.current?.value || ''
     const result = await signIn('credentials', {
@@ -81,7 +81,7 @@ export default function LoginPage() {
                   </div>
               </div> */}
             <button
-              onClick={onSubmit}
+              onClick={onLogin}
               className='w-full text-white bg-gray-950 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800'>
                 ログイン
             </button>
