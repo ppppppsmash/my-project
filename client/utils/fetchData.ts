@@ -1,4 +1,4 @@
-export const getDataAll = async(api: string) => {
+export const getDataAll = async(api: string, user_id: number) => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}${api}/`, {
       method: 'GET',
@@ -6,10 +6,16 @@ export const getDataAll = async(api: string) => {
       headers: {
         'Content-Type': 'application/json',
       }
+      // headers: {
+      //   Authorization: `Bearer ${accessToken}`, // ログイン時に取得したアクセストークンを使用
+      // },
     })
     const data = await response.json()
     console.log(data)
-    return data
+    // return data
+    const filteredData = data.filter((item: any) => item.user_id === user_id)
+    console.log(filteredData)
+    return filteredData
   } catch (error) {
     console.log(error)
   }
@@ -48,8 +54,8 @@ export const postData = async (api: string, args: any) => {
       throw new Error(`APIリクエストが失敗しました。ステータスコード: ${response.status}`);
     }
 
-    console.log(args);
-    return response;
+    console.log(args)
+    return response
   } catch (error) {
     // 例外が発生した場合はエラーを投げる
     throw new Error('APIリクエストでエラーが発生しました.');

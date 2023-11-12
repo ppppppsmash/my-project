@@ -2,10 +2,6 @@ import { postData, patchData } from '@/utils/fetchData'
 import { urlValidate } from '@/utils/validation'
 import { sendSlackAlert } from './slackAlert'
 
-const redirectTo = (url: any) => {
-  window.location.href = url
-}
-
 const fetchPsiData = async (url: string, device: string) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}psi?url=${urlValidate(url)}&strategy=${device}`, {
     cache: 'no-store'
@@ -13,7 +9,7 @@ const fetchPsiData = async (url: string, device: string) => {
   return res
 }
 
-export const getPsiData = async (selectedDevice: string[], name: string, url: string, schedule: string, redirect: string) => {
+export const getPsiData = async (selectedDevice: string[], name: string, url: string, schedule: string, userId: number) => {
   for (const device of selectedDevice) {
     const res = await fetchPsiData(url, device)
 
@@ -70,6 +66,7 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
         url: urlValidate(url),
         schedule,
         device,
+        user_id: userId,
         siteMetrics: [
           psiSiteMetircs
         ]

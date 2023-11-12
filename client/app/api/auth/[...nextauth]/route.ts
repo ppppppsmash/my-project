@@ -41,7 +41,26 @@ const handler = NextAuth({
       }
     })
   ],
-
+  session: {
+    strategy: 'jwt',
+    maxAge: 60 * 60 * 24 * 10,
+    updateAge: 60 * 1
+  },
+  secret: process.env.NEXTAUTH_SECRET as string,
+  callbacks: {
+    // async session({ session, token }) {
+    //   if (session?.user) {
+    //     session.user.id = token.sub;
+    //   }
+    //   return session;
+    // },
+    async session({ session, token }) {
+      if (session?.user) {
+        session.user.id = (token as { sub: string }).sub
+      }
+      return session
+    }
+  },
   pages: {
     signIn: '/signin',
     signOut: '/signin'

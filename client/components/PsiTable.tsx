@@ -42,12 +42,14 @@ import { HoverCard } from '@/components/HoverCard'
 import PsiSiteHoverCard from '@/components/PsiSiteHoverCard'
 import ClockLoader from 'react-spinners/ClockLoader'
 import MoonLoader from 'react-spinners/MoonLoader'
+import { useSession } from 'next-auth/react'
 
 interface NewPSIDataType extends PSIDataType {
   score?: string
 }
 
 export default function PsiTable() {
+  const { data: session, status } = useSession()
   const [selectedNames, setSelectedNames] = useState<string[]>([])
   const [pageList, setPageList] = useState<NewPSIDataType[]>([])
   const [editName, setEditName] = useState<string[]>([])
@@ -137,7 +139,7 @@ export default function PsiTable() {
   const queryClient = useQueryClient()
 
   const getDataByAll = async () => {
-    const data = await getDataAll('psi_site_list')
+    const data = await getDataAll('psi_site_list', Number(session?.user?.id))
     return data
   }
 

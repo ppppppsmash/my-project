@@ -15,12 +15,14 @@ import Loading from '@/components/Loading'
 import { SelectBox, SelectBoxItem } from '@tremor/react'
 import { Button, Text } from '@tremor/react'
 import ModalsConfirm from '@/components/ModalsConfirm'
+import { useSession } from 'next-auth/react'
 
 interface Props {
   mode: string
 }
 
 export default function PsiTabContent({ mode }: Props) {
+  const { data: session, status } = useSession()
   const id: number = 0
   const [name, setName] = useState<string>('')
   const [url, setUrl] = useState<string>('')
@@ -194,7 +196,7 @@ export default function PsiTabContent({ mode }: Props) {
     setLoading(true)
 
     if (mode === 'single') {
-      await getPsiData(selectedDevice, name, url, schedule, '/list')
+      await getPsiData(selectedDevice, name, url, schedule, Number(session?.user?.id) )
     } else if (mode === 'multiple') {
       const siteList = names.map((separate) => {
         const [name, url] = separate.split(/\s+/)
@@ -206,18 +208,17 @@ export default function PsiTabContent({ mode }: Props) {
           continue
         }
 
-        await getPsiData(selectedDevice, site.name, site.url, schedule, '/list')
+        await getPsiData(selectedDevice, site.name, site.url, schedule, Number(session?.user?.id))
       }
     } else if (mode === 'csv') {
       const csvSiteList = csvData.map(async (data) => {
         console.log(data)
-        await getPsiData(selectedDevice, data.NAME, data.URL, schedule, '/list')
+        await getPsiData(selectedDevice, data.NAME, data.URL, schedule, Number(session?.user?.id))
       })
       await Promise.all(csvSiteList)
     }
 
     setLoading(false)
-    // router.push('/list')
     setIsConfirm(true)
   }
 
@@ -304,6 +305,7 @@ export default function PsiTabContent({ mode }: Props) {
 
       {isModalOpen && <Modals
         id={id}
+        userId={Number(session?.user?.id)}
         name={mode === 'single' ? name : names}
         url={mode === 'single' ? url : ''}
         getPsiData={handlePsiData}

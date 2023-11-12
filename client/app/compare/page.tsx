@@ -10,6 +10,7 @@ import { ArrowSmallUpIcon, ArrowSmallDownIcon, FaceSmileIcon, FaceFrownIcon, Arr
 import PsiMotionModalsChartTotal from '@/components/PsiMotionModalsChartTotal'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
 import { zenKaku } from '@/utils/font'
+import { useSession } from 'next-auth/react'
 
 enum MetricType {
   Score = 'score',
@@ -32,6 +33,7 @@ type CompareResult = {
 }
 
 export default function Compare() {
+  const { data: session, status } = useSession()
   const [siteList, setSiteList] = useState<PSIDataType[]>([])
   const [selectedSiteLeft, setSelectedSiteLeft] = useState<PSIDataType | null>(null)
   const [selectedSiteRight, setSelectedSiteRight] = useState<PSIDataType | null>(null)
@@ -144,7 +146,7 @@ export default function Compare() {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await getDataAll('psi_site_list')
+      const data = await getDataAll('psi_site_list', Number(session?.user?.id))
       setSiteList(data)
     }
     getData()
