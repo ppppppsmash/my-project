@@ -5,8 +5,11 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  OneToMany
+  JoinColumn,
+  OneToMany,
+  ManyToOne
 } from 'typeorm'
+import { User } from './user.entity'
 import { SiteMetrics } from './site_metrics.entity'
 
 export enum DeviceType {
@@ -21,28 +24,35 @@ export class SiteList {
 
   @Column('enum', {enum: DeviceType, nullable: true })
   device: DeviceType
+
   @Column('varchar', { length: 50, nullable: true })
   name: string
+
   @Column('varchar', { length: 50, nullable: true })
   url: string
+
   @Column('varchar', { length: 10, nullable: true })
   schedule: string
+
+  @Column()
+  user_id: number
+
   @CreateDateColumn({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date
   get formattedCreatedAt(): string {
     return this.createdAt.toLocaleString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
   }
-  // @Column('varchar', { length: 50, nullable: true })
-  // createdAt: string
-  // @BeforeInsert()
-  // setCreatedAt() {
-  //   this.createdAt = new Date().toLocaleString()
-  // }
+
   @UpdateDateColumn({ type: "datetime", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
   updatedAt: Date
   get formattedUpdatedAt(): string {
     return this.updatedAt.toLocaleString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
   }
+
+  @ManyToOne(() => User, user => user.siteLists) // 追加
+  @JoinColumn({ name: 'user_id' }) // 追加
+  user: User
+
   @OneToMany(() => SiteMetrics, siteMetrics => siteMetrics.siteList, { cascade: true })
   siteMetrics: SiteMetrics[]
 }

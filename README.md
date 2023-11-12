@@ -68,14 +68,15 @@ PageSpeedInsightを自動で計測し、その数値の変動を記録するた�
 ```
 CREATE TABLE pagespeedinsights.site_list (
   id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
   device ENUM('desktop', 'mobile'),
   name VARCHAR(50),
   url VARCHAR(50),
   schedule VARCHAR(10),
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES pagespeedinsights.user(id)
 );
-
 
 CREATE TABLE pagespeedinsights.site_metrics (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -102,7 +103,7 @@ CREATE TABLE pagespeedinsights.site_metrics (
 
 CREATE TABLE user (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  user VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL
 );

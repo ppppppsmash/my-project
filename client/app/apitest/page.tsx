@@ -59,7 +59,7 @@ export default function AddList() {
   }
 
   const handlePsiData = async () => {
-    await getPsiData(selectedDevice, name, url, schedule, '/apitest')
+    await getPsiData(selectedDevice, name, url, schedule, id)
   }
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -74,7 +74,7 @@ export default function AddList() {
 
   useEffect(() => {
     const getDataByAll = async () => {
-      const data = await getDataAll('psi_site_list')
+      const data = await getDataAll('psi_site_list', id)
       console.log(data)
       const updatedList = data.map((item: any) => ({
         id: item.id,

@@ -82,7 +82,7 @@ const HoverCard = ({children, url}: {children: React.ReactNode, url: string}) =>
                 </div>
                 ) : (
                   <div className='flex items-center justify-center'>
-                    <CircleLoader size='20' />
+                    <CircleLoader size={20} />
                     <span>Loading...</span>
                   </div>
                 )

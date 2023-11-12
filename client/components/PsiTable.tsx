@@ -42,12 +42,14 @@ import { HoverCard } from '@/components/HoverCard'
 import PsiSiteHoverCard from '@/components/PsiSiteHoverCard'
 import ClockLoader from 'react-spinners/ClockLoader'
 import MoonLoader from 'react-spinners/MoonLoader'
+import { useSession } from 'next-auth/react'
 
 interface NewPSIDataType extends PSIDataType {
   score?: string
 }
 
 export default function PsiTable() {
+  const { data: session, status } = useSession()
   const [selectedNames, setSelectedNames] = useState<string[]>([])
   const [pageList, setPageList] = useState<NewPSIDataType[]>([])
   const [editName, setEditName] = useState<string[]>([])
@@ -137,7 +139,7 @@ export default function PsiTable() {
   const queryClient = useQueryClient()
 
   const getDataByAll = async () => {
-    const data = await getDataAll('psi_site_list')
+    const data = await getDataAll('psi_site_list', Number(session?.user?.id))
     return data
   }
 
@@ -195,7 +197,7 @@ export default function PsiTable() {
         ))}
       </MultiSelectBox>
 
-      <Table className='mt-2 border-gray-750 border-[1px] rounded-lg overflow-visible overflow-x-scroll'>
+      <Table className='mt-2 border-gray-750 border-[1px] rounded-lg overflow-x-scroll md:overflow-visible'>
         <TableHead>
           <TableRow className='border-b-[1px]  border-gray-750'>
             <TableHeaderCell
@@ -318,7 +320,7 @@ export default function PsiTable() {
               </TableCell>
               <TableCell>
                 {spinningItems.includes(index) ? (
-                  <ClockLoader size='15' />
+                  <ClockLoader size={15} />
                 ) : (
                   <div className='flex items-center gap-x-2'>
                   <Text className='dark:text-white'>{item.siteMetrics[0].score}</Text>

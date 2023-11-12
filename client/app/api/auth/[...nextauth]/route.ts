@@ -1,38 +1,30 @@
-import NextAuth from 'next-auth'
-//import { TypeORMAdapter } from '@auth/typeorm-adapter'
-//import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
-import { ConnectionOptions } from 'typeorm'
-//import { authOptions } from "@/lib/auth"
+import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials'
-import GithubProvider from 'next-auth/providers/github'
-import GoogleProvider from 'next-auth/providers/google'
 import { dbConnect } from '@/lib/dbConnect'
+import bcrypt from 'bcrypt'
 
 const handler = NextAuth({
-//  adapter: TypeORMAdapter(connection, { entities }),
   providers: [
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "example@gmail.com" },
-        password: { label: "Password", type: "password" }
+        email: { label: 'Email', type: 'email', placeholder: 'example@gmail.com' },
+        password: { label: 'Password', type: 'password' }
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         try {
           const db = await dbConnect()
+          // const passwordHashed = bcrypt.hashSync(credentials.password, 10)
+          // console.log(passwordHashed)
           const [user] = await db.query(
-            'SELECT * FROM user WHERE email = ? AND password = ?',
-            [credentials?.email, credentials?.password]
+            'SELECT * FROM user WHERE email = ?',
+            [credentials?.email]
           )
 
-          console.log(user[0])
-
-          if (user) {
-            // 認証成功
+          if (user && credentials?.password && await bcrypt.compareSync(credentials.password, user[0].password)) {
             return Promise.resolve(user[0])
           } else {
-            // 認証失敗
-            return Promise.resolve(null);
+            return Promise.resolve(null)
           }
         } catch (error) {
           console.error('Authentication error:', error)
@@ -41,11 +33,24 @@ const handler = NextAuth({
       }
     })
   ],
-
+  session: {
+    strategy: 'jwt',
+    maxAge: 60 * 60 * 24 * 10,
+    updateAge: 60 * 1
+  },
+  secret: process.env.NEXTAUTH_SECRET as string,
+  callbacks: {
+    async session({ session, token }) {
+      if (session?.user) {
+        session.user.id = (token as { sub: string }).sub
+      }
+      return session;
+    }
+  },
   pages: {
     signIn: '/signin',
     signOut: '/signin'
   }
-})
+});
 
 export { handler as GET, handler as POST }

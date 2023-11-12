@@ -5,10 +5,11 @@ import { SiteList } from '../entities/site_list.entity'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ScheduleModule } from '@nestjs/schedule'
 import { SiteMetrics } from '../entities/site_metrics.entity'
+import { User } from '../entities/user.entity'
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([SiteList, SiteMetrics]),
+    TypeOrmModule.forFeature([User, SiteList, SiteMetrics]),
     ScheduleModule.forRoot()
   ],
   providers: [PsiSiteListService],
