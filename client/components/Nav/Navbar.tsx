@@ -6,7 +6,7 @@ import { useState, useCallback, MouseEvent, Fragment } from 'react'
 import { usePathname } from 'next/navigation'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion'
-import { Bars3Icon, XMarkIcon, CommandLineIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, XMarkIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline'
 import { TbDeviceAnalytics } from 'react-icons/tb'
 import ToggleButton from '@/components/ToggleButton'
 import { inter } from '@/utils/font'
@@ -125,7 +125,10 @@ export default function Navbar() {
                                 )}
                                 onClick={() => onLogOut()}
                               >
-                                ログアウト
+                                <span className='flex items-center gap-x-2'>
+                                  <ArrowLeftOnRectangleIcon className='w-6 h-6' />
+                                  ログアウト
+                                </span>
                               </button>
                             )}
                           </Menu.Item>

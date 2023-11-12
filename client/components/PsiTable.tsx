@@ -320,7 +320,7 @@ export default function PsiTable() {
               </TableCell>
               <TableCell>
                 {spinningItems.includes(index) ? (
-                  <ClockLoader size='15' />
+                  <ClockLoader size={15} />
                 ) : (
                   <div className='flex items-center gap-x-2'>
                   <Text className='dark:text-white'>{item.siteMetrics[0].score}</Text>
