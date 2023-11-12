@@ -14,8 +14,6 @@ const AuthGuard = ({ children }: { children: React.ReactNode }) => {
     if (status === 'unauthenticated' && pathname != 'signin') {
       console.log(status)
       router.push('/signin')
-    } else if (status === 'authenticated') {
-      router.push('/')
     }
   }, [router, status])
   if (status === 'loading') return <Loading />

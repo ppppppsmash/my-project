@@ -197,7 +197,7 @@ export default function PsiTable() {
         ))}
       </MultiSelectBox>
 
-      <Table className='mt-2 border-gray-750 border-[1px] rounded-lg overflow-visible overflow-x-scroll'>
+      <Table className='mt-2 border-gray-750 border-[1px] rounded-lg overflow-x-scroll md:overflow-visible'>
         <TableHead>
           <TableRow className='border-b-[1px]  border-gray-750'>
             <TableHeaderCell
