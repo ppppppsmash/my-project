@@ -1,5 +1,5 @@
 import { Multer } from 'multer'
-import { Controller, Post, Get, Param, Res, UploadedFile, UseInterceptors, BadRequestException } from '@nestjs/common'
+import { Controller, Post, Param, UploadedFile, UseInterceptors, BadRequestException } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import * as csvParser from 'csv-parser'
 import * as path from 'path'
@@ -8,11 +8,11 @@ import { format } from 'date-fns'
 
 @Controller('upload')
 export class CsvUploadController {
-  @Post()
+  @Post(':userId')
   @UseInterceptors(FileInterceptor('csvFile', { dest: './files' }))
-  async uploadFile(@UploadedFile() file: Multer.File) {
+  async uploadFile(@UploadedFile() file: Multer.File, @Param('userId') userId: string) {
     if (!file) {
-      throw new BadRequestException('CSVファイルが指定されていません。')
+      throw new BadRequestException('CSVファイルが指定されていません.')
     }
 
     const timeZoneOffset = 9 * 60
@@ -23,10 +23,17 @@ export class CsvUploadController {
     const fileName = path.parse(file.originalname).name
     const newFileName = `${fileName}-${dateTime}${path.extname(file.originalname)}`
 
-    const filePath = path.join('./files', file.filename)
-    const newFilePath = path.join('./files', newFileName)
+    const userFolderPath = path.join('./files', userId)
+    await fs.ensureDir(userFolderPath)
 
-    await fs.rename(filePath, newFilePath)
+    console.log('User folder path:', userFolderPath)
+
+    const tempFilePath = path.join('./files', file.filename)
+    const newFilePath = path.join(userFolderPath, newFileName)
+
+    await fs.rename(tempFilePath, newFilePath)
+
+    console.log(tempFilePath, newFilePath)
 
     const results = []
     return new Promise((resolve, reject) => {

@@ -86,7 +86,7 @@ export default function PsiTabContent({ mode }: Props) {
     console.log(selectedFile)
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}upload/`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}upload/${session.user.id}`, {
         method: 'POST',
         body: formData,
       })
@@ -99,10 +99,10 @@ export default function PsiTabContent({ mode }: Props) {
         console.log(data)
         setCsvData(data)
       } else {
-        console.error('CSVダウンロードエラー')
+        console.error('CSVアップロードエラー')
       }
     } catch (error) {
-      console.error('CSVダウンロードエラー:', error)
+      console.error('CSVアップロードエラー:', error)
     }
   }
 
@@ -112,7 +112,9 @@ export default function PsiTabContent({ mode }: Props) {
     }
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv/${selectedFileName}`)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv/${session.user.id}/${selectedFileName}`)
+
+      console.log(response)
 
       const blob = await response.blob()
 
@@ -231,7 +233,8 @@ export default function PsiTabContent({ mode }: Props) {
   useEffect(() => {
     const fetchCsvFiles = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv-list`)
+        //const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv-list`)
+        const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv-list/${session.user.id}/`)
         if (response.ok) {
           const data = await response.json()
           setCsvFiles(data)
