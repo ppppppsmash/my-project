@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { signIn, signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -28,12 +28,17 @@ export default function LoginPage() {
 
   console.log(session)
 
+  useEffect(() => {
+    if (status === 'authenticated') {
+      window.location.href = '/'
+    }
+  }, [router, status])
+
 
   if (status === 'authenticated') {
     return (
       <>
-        {/* {window.location.href = '/'} */}
-        <button onClick={()=>signOut()}>Sign Out</button>
+        <button onClick={()=>signOut()}>ログイン済み</button>
       </>
     )
   }
