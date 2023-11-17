@@ -30,6 +30,8 @@ ARG DATABASE_DB
 ARG DATABASE_PASSWORD
 ARG NEXT_PUBLIC_NEST_URL
 ARG NEXT_PUBLIC_SLACK_WEBHOOK
+ARG NEXTAUTH_URL
+ARG NEXTAUTH_SECRET
 
 ENV DATABASE_PORT=3310
 ENV DATABASE_HOST="db"
@@ -39,6 +41,8 @@ ENV DATABASE_DB="pagespeedinsights"
 ENV DATABASE_PASSWORD="passwd"
 ENV NEXT_PUBLIC_NEST_URL="https://page-speed-measurement-nextapp-api-oclbewqdfa-an.a.run.app/"
 ENV NEXT_PUBLIC_SLACK_WEBHOOK="https://hooks.slack.com/services/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"
+ENV NEXTAUTH_URL="https://page-speed-measurement-nextapp-oclbewqdfa-an.a.run.app"
+ENV NEXTAUTH_SECRET="tGb+wzZzft6Cd/bIuFczJaUufA2bsfk5VsesAjEGwQw="
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
