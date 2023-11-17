@@ -6,25 +6,27 @@ import * as fs from 'fs-extra'
 @Controller('download')
 export class CsvDownloadController {
   // selectからcsvファイル一覧
-  @Get('csv-list')
-  async getCsvList(@Res() res: Response) {
-    const filesDirectory = path.join(__dirname, '..', '..', './files')
+  @Get('csv-list/:userId')
+  async getCsvList(@Res() res: Response, @Param('userId') userId: string) {
+    const filesDirectory = path.join(__dirname, '..', '..', './files', userId)
 
     const files = await fs.readdir(filesDirectory)
     files.sort((a, b) => {
       const aStats = fs.statSync(path.join(filesDirectory, a))
       const bStats = fs.statSync(path.join(filesDirectory, b))
-      return aStats.mtime.getTime() - bStats.mtime.getTime()
+      return bStats.mtime.getTime() - aStats.mtime.getTime()
     })
 
     res.send(files)
   }
 
   // selectで選択したファイルをダウンロード
-  @Get('csv/:filename')
-  async downloadCsv(@Res() res: Response, @Param('filename') filename: string) {
-    const filesDirectory = path.join(__dirname, '..', '..', './files')
+  @Get('csv/:userId/:filename/')
+  async downloadCsv(@Res() res: Response, @Param('filename') filename: string, @Param('userId') userId: string) {
+    const filesDirectory = path.join(__dirname, '..', '..', './files', userId)
+    console.log(filesDirectory)
     const filePath = path.join(filesDirectory, filename)
+    console.log(filePath)
 
     if (!fs.existsSync(filePath)) {
       res.status(404).send('CSV file not found')

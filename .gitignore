@@ -53,3 +53,4 @@ MEMO.md
 /app/psi-app/files
 .pnpm-store
 */.pnpm-store
+.metals/

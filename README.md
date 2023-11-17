@@ -78,6 +78,13 @@ CREATE TABLE pagespeedinsights.site_list (
   FOREIGN KEY (user_id) REFERENCES pagespeedinsights.user(id)
 );
 
+CREATE TABLE user (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE pagespeedinsights.site_metrics (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nama VARCHAR(50),
