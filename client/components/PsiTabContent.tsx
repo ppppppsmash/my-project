@@ -86,7 +86,7 @@ export default function PsiTabContent({ mode }: Props) {
     console.log(selectedFile)
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}upload/${session.user.id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}upload/${session?.user?.id}`, {
         method: 'POST',
         body: formData,
       })
@@ -112,7 +112,7 @@ export default function PsiTabContent({ mode }: Props) {
     }
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv/${session.user.id}/${selectedFileName}`)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv/${session?.user?.id}/${selectedFileName}`)
 
       console.log(response)
 
@@ -234,7 +234,7 @@ export default function PsiTabContent({ mode }: Props) {
     const fetchCsvFiles = async () => {
       try {
         //const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv-list`)
-        const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv-list/${session.user.id}/`)
+        const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv-list/${session?.user?.id}/`)
         if (response.ok) {
           const data = await response.json()
           setCsvFiles(data)
