@@ -7,22 +7,24 @@ import { RxCross2 } from 'react-icons/rx'
 interface Props {
   onOpen(): void
   onClose(): void
-  getPsiData(id: number, userId: number): void
+  getPsiData(id: number, userId: number, userName: string, progressCallback: (progress: number) => void): void
   id: number,
   userId: number,
+  userName: string,
   name: string | string[]
   url: string
 }
 
-export default function Modals({ onClose, getPsiData, id, userId, name, url }: Props) {
+export default function Modals({ onClose, getPsiData, id, userId, userName, name, url }: Props) {
   let [isOpen, setIsOpen] = useState(true)
+  const [progress, setProgress] = useState<number>(0)
 
   function closeModal() {
     setIsOpen(false)
   }
 
   const handleClick = () => {
-    getPsiData(id, userId)
+    getPsiData(id, userId, userName, setProgress)
     onClose()
   }
 
@@ -78,10 +80,11 @@ export default function Modals({ onClose, getPsiData, id, userId, name, url }: P
                     </p>
                   </div>
 
-                  <div className='flex gap-x-4 pt-8 items-center justify-end px-6 py-3 -mx-6 -mb-4 sm:space-y-0 sm:space-x-6 sm:flex-row'>
+                  <div className='flex pt-8 items-center justify-end px-6 py-3 -mx-6 -mb-4 sm:space-y-0 sm:space-x-6 sm:flex-row'>
                     <button
                     type="button"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 focus-visible:ring-offset-2"
+                    className="inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm
+                      font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 focus-visible:ring-offset-2"
                     onClick={()=>onClose()}
                     >
                     いいえ

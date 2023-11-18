@@ -22,7 +22,8 @@ $ cd npm run start:dev
 # http://localhost:3310
 $ docker-compose exec db bash
 $ mysql -u root -p (rootpasswd)
-$ use pagespeedinsight; => select * from site_list;
+$ use pagespeedinsight;
+$ select * from site_list;　　etc...
 ```
 
 ## このツールについて
@@ -59,6 +60,7 @@ PageSpeedInsightを自動で計測し、その数値の変動を記録するた�
 - tailwindcss： https://tailwindcss.com/
 - icon ui：https://react-icons.github.io/react-icons/ && https://heroicons.com/
 - component ui：https://headlessui.com/ && https://www.radix-ui.com/
+- next-auth: https://next-auth.js.org/
 
 ### pagespeed insights 参考URL:
 - https://developers.google.com/speed/docs/insights/v5/get-started?hl=ja
@@ -66,6 +68,13 @@ PageSpeedInsightを自動で計測し、その数値の変動を記録するた�
 
 ## DB構成
 ```
+CREATE TABLE user (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE pagespeedinsights.site_list (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
@@ -76,13 +85,6 @@ CREATE TABLE pagespeedinsights.site_list (
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES pagespeedinsights.user(id)
-);
-
-CREATE TABLE user (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NOT NULL,
-  password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE pagespeedinsights.site_metrics (
@@ -107,28 +109,39 @@ CREATE TABLE pagespeedinsights.site_metrics (
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 );
-
-CREATE TABLE user (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NOT NULL,
-  password VARCHAR(255) NOT NULL
-);
 ```
 
+## GCPインフラ情報
+**Cloud Build**
+https://console.cloud.google.com/cloud-build/triggers?project=devteam-1341
+**Cloud Run**
+https://console.cloud.google.com/run?referrer=search&project=devteam-1341
+
+フロントエンド:
+page-speed-measurement-nextapp
+
+バックエンド:
+page-speed-measurement-nextapp-api
+**Cloud SQL**
+https://console.cloud.google.com/sql/instances/pagespeed-insights-db/overview?project=devteam-1341
+
+mysql: pagespeed-insights-db
+
 ## API
+
 **ページ一覧**
-- http://localhost:9999/psi_site_list
-**各ページダイナミックルート**
-- http://localhost:9999/psi_site_list/[id]
-**psi score**
-- http://localhost:9999/psi?url=${url}&strategy=${device}
+http://localhost:9999/psi_site_list
+**PSI Score**
+http://localhost:9999/psi?url=https://google.com&strategy=desktop
 **CSVファイルアップロード**
-- http://localhost:9999/upload
+http://localhost:9999/upload
 **csvファイルダウンロード**
-- http://localhost:9999/download
+http://localhost:9999/download/csv-list/:userId/
 **リンクプレビュー**
-- http://localhost:9999/link_preview?url=${url}
+http://localhost:9999/link_preview?url=${url}
+**認証についてのapi routes**
+http://localhost:9998/api/auth/session
+http://localhost:9998/api/auth/providers
 
 
 
@@ -142,6 +155,8 @@ https://page-speed-measurement-nextapp-api-oclbewqdfa-an.a.run.app
 ### mysql (Cloud SQL)
 devteam-1341:asia-northeast1:pagespeed-insights-db
 
+DEMO:
+https://pagespeed-insights-app-oclbewqdfa-an.a.run.app
 production client url:
 https://page-speed-measurement-nextapp-oclbewqdfa-an.a.run.app
 production api url:
