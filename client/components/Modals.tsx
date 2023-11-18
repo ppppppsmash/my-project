@@ -7,14 +7,15 @@ import { RxCross2 } from 'react-icons/rx'
 interface Props {
   onOpen(): void
   onClose(): void
-  getPsiData(id: number, userId: number): void
+  getPsiData(id: number, userId: number, userName: string): void
   id: number,
   userId: number,
+  userName: string,
   name: string | string[]
   url: string
 }
 
-export default function Modals({ onClose, getPsiData, id, userId, name, url }: Props) {
+export default function Modals({ onClose, getPsiData, id, userId, userName, name, url }: Props) {
   let [isOpen, setIsOpen] = useState(true)
 
   function closeModal() {
@@ -22,7 +23,7 @@ export default function Modals({ onClose, getPsiData, id, userId, name, url }: P
   }
 
   const handleClick = () => {
-    getPsiData(id, userId)
+    getPsiData(id, userId, userName)
     onClose()
   }
 

@@ -81,7 +81,7 @@ export default function PsiTable() {
       }
     })
 
-    await getPsiDataAgain(name, url, index, id, device)
+    await getPsiDataAgain(name, url, index, id, device, session?.user?.name || '')
     setTimeout(() => {
       setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index))
     }, 1000)

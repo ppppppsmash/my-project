@@ -65,8 +65,8 @@ export default function PsiHistory() {
                 </TableCell>
                 <TableCell>
                   {index === array.length - 1
-                    ? `「${item?.name}」（${item?.url}）を登録しました。`
-                    : `「${item?.name}」（${item?.url}）のスコアを再取得しました。`
+                    ? `「${item?.name}(${item?.device})」（${item?.url}）を登録しました。`
+                    : `「${item?.name}(${item?.device})」（${item?.url}）のスコアを再取得しました。`
                   }
                 </TableCell>
               </TableRow>

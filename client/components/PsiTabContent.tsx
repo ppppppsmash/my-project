@@ -197,8 +197,10 @@ export default function PsiTabContent({ mode }: Props) {
   const handlePsiData = async () => {
     setLoading(true)
 
+    console.log(session?.user?.name)
+
     if (mode === 'single') {
-      await getPsiData(selectedDevice, name, url, schedule, Number(session?.user?.id) )
+      await getPsiData(selectedDevice, name, url, schedule, Number(session?.user?.id), session?.user?.name || '' )
     } else if (mode === 'multiple') {
       const siteList = names.map((separate) => {
         const [name, url] = separate.split(/\s+/)
@@ -210,12 +212,12 @@ export default function PsiTabContent({ mode }: Props) {
           continue
         }
 
-        await getPsiData(selectedDevice, site.name, site.url, schedule, Number(session?.user?.id))
+        await getPsiData(selectedDevice, site.name, site.url, schedule, Number(session?.user?.id), session?.user?.name || '')
       }
     } else if (mode === 'csv') {
       const csvSiteList = csvData.map(async (data) => {
         console.log(data)
-        await getPsiData(selectedDevice, data.NAME, data.URL, schedule, Number(session?.user?.id))
+        await getPsiData(selectedDevice, data.NAME, data.URL, schedule, Number(session?.user?.id), session?.user?.name || '')
       })
       await Promise.all(csvSiteList)
     }
@@ -309,6 +311,7 @@ export default function PsiTabContent({ mode }: Props) {
       {isModalOpen && <Modals
         id={id}
         userId={Number(session?.user?.id)}
+        userName={session?.user?.name || ''}
         name={mode === 'single' ? name : names}
         url={mode === 'single' ? url : ''}
         getPsiData={handlePsiData}

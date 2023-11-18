@@ -9,7 +9,7 @@ const fetchPsiData = async (url: string, device: string) => {
   return res
 }
 
-export const getPsiData = async (selectedDevice: string[], name: string, url: string, schedule: string, userId: number) => {
+export const getPsiData = async (selectedDevice: string[], name: string, url: string, schedule: string, userId: number, userName: string) => {
   for (const device of selectedDevice) {
     const res = await fetchPsiData(url, device)
 
@@ -73,9 +73,15 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
       }
 
       if (score < 70) {
-        const message = `CSVファイルで登録した ${name}（${urlValidate(url)}）--(${device}) のスコアが70未満です。 スコア: ${score}`
-        //await sendSlackAlert(message)
-        console.log(message)
+        const message = `${name}（${urlValidate(url)}, device: ${device}) から取得したスコア: ${score}`
+        console.log(userName)
+
+        if (userName) {
+          const messageWithUser = `${userName} さんからのメッセージ:\n${message}`
+          await sendSlackAlert(messageWithUser)
+        } else {
+          await sendSlackAlert(message)
+        }
       }
 
       await postData('psi_site_list', psiSiteList)
@@ -84,7 +90,7 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
   }
 }
 
-export const getPsiDataAgain = async (name: string, url: string, index: number, id: number, device: string) => {
+export const getPsiDataAgain = async (name: string, url: string, index: number, id: number, device: string, userName: string) => {
   const res = await fetchPsiData(url, device)
 
     if (res.ok) {
@@ -142,9 +148,14 @@ export const getPsiDataAgain = async (name: string, url: string, index: number, 
       }
 
       if (score < 70) {
-        const message = `${name}-(${device}) は再取得したスコアが70未満です。 スコア: ${score}`
-      //  await sendSlackAlert(message)
-        alert(message)
+        const message = `${name}（${urlValidate(url)}, device: ${device}) から再取得したスコア: ${score}`
+
+        if (userName) {
+          const messageWithUser = `${userName} さんからのメッセージ:\n${message}`
+          await sendSlackAlert(messageWithUser)
+        } else {
+          await sendSlackAlert(message)
+        }
       }
 
         await patchData('psi_site_list', id, psiSiteList)
