@@ -68,6 +68,13 @@ PageSpeedInsightを自動で計測し、その数値の変動を記録するた�
 
 ## DB構成
 ```
+CREATE TABLE user (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE pagespeedinsights.site_list (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
@@ -78,13 +85,6 @@ CREATE TABLE pagespeedinsights.site_list (
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES pagespeedinsights.user(id)
-);
-
-CREATE TABLE user (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NOT NULL,
-  password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE pagespeedinsights.site_metrics (
@@ -108,13 +108,6 @@ CREATE TABLE pagespeedinsights.site_metrics (
   FOREIGN KEY (site_list_id) REFERENCES pagespeedinsights.site_list(id),
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-);
-
-CREATE TABLE user (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NOT NULL,
-  password VARCHAR(255) NOT NULL
 );
 ```
 
@@ -162,6 +155,8 @@ https://page-speed-measurement-nextapp-api-oclbewqdfa-an.a.run.app
 ### mysql (Cloud SQL)
 devteam-1341:asia-northeast1:pagespeed-insights-db
 
+DEMO:
+https://pagespeed-insights-app-oclbewqdfa-an.a.run.app
 production client url:
 https://page-speed-measurement-nextapp-oclbewqdfa-an.a.run.app
 production api url:

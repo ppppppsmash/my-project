@@ -1,4 +1,5 @@
 'use client'
+
 import Link from 'next/link'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import dynamicImport from 'next/dynamic'
@@ -33,7 +34,6 @@ export default function PsiList() {
         </div>
 
         <Card className='mt-6 shadow-lg dark:bg-gray-950'>
-          {/* <PsiSearchMultipleBox /> */}
           <DynamicComponent />
         </Card>
       </div>

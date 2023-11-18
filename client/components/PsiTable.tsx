@@ -1,4 +1,5 @@
 'use client'
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useState, useEffect, ChangeEvent } from 'react'
@@ -320,7 +321,7 @@ export default function PsiTable() {
               </TableCell>
               <TableCell>
                 {spinningItems.includes(index) ? (
-                  <ClockLoader size={15} />
+                  <ClockLoader size={16} className='dark:text-white' />
                 ) : (
                   <div className='flex items-center gap-x-2'>
                   <Text className='dark:text-white'>{item.siteMetrics[0].score}</Text>
