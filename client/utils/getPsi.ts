@@ -2,6 +2,8 @@ import { postData, patchData } from '@/utils/fetchData'
 import { urlValidate } from '@/utils/validation'
 import { sendSlackAlert } from './slackAlert'
 
+const TOTAL_PROGRESS = 100
+
 const fetchPsiData = async (url: string, device: string) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}psi?url=${urlValidate(url)}&strategy=${device}`, {
     cache: 'no-store'
@@ -9,9 +11,14 @@ const fetchPsiData = async (url: string, device: string) => {
   return res
 }
 
-export const getPsiData = async (selectedDevice: string[], name: string, url: string, schedule: string, userId: number, userName: string) => {
+export const getPsiData = async (selectedDevice: string[], name: string, url: string, schedule: string, userId: number, userName: string, progressCallback: (progress: number) => void) => {
+  let currentProgress = 0
+
   for (const device of selectedDevice) {
     const res = await fetchPsiData(url, device)
+
+    currentProgress++
+    const progress = (currentProgress / TOTAL_PROGRESS) * 100
 
     if (res.ok) {
       const result = await res.json()
@@ -24,21 +31,21 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
 
       const { metrics: loadingExperienceAudits } = loadingExperience
       const loadingExperienceMetrics = {
-        user_fcp: loadingExperienceAudits['FIRST_CONTENTFUL_PAINT_MS'],
-        user_lcp: loadingExperienceAudits['LARGEST_CONTENTFUL_PAINT_MS'],
-        user_fid: loadingExperienceAudits['FIRST_INPUT_DELAY_MS'],
-        user_cls: loadingExperienceAudits['CUMULATIVE_LAYOUT_SHIFT_SCORE'],
-        user_inp: loadingExperienceAudits['INTERACTION_TO_NEXT_PAINT'],
-        user_ttfb: loadingExperienceAudits['EXPERIMENTAL_TIME_TO_FIRST_BYTE']
+        user_fcp: loadingExperienceAudits?.['FIRST_CONTENTFUL_PAINT_MS'],
+        user_lcp: loadingExperienceAudits?.['LARGEST_CONTENTFUL_PAINT_MS'],
+        user_fid: loadingExperienceAudits?.['FIRST_INPUT_DELAY_MS'],
+        user_cls: loadingExperienceAudits?.['CUMULATIVE_LAYOUT_SHIFT_SCORE'],
+        user_inp: loadingExperienceAudits?.['INTERACTION_TO_NEXT_PAINT'],
+        user_ttfb: loadingExperienceAudits?.['EXPERIMENTAL_TIME_TO_FIRST_BYTE'],
       }
 
       const lighthouseResultMetrics = {
-        si: lighthouseResultAudits['speed-index'],
-        fcp: lighthouseResultAudits['first-contentful-paint'],
-        lcp: lighthouseResultAudits['largest-contentful-paint'],
-        tti: lighthouseResultAudits['interactive'],
-        tbt: lighthouseResultAudits['total-blocking-time'],
-        cls: lighthouseResultAudits['cumulative-layout-shift'],
+        si: lighthouseResultAudits?.['speed-index'],
+        fcp: lighthouseResultAudits?.['first-contentful-paint'],
+        lcp: lighthouseResultAudits?.['largest-contentful-paint'],
+        tti: lighthouseResultAudits?.['interactive'],
+        tbt: lighthouseResultAudits?.['total-blocking-time'],
+        cls: lighthouseResultAudits?.['cumulative-layout-shift'],
       }
 
       const psiSiteMetircs = {
@@ -78,15 +85,19 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
 
         if (userName) {
           const messageWithUser = `${userName} さんからのメッセージ:\n${message}`
-          await sendSlackAlert(messageWithUser)
+        //  alert(messageWithUser)
+        //  await sendSlackAlert(messageWithUser)
         } else {
-          await sendSlackAlert(message)
+        //  alert(messageWithUser)
+        //  await sendSlackAlert(message)
         }
       }
 
       await postData('psi_site_list', psiSiteList)
 
     }
+
+    progressCallback(TOTAL_PROGRESS)
   }
 }
 
@@ -150,12 +161,8 @@ export const getPsiDataAgain = async (name: string, url: string, index: number, 
       if (score < 70) {
         const message = `${name}（${urlValidate(url)}, device: ${device}) から再取得したスコア: ${score}`
 
-        if (userName) {
-          const messageWithUser = `${userName} さんからのメッセージ:\n${message}`
-          await sendSlackAlert(messageWithUser)
-        } else {
-          await sendSlackAlert(message)
-        }
+        const messageWithUser = `${userName} さんからのメッセージ:\n${message}`
+        alert(messageWithUser)
       }
 
         await patchData('psi_site_list', id, psiSiteList)

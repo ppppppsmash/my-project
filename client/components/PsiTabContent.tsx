@@ -12,6 +12,7 @@ import PsiDialog from '@/components/PsiDialog'
 import { ExclamationTriangleIcon, CheckCircleIcon, DocumentChartBarIcon } from '@heroicons/react/24/solid'
 import { checkboxValidate, inputValidate, textareaValidate, csvValidate } from '@/utils/validation'
 import Loading from '@/components/Loading'
+import { ProgressLoading } from '@/components/Progress'
 import { SelectBox, SelectBoxItem } from '@tremor/react'
 import { Button, Text } from '@tremor/react'
 import ModalsConfirm from '@/components/ModalsConfirm'
@@ -41,11 +42,17 @@ export default function PsiTabContent({ mode }: Props) {
   const [csvData, setCsvData] = useState<any[]>([])
 
   const [loading, setLoading] = useState<boolean>(false)
+  const [progress, setProgress] = useState<number>(0)
 
   const [csvFiles, setCsvFiles] = useState<string[]>([])
   const [selectedFileName, setSelectedFileName] = useState<string>('')
 
   const [isConfirm, setIsConfirm] = useState<boolean>(false)
+
+  // progress状態管理
+  const handleProgress = (newProgress: any) => {
+    setProgress(newProgress)
+  }
 
   // 単体サイト
   const getChangeUrlName = ({target}: ChangeEvent<HTMLInputElement>) => {
@@ -200,7 +207,7 @@ export default function PsiTabContent({ mode }: Props) {
     console.log(session?.user?.name)
 
     if (mode === 'single') {
-      await getPsiData(selectedDevice, name, url, schedule, Number(session?.user?.id), session?.user?.name || '' )
+      await getPsiData(selectedDevice, name, url, schedule, Number(session?.user?.id), session?.user?.name || '', setProgress)
     } else if (mode === 'multiple') {
       const siteList = names.map((separate) => {
         const [name, url] = separate.split(/\s+/)
@@ -212,18 +219,21 @@ export default function PsiTabContent({ mode }: Props) {
           continue
         }
 
-        await getPsiData(selectedDevice, site.name, site.url, schedule, Number(session?.user?.id), session?.user?.name || '')
+        await getPsiData(selectedDevice, site.name, site.url, schedule, Number(session?.user?.id), session?.user?.name || '', setProgress)
       }
     } else if (mode === 'csv') {
       const csvSiteList = csvData.map(async (data) => {
         console.log(data)
-        await getPsiData(selectedDevice, data.NAME, data.URL, schedule, Number(session?.user?.id), session?.user?.name || '')
+        await getPsiData(selectedDevice, data.NAME, data.URL, schedule, Number(session?.user?.id), session?.user?.name || '', setProgress)
       })
       await Promise.all(csvSiteList)
     }
 
     setLoading(false)
-    setIsConfirm(true)
+
+    setTimeout(() => {
+      setIsConfirm(true)
+    }, 1000)
   }
 
   const handleSiteDataChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -254,7 +264,7 @@ export default function PsiTabContent({ mode }: Props) {
   return (
     <div>
       { loading &&
-        <Loading />
+        <ProgressLoading progress={progress} />
       }
 
       {isUploaded && (
