@@ -28,21 +28,21 @@ export class AutoRunService {
       const { audits: lighthouseResultAudits } = lighthouseResult
       const { metrics: loadingExperienceAudits } = loadingExperience
       const loadingExperienceMetrics = {
-        user_fcp: loadingExperienceAudits['FIRST_CONTENTFUL_PAINT_MS'],
-        user_lcp: loadingExperienceAudits['LARGEST_CONTENTFUL_PAINT_MS'],
-        user_fid: loadingExperienceAudits['FIRST_INPUT_DELAY_MS'],
-        user_cls: loadingExperienceAudits['CUMULATIVE_LAYOUT_SHIFT_SCORE'],
-        user_inp: loadingExperienceAudits['INTERACTION_TO_NEXT_PAINT'],
-        user_ttfb: loadingExperienceAudits['EXPERIMENTAL_TIME_TO_FIRST_BYTE']
+        user_fcp: loadingExperienceAudits?.['FIRST_CONTENTFUL_PAINT_MS'],
+        user_lcp: loadingExperienceAudits?.['LARGEST_CONTENTFUL_PAINT_MS'],
+        user_fid: loadingExperienceAudits?.['FIRST_INPUT_DELAY_MS'],
+        user_cls: loadingExperienceAudits?.['CUMULATIVE_LAYOUT_SHIFT_SCORE'],
+        user_inp: loadingExperienceAudits?.['INTERACTION_TO_NEXT_PAINT'],
+        user_ttfb: loadingExperienceAudits?.['EXPERIMENTAL_TIME_TO_FIRST_BYTE']
       }
 
       const lighthouseResultMetrics = {
-        si: lighthouseResultAudits['speed-index'],
-        fcp: lighthouseResultAudits['first-contentful-paint'],
-        lcp: lighthouseResultAudits['largest-contentful-paint'],
-        tti: lighthouseResultAudits['interactive'],
-        tbt: lighthouseResultAudits['total-blocking-time'],
-        cls: lighthouseResultAudits['cumulative-layout-shift'],
+        si: lighthouseResultAudits?.['speed-index'],
+        fcp: lighthouseResultAudits?.['first-contentful-paint'],
+        lcp: lighthouseResultAudits?.['largest-contentful-paint'],
+        tti: lighthouseResultAudits?.['interactive'],
+        tbt: lighthouseResultAudits?.['total-blocking-time'],
+        cls: lighthouseResultAudits?.['cumulative-layout-shift'],
       }
 
       const psiSiteMetircs = {
@@ -97,7 +97,7 @@ export class AutoRunService {
 
   private addCronJob(name: string, schedule: string, url: string, device: string, id: number) {
     const jobName = `${name}-${uuidv4()}`
-    const job = new CronJob(`* ${schedule} * * * *`, () => this.executeJob(name, url, device, id))
+    const job = new CronJob(`* * */${schedule} * * *`, () => this.executeJob(name, url, device, id))
 
     // 以前のジョブが存在する場合は停止してから新しいジョブを追加
     this.stopCronJob(jobName)
@@ -105,12 +105,12 @@ export class AutoRunService {
     this.schedulerRegistry.addCronJob(jobName, job)
     job.start()
 
-    this.logger.warn(`Job ${name} added for each minute at ${schedule} seconds!`)
+    this.logger.warn(`サイト名 ${name} のcronjob値は ${schedule}`)
 
     this.jobs[jobName] = job
   }
 
-  @Cron('0 0 9 * * *', {
+  @Cron('* * 9 * * *', {
     timeZone: 'Asia/Tokyo',
   })
   async handleCron() {

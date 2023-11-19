@@ -2,61 +2,28 @@
 
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
-import { Title, Flex, Card, Text, LineChart, BarChart, Color as TremorColor } from '@tremor/react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowsPointingInIcon, XCircleIcon } from '@heroicons/react/24/outline'
-import { formatDate } from '@/utils/formatDate'
-import { PSIDataType, PSIMetrics } from '@/type'
+import { Title, Card, LineChart, Color as TremorColor } from '@tremor/react'
 import { getDataAll } from '@/utils/fetchData'
-import { metricsFormatter, metricsFormatterSingle } from '@/utils/graphDataFormatter'
-
-interface Props {
-  siteMetrics: PSIMetrics[]
-  categories: string[]
-}
-
-const dataFormatter = (number: number) => {
-  return "$ " + Intl.NumberFormat("us").format(number).toString();
-}
+import { PSIDataType, PSIMetrics } from '@/type'
 
 export default function PsiChartForTable() {
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
 
   const colors: TremorColor[] = ['rose', 'emerald', 'orange', 'lime', 'violet', 'pink']
-  const [siteData, setSiteData] = useState<PSIDataType[]>([])
+  const chartCategories: string[] = ['score', 'user_fcp', 'user_lcp', 'user_fid', 'user_cls', 'user_inp', 'user_ttfb']
 
-  const formattedCategories = (category: string) : string => {
-    switch (category) {
-      case 'siteMetrics[0].user_fcp':
-        return 'Largest Contentful Paint'
-      case 'fcp':
-        return 'First Contentful Paint'
-      case 'cls':
-        return 'Cumulative Layout Shift'
-      case 'tbt':
-        return 'Total Blocking Time'
-      case 'tti':
-        return 'Time to Interactive'
-      case 'si':
-        return 'Speed Index'
-      default:
-        return category
-    }
-  }
+  const [siteData, setSiteData] = useState<PSIDataType[]>([])
+  const [siteMetircs, setSiteMetircs] = useState<PSIMetrics[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
-      const datas = await getDataAll('psi_site_list', Number(session?.user?.id))
-      setSiteData(datas)
+      const siteDatas = await getDataAll('psi_site_list', Number(session?.user?.id))
+      setSiteData(siteDatas)
 
-      const test = datas.map((data: any, index: number) => {
-        return data.siteMetrics
+      const siteData = siteDatas.map((data: any) => {
+        return data.siteMetrics[0]
       })
-      const test2 = Object.entries(test).map((key: any, value: any) => {
-        return ({
-          [key]: value
-        })
-      })
+      setSiteMetircs(siteData)
     }
     fetchData()
   }, [])
@@ -66,12 +33,9 @@ export default function PsiChartForTable() {
       <div className='w-full p-2'>
         <Title className='dark:text-white mb-5'>チャート一覧</Title>
         <LineChart
-          data={siteData}
+          data={siteMetircs}
           index='name'
-          categories={[`siteMetrics[0].score`, `siteMetrics[0].user_fcp`, `siteMetrics[0].user_lcp`,
-           `siteMetrics[0].user_fid`, `siteMetrics[0].user_cls`, `siteMetrics[0].user_inp`,
-           `siteMetrics[0].user_ttfb`
-          ]}
+          categories={chartCategories}
           colors={colors}
           yAxisWidth={40}
           className='dark:text-white'

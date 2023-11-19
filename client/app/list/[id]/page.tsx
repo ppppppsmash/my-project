@@ -1,4 +1,5 @@
 'use client'
+
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { PSIDataType, PSIMetrics } from '@/type'
@@ -8,11 +9,8 @@ import { ArrowTopRightOnSquareIcon, ClockIcon, DevicePhoneMobileIcon, ComputerDe
 import { formatDate } from '@/utils/formatDate'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
 import DelaySection from '@/components/DelaySection'
-import PsiMotionModals from '@/components/PsiMotionModalsChart'
-import PsiMotionUserModalsChart from '@/components/PsiMotionUserModalsChart'
-import PsiMotionModalsChart from '@/components/PsiMotionModalsChart'
-import GPTHoverCard from '@/components/GPTHoverCard'
-import { BsFillQuestionCircleFill } from 'react-icons/bs'
+import PsiListTab from '@/components/PsiListTab'
+import SiteDetail from '@/components/SiteDetail'
 
 interface Props {
   params: { id: number }
@@ -21,21 +19,6 @@ interface Props {
 export default function Slug({ params: { id } }: Props) {
   const [siteList, setSiteList] = useState<PSIDataType[]>([])
   const [siteMetrics, setSiteMetrics] = useState<PSIMetrics[]>([])
-
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getData('psi_site_list', id)
-      const formattedMetrics = metricsFormatter(data.siteMetrics)
-      setSiteList([data])
-      setSiteMetrics(formattedMetrics)
-    }
-    fetchData()
-  }, [id])
-
-  console.log(siteList)
-  console.log(siteMetrics)
 
   const metricsNewest = siteMetrics.length > 0 ? siteMetrics[siteMetrics.length - 1] : null
 
@@ -54,8 +37,15 @@ export default function Slug({ params: { id } }: Props) {
     return resultData
   }
 
-  const valueFormatter = (number: number) => `$ ${Intl.NumberFormat("us").format(number).toString()}`
-
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getData('psi_site_list', id)
+      const formattedMetrics = metricsFormatter(data.siteMetrics)
+      setSiteList([data])
+      setSiteMetrics(formattedMetrics)
+    }
+    fetchData()
+  }, [id])
 
   return (
     <DelaySection delay={0.3}>
@@ -118,161 +108,44 @@ export default function Slug({ params: { id } }: Props) {
               </Card>
             </Col>
             <Col numColSpanSm={1}>
-              {/* <Card className='h-full text-center dark:bg-gray-950'> */}
-                {/* <Text className='dark:text-white'>Score</Text> */}
-                  { metricsNewest && metricsNewest.score >= 70 ?
-                  (
-                    <DonutChart
-                      data={createDonutScore(siteMetrics)}
-                      showTooltip={false}
-                      category="score"
-                      index="index"
-                      valueFormatter={(number: number) =>
-                        `${Number(Intl.NumberFormat("us").format(number)) - restScore}`
-                      }
-                      className='mt-2'
-                      colors={["emerald", "neutral"]}
-                    />
-                  ) : (
-                    <DonutChart
-                      data={createDonutScore(siteMetrics)}
-                      showTooltip={false}
-                      category="score"
-                      index="index"
-                      valueFormatter={(number: number) =>
-                        `${Number(Intl.NumberFormat("us").format(number)) - restScore}`
-                      }
-                      className='mt-2'
-                      colors={["rose", "neutral"]}
-                    />
-                  )}
+              { metricsNewest && metricsNewest.score >= 70 ?
+              (
+                <DonutChart
+                  data={createDonutScore(siteMetrics)}
+                  showTooltip={false}
+                  category="score"
+                  index="index"
+                  valueFormatter={(number: number) =>
+                    `${Number(Intl.NumberFormat("us").format(number)) - restScore}`
+                  }
+                  className='mt-2'
+                  colors={["emerald", "neutral"]}
+                />
+              ) : (
+                <DonutChart
+                  data={createDonutScore(siteMetrics)}
+                  showTooltip={false}
+                  category="score"
+                  index="index"
+                  valueFormatter={(number: number) =>
+                    `${Number(Intl.NumberFormat("us").format(number)) - restScore}`
+                  }
+                  className='mt-2'
+                  colors={["rose", "neutral"]}
+                />
+              )}
               {/* </Card> */}
             </Col>
           </Grid>
         </>
       ))}
 
-      <Title className='mt-10 dark:text-white border-b-2 border-b-black dark:border-b-white'>ユーザー体験パフォーマンス</Title>
-      <Grid
-        className='gap-6 mt-6 mb-6'
-        numColsLg={6}
-      >
-        <Col numColSpanLg={3}>
-          <Card className='dark:bg-gray-950 group'>
-            <Flex>
-              <Text className='dark:text-white'>First Contentful Paint (FCP): <strong>{metricsNewest && metricsNewest?.user_fcp / 1000} s</strong></Text>
-              <GPTHoverCard message={`First Contentful Paint (FCP): ${metricsNewest && metricsNewest?.user_fcp / 1000}s`}>
-                <div className='cursor-pointer'>
-                  <BsFillQuestionCircleFill className='opacity-0 group-hover:opacity-100 transition duration-600' size={20} />
-                </div>
-              </GPTHoverCard>
-            </Flex>
-          </Card>
-        </Col>
-        <Col numColSpanLg={3}>
-          <Card className='dark:bg-gray-950 group'>
-            <Flex>
-              <Text className='dark:text-white'>Largest Contentful Paint (LCP): <strong>{metricsNewest && metricsNewest?.user_lcp / 1000} s</strong></Text>
-              <GPTHoverCard message={`Largest Contentful Paint (LCP): ${metricsNewest && metricsNewest?.user_lcp / 1000}s`}>
-                <div className='cursor-pointer'>
-                  <BsFillQuestionCircleFill className='opacity-0 group-hover:opacity-100 transition duration-600' size={20} />
-                </div>
-              </GPTHoverCard>
-            </Flex>
-          </Card>
-        </Col>
-        <Col numColSpanLg={3}>
-          <Card className='dark:bg-gray-950 group'>
-            <Flex>
-              <Text className='dark:text-white'>First Input Delay (FID): <strong>{metricsNewest && metricsNewest?.user_fid} ms</strong></Text>
-              <GPTHoverCard message={`First Input Delay (FID): ${metricsNewest && metricsNewest?.user_fid}ms`}>
-                <div className='cursor-pointer'>
-                  <BsFillQuestionCircleFill className='opacity-0 group-hover:opacity-100 transition duration-600' size={20} />
-                </div>
-              </GPTHoverCard>
-            </Flex>
-          </Card>
-        </Col>
-        <Col numColSpanLg={3}>
-          <Card className='dark:bg-gray-950 group'>
-            <Flex>
-              <Text className='dark:text-white'>Cumulative Layout Shift (CLS): <strong>{metricsNewest && metricsNewest?.user_cls}</strong></Text>
-              <GPTHoverCard message={`Cumulative Layout Shift (CLS): ${metricsNewest && metricsNewest?.user_cls}`}>
-                <div className='cursor-pointer'>
-                  <BsFillQuestionCircleFill className='opacity-0 group-hover:opacity-100 transition duration-600' size={20} />
-                </div>
-              </GPTHoverCard>
-            </Flex>
-          </Card>
-        </Col>
-        <Col numColSpanLg={3}>
-          <Card className='dark:bg-gray-950 group'>
-            <Flex>
-              <Text className='dark:text-white'>Interaction to Next Paint (INP): <strong>{metricsNewest && metricsNewest?.user_inp / 1000} s</strong></Text>
-              <GPTHoverCard message={`Interaction to Next Paint (INP): ${metricsNewest && metricsNewest?.user_inp / 1000}s`}>
-                <div className='cursor-pointer'>
-                  <BsFillQuestionCircleFill className='opacity-0 group-hover:opacity-100 transition duration-600' size={20} />
-                </div>
-              </GPTHoverCard>
-            </Flex>
-          </Card>
-        </Col>
-        <Col numColSpanLg={3}>
-          <Card className='dark:bg-gray-950 group'>
-            <Flex>
-              <Text className='dark:text-white'>Time to First Byte (TTFB): <strong>{metricsNewest && metricsNewest?.user_ttfb / 1000} s</strong></Text>
-              <GPTHoverCard message={`Time to First Byte (TTFB): ${metricsNewest && metricsNewest?.user_ttfb / 1000}s`}>
-                <div className='cursor-pointer'>
-                  <BsFillQuestionCircleFill className='opacity-0 group-hover:opacity-100 transition duration-600' size={20} />
-                </div>
-              </GPTHoverCard>
-            </Flex>
-          </Card>
-        </Col>
-      </Grid>
-
-      <Title className='mt-10 dark:text-white border-b-2 border-b-black dark:border-b-white'>ラボパフォーマンス</Title>
-      <Grid
-        className='gap-6 mt-6 mb-6'
-        numColsLg={6}
-      >
-        <Col numColSpanLg={2}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>Largest Contentful Paint: <strong>{metricsNewest?.lcp} s</strong></Text>
-          </Card>
-        </Col>
-        <Col numColSpanLg={2}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>Time to Interactive: <strong>{metricsNewest?.tti} s</strong></Text>
-          </Card>
-        </Col>
-        <Col numColSpanLg={2}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>Cumulative Layout Shift Score: <strong>{metricsNewest?.cls}</strong></Text>
-          </Card>
-        </Col>
-        <Col numColSpanLg={2}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>First Contentful Paint: <strong>{metricsNewest?.fcp} s</strong></Text>
-          </Card>
-        </Col>
-        <Col numColSpanLg={2}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>Total Blocking Time: <strong>{metricsNewest?.tbt} ms</strong></Text>
-          </Card>
-        </Col>
-        <Col numColSpanLg={2}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>Speed Index: <strong>{metricsNewest?.si} s</strong></Text>
-          </Card>
-        </Col>
-      </Grid>
-      <div className='mt-4'>
-        <PsiMotionModalsChart
-          categories={['lcp', 'tti', 'cls', 'fcp', 'tbt', 'si']}
-          siteMetrics={siteMetrics}
-        />
-      </div>
+      <PsiListTab
+        childrenA={<SiteDetail id={id} />}
+        childrenB={<div>456</div>}
+        textA='パフォーマンス詳細'
+        textB='チャート詳細'
+      />
     </DelaySection>
   )
 }

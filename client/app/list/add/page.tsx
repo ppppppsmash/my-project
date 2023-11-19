@@ -2,9 +2,8 @@
 
 import dynamicImport from 'next/dynamic'
 import { Card, Title } from '@tremor/react'
-import PsiTab from '@/components/PsiTab'
 import { zenKaku } from '@/utils/font'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 
 const DynamicComponent = dynamicImport(() => import('@/components/PsiTab'))
 
