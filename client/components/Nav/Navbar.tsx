@@ -8,7 +8,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion'
 import { Bars3Icon, XMarkIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline'
 import { TbDeviceAnalytics } from 'react-icons/tb'
-import ToggleButton from '@/components/ToggleButton'
+import ToggleButton from '@/components/Nav/ToggleButton'
 import { inter } from '@/utils/font'
 import { signIn, signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
@@ -118,18 +118,30 @@ export default function Navbar() {
                       <Menu.Items className='absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
                           <Menu.Item>
                             {({ active }) => (
-                              <button
-                                className={classNames(
-                                  active ? 'bg-gray-100' : '',
-                                  'flex w-full px-4 py-2 text-sm text-gray-700'
-                                )}
-                                onClick={() => onLogOut()}
-                              >
-                                <span className='flex items-center gap-x-2'>
-                                  <ArrowLeftOnRectangleIcon className='w-6 h-6' />
-                                  ログアウト
-                                </span>
-                              </button>
+                              <>
+                                <div className='flex items-center'>
+                                  <div className='ml-3'>
+                                    <div className='text-base font-medium text-gray-800'>
+                                      {session?.user.name}
+                                    </div>
+                                    <div className='text-sm font-medium text-gray-500'>
+                                      {session?.user.email}
+                                    </div>
+                                  </div>
+                                </div>
+                                <button
+                                  className={classNames(
+                                    active ? 'bg-gray-100' : '',
+                                    'flex w-full mt-2 pl-2 py-2 text-sm text-gray-700 hover:bg-gray-800 hover:text-white border-gray-800 rounded-md transition duration-500'
+                                  )}
+                                  onClick={() => onLogOut()}
+                                >
+                                  <span className='flex items-center gap-x-2'>
+                                    <ArrowLeftOnRectangleIcon className='w-6 h-6' />
+                                    ログアウト
+                                  </span>
+                                </button>
+                              </>
                             )}
                           </Menu.Item>
                       </Menu.Items>

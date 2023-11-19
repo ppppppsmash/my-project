@@ -10,7 +10,8 @@ import { formatDate } from '@/utils/formatDate'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
 import DelaySection from '@/components/DelaySection'
 import PsiListTab from '@/components/PsiListTab'
-import SiteDetail from '@/components/SiteDetail'
+import DetailSite from '@/components/DetailSite'
+import DetailChart from '@/components/Charts/DetailChart'
 
 interface Props {
   params: { id: number }
@@ -141,8 +142,8 @@ export default function Slug({ params: { id } }: Props) {
       ))}
 
       <PsiListTab
-        childrenA={<SiteDetail id={id} />}
-        childrenB={<div>456</div>}
+        childrenA={<DetailSite id={id} />}
+        childrenB={<DetailChart id={id} />}
         textA='パフォーマンス詳細'
         textB='チャート詳細'
       />

@@ -3,12 +3,10 @@ import Nav from '@/components/Nav/Navbar'
 import DelaySection from '@/components/DelaySection'
 import AuthGuard from '@/components/AuthGuard'
 import './globals.css'
-import ToggleButton from '@/components/ToggleButton'
 import type { Metadata } from 'next'
 import Favicon from '@/public/favicon.ico'
 import MoonLoader from 'react-spinners/MoonLoader'
 import Providers from './Providers'
-import { SessionProvider } from 'next-auth/react'
 
 export const metadata: Metadata = {
   title: 'Page Speed Measurement',
