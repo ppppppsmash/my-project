@@ -34,8 +34,8 @@ export default function PsiTab() {
         <Tab.List className='flex space-x-1 rounded-xl bg-gray-800/[.04] p-1 dark:bg-gray-100 dark:text-white'>
         {Object.keys(categories).map((category) => (
           <Tab
-          key={category}
-          className={({ selected }) =>
+            key={category}
+            className={({ selected }) =>
             classNames(
               'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-900 dark:text-gray-950',
               'ring-white ring-opacity-40 ring-offset-2 ring-offset-gray-400 focus:outline-none focus:ring-1',
