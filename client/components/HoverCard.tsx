@@ -38,7 +38,7 @@ const HoverCard = ({children, url}: {children: React.ReactNode, url: string}) =>
             'radix-side-top:animate-slide-up radix-side-bottom:animate-slide-down',
             'max-w-md rounded-lg p-4 md:w-full whitespace-pre break-all',
             'bg-white dark:bg-gray-800 p-4 rounded shadow-md',
-            'focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75'
+            'focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75'
           )}
         >
           <motion.div

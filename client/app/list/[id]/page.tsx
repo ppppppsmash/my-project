@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { PSIDataType, PSIMetrics } from '@/type'
 import { getData } from '@/utils/fetchData'
-import { Grid, Col, Card, Text, Title, Subtitle, Bold, DonutChart } from '@tremor/react'
+import { Grid, Col, Card, Text, Title, Subtitle, Bold, DonutChart, Accordion, AccordionHeader, AccordionBody, AccordionList } from '@tremor/react'
 import { ArrowTopRightOnSquareIcon, ClockIcon, DevicePhoneMobileIcon, ComputerDesktopIcon, CalendarDaysIcon } from '@heroicons/react/24/outline'
 import { formatDate } from '@/utils/formatDate'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
@@ -11,6 +11,7 @@ import DelaySection from '@/components/DelaySection'
 import PsiMotionModals from '@/components/PsiMotionModalsChart'
 import PsiMotionUserModalsChart from '@/components/PsiMotionUserModalsChart'
 import PsiMotionModalsChart from '@/components/PsiMotionModalsChart'
+import GPTHoverCard from '@/components/GPTHoverCard'
 
 interface Props {
   params: { id: number }
@@ -156,9 +157,11 @@ export default function Slug({ params: { id } }: Props) {
         numColsLg={6}
       >
         <Col numColSpanLg={3}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>First Contentful Paint (FCP): <strong>{metricsNewest && metricsNewest?.user_fcp / 1000} s</strong></Text>
-          </Card>
+          <GPTHoverCard message={`First Contentful Paint (FCP): ${metricsNewest && metricsNewest?.user_fcp / 1000}s`}>
+            <Card className='dark:bg-gray-950'>
+              <Text className='dark:text-white'>First Contentful Paint (FCP): <strong>{metricsNewest && metricsNewest?.user_fcp / 1000} s</strong></Text>
+            </Card>
+          </GPTHoverCard>
         </Col>
         <Col numColSpanLg={3}>
           <Card className='dark:bg-gray-950'>
@@ -187,7 +190,7 @@ export default function Slug({ params: { id } }: Props) {
         </Col>
       </Grid>
 
-      <Title className='mt-10 dark:text-white border-b-2 border-b-black dark:border-b-white'>ラボスパフォーマンス</Title>
+      <Title className='mt-10 dark:text-white border-b-2 border-b-black dark:border-b-white'>ラボパフォーマンス</Title>
       <Grid
         className='gap-6 mt-6 mb-6'
         numColsLg={6}
