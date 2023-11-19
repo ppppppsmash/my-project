@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { PSIDataType, PSIMetrics } from '@/type'
 import { getData } from '@/utils/fetchData'
-import { Grid, Col, Card, Text, Title, Subtitle, Bold, DonutChart, Accordion, AccordionHeader, AccordionBody, AccordionList } from '@tremor/react'
+import { Grid, Col, Card, Text, Title, Subtitle, Flex, DonutChart, Accordion, AccordionHeader, AccordionBody, AccordionList } from '@tremor/react'
 import { ArrowTopRightOnSquareIcon, ClockIcon, DevicePhoneMobileIcon, ComputerDesktopIcon, CalendarDaysIcon } from '@heroicons/react/24/outline'
 import { formatDate } from '@/utils/formatDate'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
@@ -12,6 +12,7 @@ import PsiMotionModals from '@/components/PsiMotionModalsChart'
 import PsiMotionUserModalsChart from '@/components/PsiMotionUserModalsChart'
 import PsiMotionModalsChart from '@/components/PsiMotionModalsChart'
 import GPTHoverCard from '@/components/GPTHoverCard'
+import { BsFillQuestionCircleFill } from 'react-icons/bs'
 
 interface Props {
   params: { id: number }
@@ -157,35 +158,75 @@ export default function Slug({ params: { id } }: Props) {
         numColsLg={6}
       >
         <Col numColSpanLg={3}>
-          <GPTHoverCard message={`First Contentful Paint (FCP): ${metricsNewest && metricsNewest?.user_fcp / 1000}s`}>
-            <Card className='dark:bg-gray-950'>
+          <Card className='dark:bg-gray-950 group'>
+            <Flex>
               <Text className='dark:text-white'>First Contentful Paint (FCP): <strong>{metricsNewest && metricsNewest?.user_fcp / 1000} s</strong></Text>
-            </Card>
-          </GPTHoverCard>
-        </Col>
-        <Col numColSpanLg={3}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>Largest Contentful Paint (LCP): <strong>{metricsNewest && metricsNewest?.user_lcp / 1000} s</strong></Text>
+              <GPTHoverCard message={`First Contentful Paint (FCP): ${metricsNewest && metricsNewest?.user_fcp / 1000}s`}>
+                <div className='cursor-pointer'>
+                  <BsFillQuestionCircleFill className='opacity-0 group-hover:opacity-100 transition duration-600' size={20} />
+                </div>
+              </GPTHoverCard>
+            </Flex>
           </Card>
         </Col>
         <Col numColSpanLg={3}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>First Input Delay (FID): <strong>{metricsNewest && metricsNewest?.user_fid} ms</strong></Text>
+          <Card className='dark:bg-gray-950 group'>
+            <Flex>
+              <Text className='dark:text-white'>Largest Contentful Paint (LCP): <strong>{metricsNewest && metricsNewest?.user_lcp / 1000} s</strong></Text>
+              <GPTHoverCard message={`Largest Contentful Paint (LCP): ${metricsNewest && metricsNewest?.user_lcp / 1000}s`}>
+                <div className='cursor-pointer'>
+                  <BsFillQuestionCircleFill className='opacity-0 group-hover:opacity-100 transition duration-600' size={20} />
+                </div>
+              </GPTHoverCard>
+            </Flex>
           </Card>
         </Col>
         <Col numColSpanLg={3}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>Cumulative Layout Shift (CLS): <strong>{metricsNewest && metricsNewest?.user_cls}</strong></Text>
+          <Card className='dark:bg-gray-950 group'>
+            <Flex>
+              <Text className='dark:text-white'>First Input Delay (FID): <strong>{metricsNewest && metricsNewest?.user_fid} ms</strong></Text>
+              <GPTHoverCard message={`First Input Delay (FID): ${metricsNewest && metricsNewest?.user_fid}ms`}>
+                <div className='cursor-pointer'>
+                  <BsFillQuestionCircleFill className='opacity-0 group-hover:opacity-100 transition duration-600' size={20} />
+                </div>
+              </GPTHoverCard>
+            </Flex>
           </Card>
         </Col>
         <Col numColSpanLg={3}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>Interaction to Next Paint (INP): <strong>{metricsNewest && metricsNewest?.user_inp / 1000} s</strong></Text>
+          <Card className='dark:bg-gray-950 group'>
+            <Flex>
+              <Text className='dark:text-white'>Cumulative Layout Shift (CLS): <strong>{metricsNewest && metricsNewest?.user_cls}</strong></Text>
+              <GPTHoverCard message={`Cumulative Layout Shift (CLS): ${metricsNewest && metricsNewest?.user_cls}`}>
+                <div className='cursor-pointer'>
+                  <BsFillQuestionCircleFill className='opacity-0 group-hover:opacity-100 transition duration-600' size={20} />
+                </div>
+              </GPTHoverCard>
+            </Flex>
           </Card>
         </Col>
         <Col numColSpanLg={3}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>Time to First Byte (TTFB): <strong>{metricsNewest && metricsNewest?.user_ttfb / 1000} s</strong></Text>
+          <Card className='dark:bg-gray-950 group'>
+            <Flex>
+              <Text className='dark:text-white'>Interaction to Next Paint (INP): <strong>{metricsNewest && metricsNewest?.user_inp / 1000} s</strong></Text>
+              <GPTHoverCard message={`Interaction to Next Paint (INP): ${metricsNewest && metricsNewest?.user_inp / 1000}s`}>
+                <div className='cursor-pointer'>
+                  <BsFillQuestionCircleFill className='opacity-0 group-hover:opacity-100 transition duration-600' size={20} />
+                </div>
+              </GPTHoverCard>
+            </Flex>
+          </Card>
+        </Col>
+        <Col numColSpanLg={3}>
+          <Card className='dark:bg-gray-950 group'>
+            <Flex>
+              <Text className='dark:text-white'>Time to First Byte (TTFB): <strong>{metricsNewest && metricsNewest?.user_ttfb / 1000} s</strong></Text>
+              <GPTHoverCard message={`Time to First Byte (TTFB): ${metricsNewest && metricsNewest?.user_ttfb / 1000}s`}>
+                <div className='cursor-pointer'>
+                  <BsFillQuestionCircleFill className='opacity-0 group-hover:opacity-100 transition duration-600' size={20} />
+                </div>
+              </GPTHoverCard>
+            </Flex>
           </Card>
         </Col>
       </Grid>

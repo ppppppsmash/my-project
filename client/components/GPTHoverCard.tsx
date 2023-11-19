@@ -2,12 +2,13 @@ import * as HoverCardPrimitive from '@radix-ui/react-hover-card'
 import { clsx } from 'clsx'
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import CircleLoader from 'react-spinners/CircleLoader'
 import {
-  Text
+  Text,
+  Flex
 } from '@tremor/react'
 import { SparklesIcon } from '@heroicons/react/24/solid'
 import { LightBulbIcon } from '@heroicons/react/24/outline'
+import CircleLoader from 'react-spinners/CircleLoader'
 
 const GPTHoverCard = ({ children, message }: { children: React.ReactNode, message: string }) => {
   const [hovered, setHovered] = useState(false);
@@ -38,7 +39,16 @@ const GPTHoverCard = ({ children, message }: { children: React.ReactNode, messag
   const handleMouseLeave = () => {
     setHovered(false)
     setResponse('')
-  };
+  }
+
+  const Loading = () => {
+    return (
+      <Flex className='justify-center gap-x-3'>
+        <Text>Loading...</Text>
+        <CircleLoader size={20} />
+      </Flex>
+    )
+  }
 
   return (
     <HoverCardPrimitive.Root>
@@ -55,12 +65,37 @@ const GPTHoverCard = ({ children, message }: { children: React.ReactNode, messag
           )}
           sideOffset={5}
         >
-          <div className='w-full h-full flex gap-x-2 items-start'>
-            <LightBulbIcon className='w-5 h-5 text-[#FFC042]' />
-            <Text className='block w-full text-sm dark:text-white'>
-              {hovered ? `ChatGPT:\n ${response}` || 'Loading...' : ''}
-            </Text>
-          </div>
+          <motion.div
+            className='w-[450px] h-[450px] pointer-events-none relative z-50 origin-top overflow-hidden !p-0'
+            initial={{
+              opacity: 0,
+              scale: 0.965,
+              y: 9,
+              height:0
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              height: 250
+            }}
+            exit={{
+              opacity: 0,
+              scale: 0.98,
+              y: 8,
+              height: 0
+            }}
+            transition={{
+              duration: 0.2,
+            }}
+          >
+            <div className='w-full h-full flex gap-x-2 items-start'>
+              <LightBulbIcon className='w-5 h-5 text-[#FFC042]' />
+              <Text className='block w-full text-sm dark:text-white'>
+                {hovered ? (response !== '' ? (`ChatGPT:\n ${response}`) : <Loading />) : ''}
+              </Text>
+            </div>
+          </motion.div>
         </HoverCardPrimitive.Content>
       </HoverCardPrimitive.Portal>
     </HoverCardPrimitive.Root>
