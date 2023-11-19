@@ -8,19 +8,32 @@ import {
 } from '@tremor/react'
 import { SparklesIcon } from '@heroicons/react/24/solid'
 import { LightBulbIcon } from '@heroicons/react/24/outline'
-import { chatGPT } from '@/utils/chatGPT'
-
-const { Root, Trigger, Portal } = HoverCardPrimitive
 
 const GPTHoverCard = ({ children, message }: { children: React.ReactNode, message: string }) => {
   const [hovered, setHovered] = useState(false);
   const [response, setResponse] = useState<string>('')
 
+  const fetchChatResponse = async (message: string) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}chatgpt/diagnosis?message=${message}`, {
+        cache: 'no-store',
+      })
+      return response
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const handleMouseEnter = async () => {
     setHovered(true)
-    const result = await chatGPT(message)
-    setResponse(result)
-  };
+    const response = await fetchChatResponse(message)
+
+    if(response?.ok) {
+      const responseData = await response.json()
+      const result = responseData.choices[0].message.content
+      setResponse(result)
+    }
+  }
 
   const handleMouseLeave = () => {
     setHovered(false)
