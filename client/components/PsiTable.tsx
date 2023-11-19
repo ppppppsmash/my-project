@@ -16,8 +16,6 @@ import {
   MultiSelectBox,
   MultiSelectBoxItem,
   BadgeDelta,
-  TabList,
-  Tab
 } from '@tremor/react'
 import {
   XMarkIcon,

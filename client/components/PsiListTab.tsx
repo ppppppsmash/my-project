@@ -19,9 +19,10 @@ export default function PsiListTab({
     <div>
       <>
         <TabList
+          color='zinc'
           defaultValue='1'
           onValueChange={(value) => setShowCard(value === '1')}
-          className='mt-6'
+          className='mt-6 text-gray-950'
         >
           <Tab value='1' text='表組み一覧' icon={DocumentTextIcon} />
           <Tab value='2' text='チャート一覧' icon={ChartPieIcon} />

@@ -23,3 +23,8 @@ export function metricsFormatter(data: PSIMetrics[]): PSIMetrics[] {
       updatedAt: formatDate(item.updatedAt)
     }))
   }
+
+  export function metricsFormatterSingle(value: string) {
+    const valueNum = value.replace(/,/g, '').split(/\s/)[0]
+    return parseInt(valueNum)
+  }
