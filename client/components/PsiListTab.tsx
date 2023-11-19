@@ -1,5 +1,4 @@
 import { DocumentTextIcon, ChartPieIcon } from '@heroicons/react/24/solid'
-
 import {
   TabList,
   Tab
@@ -8,13 +7,16 @@ import {
 import { useState } from 'react'
 
 export default function PsiListTab({
-  childrenA, childrenB
+  childrenA, childrenB, textA, textB
 } : {
   childrenA: React.ReactNode
   childrenB: React.ReactNode
+  textA: string
+  textB: string
 }
 ) {
   const [showCard, setShowCard] = useState(true)
+
   return (
     <div>
       <>
@@ -24,8 +26,8 @@ export default function PsiListTab({
           onValueChange={(value) => setShowCard(value === '1')}
           className='mt-6 text-gray-950'
         >
-          <Tab value='1' text='表組み一覧' icon={DocumentTextIcon} />
-          <Tab value='2' text='チャート一覧' icon={ChartPieIcon} />
+          <Tab value='1' text={textA} icon={DocumentTextIcon} />
+          <Tab value='2' text={textB} icon={ChartPieIcon} />
         </TabList>
       </>
 

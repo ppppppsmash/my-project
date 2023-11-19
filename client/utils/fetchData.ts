@@ -6,9 +6,6 @@ export const getDataAll = async(api: string, user_id: number) => {
       headers: {
         'Content-Type': 'application/json',
       }
-      // headers: {
-      //   Authorization: `Bearer ${accessToken}`, // ログイン時に取得したアクセストークンを使用
-      // },
     })
     const data = await response.json()
     console.log(data)
