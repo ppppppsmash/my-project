@@ -11,7 +11,7 @@ import {
 import { zenKaku } from '@/utils/font'
 const queryClient = new QueryClient()
 
-const DynamicComponent = dynamicImport(() => import('@/components/PsiTable'))
+const DynamicComponent = dynamicImport(() => import('@/components/PsiList'))
 
 export default function PsiList() {
   return (

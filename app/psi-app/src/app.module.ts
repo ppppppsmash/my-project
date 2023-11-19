@@ -9,6 +9,7 @@ import { PsiModule } from './psi/psi.module'
 import { PsiUploadModule } from './csv_upload/csv_upload.module'
 import { CsvDownloadModule } from './csv_download/csv_download.module'
 import { LinkPreviewModule } from './link_preview/link_preview.module'
+import { ChatGPTModule } from './chatgpt/chatgpt.module'
 import { AutoRunModule } from './auto_run/auto_run.module'
 import { ScheduleModule } from '@nestjs/schedule'
 import { AppDataSource } from './db/data-source'
@@ -20,25 +21,20 @@ import configuration from './config/configuration'
       load: [configuration],
       isGlobal: true,
     }),
-    TypeOrmModule.forRootAsync({ //forRootではなく、forRootAsync
+    TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         ...configService.get('database'),
       }),
     }),
-    //TypeOrmModule.forRoot(AppDataSource.options),
-    //ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true}),
-    // TypeOrmModule.forRootAsync({
-    //   imports: [ConfigModule],
-    //   useClass: TypeOrmConfigService
-    // }),
     AutoRunModule,
     PsiSiteListModule,
     PsiModule,
     PsiUploadModule,
     CsvDownloadModule,
     LinkPreviewModule,
+    ChatGPTModule,
     ScheduleModule.forRoot()
   ],
   controllers: [AppController],

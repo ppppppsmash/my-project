@@ -4,7 +4,6 @@ import {
   Card,
   Title,
   Text,
-  Flex,
   Table,
   TableRow,
   TableCell,
@@ -21,11 +20,10 @@ import { signIn, signOut, useSession } from "next-auth/react"
 import { getCsrfToken } from "next-auth/react"
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import dynamicImport from 'next/dynamic'
-import PsiHistory from '@/components/PsiHistory'
 
 const queryClient = new QueryClient()
 
- const DynamicComponent = dynamicImport(() => import('@/components/PsiHistory'))
+const DynamicPsiHistoryComponent = dynamicImport(() => import('@/components/PsiHistory'))
 
 export default async function Home() {
   const { data: session, status } = useSession()
@@ -40,7 +38,7 @@ export default async function Home() {
             <>
               <Text>ようこそ🤟 {session?.user?.name}</Text>
               <Text className='mt-4'>Email: {session?.user?.email}</Text>
-              <DynamicComponent />
+              <DynamicPsiHistoryComponent />
             </>
           }
         </div>

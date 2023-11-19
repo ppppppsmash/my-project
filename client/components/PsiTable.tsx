@@ -1,8 +1,8 @@
 'use client'
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import Link from 'next/link'
-import { useState, useEffect, ChangeEvent } from 'react'
+import { useState, ChangeEvent } from 'react'
 import { PSIDataType, SortType } from '@/type'
 import {
   Table,
@@ -12,24 +12,19 @@ import {
   TableBody,
   TableCell,
   Text,
-  Title,
   TextInput,
   MultiSelectBox,
   MultiSelectBoxItem,
-  Badge,
-  BadgeDelta
+  BadgeDelta,
 } from '@tremor/react'
 import {
   XMarkIcon,
   CheckIcon,
   DevicePhoneMobileIcon,
   ComputerDesktopIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
   ArrowSmallUpIcon,
   ArrowSmallDownIcon,
-  EyeIcon,
-  ChevronUpDownIcon
+  EyeIcon
 } from '@heroicons/react/24/outline'
 import PsiPopup from '@/components/PsiPopup'
 import PsiSelect from '@/components/PsiSelect'
@@ -178,9 +173,8 @@ export default function PsiTable() {
 
   if(isLoading) return (<h1 className='flex items-center justify-center my-4'><MoonLoader size={22} /></h1>)
   if (!result) return <h1 className='text-md text-center'>データがありません.</h1>
-
   return (
-    <div className={`dark:bg-gray-950`}>
+    <div>
       <MultiSelectBox
         onValueChange={setSelectedNames}
         placeholder="検索..."
@@ -393,3 +387,4 @@ export default function PsiTable() {
     </div>
   )
 }
+
