@@ -24,7 +24,7 @@ export function DatePicker({ selectedDate, onSelectDate }: DatePickerProps) {
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild className='flex justify-end'>
         <div className='flex justify-end'>
           <Button
             variant={'outline'}
@@ -38,7 +38,7 @@ export function DatePicker({ selectedDate, onSelectDate }: DatePickerProps) {
           </Button>
         </div>
       </PopoverTrigger>
-      <PopoverContent className='w-auto p-0'>
+      <PopoverContent className='w-auto p-0' align='end'>
         <Calendar
           mode='single'
           selected={date}

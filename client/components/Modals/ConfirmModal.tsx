@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-export default function ModalsConfirm() {
+export default function ConfirmModal() {
   let [isOpen, setIsOpen] = useState(true)
 
   const router = useRouter()
@@ -26,7 +26,7 @@ export default function ModalsConfirm() {
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className="relative" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -36,10 +36,10 @@ export default function ModalsConfirm() {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
+            <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50" />
           </Transition.Child>
 
-          <div className="fixed inset-0 overflow-y-auto">
+          <div className="fixed inset-0 overflow-y-auto z-50">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
               <Transition.Child
                 as={Fragment}
@@ -63,7 +63,7 @@ export default function ModalsConfirm() {
                     </p>
                   </div>
 
-                  <div className='flex gap-x-4 sm:gap-x-0 pt-8 items-center justify-end px-6 py-3 -mx-6 -mb-4 sm:space-y-0 sm:space-x-6 sm:flex-row'>
+                  <div className='flex gap-x-2 pt-8 items-center justify-end px-6 py-3 -mx-6 -mb-4 sm:space-y-0 sm:flex-row'>
                     <button
                     type="button"
                     className="inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 focus-visible:ring-offset-2"
