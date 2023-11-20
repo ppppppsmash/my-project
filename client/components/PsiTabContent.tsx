@@ -13,7 +13,7 @@ import Loading from '@/components/Loading'
 import { ProgressLoading } from '@/components/Progress'
 import { SelectBox, SelectBoxItem } from '@tremor/react'
 import { Button, Text } from '@tremor/react'
-import ModalsConfirm from '@/components/ModalsConfirm'
+import ConfirmModal from '@/components/Modals/ConfirmModal'
 import { useSession } from 'next-auth/react'
 import RegistrationModal from './Modals/RegistrationModal'
 
@@ -454,7 +454,7 @@ export default function PsiTabContent({ mode }: Props) {
           />
         </div>
 
-        {isConfirm && <ModalsConfirm />}
+        {isConfirm && <ConfirmModal />}
 
       </div>
     </div>

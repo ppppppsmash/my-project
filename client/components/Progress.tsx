@@ -2,9 +2,7 @@
 
 import * as ProgressPrimitive from '@radix-ui/react-progress'
 import React, { useState, useEffect } from 'react'
-import PacmanLoader from 'react-spinners/PacmanLoader'
-import FadeLoader from 'react-spinners/FadeLoader'
-//import { getRandomArbitrary } from "../utils/math"
+import BounceLoader from 'react-spinners/BounceLoader'
 
 interface ProgressProps {
     progress: number
@@ -33,17 +31,18 @@ const ProgressLoading = ({ progress }: ProgressProps) => {
   }, [])
 
   return (
-    <div className='fixed inset-0 z-40 flex items-center flex-col bg-black bg-opacity-70 sm:justify-center enter enter-active'>
-      <FadeLoader
-        color='#FFFFFF'
+    <div className='fixed inset-0 z-50 flex items-center flex-col bg-background/80 backdrop-blur-sm sm:justify-center enter enter-active'>
+      <BounceLoader
+        color='black'
+        size={20}
       />
       <ProgressPrimitive.Root
         value={progress}
-        className="h-3 w-5/12 overflow-hidden rounded-full bg-white dark:bg-gray-900 mt-8"
+        className="h-3 w-1/5 overflow-hidden rounded-full bg-gray-700 dark:bg-white mt-8 border border-gray-700 dark:border-white"
       >
       <ProgressPrimitive.Indicator
         style={{ width: `${progress}%` }}
-        className="h-full bg-gray-950 duration-300 ease-in-out dark:bg-white"
+        className="h-full dark:bg-gray-950  duration-300 ease-in-out bg-white"
       />
       </ProgressPrimitive.Root>
     </div>
