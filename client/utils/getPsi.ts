@@ -52,18 +52,18 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
         score,
         name,
         url,
-        lcp: lighthouseResultMetrics.lcp.displayValue,
-        tti: lighthouseResultMetrics.tti.displayValue,
-        cls: lighthouseResultMetrics.cls.displayValue,
-        fcp: lighthouseResultMetrics.fcp.displayValue,
-        tbt: lighthouseResultMetrics.tbt.displayValue,
-        si: lighthouseResultMetrics.si.displayValue,
-        user_fcp: loadingExperienceMetrics.user_fcp.percentile,
-        user_lcp: loadingExperienceMetrics.user_lcp.percentile,
-        user_fid: loadingExperienceMetrics.user_fid.percentile,
-        user_cls: loadingExperienceMetrics.user_cls.percentile,
-        user_inp: loadingExperienceMetrics.user_inp.percentile,
-        user_ttfb: loadingExperienceMetrics.user_ttfb.percentile
+        lcp: lighthouseResultMetrics?.lcp?.displayValue,
+        tti: lighthouseResultMetrics?.tti?.displayValue,
+        cls: lighthouseResultMetrics?.cls?.displayValue,
+        fcp: lighthouseResultMetrics?.fcp?.displayValue,
+        tbt: lighthouseResultMetrics?.tbt?.displayValue,
+        si: lighthouseResultMetrics?.si?.displayValue,
+        user_fcp: loadingExperienceMetrics?.user_fcp?.percentile,
+        user_lcp: loadingExperienceMetrics?.user_lcp?.percentile,
+        user_fid: loadingExperienceMetrics?.user_fid?.percentile,
+        user_cls: loadingExperienceMetrics?.user_cls?.percentile,
+        user_inp: loadingExperienceMetrics?.user_inp?.percentile,
+        user_ttfb: loadingExperienceMetrics?.user_ttfb?.percentile
       }
 
       console.log(psiSiteMetircs)
@@ -115,39 +115,39 @@ export const getPsiDataAgain = async (name: string, url: string, index: number, 
 
       const { metrics: loadingExperienceAudits } = loadingExperience
       const loadingExperienceMetrics = {
-        user_fcp: loadingExperienceAudits['FIRST_CONTENTFUL_PAINT_MS'],
-        user_lcp: loadingExperienceAudits['LARGEST_CONTENTFUL_PAINT_MS'],
-        user_fid: loadingExperienceAudits['FIRST_INPUT_DELAY_MS'],
-        user_cls: loadingExperienceAudits['CUMULATIVE_LAYOUT_SHIFT_SCORE'],
-        user_inp: loadingExperienceAudits['INTERACTION_TO_NEXT_PAINT'],
-        user_ttfb: loadingExperienceAudits['EXPERIMENTAL_TIME_TO_FIRST_BYTE']
+        user_fcp: loadingExperienceAudits?.['FIRST_CONTENTFUL_PAINT_MS'],
+        user_lcp: loadingExperienceAudits?.['LARGEST_CONTENTFUL_PAINT_MS'],
+        user_fid: loadingExperienceAudits?.['FIRST_INPUT_DELAY_MS'],
+        user_cls: loadingExperienceAudits?.['CUMULATIVE_LAYOUT_SHIFT_SCORE'],
+        user_inp: loadingExperienceAudits?.['INTERACTION_TO_NEXT_PAINT'],
+        user_ttfb: loadingExperienceAudits?.['EXPERIMENTAL_TIME_TO_FIRST_BYTE']
       }
 
       const lighthouseResultMetrics = {
-        si: lighthouseResultAudits['speed-index'],
-        fcp: lighthouseResultAudits['first-contentful-paint'],
-        lcp: lighthouseResultAudits['largest-contentful-paint'],
-        tti: lighthouseResultAudits['interactive'],
-        tbt: lighthouseResultAudits['total-blocking-time'],
-        cls: lighthouseResultAudits['cumulative-layout-shift'],
+        si: lighthouseResultAudits?.['speed-index'],
+        fcp: lighthouseResultAudits?.['first-contentful-paint'],
+        lcp: lighthouseResultAudits?.['largest-contentful-paint'],
+        tti: lighthouseResultAudits?.['interactive'],
+        tbt: lighthouseResultAudits?.['total-blocking-time'],
+        cls: lighthouseResultAudits?.['cumulative-layout-shift'],
       }
 
       const psiSiteMetircs = {
         score,
         name,
         url,
-        lcp: lighthouseResultMetrics.lcp.displayValue,
-        tti: lighthouseResultMetrics.tti.displayValue,
-        cls: lighthouseResultMetrics.cls.displayValue,
-        fcp: lighthouseResultMetrics.fcp.displayValue,
-        tbt: lighthouseResultMetrics.tbt.displayValue,
-        si: lighthouseResultMetrics.si.displayValue,
-        user_fcp: loadingExperienceMetrics.user_fcp.percentile,
-        user_lcp: loadingExperienceMetrics.user_lcp.percentile,
-        user_fid: loadingExperienceMetrics.user_fid.percentile,
-        user_cls: loadingExperienceMetrics.user_cls.percentile,
-        user_inp: loadingExperienceMetrics.user_inp.percentile,
-        user_ttfb: loadingExperienceMetrics.user_ttfb.percentile
+        lcp: lighthouseResultMetrics?.lcp?.displayValue,
+        tti: lighthouseResultMetrics?.tti?.displayValue,
+        cls: lighthouseResultMetrics?.cls?.displayValue,
+        fcp: lighthouseResultMetrics?.fcp?.displayValue,
+        tbt: lighthouseResultMetrics?.tbt?.displayValue,
+        si: lighthouseResultMetrics?.si?.displayValue,
+        user_fcp: loadingExperienceMetrics?.user_fcp?.percentile,
+        user_lcp: loadingExperienceMetrics?.user_lcp?.percentile,
+        user_fid: loadingExperienceMetrics?.user_fid?.percentile,
+        user_cls: loadingExperienceMetrics?.user_cls?.percentile,
+        user_inp: loadingExperienceMetrics?.user_inp?.percentile,
+        user_ttfb: loadingExperienceMetrics?.user_ttfb?.percentile
       }
 
       const psiSiteList = {

@@ -31,14 +31,14 @@ const ProgressLoading = ({ progress }: ProgressProps) => {
   }, [])
 
   return (
-    <div className='fixed inset-0 z-50 flex items-center flex-col bg-background/80 backdrop-blur-sm sm:justify-center enter enter-active'>
+    <div className='fixed inset-0 z-50 flex items-center flex-col bg-background/80 backdrop-blur-sm justify-center enter enter-active'>
       <BounceLoader
         color='black'
         size={20}
       />
       <ProgressPrimitive.Root
         value={progress}
-        className="h-3 w-1/5 overflow-hidden rounded-full bg-gray-700 dark:bg-white mt-8 border border-gray-700 dark:border-white"
+        className="h-3 sm:w-1/5 w-2/3 overflow-hidden rounded-full bg-gray-700 dark:bg-white mt-8 border border-gray-700 dark:border-white"
       >
       <ProgressPrimitive.Indicator
         style={{ width: `${progress}%` }}
