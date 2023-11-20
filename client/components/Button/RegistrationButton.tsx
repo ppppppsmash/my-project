@@ -2,13 +2,10 @@ import { Button } from '@tremor/react'
 
 interface Props {
   label: string
-  setOpen: () => void
+  clickEvent: () => void
 }
 
-export default function PsiButton({label, setOpen}: Props) {
-  const handleClick = () => {
-    setOpen()
-  }
+export default function RegistrationButton({label, clickEvent}: Props) {
 
   return (
     <Button
@@ -16,7 +13,7 @@ export default function PsiButton({label, setOpen}: Props) {
       py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
       duration-150 focus:shadow-outline ease-in-out'
       color='gray'
-      onClick={handleClick}
+      onClick={clickEvent}
     >
       {label}
     </Button>

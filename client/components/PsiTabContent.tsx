@@ -5,18 +5,17 @@ import { ChangeEvent, FormEvent, useState, useEffect } from 'react'
 import PsiCheckbox from '@/components/PsiCheckbox'
 import PsiSelect from '@/components/PsiSelect'
 import { getPsiData } from '@/utils/getPsi'
-import Modals from '@/components/Modals'
 import PsiInput from '@/components/PsiInput'
-import PsiButton from '@/components/PsiButton'
 import PsiDialog from '@/components/PsiDialog'
 import { ExclamationTriangleIcon, CheckCircleIcon, DocumentChartBarIcon } from '@heroicons/react/24/solid'
-import { checkboxValidate, inputValidate, textareaValidate, csvValidate } from '@/utils/validation'
+import { urlValidate, inputValidate, checkboxValidate, textareaValidate, csvValidate } from '@/utils/validation'
 import Loading from '@/components/Loading'
 import { ProgressLoading } from '@/components/Progress'
 import { SelectBox, SelectBoxItem } from '@tremor/react'
 import { Button, Text } from '@tremor/react'
 import ModalsConfirm from '@/components/ModalsConfirm'
 import { useSession } from 'next-auth/react'
+import RegistrationModal from './Modals/RegistrationModal'
 
 interface Props {
   mode: string
@@ -318,17 +317,6 @@ export default function PsiTabContent({ mode }: Props) {
         </>
       )}
 
-      {isModalOpen && <Modals
-        id={id}
-        userId={Number(session?.user?.id)}
-        userName={session?.user?.name || ''}
-        name={mode === 'single' ? name : names}
-        url={mode === 'single' ? url : ''}
-        getPsiData={handlePsiData}
-        onOpen={openModal}
-        onClose={closeModal}
-      />}
-
       <div>
       {mode === 'single' && (
         <div>
@@ -452,10 +440,17 @@ export default function PsiTabContent({ mode }: Props) {
         </div>
 
         <div className='w-2/12'>
-          <PsiButton
-            label='登録'
-            setOpen={openModal}
-          //  disabled={!isFileExist}
+          <RegistrationModal
+            onShow={isModalOpen}
+            label='サイトを登録しますか？'
+            id={id}
+            userId={Number(session?.user?.id)}
+            userName={session?.user?.name || ''}
+            name={mode === 'single' ? name : names}
+            url={mode === 'single' ? url : ''}
+            getPsiData={handlePsiData}
+            onOpen={openModal}
+            onClose={closeModal}
           />
         </div>
 
