@@ -1,18 +1,7 @@
 'use client'
 
 import {
-  Card,
-  Title,
-  Text,
-  Table,
-  TableRow,
-  TableCell,
-  TableHead,
-  TableHeaderCell,
-  TableBody,
-  Badge,
-  Button,
-  Color,
+  Text
 } from '@tremor/react'
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"

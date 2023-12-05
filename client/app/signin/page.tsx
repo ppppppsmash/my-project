@@ -4,6 +4,8 @@ import React, { useRef, useState, useEffect } from 'react'
 import { signIn, signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { Title } from '@tremor/react'
+import { inter, quicksand } from '@/utils/font'
 
 export default function LoginPage() {
   const { data: session, status } = useSession()
@@ -13,20 +15,32 @@ export default function LoginPage() {
 
   const router = useRouter()
 
+  const [errorMessage, setErrorMessage] = useState<string>('')
+
   const onLogin = async () => {
     const emailValue = email.current?.value || ''
     const passwordValue = password.current?.value || ''
-    const result = await signIn('credentials', {
-      email: emailValue,
-      password: passwordValue,
-      redirect: true,
-      callbackUrl: '/'
-    })
 
-    console.log(email, password)
+    try {
+      const result = await signIn('credentials', {
+        email: emailValue,
+        password: passwordValue,
+        redirect: true,
+        callbackUrl: '/'
+      })
+
+      if (result?.error) {
+        // ログインエラーがある場合、エラーメッセージを表示
+        setErrorMessage('ログインに失敗しました。正しいメールアドレスとパスワードを入力してください。')
+      } else {
+        setErrorMessage('') // エラーメッセージをクリア
+      }
+    } catch (error) {
+      console.error('ログインエラー:', error)
+    }
   }
 
-  console.log(session)
+  console.log(errorMessage)
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -45,55 +59,49 @@ export default function LoginPage() {
 
   return (
     <div
-      className='flex flex-col justify-center items-center h-screen bg-gradient-to-br gap-1 from-cyan-300
-      to-sky-600'
+      className='fixed w-full top-0 z-50 flex flex-col justify-center items-center h-screen bg-gradient-to-br gap-1 from-white
+      to-gray-800'
     >
-      <div className='flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0'>
-        <div className='w-full bg-white/30 backdrop-blur-sm rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700'>
+      <div className='flex flex-col w-10/12 md:w-full items-center justify-center py-8 mx-auto md:h-screen lg:py-0'>
+        <div className='w-full bg-white/40 backdrop-blur-md rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700'>
           <div className='p-6 space-y-4 md:space-y-6 sm:p-8'>
-            <h1 className='text-xl leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white'>
-              Page Speed Measurement
-            </h1>
+            <Title
+              className={`text-xl leading-tight tracking-tight text-gray-900 text-center
+                md:text-2xl dark:text-white font-thin ${quicksand.className}`}
+            >
+              PSI Measurement
+            </Title>
+            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
             <div className='space-y-4 md:space-y-6'>
-              <div>
-                <label className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>Email</label>
+              <div className='mb-6 pt-3 rounded bg-gray-200'>
+                <label className='block text-gray-700 text-sm font-light mb-2 ml-3'>Email</label>
                 <input
                   type='email'
                   name='Email'
                   ref={email}
-                  className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
-                  placeholder='name@company.com'
+                  className='bg-white rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-gray-600 transition duration-500 px-3 py-3'
+                  placeholder='name@webcrew.co.jp'
                 />
               </div>
-              <div>
-                <label className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>Password</label>
+              <div className='mb-6 pt-3 rounded bg-gray-200'>
+                <label className='block text-gray-700 text-sm font-light mb-2 ml-3'>Password</label>
                 <input
                   type='password'
                   name='Password'
                   placeholder='••••••••'
                   ref={password}
-                  className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
+                  className='bg-white rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-gray-600 transition duration-500 px-3 pb-3 py-3'
                 />
               </div>
-              {/* <div className='flex items-center justify-between'>
-                  <div className='flex items-start'>
-                      <div className='flex items-center h-5'>
-                        <input id='remember' aria-describedby='remember' type='checkbox' className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800' required='' />
-                      </div>
-                      <div className='ml-3 text-sm'>
-                        <label for='remember' className='text-gray-500 dark:text-gray-300'>Remember me</label>
-                      </div>
-                  </div>
-              </div> */}
-            <button
-              onClick={onLogin}
-              className='w-full text-white bg-gray-950 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800'>
-                ログイン
-            </button>
+              <button
+                onClick={onLogin}
+                className='w-full font-thin bg-gray-950 hover:bg-gray-700 text-white py-2 rounded shadow-lg hover:shadow-xl transition duration-200'>
+                  ログイン
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
   )
 }
