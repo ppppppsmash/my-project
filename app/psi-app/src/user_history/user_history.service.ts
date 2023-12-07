@@ -11,8 +11,8 @@ export class UserHistoryService {
       private readonly userHistoryRepository: Repository<UserHistory>
     ) {}
 
-    async getUserHistory(user_id: number): Promise<UserHistory> {
-      const userHistory = await this.userHistoryRepository.findOne({ where: { user_id } })
+    async getUserHistory(user_id: number): Promise<UserHistory[]> {
+      const userHistory = await this.userHistoryRepository.find({ where: { user_id } })
       return userHistory
     }
 
