@@ -79,6 +79,14 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
         ]
       }
 
+      const historyData = {
+        action: 'PSIスコアを取得しました',
+        user_id: userId,
+        site_name: psiSiteList.name,
+        site_url: urlValidate(url),
+        device
+      }
+
       if (score < 70) {
         const message = `${name}（${urlValidate(url)}, device: ${device}) から取得したスコア: ${score}`
         console.log(userName)
@@ -93,6 +101,7 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
         }
       }
 
+      await postData('user_history', historyData)
       await postData('psi_site_list', psiSiteList)
 
     }
@@ -101,7 +110,7 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
   }
 }
 
-export const getPsiDataAgain = async (name: string, url: string, index: number, id: number, device: string, userName: string) => {
+export const getPsiDataAgain = async (name: string, url: string, index: number, id: number, device: string, userId: number, userName: string) => {
   const res = await fetchPsiData(url, device)
 
     if (res.ok) {
@@ -158,13 +167,21 @@ export const getPsiDataAgain = async (name: string, url: string, index: number, 
         ]
       }
 
+      const historyData = {
+        action: 'PSIスコアを再度取得しました',
+        user_id: userId,
+        site_name: psiSiteMetircs.name,
+        site_url: urlValidate(psiSiteMetircs.url),
+        device
+      }
+
       if (score < 70) {
         const message = `${name}（${urlValidate(url)}, device: ${device}) から再取得したスコア: ${score}`
 
         const messageWithUser = `${userName} さんからのメッセージ:\n${message}`
         alert(messageWithUser)
       }
-
-        await patchData('psi_site_list', id, psiSiteList)
+      await postData('user_history', historyData)
+      await patchData('psi_site_list', id, psiSiteList)
     }
 }

@@ -30,6 +30,16 @@ export interface PSIMetrics {
   updatedAt: string
 }
 
+export interface UserHistory {
+  id: number
+  user_id: number
+  action: string
+  action_date: string
+  site_name: string
+  site_url: string
+  device: string
+}
+
 export interface pageList {
   name: string
   url: string
