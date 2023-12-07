@@ -12,7 +12,10 @@ export class UserHistoryService {
     ) {}
 
     async getUserHistory(user_id: number): Promise<UserHistory[]> {
-      const userHistory = await this.userHistoryRepository.find({ where: { user_id } })
+      const userHistory = await this.userHistoryRepository.find({
+        where: { user_id },
+        order: { action_date: 'DESC' }
+      })
       return userHistory
     }
 

@@ -83,7 +83,8 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
         action: 'PSIスコアを取得しました',
         user_id: userId,
         site_name: psiSiteList.name,
-        site_url: urlValidate(url)
+        site_url: urlValidate(url),
+        device
       }
 
       if (score < 70) {
@@ -170,7 +171,8 @@ export const getPsiDataAgain = async (name: string, url: string, index: number, 
         action: 'PSIスコアを再度取得しました',
         user_id: userId,
         site_name: psiSiteMetircs.name,
-        site_url: urlValidate(psiSiteMetircs.url)
+        site_url: urlValidate(psiSiteMetircs.url),
+        device
       }
 
       if (score < 70) {

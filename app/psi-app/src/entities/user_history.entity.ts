@@ -17,6 +17,9 @@ export class UserHistory {
   @Column()
   site_url: string
 
+  @Column()
+  device: string
+
   @CreateDateColumn({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
   action_date: Date
 }

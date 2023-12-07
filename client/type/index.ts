@@ -37,6 +37,7 @@ export interface UserHistory {
   action_date: string
   site_name: string
   site_url: string
+  device: string
 }
 
 export interface pageList {

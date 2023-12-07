@@ -35,11 +35,13 @@ export default function PsiHistory() {
     return data
   }
 
-  const { data: result, isLoading } = useQuery<NewPSIDataType[]>({
+  const { data: results, isLoading } = useQuery<NewPSIDataType[]>({
     queryKey: ['history'],
     queryFn: getDataByAll,
     refetchInterval: 10000
   })
+
+  console.log(results)
 
   const { data: history } = useQuery<UserHistory[]>({
     queryKey: ['user_history'],
@@ -52,7 +54,7 @@ export default function PsiHistory() {
 
   console.log(history)
 
-  if (!result) return <h1 className='mt-14 text-md text-center'>データがありません.</h1>
+  if (!history) return <h1 className='mt-14 text-md text-center'>データがありません.</h1>
 
   return (
     <div className='mt-14'>
@@ -75,11 +77,10 @@ export default function PsiHistory() {
                 </div>
               </TableCell>
               <TableCell>
-                サイト名：{item.site_name} 「{item.site_url}」 から{item.action}。
+                サイト名：{item.site_name} 「（{item.device}）{item.site_url}」 から{item.action}。
               </TableCell>
             </TableRow>
-            ))
-            }
+          ))}
           </TableBody>
         </Table>
       </Card>

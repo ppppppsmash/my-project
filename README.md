@@ -109,6 +109,16 @@ CREATE TABLE pagespeedinsights.site_metrics (
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 );
+
+CREATE TABLE pagespeedinsights.user_history (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  action VARCHAR(255) NOT NULL,
+  site_name VARCHAR(50),
+  site_url VARCHAR(50),
+  device VARCHAR(50),
+  action_date DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 ```
 
 ## GCPインフラ情報
@@ -131,17 +141,25 @@ mysql: pagespeed-insights-db
 
 **ページ一覧**
 http://localhost:9999/psi_site_list
+
 **PSI Score**
 http://localhost:9999/psi?url=https://google.com&strategy=desktop
+
 **CSVファイルアップロード**
 http://localhost:9999/upload
+
 **csvファイルダウンロード**
 http://localhost:9999/download/csv-list/:userId/
+
 **リンクプレビュー**
 http://localhost:9999/link_preview?url=${url}
+
 **認証についてのapi routes**
 http://localhost:9998/api/auth/session
 http://localhost:9998/api/auth/providers
+
+**ユーザー履歴**
+http://localhost:9999/user_history/:userId/
 
 
 
