@@ -67,13 +67,7 @@ export class SiteMetrics {
   @ManyToOne(() => SiteList, siteList => siteList.siteMetrics)
   @JoinColumn({ name: 'site_list_id' })
   siteList: SiteList
-  // @ManyToOne(() => User, user => user.siteMetrics)
-  // @JoinColumn({ name: 'user_id' })
-  // user: User
-  // @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
-  // createdAt: Date
-  // @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
-  // updatedAt: Date
+
   @CreateDateColumn({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date
   get formattedCreatedAt(): string {

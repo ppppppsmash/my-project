@@ -1,4 +1,5 @@
 import { User } from '../entities/user.entity'
+import { UserHistory } from '../entities/user_history.entity'
 import { SiteList } from '../entities/site_list.entity'
 import { SiteMetrics } from '../entities/site_metrics.entity'
 
@@ -16,7 +17,7 @@ export default () => ({
     database: process.env.DATABASE_DB, // docker-compose.yml の MYSQL_DATABASE
     logging: true, // コンソール画面に実行したSQLが表示される
     synchronize: false, // true にすると migration が自動で実行されます。
-    entities: [User, SiteList, SiteMetrics], // エンティティクラスを指定する（複数の場合はカンマで区切る）
+    entities: [User, UserHistory, SiteList, SiteMetrics], // エンティティクラスを指定する（複数の場合はカンマで区切る）
     migrations: ['dist/migration/*.js'], // dist ディレクトリ内の js ファイルを指定する
   }
 })

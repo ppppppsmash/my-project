@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { SiteMetrics } from '../entities/site_metrics.entity'
 import { SiteList } from '../entities/site_list.entity'
-import { Repository, InsertResult, UpdateResult, DeleteResult, EntityManager, getRepository } from 'typeorm'
+import { Repository, InsertResult, UpdateResult, DeleteResult, EntityManager } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 
 @Injectable()
