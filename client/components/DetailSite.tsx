@@ -6,7 +6,7 @@ import PsiMotionModalsChart from '@/components/PsiMotionModalsChart'
 import { PSIDataType, PSIMetrics } from '@/type'
 import { getData } from '@/utils/fetchData'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
-import GPTHoverCard from '@/components/GPTHoverCard'
+import GPTHoverCard from '@/components/HoverCard/GPTHoverCard'
 import { BsFillQuestionCircleFill } from 'react-icons/bs'
 
 interface Props {
