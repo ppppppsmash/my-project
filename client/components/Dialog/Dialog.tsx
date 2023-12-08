@@ -8,7 +8,7 @@ interface IconProps {
   className: string
 }
 
-export default function PsiDialog({ className, title, icon, color }: IconProps) {
+export default function Dialog({ className, title, icon, color }: IconProps) {
   return (
     <>
       <Callout

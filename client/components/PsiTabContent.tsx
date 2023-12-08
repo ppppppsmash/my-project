@@ -6,7 +6,7 @@ import PsiCheckbox from '@/components/PsiCheckbox'
 import PsiSelect from '@/components/PsiSelect'
 import { getPsiData } from '@/utils/getPsi'
 import PsiInput from '@/components/PsiInput'
-import PsiDialog from '@/components/PsiDialog'
+import Dialog from '@/components/Dialog/Dialog'
 import { ExclamationTriangleIcon, CheckCircleIcon, DocumentChartBarIcon, ArrowDownTrayIcon } from '@heroicons/react/24/solid'
 import { urlValidate, inputValidate, checkboxValidate, textareaValidate, csvValidate } from '@/utils/validation'
 import { ProgressLoading } from '@/components/Loader/Progress'
@@ -267,7 +267,7 @@ export default function PsiTabContent({ mode }: Props) {
 
       {isUploaded && (
         <>
-          <PsiDialog
+          <Dialog
             className='h-12 my-4'
             title='ファイルを無事にアップできました.'
             color='green'
@@ -280,7 +280,7 @@ export default function PsiTabContent({ mode }: Props) {
         <>
         {mode === 'single' && (
           singleErrorInfo.map((info, index) => (
-            <PsiDialog
+            <Dialog
               key={index}
               className='h-12 my-4'
               title={info}
@@ -292,7 +292,7 @@ export default function PsiTabContent({ mode }: Props) {
 
         {mode === 'multiple' && (
           multiErrorInfo.map((info, index) => (
-            <PsiDialog
+            <Dialog
               key={index}
               className='h-12 my-4'
               title={info}
@@ -304,7 +304,7 @@ export default function PsiTabContent({ mode }: Props) {
 
         {mode === 'csv' && (
           csvErrorInfo.map((info, index) => (
-            <PsiDialog
+            <Dialog
               key={index}
               className='h-12 my-4'
               title={info}
