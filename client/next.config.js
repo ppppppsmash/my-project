@@ -7,7 +7,7 @@ const nextConfig = {
     outputStandalone: true,
   },
   images: {
-    domains: ['avatars.githubusercontent.com', 'avatar.vercel.sh']
+    domains: ['avatars.githubusercontent.com', 'avatar.vercel.sh', 'ca.slack-edge.com']
   },
 }
 
