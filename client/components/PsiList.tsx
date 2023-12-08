@@ -2,7 +2,8 @@
 
 import PsiListTab from '@/components/PsiListTab'
 import PsiTable from '@/components/PsiTable'
-import PsiChartForTable from '@/components/PsiChartForTable'
+import LineChartList from '@/components/Charts/LineChartList'
+import BarChartList from '@/components/Charts/BarChartList'
 
 export default function PsiList() {
   return (
@@ -12,7 +13,7 @@ export default function PsiList() {
           <PsiTable />
         }
         childrenB={
-          <PsiChartForTable />
+          <BarChartList />
         }
         textA='表組み一覧'
         textB='チャート一覧'

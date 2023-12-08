@@ -6,7 +6,7 @@ import { Title, Card, LineChart, Color as TremorColor } from '@tremor/react'
 import { getDataAll } from '@/utils/fetchData'
 import { PSIDataType, PSIMetrics } from '@/type'
 
-export default function PsiChartForTable() {
+export default function LineChartList() {
   const { data: session } = useSession()
 
   const colors: TremorColor[] = ['rose', 'emerald', 'orange', 'lime', 'violet', 'pink']
