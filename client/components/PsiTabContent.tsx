@@ -6,8 +6,8 @@ import PsiCheckbox from '@/components/PsiCheckbox'
 import PsiSelect from '@/components/PsiSelect'
 import { getPsiData } from '@/utils/getPsi'
 import PsiInput from '@/components/PsiInput'
-import PsiDialog from '@/components/PsiDialog'
-import { ExclamationTriangleIcon, CheckCircleIcon, DocumentChartBarIcon } from '@heroicons/react/24/solid'
+import Dialog from '@/components/Dialog/Dialog'
+import { ExclamationTriangleIcon, CheckCircleIcon, DocumentChartBarIcon, ArrowDownTrayIcon } from '@heroicons/react/24/solid'
 import { urlValidate, inputValidate, checkboxValidate, textareaValidate, csvValidate } from '@/utils/validation'
 import { ProgressLoading } from '@/components/Loader/Progress'
 import { SelectBox, SelectBoxItem } from '@tremor/react'
@@ -267,7 +267,7 @@ export default function PsiTabContent({ mode }: Props) {
 
       {isUploaded && (
         <>
-          <PsiDialog
+          <Dialog
             className='h-12 my-4'
             title='ファイルを無事にアップできました.'
             color='green'
@@ -280,7 +280,7 @@ export default function PsiTabContent({ mode }: Props) {
         <>
         {mode === 'single' && (
           singleErrorInfo.map((info, index) => (
-            <PsiDialog
+            <Dialog
               key={index}
               className='h-12 my-4'
               title={info}
@@ -292,7 +292,7 @@ export default function PsiTabContent({ mode }: Props) {
 
         {mode === 'multiple' && (
           multiErrorInfo.map((info, index) => (
-            <PsiDialog
+            <Dialog
               key={index}
               className='h-12 my-4'
               title={info}
@@ -304,7 +304,7 @@ export default function PsiTabContent({ mode }: Props) {
 
         {mode === 'csv' && (
           csvErrorInfo.map((info, index) => (
-            <PsiDialog
+            <Dialog
               key={index}
               className='h-12 my-4'
               title={info}
@@ -349,36 +349,53 @@ export default function PsiTabContent({ mode }: Props) {
       )}
       {mode === 'csv' && (
         <div>
+          <div className='mt-4'>
+            <Button
+              className='sm:w-[120px] w-1/3 bg-gray-900 hover:bg-gray-700
+                py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
+                duration-150 focus:shadow-outline ease-in-out'
+              color='gray'
+              type='button'
+            >
+              <Link
+                className='flex items-center gap-x-1'
+                href={{pathname: '/file/example-csv.csv'}}
+              >
+                <ArrowDownTrayIcon className='w-4 h-4' />
+                <span className='block text-sm'>CSVサンプル</span>
+              </Link>
+            </Button>
+          </div>
+          <form className='w-full' onSubmit={handleSubmit}>
+            <Text className="text-sm font-semibold mt-4 -mb-4 inline-block text-neutral-700 dark:text-neutral-200">
+              CSVファイルをアップロードしてください.
+            </Text>
+            <div className={`flex justify-center relative w-full h-[180px] overflow-hidden mb-4
+              before:flex before:items-center before:justify-center before:absolute before:top-[10px]
+              before:bottom-[12px] before:left-0 before:right-0 before:border-dashed
+              before:border-2 before:rounded-lg  before:text-black before:text-sm
+              ${isFileExist ? `before:border-black` : `before:border-gray-400`}
+              `}>
+                {isFileExist ? (
+                  <Text className="flex items-center justify-center top-0 left-0 w-full h-full p-2 text-center text-black text-sm">
+                    ファイルをアップしました: {selectedFile?.name}
+                  </Text>
+                ) : (
+                  <Text className="flex items-center justify-center top-0 left-0 w-full h-full p-2 text-center text-gray-400 text-sm">
+                    ドロップ&ドラッグ
+                  </Text>
+                )}
+                <input
+                  className='absolute top-0 left-0 w-full h-full opacity-0'
+                  type='file'
+                  name='csvFile'
+                  onChange={handleFileChangeUpload}
+                  id="formFile"
+                />
+            </div>
 
-            <form className='w-full' onSubmit={handleSubmit}>
-              <Text className="inline-block text-neutral-700 dark:text-neutral-200">
-                CSVファイルをアップロードしてください.
-              </Text>
-              <div className={`flex justify-center relative w-full h-[180px] overflow-hidden mb-4
-                before:flex before:items-center before:justify-center before:absolute before:top-[10px]
-                before:bottom-[12px] before:left-[24px] before:right-[24px] before:border-dashed
-                before:border-2 before:rounded-lg  before:text-black before:text-sm
-                ${isFileExist ? `before:border-black` : `before:border-gray-400`}
-                `}>
-                  {isFileExist ? (
-                    <Text className="flex items-center justify-center top-0 left-0 w-full h-full p-2 text-center text-black text-sm">
-                      ファイルをアップしました: {selectedFile?.name}
-                    </Text>
-                  ) : (
-                    <Text className="flex items-center justify-center top-0 left-0 w-full h-full p-2 text-center text-gray-400 text-sm">
-                      ドロップ&ドラッグ
-                    </Text>
-                  )}
-                  <input
-                    className='absolute top-0 left-0 w-full h-full opacity-0'
-                    type='file'
-                    name='csvFile'
-                    onChange={handleFileChangeUpload}
-                    id="formFile"
-                  />
-              </div>
-
-              { isFileExist &&
+            { isFileExist &&
+            <>
               <Button
                 className='w-[120px] -mt-8 mb-8 ml-[24px] bg-gray-900 hover:bg-gray-700
                 py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
@@ -388,11 +405,12 @@ export default function PsiTabContent({ mode }: Props) {
               >
                 アップロード
               </Button>
-              }
-            </form>
+            </>
+            }
+          </form>
 
           <div className='mb-4 flex gap-6 items-end'>
-            <div className='flex w-1/2 gap-2 h-[36px]'>
+            <div className='flex w-2/3 gap-2 h-[36px]'>
               <div className="mx-auto space-y-6 w-full">
                 <SelectBox value={selectedFileName} onValueChange={setSelectedFileName}>
                 {csvFiles.map((file, index) => (
@@ -408,14 +426,17 @@ export default function PsiTabContent({ mode }: Props) {
               </div>
 
               <Button
-                className='w-[120px] bg-gray-900 hover:bg-gray-700
-                py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
-                duration-150 focus:shadow-outline ease-in-out'
+                className='sm:w-[120px] w-1/3 bg-gray-900 hover:bg-gray-700
+                  py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
+                  duration-150 focus:shadow-outline ease-in-out'
                 color='gray'
                 type='button'
                 onClick={handleDownload}
               >
-                ダウンロード
+                <span className='flex items-center gap-x-1'>
+                  <ArrowDownTrayIcon className='w-4 h-4' />
+                  <span className='block text-sm'>ダウンロード</span>
+                </span>
               </Button>
 
             </div>

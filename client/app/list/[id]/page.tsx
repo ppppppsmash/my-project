@@ -8,7 +8,7 @@ import { Grid, Col, Card, Text, Title, Subtitle, Flex, DonutChart } from '@tremo
 import { ArrowTopRightOnSquareIcon, ClockIcon, DevicePhoneMobileIcon, ComputerDesktopIcon, CalendarDaysIcon } from '@heroicons/react/24/outline'
 import { formatDate } from '@/utils/formatDate'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
-import DelaySection from '@/components/DelaySection'
+import DelaySection from '@/components/FramerMotion/DelaySection'
 import PsiListTab from '@/components/PsiListTab'
 import DetailSite from '@/components/DetailSite'
 import DetailChart from '@/components/Charts/DetailChart'

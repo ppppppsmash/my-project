@@ -115,12 +115,12 @@ export default function Navbar() {
                       leaveFrom='transform opacity-100 scale-100'
                       leaveTo='transform opacity-0 scale-95'
                     >
-                      <Menu.Items className='absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                      <Menu.Items className='absolute right-0 z-10 mt-2 w-[13rem] origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
                           <Menu.Item>
                             {({ active }) => (
                               <>
-                                <div className='flex items-center'>
-                                  <div className='ml-3'>
+                                <div className='flex items-center break-all px-2'>
+                                  <div className=''>
                                     <div className='text-base font-medium text-gray-800'>
                                       {session?.user.name}
                                     </div>
@@ -132,7 +132,7 @@ export default function Navbar() {
                                 <button
                                   className={classNames(
                                     active ? 'bg-gray-100' : '',
-                                    'flex w-full mt-2 pl-2 py-2 text-sm text-gray-700 hover:bg-gray-800 hover:text-white border-gray-800 rounded-md transition duration-500'
+                                    'flex w-full mt-2 px-1 py-2 text-sm text-gray-700 hover:bg-gray-800 hover:text-white border-gray-800 rounded-md transition duration-500'
                                   )}
                                   onClick={() => onLogOut()}
                                 >

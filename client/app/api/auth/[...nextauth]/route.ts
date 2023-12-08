@@ -43,6 +43,12 @@ const handler = NextAuth({
     async session({ session, token }) {
       if (session?.user) {
         session.user.id = (token as { sub: string }).sub
+
+        const db = await dbConnect()
+        const [user] = await db.query('SELECT * FROM user WHERE email = ?', [session.user.email])
+        if(user) {
+          session.user.image = user[0].image
+        }
       }
       return session;
     }
