@@ -9,7 +9,7 @@ import { ArrowTopRightOnSquareIcon, ClockIcon, DevicePhoneMobileIcon, ComputerDe
 import { formatDate } from '@/utils/formatDate'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
 import DelaySection from '@/components/FramerMotion/DelaySection'
-import PsiListTab from '@/components/PsiListTab'
+import Tab from '@/components/Tab/Tab'
 import DetailSite from '@/components/DetailSite'
 import DetailChart from '@/components/Charts/DetailChart'
 
@@ -48,6 +48,8 @@ export default function Slug({ params: { id } }: Props) {
     fetchData()
   }, [id])
 
+  console.log(metricsNewest)
+
   return (
     <DelaySection delay={0.3}>
       {siteList.length > 0 && siteList.map((list, index) => (
@@ -76,9 +78,7 @@ export default function Slug({ params: { id } }: Props) {
                 <div className='sm:flex items-center sm:space-x-5 sm:space-y-0 space-y-2 mt-4'>
                   <Text className='flex items-center space-x-2 dark:text-white'>
                     <ClockIcon className='w-4 h-4' />
-                    <span>
-                      {formatDate(list.updatedAt) || formatDate(list.createdAt)}
-                    </span>
+                    <span>{metricsNewest?.updatedAt}</span>
                   </Text>
 
                   <Text className='dark:text-white'>
@@ -141,7 +141,7 @@ export default function Slug({ params: { id } }: Props) {
         </>
       ))}
 
-      <PsiListTab
+      <Tab
         childrenA={<DetailSite id={id} />}
         childrenB={<DetailChart id={id} />}
         textA='パフォーマンス詳細'

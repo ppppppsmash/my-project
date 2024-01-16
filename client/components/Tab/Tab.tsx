@@ -6,7 +6,7 @@ import {
 
 import { useState } from 'react'
 
-export default function PsiListTab({
+export default function TabForList({
   childrenA, childrenB, textA, textB
 } : {
   childrenA: React.ReactNode
