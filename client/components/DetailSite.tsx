@@ -29,7 +29,7 @@ export default function SiteDetail({ id }: Props) {
 
   return (
     <>
-      <Title className='mt-10 dark:text-white border-b-2 border-b-black dark:border-b-white'>ユーザー体験パフォーマンス</Title>
+      <Title className='mt-10 dark:text-white border-b-2 border-b-black dark:border-b-white'>ユーザーパフォーマンス</Title>
       <Grid
         className='gap-6 mt-6 mb-6'
         numColsLg={6}

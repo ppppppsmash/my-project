@@ -1,6 +1,6 @@
 'use client'
 
-import PsiListTab from '@/components/PsiListTab'
+import TabForList from '@/components/Tab/Tab'
 import PsiTable from '@/components/PsiTable'
 import LineChartList from '@/components/Charts/LineChartList'
 import BarChartList from '@/components/Charts/BarChartList'
@@ -8,7 +8,7 @@ import BarChartList from '@/components/Charts/BarChartList'
 export default function PsiList() {
   return (
     <div className={`dark:bg-gray-950`}>
-      <PsiListTab
+      <TabForList
         childrenA={
           <PsiTable />
         }

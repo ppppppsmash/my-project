@@ -5,7 +5,7 @@ import { Card, Title } from '@tremor/react'
 import { zenKaku } from '@/utils/font'
 import { useSession } from 'next-auth/react'
 
-const DynamicComponent = dynamicImport(() => import('@/components/PsiTab'))
+const DynamicComponent = dynamicImport(() => import('@/components/Tab/RegistrationTab'))
 
 export default function AddList() {
   const { data: session } = useSession()

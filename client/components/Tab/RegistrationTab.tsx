@@ -1,4 +1,5 @@
 'use client'
+
 import { useState } from 'react'
 import { Tab } from '@headlessui/react'
 import PsiTabContent from '@/components/PsiTabContent'
@@ -7,7 +8,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function PsiTab() {
+export default function RegistrationTab() {
   const [selectedTab, setSelectedTab] = useState(0)
 
   let [categories] = useState({

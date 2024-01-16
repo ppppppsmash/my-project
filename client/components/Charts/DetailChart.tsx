@@ -48,31 +48,49 @@ export default function DetailChart({ id }: Props) {
     }
   }, [selectedDate, siteMetrics])
 
-  const colors: TremorColor[] = ['rose', 'emerald', 'orange', 'lime', 'violet', 'pink'];
-  const chartCategories: string[] = ['score', 'user_fcp', 'user_lcp', 'user_fid', 'user_cls', 'user_inp', 'user_ttfb'];
+  const colors: TremorColor[] = ['rose', 'emerald', 'orange', 'lime', 'violet', 'pink']
+  const chartUserCategories: string[] = ['score', 'user_fcp', 'user_lcp', 'user_fid', 'user_cls', 'user_inp', 'user_ttfb']
+  const chartLabCategories: string[] = ['score', 'fcp', 'lcp', 'tti', 'cls', 'tbt', 'si']
 
   console.log(selectedDate)
 
   return (
-    <Card className='w-full box-border p-2 -mx-2 dark:bg-gray-950'>
-      <div className='w-full p-2'>
-        <Title className='dark:text-white mb-5'>チャート詳細一覧</Title>
+    <>
+      <Card className='w-full box-border p-2 -mx-2 dark:bg-gray-950'>
+        <div className='w-full p-2'>
+          <Title className='dark:text-white mb-5'>ユーザーパフォーマンス</Title>
 
-        {/* 注意: selectedDate はそのまま渡す */}
-        <DatePicker
-          selectedDate={selectedDate}
-          onSelectDate={setSelectedDate}
-        />
+          {/* 注意: selectedDate はそのまま渡す */}
+          <DatePicker
+            selectedDate={selectedDate}
+            onSelectDate={setSelectedDate}
+          />
 
-        <LineChart
-          data={selectedMetrics}
-          index='createdAt'
-          categories={chartCategories}
-          colors={colors}
-          yAxisWidth={40}
-          className='dark:text-white'
-        />
-      </div>
-    </Card>
+          <LineChart
+            data={selectedMetrics}
+            index='createdAt'
+            categories={chartUserCategories}
+            colors={colors}
+            yAxisWidth={40}
+            className='dark:text-white'
+          />
+        </div>
+      </Card>
+
+      <Card className='w-full box-border p-2 mt-10 -mx-2 dark:bg-gray-950'>
+        <div className='w-full p-2'>
+          <Title className='dark:text-white mb-5'>ラボパフォーマンス</Title>
+
+          <LineChart
+            data={selectedMetrics}
+            index='createdAt'
+            categories={chartLabCategories}
+            colors={colors}
+            yAxisWidth={40}
+            className='dark:text-white'
+          />
+        </div>
+      </Card>
+    </>
   );
 }
