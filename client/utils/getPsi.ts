@@ -94,10 +94,10 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
         if (userName) {
           const messageWithUser = `${userName} さんからのメッセージ:\n${message}`
         //  alert(messageWithUser)
-        //  await sendSlackAlert(messageWithUser)
+          await sendSlackAlert(messageWithUser)
         } else {
         //  alert(messageWithUser)
-        //  await sendSlackAlert(message)
+          await sendSlackAlert(message)
         }
       }
 
@@ -179,7 +179,8 @@ export const getPsiDataAgain = async (name: string, url: string, index: number, 
         const message = `${name}（${urlValidate(url)}, device: ${device}) から再取得したスコア: ${score}`
 
         const messageWithUser = `${userName} さんからのメッセージ:\n${message}`
-        alert(messageWithUser)
+        //alert(messageWithUser)
+        await sendSlackAlert(messageWithUser)
       }
       await postData('user_history', historyData)
       await patchData('psi_site_list', id, psiSiteList)
