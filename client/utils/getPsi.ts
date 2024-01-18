@@ -94,10 +94,10 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
         if (userName) {
           const messageWithUser = `${userName} さんからのメッセージ:\n${message}`
         //  alert(messageWithUser)
-          await sendSlackAlert(messageWithUser)
+          //await sendSlackAlert(messageWithUser)
         } else {
-        //  alert(messageWithUser)
-          await sendSlackAlert(message)
+          //alert(messageWithUser)
+          //await sendSlackAlert(message)
         }
       }
 
@@ -180,7 +180,7 @@ export const getPsiDataAgain = async (name: string, url: string, index: number, 
 
         const messageWithUser = `${userName} さんからのメッセージ:\n${message}`
         //alert(messageWithUser)
-        await sendSlackAlert(messageWithUser)
+        //await sendSlackAlert(messageWithUser)
       }
       await postData('user_history', historyData)
       await patchData('psi_site_list', id, psiSiteList)

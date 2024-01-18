@@ -18,6 +18,7 @@ import { urlValidate } from '@/utils/validation'
 interface Props {
   onShow: boolean
   label: string
+  text: string
   onOpen(): void
   onClose(): void
   getPsiData(id: number, userId: number, userName: string, progressCallback: (progress: number) => void): void
@@ -28,7 +29,7 @@ interface Props {
   url: string
 }
 
-export default function RegistrationModal({ onShow, label, onOpen, onClose, getPsiData, id, userId, userName, name, url }: Props) {
+export default function RegistrationModal({ onShow, label, text, onOpen, onClose, getPsiData, id, userId, userName, name, url }: Props) {
   let [isOpen, setIsOpen] = useState(true)
   const [progress, setProgress] = useState<number>(0)
 
@@ -49,7 +50,7 @@ export default function RegistrationModal({ onShow, label, onOpen, onClose, getP
     <AlertDialog>
       <AlertDialogTrigger>
         <RegistrationButton
-          label='登録'
+          label={label}
           clickEvent={handleButtonClick}
         />
       </AlertDialogTrigger>

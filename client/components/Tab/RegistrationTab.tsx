@@ -53,7 +53,7 @@ export default function RegistrationTab() {
         <Tab.Panels className='mt-2'>
         {Object.values(categories).map((posts, index) => (
           <Tab.Panel key={index}>
-            {selectedTab === 0 && <PsiTabContent mode={posts[0].mode} />}
+            { selectedTab === 0 && <PsiTabContent mode={posts[0].mode} /> }
           </Tab.Panel>
         ))}
         </Tab.Panels>

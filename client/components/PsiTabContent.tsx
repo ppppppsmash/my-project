@@ -5,9 +5,9 @@ import { ChangeEvent, FormEvent, useState, useEffect } from 'react'
 import PsiCheckbox from '@/components/PsiCheckbox'
 import PsiSelect from '@/components/PsiSelect'
 import { getPsiData } from '@/utils/getPsi'
-import PsiInput from '@/components/PsiInput'
+import Input from '@/components/Input/Input'
 import Dialog from '@/components/Dialog/Dialog'
-import { ExclamationTriangleIcon, CheckCircleIcon, DocumentChartBarIcon, ArrowDownTrayIcon } from '@heroicons/react/24/solid'
+import { ExclamationTriangleIcon, CheckCircleIcon, DocumentChartBarIcon, ArrowDownTrayIcon, ArrowUpTrayIcon } from '@heroicons/react/24/solid'
 import { urlValidate, inputValidate, checkboxValidate, textareaValidate, csvValidate } from '@/utils/validation'
 import { ProgressLoading } from '@/components/Loader/Progress'
 import { SelectBox, SelectBoxItem } from '@tremor/react'
@@ -320,13 +320,13 @@ export default function PsiTabContent({ mode }: Props) {
       {mode === 'single' && (
         <div>
           <div className='mb-4'>
-            <PsiInput
+            <Input
               placeholder='example'
               handleChange={getChangeUrlName}
             />
           </div>
           <div className='mb-4'>
-            <PsiInput
+            <Input
               placeholder='https://example.com'
               handleChange={getChangeUrl}
             />
@@ -337,12 +337,12 @@ export default function PsiTabContent({ mode }: Props) {
         <div>
           <div className='mb-4'>
             <textarea
-              placeholder='example http://example.com（サイト名とURLの間に半角スペースを入れてください.）'
+              placeholder='example http://example.com サイト名とURLの間に半角スペースを入れてください.'
               rows={10}
               onChange={handleSiteDataChange}
               value={names.join('\n')}
-              className='w-full p-2 border rounded ring-blue-300 ring-0 focus:ring-2
-              focus:ring-blue-200 focus:outline-none border-gray-300'
+              className='w-full p-2 border placeholder:text-xs placeholder:text-gray-400 rounded ring-blue-300 ring-0 focus:ring-2
+              focus:ring-blue-200 focus:outline-none border-gray-300 dark:text-gray-950'
             />
           </div>
         </div>
@@ -351,7 +351,7 @@ export default function PsiTabContent({ mode }: Props) {
         <div>
           <div className='mt-4'>
             <Button
-              className='sm:w-[120px] w-1/3 bg-gray-900 hover:bg-gray-700
+              className='sm:w-[130px] w-1/3 bg-gray-900 hover:bg-gray-700
                 py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
                 duration-150 focus:shadow-outline ease-in-out'
               color='gray'
@@ -359,15 +359,15 @@ export default function PsiTabContent({ mode }: Props) {
             >
               <Link
                 className='flex items-center gap-x-1'
-                href={{pathname: '/file/example-csv.csv'}}
+                href={{ pathname: '/file/example-csv.csv' }}
               >
                 <ArrowDownTrayIcon className='w-4 h-4' />
-                <span className='block text-sm'>CSVサンプル</span>
+                <span className='block text-xs'>CSVサンプル</span>
               </Link>
             </Button>
           </div>
           <form className='w-full' onSubmit={handleSubmit}>
-            <Text className="text-sm font-semibold mt-4 -mb-4 inline-block text-neutral-700 dark:text-neutral-200">
+            <Text className="text-xs font-semibold mt-4 -mb-4 inline-block text-neutral-700 dark:text-neutral-200">
               CSVファイルをアップロードしてください.
             </Text>
             <div className={`flex justify-center relative w-full h-[180px] overflow-hidden mb-4
@@ -397,20 +397,25 @@ export default function PsiTabContent({ mode }: Props) {
             { isFileExist &&
             <>
               <Button
-                className='w-[120px] -mt-8 mb-8 ml-[24px] bg-gray-900 hover:bg-gray-700
+                className='w-[120px] -mt-8 mb-8 bg-gray-900 hover:bg-gray-700
                 py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
-                duration-150 focus:shadow-outline ease-in-out text-right'
+                duration-150 focus:shadow-outline ease-in-out text-right text-xs'
                 color='gray'
                 type='submit'
               >
-                アップロード
+                <span className='flex items-center gap-x-1'>
+                  <ArrowUpTrayIcon className='w-4 h-4' />
+                  <span className='text-xs'>
+                    アップロード
+                  </span>
+                </span>
               </Button>
             </>
             }
           </form>
 
           <div className='mb-4 flex gap-6 items-end'>
-            <div className='flex w-2/3 gap-2 h-[36px]'>
+            <div className='flex w-1/2 gap-2 h-[36px]'>
               <div className="mx-auto space-y-6 w-full">
                 <SelectBox value={selectedFileName} onValueChange={setSelectedFileName}>
                 {csvFiles.map((file, index) => (
@@ -426,7 +431,7 @@ export default function PsiTabContent({ mode }: Props) {
               </div>
 
               <Button
-                className='sm:w-[120px] w-1/3 bg-gray-900 hover:bg-gray-700
+                className='sm:w-[130px] w-1/3 bg-gray-900 hover:bg-gray-700
                   py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
                   duration-150 focus:shadow-outline ease-in-out'
                 color='gray'
@@ -435,7 +440,7 @@ export default function PsiTabContent({ mode }: Props) {
               >
                 <span className='flex items-center gap-x-1'>
                   <ArrowDownTrayIcon className='w-4 h-4' />
-                  <span className='block text-sm'>ダウンロード</span>
+                  <span className='block text-xs'>ダウンロード</span>
                 </span>
               </Button>
 
@@ -462,7 +467,8 @@ export default function PsiTabContent({ mode }: Props) {
         <div className='w-2/12'>
           <RegistrationModal
             onShow={isModalOpen}
-            label='サイトを登録しますか？'
+            label={mode === 'csv' ? 'アップロード' : '登録'}
+            text={mode === 'csv' ? 'CSVファイルをアップロードしますか？' : 'サイトを登録しますか？'}
             id={id}
             userId={Number(session?.user?.id)}
             userName={session?.user?.name || ''}
