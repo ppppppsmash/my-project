@@ -35,14 +35,24 @@ export class PsiSiteListService {
     })
   }
 
-  async create(SiteList): Promise<any> {
-    const savedSiteList = await this.pageRepository.save(SiteList)
-    const siteMetrics = SiteList.siteMetrics
+  // async create(SiteList): Promise<any> {
+  //   const savedSiteList = await this.pageRepository.save(SiteList)
+  //   const siteMetrics = SiteList.siteMetrics
 
-    await Promise.all(siteMetrics.map(async (metric) => {
-      metric.siteList = savedSiteList
-      await this.metricsRepository.save(metric)
-    }))
+  //   await Promise.all(siteMetrics.map(async (metric) => {
+  //     metric.siteList = savedSiteList
+  //     await this.metricsRepository.save(metric)
+  //   }))
+  // }
+
+  async create(SiteList): Promise<any> {
+    await this.pageRepository.save(SiteList)
+    // const siteMetrics = SiteList.siteMetrics
+
+    // await Promise.all(siteMetrics.map(async (metric) => {
+    //   metric.siteList = savedSiteList
+    //   await this.metricsRepository.save(metric)
+    // }))
   }
 
   async patch(id: number, siteListData): Promise<any> {

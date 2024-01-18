@@ -15,6 +15,7 @@ import { Button, Text } from '@tremor/react'
 import ConfirmModal from '@/components/Modals/ConfirmModal'
 import { useSession } from 'next-auth/react'
 import RegistrationModal from './Modals/RegistrationModal'
+import { siteRegistrate } from '@/utils/siteRegistrator'
 
 interface Props {
   mode: string
@@ -202,10 +203,8 @@ export default function PsiTabContent({ mode }: Props) {
   const handlePsiData = async () => {
     setLoading(true)
 
-    console.log(session?.user?.name)
-
     if (mode === 'single') {
-      await getPsiData(selectedDevice, name, url, schedule, Number(session?.user?.id), session?.user?.name || '', setProgress)
+      await siteRegistrate(selectedDevice, name, url, schedule, Number(session?.user?.id), setProgress)
     } else if (mode === 'multiple') {
       const siteList = names.map((separate) => {
         const [name, url] = separate.split(/\s+/)
@@ -217,12 +216,12 @@ export default function PsiTabContent({ mode }: Props) {
           continue
         }
 
-        await getPsiData(selectedDevice, site.name, site.url, schedule, Number(session?.user?.id), session?.user?.name || '', setProgress)
+        await siteRegistrate(selectedDevice, site.name, site.url, schedule, Number(session?.user?.id), setProgress)
       }
     } else if (mode === 'csv') {
       const csvSiteList = csvData.map(async (data) => {
         console.log(data)
-        await getPsiData(selectedDevice, data.NAME, data.URL, schedule, Number(session?.user?.id), session?.user?.name || '', setProgress)
+        await siteRegistrate(selectedDevice, data.NAME, data.URL, schedule, Number(session?.user?.id), setProgress)
       })
       await Promise.all(csvSiteList)
     }
@@ -474,7 +473,7 @@ export default function PsiTabContent({ mode }: Props) {
             userName={session?.user?.name || ''}
             name={mode === 'single' ? name : names}
             url={mode === 'single' ? url : ''}
-            getPsiData={handlePsiData}
+            siteRegistrate={handlePsiData}
             onOpen={openModal}
             onClose={closeModal}
           />

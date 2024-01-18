@@ -77,7 +77,12 @@ export default function PsiHistory() {
                 </div>
               </TableCell>
               <TableCell>
-                サイト名：{item.site_name} 「（{item.device}）{item.site_url}」 から{item.action}。
+                <span className='bg-gradient-to-r from-pink-400 via-indigo-500 to-violet-600
+                  bg-clip-text font-bold tracking-tight text-transparent dark:from-amber-200
+                  dark:to-sky-400'>
+                    {item.site_name}
+                </span>
+                「（{item.device}）{item.site_url}」:  {item.action}.
               </TableCell>
             </TableRow>
           ))}

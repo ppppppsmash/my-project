@@ -21,7 +21,7 @@ interface Props {
   text: string
   onOpen(): void
   onClose(): void
-  getPsiData(id: number, userId: number, userName: string, progressCallback: (progress: number) => void): void
+  siteRegistrate(id: number, userId: number, userName: string, progressCallback: (progress: number) => void): void
   id: number,
   userId: number,
   userName: string,
@@ -29,7 +29,7 @@ interface Props {
   url: string
 }
 
-export default function RegistrationModal({ onShow, label, text, onOpen, onClose, getPsiData, id, userId, userName, name, url }: Props) {
+export default function RegistrationModal({ onShow, label, text, onOpen, onClose, siteRegistrate, id, userId, userName, name, url }: Props) {
   let [isOpen, setIsOpen] = useState(true)
   const [progress, setProgress] = useState<number>(0)
 
@@ -38,7 +38,7 @@ export default function RegistrationModal({ onShow, label, text, onOpen, onClose
   }
 
   const handleClick = () => {
-    getPsiData(id, userId, userName, setProgress)
+    siteRegistrate(id, userId, userName, setProgress)
     onClose()
   }
 
@@ -57,7 +57,7 @@ export default function RegistrationModal({ onShow, label, text, onOpen, onClose
       {onShow &&
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{label}</AlertDialogTitle>
+          <AlertDialogTitle>{text}</AlertDialogTitle>
           <AlertDialogDescription>
             <div className="mt-2">
               <p className="text-sm text-gray-500">

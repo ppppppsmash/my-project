@@ -317,7 +317,7 @@ export default function PsiTable() {
                   <ClockLoader size={16} className='dark:text-white' />
                 ) : (
                   <div className='flex items-center gap-x-2'>
-                  <Text className='dark:text-white'>{item.siteMetrics[0].score}</Text>
+                    <Text className='dark:text-white'>{ item.siteMetrics[0]?.score ? item.siteMetrics[0].score : '未取得' }</Text>
                   {item.siteMetrics[1] && (
                     <>
                       {item.siteMetrics[0].score > item.siteMetrics[1].score ? (
@@ -339,7 +339,7 @@ export default function PsiTable() {
                 )}
               </TableCell>
               <TableCell>
-              <Text className='dark:text-white'>{formatDate(item.siteMetrics[0].updatedAt) || formatDate(item.createdAt)}</Text>
+              <Text className='dark:text-white'>{item?.siteMetrics[0]?.updatedAt ? formatDate(item?.siteMetrics[0]?.updatedAt) : formatDate(item.createdAt)}</Text>
               </TableCell>
               <TableCell>
               {editIndex === index ? (
