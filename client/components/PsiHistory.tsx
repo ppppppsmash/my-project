@@ -58,17 +58,17 @@ export default function PsiHistory() {
 
   return (
     <div className='mt-14'>
-      <Card>
-        <Text className="mt-2">履歴一覧</Text>
-        <Table className="mt-6">
+      <Card className='dark:bg-gray-950'>
+        <Text className='mt-2 dark:text-white'>履歴一覧</Text>
+        <Table className='mt-6 dark:text-white'>
           <TableHead>
             <TableRow>
-              <TableHeaderCell>Date</TableHeaderCell>
-              <TableHeaderCell>History</TableHeaderCell>
+              <TableHeaderCell className='dark:text-white'>Date</TableHeaderCell>
+              <TableHeaderCell className='dark:text-white'>History</TableHeaderCell>
             </TableRow>
           </TableHead>
 
-          <TableBody>
+          <TableBody className='dark:text-white'>
           {history?.map((item, index) => (
             <TableRow key={index}>
               <TableCell>
@@ -77,7 +77,12 @@ export default function PsiHistory() {
                 </div>
               </TableCell>
               <TableCell>
-                サイト名：{item.site_name} 「（{item.device}）{item.site_url}」 から{item.action}。
+                <span className='bg-gradient-to-r from-pink-400 via-indigo-500 to-violet-600
+                  bg-clip-text font-bold tracking-tight text-transparent dark:from-amber-200
+                  dark:to-sky-400'>
+                    {item.site_name}
+                </span>
+                「（{item.device}）{item.site_url}」:  {item.action}.
               </TableCell>
             </TableRow>
           ))}

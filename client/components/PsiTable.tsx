@@ -31,7 +31,6 @@ import PsiSelect from '@/components/PsiSelect'
 import { deleteData, getData, getDataAll, patchData } from '@/utils/fetchData'
 import { getPsiData, getPsiDataAgain } from '@/utils/getPsi'
 import { formatDate } from '@/utils/formatDate'
-import { FiLoader } from 'react-icons/fi'
 import { fetchLinkPreview } from '@/utils/getLinkPreview'
 import Image from 'next/image'
 import { HoverCard } from '@/components/HoverCard/HoverCard'
@@ -318,20 +317,20 @@ export default function PsiTable() {
                   <ClockLoader size={16} className='dark:text-white' />
                 ) : (
                   <div className='flex items-center gap-x-2'>
-                  <Text className='dark:text-white'>{item.siteMetrics[0].score}</Text>
+                    <Text className='dark:text-white'>{ item.siteMetrics[0]?.score ? item.siteMetrics[0].score : '未取得' }</Text>
                   {item.siteMetrics[1] && (
                     <>
                       {item.siteMetrics[0].score > item.siteMetrics[1].score ? (
-                        <BadgeDelta deltaType="increase">
-                          {item.siteMetrics[0].score - item.siteMetrics[1].score}
+                        <BadgeDelta className='w-[60px] py-0' deltaType='increase'>
+                          <span className='text-xs'>{item.siteMetrics[0].score - item.siteMetrics[1].score}</span>
                         </BadgeDelta>
                       ) : item.siteMetrics[0].score < item.siteMetrics[1].score ? (
-                        <BadgeDelta deltaType="decrease">
-                          {item.siteMetrics[1].score - item.siteMetrics[0].score}
+                        <BadgeDelta className='w-[60px] py-0' deltaType='decrease'>
+                          <span className='text-xs'>{item.siteMetrics[1].score - item.siteMetrics[0].score}</span>
                         </BadgeDelta>
                       ) : (
-                        <BadgeDelta deltaType="unchanged">
-                          0
+                        <BadgeDelta className='w-[60px] py-0' deltaType="unchanged">
+                          <span className='text-xs'>0</span>
                         </BadgeDelta>
                       )}
                     </>
@@ -340,7 +339,7 @@ export default function PsiTable() {
                 )}
               </TableCell>
               <TableCell>
-              <Text className='dark:text-white'>{formatDate(item.siteMetrics[0].updatedAt) || formatDate(item.createdAt)}</Text>
+              <Text className='dark:text-white'>{item?.siteMetrics[0]?.updatedAt ? formatDate(item?.siteMetrics[0]?.updatedAt) : formatDate(item.createdAt)}</Text>
               </TableCell>
               <TableCell>
               {editIndex === index ? (
