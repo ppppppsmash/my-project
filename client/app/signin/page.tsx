@@ -66,13 +66,14 @@ export default function LoginPage() {
   return (
     <div
       id='login'
-      className='fixed w-full top-0 z-50 flex flex-col justify-centeritems-center h-screen gap-1'
+      className='fixed w-full top-0 z-50 flex flex-col justify-centeritems-center
+      h-screen gap-1'
     >
       <div className='flex flex-col w-10/12 md:w-full items-center justify-center
-        py-8 mx-auto md:h-screen lg:py-0'>
+        sm:py-8 mx-auto md:h-screen lg:py-0 pt-[150px]'>
         <div className='w-full bg-gray-400/30 backdrop-blur-lg rounded-xl shadow-3xl
           dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 border border-gray-400/30
-          dark:border-gray-700  hover:scale-[1.01] transition duration-300'>
+          dark:border-gray-700 hover:scale-[1.01] transition duration-300'>
           <div className='p-6 space-y-4 md:space-y-6 sm:p-8'>
             <Title
               className={`text-xl leading-tight tracking-tight text-white text-center
@@ -88,7 +89,9 @@ export default function LoginPage() {
                   type='email'
                   name='Email'
                   ref={email}
-                  className='bg-white rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-gray-600 transition duration-500 px-3 py-3'
+                  className='bg-white rounded w-full text-gray-700 focus:outline-none
+                    border-b-4 border-gray-300 focus:border-gray-600 transition
+                    duration-500 px-3 py-3 placeholder:text-xs'
                   placeholder='name@webcrew.co.jp'
                 />
               </div>
@@ -99,7 +102,9 @@ export default function LoginPage() {
                   name='Password'
                   placeholder='••••••••'
                   ref={password}
-                  className='bg-white rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-gray-600 transition duration-500 px-3 pb-3 py-3'
+                  className='bg-white rounded w-full text-gray-700 focus:outline-none
+                  border-b-4 border-gray-300 focus:border-gray-600 transition
+                  duration-500 px-3 pb-3 py-3 placeholder:text-xs'
                 />
               </div>
               <button
