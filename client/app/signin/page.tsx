@@ -57,24 +57,33 @@ export default function LoginPage() {
     )
   }
 
+  document.addEventListener('keydown', (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      onLogin()
+    }
+  })
+
   return (
     <div
-      className='fixed w-full top-0 z-50 flex flex-col justify-center items-center h-screen bg-gradient-to-br gap-1 from-white
-      to-gray-800'
+      id='login'
+      className='fixed w-full top-0 z-50 flex flex-col justify-centeritems-center h-screen gap-1'
     >
-      <div className='flex flex-col w-10/12 md:w-full items-center justify-center py-8 mx-auto md:h-screen lg:py-0'>
-        <div className='w-full bg-white/40 backdrop-blur-md rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700'>
+      <div className='flex flex-col w-10/12 md:w-full items-center justify-center
+        py-8 mx-auto md:h-screen lg:py-0'>
+        <div className='w-full bg-gray-400/30 backdrop-blur-lg rounded-xl shadow-3xl
+          dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 border border-gray-400/30
+          dark:border-gray-700  hover:scale-[1.01] transition duration-300'>
           <div className='p-6 space-y-4 md:space-y-6 sm:p-8'>
             <Title
-              className={`text-xl leading-tight tracking-tight text-gray-900 text-center
-                md:text-2xl dark:text-white font-thin ${quicksand.className}`}
+              className={`text-xl leading-tight tracking-tight text-white text-center
+                md:text-2xl dark:text-white font-semibold ${quicksand.className}`}
             >
               PSI Measurement
             </Title>
             {errorMessage && <p className="text-red-500">{errorMessage}</p>}
             <div className='space-y-4 md:space-y-6'>
-              <div className='mb-6 pt-3 rounded bg-gray-200'>
-                <label className='block text-gray-700 text-sm font-light mb-2 ml-3'>Email</label>
+              <div className='mb-6 pt-3 rounded bg-gray-900'>
+                <label className='block text-white text-sm font-light mb-2 ml-3'>Email</label>
                 <input
                   type='email'
                   name='Email'
@@ -83,8 +92,8 @@ export default function LoginPage() {
                   placeholder='name@webcrew.co.jp'
                 />
               </div>
-              <div className='mb-6 pt-3 rounded bg-gray-200'>
-                <label className='block text-gray-700 text-sm font-light mb-2 ml-3'>Password</label>
+              <div className='mb-6 pt-3 rounded bg-gray-900'>
+                <label className='block text-white text-sm font-light mb-2 ml-3'>Password</label>
                 <input
                   type='password'
                   name='Password'
@@ -95,7 +104,9 @@ export default function LoginPage() {
               </div>
               <button
                 onClick={onLogin}
-                className='w-full font-thin bg-gray-950 hover:bg-gray-700 text-white py-2 rounded shadow-lg hover:shadow-xl transition duration-200'>
+                className='w-full font-thin bg-gray-950
+                  text-white py-2 rounded hover:shadow-xl transition
+                  duration-300 hover:shadow-gray-300'>
                   ログイン
               </button>
             </div>
