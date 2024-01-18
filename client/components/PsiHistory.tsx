@@ -58,17 +58,17 @@ export default function PsiHistory() {
 
   return (
     <div className='mt-14'>
-      <Card>
-        <Text className="mt-2">履歴一覧</Text>
-        <Table className="mt-6">
+      <Card className='dark:bg-gray-950'>
+        <Text className='mt-2 dark:text-white'>履歴一覧</Text>
+        <Table className='mt-6 dark:text-white'>
           <TableHead>
             <TableRow>
-              <TableHeaderCell>Date</TableHeaderCell>
-              <TableHeaderCell>History</TableHeaderCell>
+              <TableHeaderCell className='dark:text-white'>Date</TableHeaderCell>
+              <TableHeaderCell className='dark:text-white'>History</TableHeaderCell>
             </TableRow>
           </TableHead>
 
-          <TableBody>
+          <TableBody className='dark:text-white'>
           {history?.map((item, index) => (
             <TableRow key={index}>
               <TableCell>

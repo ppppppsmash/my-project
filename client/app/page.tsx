@@ -3,9 +3,8 @@
 import {
   Text
 } from '@tremor/react'
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
-import { signIn, signOut, useSession } from "next-auth/react"
+import Image from 'next/image'
+import { useSession } from "next-auth/react"
 import { getCsrfToken } from "next-auth/react"
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import dynamicImport from 'next/dynamic'
@@ -22,10 +21,25 @@ export default async function Home() {
     return (
       <QueryClientProvider client={queryClient}>
         <div className='w-full mx-auto'>
-          {status === 'authenticated' &&
+          { status === 'authenticated' &&
             <>
-              <Text>ようこそ🤟 {session?.user?.name}</Text>
-              <Text className='mt-4'>Email: {session?.user?.email}</Text>
+              <div className='flex items-center gap-x-6'>
+                {session.user.image && (
+                  <Image
+                    className='rounded-full border-gray-300 border shadow-sm'
+                    src={session?.user?.image}
+                    width={100}
+                    height={100}
+                    alt='webcrew member'
+                  />
+                )}
+
+                <div>
+                  <Text className='dark:text-white'>ようこそ🤟 {session?.user?.name} さん</Text>
+                  <Text className='mt-4 dark:text-white'>Email: {session?.user?.email}</Text>
+                </div>
+              </div>
+
               <DynamicPsiHistoryComponent />
             </>
           }
