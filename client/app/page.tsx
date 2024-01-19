@@ -35,7 +35,7 @@ export default async function Home() {
                 )}
 
                 <div>
-                  <Text className='dark:text-white'>ようこそ🤟 {session?.user?.name} さん</Text>
+                  <Text className='dark:text-white'>お疲れ様です！🤟 {session?.user?.name} さん</Text>
                   <Text className='mt-4 dark:text-white'>Email: {session?.user?.email}</Text>
                 </div>
               </div>

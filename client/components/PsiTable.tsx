@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useState, ChangeEvent } from 'react'
 import { PSIDataType, SortType } from '@/type'
 import {
+  Flex,
   Table,
   TableHead,
   TableRow,
@@ -38,6 +39,7 @@ import PsiSiteHoverCard from '@/components/PsiSiteHoverCard'
 import ClockLoader from 'react-spinners/ClockLoader'
 import MoonLoader from 'react-spinners/MoonLoader'
 import { useSession } from 'next-auth/react'
+import BulkButton from '@/components/Button/BulkButton'
 
 interface NewPSIDataType extends PSIDataType {
   score?: string
@@ -76,7 +78,7 @@ export default function PsiTable() {
     await getPsiDataAgain(name, url, index, id, device, Number(session?.user?.id), session?.user?.name || '')
     setTimeout(() => {
       setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index))
-    }, 1000)
+    }, 2000)
    }
 
   const handleSort = (columnName: string) => {
@@ -191,7 +193,7 @@ export default function PsiTable() {
         await getPsiDataAgain(name, url, index || 0, id, device, Number(session?.user?.id), session?.user?.name || '');
         setTimeout(() => {
           setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index))
-        }, 1000)
+        }, 2000)
       }
     }
   }
@@ -200,29 +202,28 @@ export default function PsiTable() {
   if (!result) return <h1 className='text-md text-center'>データがありません.</h1>
   return (
     <div>
-      <MultiSelectBox
-        onValueChange={setSelectedNames}
-        placeholder="検索..."
-        className="max-w-xs mt-8 dark:bg-gray-950"
-      >
-        {result.map((item) => (
-          <MultiSelectBoxItem
-            key={item?.id}
-            value={(item?.name).toString()}
-            text={item?.name}
-            className='dark:bg-gray-950 dark:text-white'
-          >
-            {item?.name}
-          </MultiSelectBoxItem>
-        ))}
-      </MultiSelectBox>
-
-      <button
-        className="text-blue-500 dark:text-blue-400"
-        onClick={handleBulkUpdate}
-      >
-        一括取得
-      </button>
+      <Flex>
+        <MultiSelectBox
+          onValueChange={setSelectedNames}
+          placeholder="検索..."
+          className="max-w-xs mt-8 dark:bg-gray-950"
+        >
+          {result.map((item) => (
+            <MultiSelectBoxItem
+              key={item?.id}
+              value={(item?.name).toString()}
+              text={item?.name}
+              className='dark:bg-gray-950 dark:text-white'
+            >
+              {item?.name}
+            </MultiSelectBoxItem>
+          ))}
+        </MultiSelectBox>
+        <BulkButton
+          label='一括取得'
+          clickEvent={handleBulkUpdate}
+        />
+      </Flex>
 
       <Table className='mt-2 border-gray-750 border-[1px] rounded-lg overflow-x-scroll md:overflow-visible'>
         <TableHead>

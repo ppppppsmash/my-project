@@ -20,19 +20,6 @@ export default function PsiList() {
         <Title className={`${zenKaku.className} relative md:text-xl dark:text-white dark:after:from-white after:block after:bg-bottom
           after:bg-gradient-to-r after:from-gray-700 after:via-gray-300 after:to-transparent after:h-[1px]`}>ページ一覧</Title>
 
-        <div className='mt-5 text-right'>
-          <Button
-            className='w-[150px] bg-gray-950 hover:bg-gray-700
-            py-2 px-4 rounded active:bg-gray-500 duration-150
-            focus:shadow-outline ease-in-out dark:bg-white dark:text-gray-950'
-            color='gray'
-          >
-            <Link href='/list/add'>
-              ページ登録
-            </Link>
-          </Button>
-        </div>
-
         <Card className='mt-6 shadow-lg dark:bg-gray-950'>
           <DynamicComponent />
         </Card>

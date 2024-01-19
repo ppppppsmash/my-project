@@ -109,8 +109,7 @@ export default function Slug({ params: { id } }: Props) {
               </Card>
             </Col>
             <Col numColSpanSm={1}>
-              { metricsNewest && metricsNewest.score >= 70 ?
-              (
+              {metricsNewest && (
                 <DonutChart
                   data={createDonutScore(siteMetrics)}
                   showTooltip={false}
@@ -120,22 +119,9 @@ export default function Slug({ params: { id } }: Props) {
                     `${Number(Intl.NumberFormat("us").format(number)) - restScore}`
                   }
                   className='mt-2'
-                  colors={["emerald", "neutral"]}
-                />
-              ) : (
-                <DonutChart
-                  data={createDonutScore(siteMetrics)}
-                  showTooltip={false}
-                  category="score"
-                  index="index"
-                  valueFormatter={(number: number) =>
-                    `${Number(Intl.NumberFormat("us").format(number)) - restScore}`
-                  }
-                  className='mt-2'
-                  colors={["rose", "neutral"]}
+                  colors={metricsNewest.score >= 70 ? ["emerald", "neutral"] : ["rose", "neutral"]}
                 />
               )}
-              {/* </Card> */}
             </Col>
           </Grid>
         </>
