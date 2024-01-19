@@ -49,7 +49,7 @@ export default function SiteDetail({ id }: Props) {
                 <div className='cursor-pointer'>
                   <BoltIcon
                     className='text-yellow-400 opacity-0 group-hover:opacity-100 transition duration-600
-                      hover:scale-[1.3] hover:shadow-xl hover:shadow-gray-200 w-6 h-6 hover:rotate-180'
+                      hover:scale-[1.3] w-6 h-6 hover:rotate-180'
                   />
                 </div>
               </GPTHoverCard>
@@ -64,7 +64,7 @@ export default function SiteDetail({ id }: Props) {
                 <div className='cursor-pointer'>
                   <BoltIcon
                     className='text-yellow-400 opacity-0 group-hover:opacity-100 transition duration-600
-                      hover:scale-[1.3] hover:shadow-xl hover:shadow-gray-200 w-6 h-6 hover:rotate-180'
+                      hover:scale-[1.3] w-6 h-6 hover:rotate-180'
                   />
                 </div>
               </GPTHoverCard>
@@ -79,7 +79,7 @@ export default function SiteDetail({ id }: Props) {
                 <div className='cursor-pointer'>
                   <BoltIcon
                     className='text-yellow-400 opacity-0 group-hover:opacity-100 transition duration-600
-                      hover:scale-[1.3] hover:shadow-xl hover:shadow-gray-200 w-6 h-6 hover:rotate-180'
+                      hover:scale-[1.3] w-6 h-6 hover:rotate-180'
                   />
                 </div>
               </GPTHoverCard>
@@ -94,7 +94,7 @@ export default function SiteDetail({ id }: Props) {
                 <div className='cursor-pointer'>
                   <BoltIcon
                     className='text-yellow-400 opacity-0 group-hover:opacity-100 transition duration-600
-                      hover:scale-[1.3] hover:shadow-xl hover:shadow-gray-200 w-6 h-6 hover:rotate-180'
+                      hover:scale-[1.3] w-6 h-6 hover:rotate-180'
                   />
                 </div>
               </GPTHoverCard>
@@ -109,7 +109,7 @@ export default function SiteDetail({ id }: Props) {
                 <div className='cursor-pointer'>
                   <BoltIcon
                     className='text-yellow-400 opacity-0 group-hover:opacity-100 transition duration-600
-                      hover:scale-[1.3] hover:shadow-xl hover:shadow-gray-200 w-6 h-6 hover:rotate-180'
+                      hover:scale-[1.3] w-6 h-6 hover:rotate-180'
                   />
                 </div>
               </GPTHoverCard>
@@ -124,7 +124,7 @@ export default function SiteDetail({ id }: Props) {
                 <div className='cursor-pointer'>
                   <BoltIcon
                     className='text-yellow-400 opacity-0 group-hover:opacity-100 transition duration-600
-                      hover:scale-[1.3] hover:shadow-xl hover:shadow-gray-200 w-6 h-6 hover:rotate-180'
+                      hover:scale-[1.3] w-6 h-6 hover:rotate-180'
                   />
                 </div>
               </GPTHoverCard>

@@ -6,7 +6,6 @@ import { PSIDataType, PSIMetrics } from '@/type'
 import { getData } from '@/utils/fetchData'
 import { Grid, Col, Card, Text, Title, Subtitle, Flex, DonutChart } from '@tremor/react'
 import { ArrowTopRightOnSquareIcon, ClockIcon, DevicePhoneMobileIcon, ComputerDesktopIcon, CalendarDaysIcon } from '@heroicons/react/24/outline'
-import { formatDate } from '@/utils/formatDate'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
 import DelaySection from '@/components/FramerMotion/DelaySection'
 import Tab from '@/components/Tab/Tab'
@@ -66,7 +65,7 @@ export default function Slug({ params: { id } }: Props) {
             <Col numColSpanSm={5}>
               <Card className='dark:bg-gray-950 mt-6'>
                 <Title className='dark:text-white'>{list.name}</Title>
-                <Subtitle className='flex items-center space-x-2 dark:text-white'>
+                <Subtitle className='flex items-center space-x-2 dark:text-white text-xs'>
                   <Link
                     target='_blank'
                     href={{pathname: list.url}}

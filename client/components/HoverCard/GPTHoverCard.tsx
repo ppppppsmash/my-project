@@ -4,9 +4,9 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import {
   Text,
+  Bold,
   Flex
 } from '@tremor/react'
-import { SparklesIcon } from '@heroicons/react/24/solid'
 import { LightBulbIcon } from '@heroicons/react/24/outline'
 import CircleLoader from 'react-spinners/CircleLoader'
 
@@ -26,26 +26,32 @@ const GPTHoverCard = ({ children, message }: { children: React.ReactNode, messag
   }
 
   const handleMouseEnter = async () => {
-    setHovered(true)
-    const response = await fetchChatResponse(message)
+    if (!hovered) {
+      setHovered(true)
+      const response = await fetchChatResponse(message)
 
-    if(response?.ok) {
-      const responseData = await response.json()
-      const result = responseData.choices[0].message.content
-      setResponse(result)
+      if(response?.ok) {
+        const responseData = await response.json()
+        const result = responseData.choices[0].message.content
+        setResponse(result)
+      }
     }
   }
 
   const handleMouseLeave = () => {
     setHovered(false)
-    setResponse('')
   }
 
   const Loading = () => {
     return (
-      <Flex className='justify-center gap-x-3'>
-        <Text>Loading...</Text>
-        <CircleLoader size={20} />
+      <Flex className='flex-direction justify-center gap-x-3'>
+        <CircleLoader size={22} />
+        <Bold className='animate-pulse'>
+            <span className='bg-gradient-to-r from-fuchsia-500 to-emerald-400
+              bg-clip-text font-bold tracking-tight text-transparent'>
+                ChatGPTは考え中...
+            </span>
+          </Bold>
       </Flex>
     )
   }
@@ -55,10 +61,10 @@ const GPTHoverCard = ({ children, message }: { children: React.ReactNode, messag
       <HoverCardPrimitive.Trigger asChild onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         {children}
       </HoverCardPrimitive.Trigger>
-      <HoverCardPrimitive.Portal>
+      <HoverCardPrimitive.Portal className='!block'>
         <HoverCardPrimitive.Content
           className={clsx(
-            'w-full h-full radix-side-top:animate-slide-up radix-side-bottom:animate-slide-down',
+            'w-[700] h-[350px] radix-side-top:animate-slide-up radix-side-bottom:animate-slide-down',
             'max-w-full rounded-lg p-4 w-full whitespace-pre break-all',
             'bg-white dark:bg-gray-800 p-4 rounded shadow-md',
             'focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75',
@@ -66,7 +72,7 @@ const GPTHoverCard = ({ children, message }: { children: React.ReactNode, messag
           sideOffset={5}
         >
           <motion.div
-            className='w-[450px] h-[450px] pointer-events-none relative z-50 origin-top overflow-hidden !p-0'
+            className='w-[700px] overflow-hidden pointer-events-none relative z-50 origin-top !p-0'
             initial={{
               opacity: 0,
               scale: 0.965,
@@ -77,7 +83,7 @@ const GPTHoverCard = ({ children, message }: { children: React.ReactNode, messag
               opacity: 1,
               scale: 1,
               y: 0,
-              height: 250
+              height: 300
             }}
             exit={{
               opacity: 0,
@@ -89,9 +95,8 @@ const GPTHoverCard = ({ children, message }: { children: React.ReactNode, messag
               duration: 0.2,
             }}
           >
-            <div className='w-full h-full flex gap-x-2 items-start'>
-              <LightBulbIcon className='w-5 h-5 text-[#FFC042]' />
-              <Text className='block w-full text-sm dark:text-white'>
+            <div className='w-full h-full flex gap-x-2 items-center'>
+              <Text className='w-[700px] text-xs dark:text-white whitespace-pre break-all'>
                 {hovered ? (response !== '' ? (`ChatGPT:\n ${response}`) : <Loading />) : ''}
               </Text>
             </div>
