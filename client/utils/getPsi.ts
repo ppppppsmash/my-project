@@ -168,7 +168,7 @@ export const getPsiDataAgain = async (name: string, url: string, index: number, 
       }
 
       const historyAction = {
-        action: 'PSIスコアを再取得しました',
+        action: 'PSIスコアを取得しました',
         user_id: userId,
         site_name: psiSiteMetircs.name,
         site_url: urlValidate(psiSiteMetircs.url),

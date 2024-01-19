@@ -14,7 +14,7 @@ import { signIn, signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 
 const navigation = [
-  { name: 'ホーム', href: '/' },
+  { name: '履歴一覧', href: '/' },
   { name: 'ページ登録', href: '/list/add' },
   { name: 'ページ一覧', href: '/list' },
   { name: 'ページ比較', href: '/compare' }

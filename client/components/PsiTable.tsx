@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useState, ChangeEvent } from 'react'
 import { PSIDataType, SortType } from '@/type'
 import {
+  Flex,
   Table,
   TableHead,
   TableRow,
@@ -26,7 +27,7 @@ import {
   ArrowSmallDownIcon,
   EyeIcon
 } from '@heroicons/react/24/outline'
-import PsiPopup from '@/components/PsiPopup'
+import TablePopup from '@/components/PopOver/TablePopup'
 import PsiSelect from '@/components/PsiSelect'
 import { deleteData, getData, getDataAll, patchData } from '@/utils/fetchData'
 import { getPsiData, getPsiDataAgain } from '@/utils/getPsi'
@@ -38,6 +39,7 @@ import PsiSiteHoverCard from '@/components/PsiSiteHoverCard'
 import ClockLoader from 'react-spinners/ClockLoader'
 import MoonLoader from 'react-spinners/MoonLoader'
 import { useSession } from 'next-auth/react'
+import BulkButton from '@/components/Button/BulkButton'
 
 interface NewPSIDataType extends PSIDataType {
   score?: string
@@ -52,7 +54,6 @@ export default function PsiTable() {
   const [schedule, setSchedule] = useState('0')
   const [isEdited, setIsEdited] = useState<boolean>(false)
   const [visible, setVisible] = useState(false)
-  const [loadingVisible, setLoadingVisible] = useState(false)
   const [currentTablePage, setCurrentTablePage] = useState<number>(1)
   const [spinningItems, setSpinningItems] = useState<any[]>([])
   const [sortColumn, setSortColumn] = useState<string>('')
@@ -66,7 +67,6 @@ export default function PsiTable() {
 
   // スコア再取得
   const handleClick = async (name: string, url: string, index: number, id: number, device: string) => {
-    setLoadingVisible(true)
     setSpinningItems((prevState: any) => {
       if (prevState.includes(index)) {
         return prevState.filter((item: number) => item !== index)
@@ -78,7 +78,7 @@ export default function PsiTable() {
     await getPsiDataAgain(name, url, index, id, device, Number(session?.user?.id), session?.user?.name || '')
     setTimeout(() => {
       setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index))
-    }, 1000)
+    }, 2000)
    }
 
   const handleSort = (columnName: string) => {
@@ -170,26 +170,60 @@ export default function PsiTable() {
     })
   }
 
+  const handleBulkUpdate = async () => {
+    const selectedItems = result?.filter((item) => {
+      return item
+    })
+
+    // 各アイテムに対してPSIスコアを再取得
+    if(selectedItems) {
+      for (const selectedItem of selectedItems) {
+        const { name, url, id, device } = selectedItem;
+        const index = result?.findIndex(item => item.id === id)
+
+        setSpinningItems((item: any) => {
+          if (item.includes(index)) {
+            return item.filter((x: number) => x !== index)
+          } else {
+            return [...item, index]
+          }
+        })
+
+        // スコア再取得ロジック（例: getPsiDataAgain 関数を使用）
+        await getPsiDataAgain(name, url, index || 0, id, device, Number(session?.user?.id), session?.user?.name || '');
+        setTimeout(() => {
+          setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index))
+        }, 2000)
+      }
+    }
+  }
+
   if(isLoading) return (<h1 className='flex items-center justify-center my-4'><MoonLoader size={22} /></h1>)
   if (!result) return <h1 className='text-md text-center'>データがありません.</h1>
   return (
     <div>
-      <MultiSelectBox
-        onValueChange={setSelectedNames}
-        placeholder="検索..."
-        className="max-w-xs mt-8 dark:bg-gray-950"
-      >
-        {result.map((item) => (
-          <MultiSelectBoxItem
-            key={item?.id}
-            value={(item?.name).toString()}
-            text={item?.name}
-            className='dark:bg-gray-950 dark:text-white'
-          >
-            {item?.name}
-          </MultiSelectBoxItem>
-        ))}
-      </MultiSelectBox>
+      <Flex>
+        <MultiSelectBox
+          onValueChange={setSelectedNames}
+          placeholder="検索..."
+          className="max-w-xs mt-8 dark:bg-gray-950"
+        >
+          {result.map((item) => (
+            <MultiSelectBoxItem
+              key={item?.id}
+              value={(item?.name).toString()}
+              text={item?.name}
+              className='dark:bg-gray-950 dark:text-white'
+            >
+              {item?.name}
+            </MultiSelectBoxItem>
+          ))}
+        </MultiSelectBox>
+        <BulkButton
+          label='一括取得'
+          clickEvent={handleBulkUpdate}
+        />
+      </Flex>
 
       <Table className='mt-2 border-gray-750 border-[1px] rounded-lg overflow-x-scroll md:overflow-visible'>
         <TableHead>
@@ -372,7 +406,7 @@ export default function PsiTable() {
               }
               </TableCell>
               <TableCell>
-                <PsiPopup
+                <TablePopup
                   className={index === sortedData.length - 1 || index === sortedData.length -2 ? 'bottom-8 -left-6' : 'top-4 -left-6'}
                   behaviorEdit={() => handleEdit(index)}
                   behaviorScoreAgain={() => handleClick(item.name, item.url, index, item.id, item.device)}

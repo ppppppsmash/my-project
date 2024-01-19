@@ -38,7 +38,7 @@ export default function PsiHistory() {
   const { data: results, isLoading } = useQuery<NewPSIDataType[]>({
     queryKey: ['history'],
     queryFn: getDataByAll,
-    refetchInterval: 10000
+    refetchInterval: 5000
   })
 
   console.log(results)
