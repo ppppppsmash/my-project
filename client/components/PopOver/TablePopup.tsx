@@ -1,6 +1,12 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { PencilSquareIcon, XMarkIcon, ArrowPathIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
+import { PencilSquareIcon, XMarkIcon, ArrowPathIcon, EllipsisHorizontalIcon, SparklesIcon } from '@heroicons/react/24/outline'
+
+interface ActionItem {
+  name: string
+  isRequired: boolean
+  icon: () => JSX.Element
+}
 
 interface Props {
   behaviorEdit(): void
@@ -12,6 +18,12 @@ interface Props {
 const iconEdit = () => {
   return (
     <PencilSquareIcon />
+  )
+}
+
+const iconScore = () => {
+  return (
+    <SparklesIcon />
   )
 }
 
@@ -27,28 +39,36 @@ const iconDelete = () => {
   )
 }
 
-const actions = [
+const actions: ActionItem[] = [
   {
-    name: 'Edit',
+    name: '編集',
+    isRequired: true,
     icon: iconEdit
   },
   {
-    name: 'Again',
+    name: '取得',
+    isRequired: true,
+    icon: iconScore
+  },
+  {
+    name: '再取得',
+    isRequired: true,
     icon: iconScoreAgain
   },
   {
-    name: 'Delete',
+    name: '削除',
+    isRequired: true,
     icon: iconDelete
   },
 ]
 
-export default function PsiPopup({ behaviorEdit, behaviorScoreAgain, behaviorDelete, className }: Props) {
+export default function TablePopup({ behaviorEdit, behaviorScoreAgain, behaviorDelete, className }: Props) {
   const handleClick = (action: string) => {
-    if(action === 'Edit') {
+    if(action === '編集') {
       behaviorEdit()
-    } else if (action === 'Again') {
+    } else if (action === '再取得') {
       behaviorScoreAgain()
-    } else if(action === 'Delete') {
+    } else if(action === '削除') {
       behaviorDelete()
     }
   }
@@ -79,6 +99,7 @@ export default function PsiPopup({ behaviorEdit, behaviorScoreAgain, behaviorDel
               <div className='overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5'>
                 <div className='relative block bg-white py-4'>
                   {actions.map((item) => (
+                    item.isRequired &&
                     <a
                       key={item.name}
                       className='mx-1 flex items-center rounded-lg p-2 transition duration-150 ease-in-out
