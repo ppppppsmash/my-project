@@ -268,9 +268,10 @@ export default function PsiTabContent({ mode }: Props) {
         <>
           <Dialog
             className='h-12 my-4'
-            title='ファイルを無事にアップできました.'
+            title='成功'
             color='green'
             icon={CheckCircleIcon}
+            message='ファイルを無事にアップできました.'
           />
         </>
       )}
@@ -282,9 +283,10 @@ export default function PsiTabContent({ mode }: Props) {
             <Dialog
               key={index}
               className='h-12 my-4'
-              title={info}
+              title='失敗'
               color='rose'
               icon={ExclamationTriangleIcon}
+              message={info}
             />
           ))
         )}
@@ -294,9 +296,10 @@ export default function PsiTabContent({ mode }: Props) {
             <Dialog
               key={index}
               className='h-12 my-4'
-              title={info}
+              title='失敗'
               color='rose'
               icon={ExclamationTriangleIcon}
+              message={info}
             />
           ))
         )}
@@ -306,9 +309,10 @@ export default function PsiTabContent({ mode }: Props) {
             <Dialog
               key={index}
               className='h-12 my-4'
-              title={info}
+              title='失敗'
               color='rose'
               icon={ExclamationTriangleIcon}
+              message={info}
             />
           ))
         )}

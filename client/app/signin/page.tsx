@@ -6,6 +6,8 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Title } from '@tremor/react'
 import { inter, quicksand } from '@/utils/font'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/solid'
+import Dialog from '@/components/Dialog/Dialog'
 
 export default function LoginPage() {
   const { data: session, status } = useSession()
@@ -25,37 +27,24 @@ export default function LoginPage() {
       const result = await signIn('credentials', {
         email: emailValue,
         password: passwordValue,
-        redirect: true,
-        callbackUrl: '/'
+        redirect: false,
       })
 
       if (result?.error) {
-        // ログインエラーがある場合、エラーメッセージを表示
-        setErrorMessage('ログインに失敗しました。正しいメールアドレスとパスワードを入力してください。')
+        setErrorMessage('正しいメールアドレスとパスワードを入力してください.')
       } else {
-        setErrorMessage('') // エラーメッセージをクリア
+        setErrorMessage('')
       }
     } catch (error) {
       console.error('ログインエラー:', error)
     }
   }
 
-  console.log(errorMessage)
-
   useEffect(() => {
     if (status === 'authenticated') {
       window.location.href = '/'
     }
   }, [router, status])
-
-
-  if (status === 'authenticated') {
-    return (
-      <>
-        <button onClick={()=>signOut()}>ログイン済み</button>
-      </>
-    )
-  }
 
   document.addEventListener('keydown', (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
@@ -69,6 +58,15 @@ export default function LoginPage() {
       className='fixed w-full top-0 z-50 flex flex-col justify-centeritems-center
       h-screen gap-1'
     >
+      {errorMessage &&
+        <Dialog
+          className='w-1/2 mx-auto absolute top-10 -translate-x-1/2 left-1/2 opacity-0 animate-slide-in-sec'
+          title='ログインに失敗しました'
+          color='red'
+          icon={ExclamationTriangleIcon}
+          message={errorMessage}
+        />
+      }
       <div className='flex flex-col w-10/12 md:w-full items-center justify-center
         sm:py-8 mx-auto md:h-screen lg:py-0 pt-[150px]'>
         <div className='w-full bg-gray-400/30 backdrop-blur-lg rounded-xl shadow-3xl
@@ -81,7 +79,6 @@ export default function LoginPage() {
             >
               PSI Measurement
             </Title>
-            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
             <div className='space-y-4 md:space-y-6'>
               <div className='mb-6 pt-3 rounded bg-gray-900'>
                 <label className='block text-white text-sm font-light mb-2 ml-3'>Email</label>
@@ -109,9 +106,8 @@ export default function LoginPage() {
               </div>
               <button
                 onClick={onLogin}
-                className='w-full font-thin bg-gray-950
-                  text-white py-2 rounded hover:shadow-xl transition
-                  duration-300 hover:shadow-gray-300'>
+                className={`w-full bg-gray-950 text-white py-2 rounded hover:shadow-xl transition
+                  duration-300 hover:shadow-gray-300 font-extrabold ${inter.className}`}>
                   ログイン
               </button>
             </div>

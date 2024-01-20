@@ -7,19 +7,8 @@ module.exports = {
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
     './app/**/*.{js,ts,jsx,tsx}',
-    './node_modules/@tremor/**/*.{js,ts,jsx,tsx}', // Tremor module
+    './node_modules/@tremor/**/*.{js,ts,jsx,tsx}',
   ],
-  // theme: {
-  //   extend: {
-  //     colors: {
-  //     },
-  //     backgroundImage: {
-  //     },
-      // transitionProperty: {
-      //   width: 'width'
-      // }
-  //   },
-  // },
   theme: {
     container: {
       center: true,

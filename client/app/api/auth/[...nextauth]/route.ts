@@ -13,19 +13,20 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         try {
-          const db = await dbConnect()
-          // const passwordHashed = bcrypt.hashSync(credentials.password, 10)
-          // console.log(passwordHashed)
-          const [user] = await db.query(
-            'SELECT * FROM user WHERE email = ?',
-            [credentials?.email]
-          )
+          const db = await dbConnect();
+          const [user] = await db.query('SELECT * FROM user WHERE email = ?', [credentials?.email])
 
-          if (user && credentials?.password && await bcrypt.compareSync(credentials.password, user[0].password)) {
-            return Promise.resolve(user[0])
-          } else {
+          if (!credentials?.email || !credentials?.password) {
             return Promise.resolve(null)
           }
+
+          if (user && credentials?.password) {
+            const passwordMatch = await bcrypt.compare(credentials.password, user[0].password)
+            if (passwordMatch) {
+              return Promise.resolve(user[0])
+            }
+          }
+          return Promise.resolve(null)
         } catch (error) {
           console.error('Authentication error:', error)
           return Promise.resolve(null)
