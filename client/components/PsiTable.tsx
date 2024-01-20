@@ -220,7 +220,7 @@ export default function PsiTable() {
           ))}
         </MultiSelectBox>
         <BulkButton
-          label='一括取得'
+          label="Let's Get !"
           clickEvent={handleBulkUpdate}
         />
       </Flex>

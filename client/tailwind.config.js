@@ -88,8 +88,42 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        'slide-in': 'slideIn 0.35s ease-in-out 0.5s forwards',
+        'slide-in-sec': 'slideInSec 0.35s ease-in-out 0.5s forwards'
+      },
+      keyframes: {
+        slideIn: {
+          '0%': {
+            opacity: 0,
+            transform: 'translateY(20px)'
+          },
+          '100%': {
+            opacity: 1,
+            transform: 'translateY(0)'
+          }
+        },
+        slideInSec: {
+          '0%': {
+            opacity: 0,
+            transform: 'translate(-50%, calc(-50% - 20px))'
+          },
+          '100%': {
+            opacity: 1,
+            transform: 'translate(-50%, -50%)'
+          }
+        },
+        dashedLine: {
+          '0%': {
+            opacirty: 1
+          },
+          '100%': {
+            opacity: 0
+          }
+        }
       },
     },
-    plugins: [],
+    plugins: [
+      require('tailwindcss-animation-delay')
+    ],
   }
 }

@@ -68,61 +68,103 @@ export default function PsiCompareList({ siteList, compareResult, selectedDate }
       </ListItem>
 
 
-      <ListItem>
+      <ListItem
+        className='opacity-0 translate-y-10 animate-slide-in'
+        style={{ animationDelay: '1.2s' }}
+      >
         <span>取得時間：</span>
         <span className="flex">{metricsNewest && formatDate(metricsNewest.updatedAt)}</span>
       </ListItem>
 
-      <ListItem>
+      <ListItem
+        className='opacity-0 translate-y-10 animate-slide-in'
+        style={{ animationDelay: '1.3s' }}
+      >
         <span>Score:</span>
         <span className='flex'>{metricsNewest && metricsNewest.score} {score}</span>
       </ListItem>
-      <ListItem>
+      <ListItem
+        className='opacity-0 translate-y-10 animate-slide-in'
+        style={{ animationDelay: '1.4s' }}
+      >
         <span>First Contentful Paint:</span>
         <span className='flex'>{metricsNewest && metricsNewest.fcp} {fcp}</span>
       </ListItem>
-      <ListItem>
+      <ListItem
+        className='opacity-0 translate-y-10 animate-slide-in'
+        style={{ animationDelay: '1.5s' }}
+      >
         <span>Largest Contentful Paint:</span>
         <span className='flex'>{metricsNewest && metricsNewest.lcp} {lcp}</span>
       </ListItem>
-      <ListItem>
+      <ListItem
+        className='opacity-0 translate-y-10 animate-slide-in'
+        style={{ animationDelay: '1.6s' }}
+      >
         <span>Time to Interactive:</span>
         <span className='flex'>{metricsNewest && metricsNewest.tti} {tti}</span>
       </ListItem>
-      <ListItem>
+      <ListItem
+        className='opacity-0 translate-y-10 animate-slide-in'
+        style={{ animationDelay: '1.7s' }}
+      >
         <span>Total Blocking Time:</span>
         <span className='flex'>{metricsNewest && metricsNewest.tbt} {tbt}</span>
       </ListItem>
-      <ListItem>
+      <ListItem
+        className='opacity-0 translate-y-10 animate-slide-in'
+        style={{ animationDelay: '1.8s' }}
+      >
         <span>Cumulative Layout Shift:</span>
         <span className='flex'>{metricsNewest && metricsNewest.cls} {cls}</span>
       </ListItem>
-      <ListItem>
+      <ListItem
+        className='opacity-0 translate-y-10 animate-slide-in'
+        style={{ animationDelay: '1.9s' }}
+      >
         <span>Speed Index:</span>
         <span className='flex'>{metricsNewest && metricsNewest.si} {si}</span>
       </ListItem>
 
-      <ListItem>
+      <ListItem
+        className='opacity-0 translate-y-10 animate-slide-in'
+        style={{ animationDelay: '2.0s' }}
+      >
         <span>（User）First Contentful Paint:</span>
         <span className='flex'>{metricsNewest && metricsNewest.user_fcp / 1000} s {user_lcp}</span>
       </ListItem>
-      <ListItem>
+      <ListItem
+        className='opacity-0 translate-y-10 animate-slide-in'
+        style={{ animationDelay: '2.1s' }}
+      >
         <span>（User）Largest Contentful Paint:</span>
         <span className='flex'>{metricsNewest && metricsNewest.user_lcp / 1000} s {user_lcp}</span>
       </ListItem>
-      <ListItem>
+      <ListItem
+        className='opacity-0 translate-y-10 animate-slide-in'
+        style={{ animationDelay: '2.2s' }}
+      >
         <span>（User）First Input Delay:</span>
         <span className='flex'>{metricsNewest && metricsNewest.user_fid} ms {user_fid}</span>
       </ListItem>
-      <ListItem>
+      <ListItem
+        className='opacity-0 translate-y-10 animate-slide-in'
+        style={{ animationDelay: '2.3s' }}
+      >
         <span>（User）Cumulative Layout Shif:</span>
         <span className='flex'>{metricsNewest && metricsNewest.user_cls} {user_cls}</span>
       </ListItem>
-      <ListItem>
+      <ListItem
+        className='opacity-0 translate-y-10 animate-slide-in'
+        style={{ animationDelay: '2.4s' }}
+      >
         <span>（User）Interaction to Next Paint:</span>
         <span className='flex'>{metricsNewest && metricsNewest.user_inp / 1000} s {user_inp}</span>
       </ListItem>
-      <ListItem>
+      <ListItem
+        className='opacity-0 translate-y-10 animate-slide-in'
+        style={{ animationDelay: '2.5s' }}
+      >
         <span>（User）Time to First Byte:</span>
         <span className='flex'>{metricsNewest && metricsNewest.user_ttfb / 1000} s {user_ttfb}</span>
       </ListItem>
