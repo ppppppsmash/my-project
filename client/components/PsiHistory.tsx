@@ -70,7 +70,11 @@ export default function PsiHistory() {
 
           <TableBody className='dark:text-white'>
           {history?.map((item, index) => (
-            <TableRow key={index}>
+            <TableRow
+              key={index}
+              className='opacity-0 translate-y-10 animate-slide-in'
+              style={{animationDelay: `${index * 0.1 + 1.3}s`}}
+            >
               <TableCell>
                 <div key={index}>
                   {formatDate(item.action_date)}

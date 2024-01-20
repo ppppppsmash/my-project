@@ -9,7 +9,7 @@ import { PSIDataType, PSIMetrics } from '@/type'
 export default function BarChartList() {
   const { data: session } = useSession()
 
-  const colors: TremorColor[] = ['violet']
+  const colors: TremorColor[] = ['purple']
   const chartCategories: string[] = ['score']
 
   const [siteData, setSiteData] = useState<PSIDataType[]>([])

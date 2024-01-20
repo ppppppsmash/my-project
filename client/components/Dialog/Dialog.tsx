@@ -4,11 +4,12 @@ import React, { ElementType } from 'react'
 interface IconProps {
   title: string
   icon: ElementType
-  color: 'gray' | 'orange' | 'amber' | 'green' | 'indigo' | 'rose'
+  color: 'gray' | 'orange' | 'amber' | 'green' | 'indigo' | 'rose' | 'red'
   className: string
+  message: string
 }
 
-export default function Dialog({ className, title, icon, color }: IconProps) {
+export default function Dialog({ className, title, icon, color, message }: IconProps) {
   return (
     <>
       <Callout
@@ -16,7 +17,9 @@ export default function Dialog({ className, title, icon, color }: IconProps) {
         title={title}
         icon={icon}
         color={color}
-      ></Callout>
+      >
+        { message }
+      </Callout>
     </>
   )
 }

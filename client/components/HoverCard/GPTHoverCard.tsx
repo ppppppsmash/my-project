@@ -7,7 +7,6 @@ import {
   Bold,
   Flex
 } from '@tremor/react'
-import { LightBulbIcon } from '@heroicons/react/24/outline'
 import CircleLoader from 'react-spinners/CircleLoader'
 
 const GPTHoverCard = ({ children, message }: { children: React.ReactNode, message: string }) => {
