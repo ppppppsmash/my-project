@@ -1,6 +1,7 @@
 import * as HoverCardPrimitive from '@radix-ui/react-hover-card'
 import { clsx } from 'clsx'
 import React, { useState } from 'react'
+import { patchData } from '@/utils/fetchData'
 import { fetchLinkPreview } from '@/utils/getLinkPreview'
 import { motion } from 'framer-motion'
 import CircleLoader from 'react-spinners/CircleLoader'
@@ -9,19 +10,33 @@ const { Root, Trigger, Portal } = HoverCardPrimitive
 
 interface HoverCardProps {}
 
-const HoverCard = ({children, url}: {children: React.ReactNode, url: string}) => {
+const HoverCard = ({children, url, id}: {children: React.ReactNode, url: string, id: number}) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [imageUrl, setImageUrl] = useState('')
+  const [isSeoFetched, setIsSeoFetched] = useState<boolean>(false)
 
   const getImage = async () => {
+    if (isSeoFetched) {
+      return
+    }
+
     const fetchMeta = await fetchLinkPreview(url)
     setTitle(fetchMeta.title)
     setDescription(fetchMeta.description)
     setImageUrl(fetchMeta.image)
+
+    const seoInfo = {
+      title: fetchMeta.title,
+      description: fetchMeta.description,
+      image: fetchMeta.image
+    }
+    await patchData('psi_site_list', id, seoInfo)
+
+    setIsSeoFetched(true)
   }
 
-  const onOpenChange = (): void => {
+  const onOpenChange = async () => {
     getImage()
   }
 

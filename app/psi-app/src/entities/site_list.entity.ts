@@ -37,6 +37,15 @@ export class SiteList {
   @Column()
   user_id: number
 
+  @Column('varchar', { length: 50, nullable: true })
+  title: string
+
+  @Column('varchar', { length: 255, nullable: true })
+  image: string
+
+  @Column('varchar', { length: 255, nullable: true })
+  description: string
+
   @CreateDateColumn({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date
   get formattedCreatedAt(): string {
@@ -49,8 +58,8 @@ export class SiteList {
     return this.updatedAt.toLocaleString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
   }
 
-  @ManyToOne(() => User, user => user.siteLists) // 追加
-  @JoinColumn({ name: 'user_id' }) // 追加
+  @ManyToOne(() => User, user => user.siteLists)
+  @JoinColumn({ name: 'user_id' })
   user: User
 
   @OneToMany(() => SiteMetrics, siteMetrics => siteMetrics.siteList, { cascade: true })

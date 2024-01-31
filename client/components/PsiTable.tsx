@@ -31,11 +31,11 @@ import {
 } from '@heroicons/react/24/outline'
 import TablePopup from '@/components/PopOver/TablePopup'
 import PsiSelect from '@/components/PsiSelect'
-import { deleteData, getData, getDataAll, patchData } from '@/utils/fetchData'
+import { deleteData, getData, getDataAll, postData, patchData } from '@/utils/fetchData'
 import { getPsiData, getPsiDataAgain } from '@/utils/getPsi'
 import { formatDate } from '@/utils/formatDate'
 import { HoverCard } from '@/components/HoverCard/HoverCard'
-import PsiSiteHoverCard from '@/components/PsiSiteHoverCard'
+import DetailHoverCard from '@/components/HoverCard/DetailHoverCard'
 import ClockLoader from 'react-spinners/ClockLoader'
 import MoonLoader from 'react-spinners/MoonLoader'
 import { useSession } from 'next-auth/react'
@@ -100,10 +100,6 @@ export default function PsiTable() {
     })
   }
 
-  const handlePageChange = (tablePage: number) => {
-    setCurrentTablePage(tablePage)
-  }
-
   const handleEdit = (index: number) => {
     setEditIndex(index)
     setIsEdited(false)
@@ -116,7 +112,24 @@ export default function PsiTable() {
       return {...siteMetric, name: editName[index]}
     })
 
+
+    const seoInfo = {
+      title: '123',
+      description: '123',
+      image: '123'
+    }
+    await patchData('psi_site_list', id, seoInfo)
+    //const ids = result?.findIndex(item => item.id === id)
+
+    // const action = {
+    //   action: 'site名を変更しました',
+    //   user_id: Number(session?.user?.id),
+    //   site_name: editName[index],
+    //   site_url: ids ? result?[ids].url : ''
+    // }
+
     await patchData('psi_site_list', id, {name: editName[index], siteMetrics: updatedSiteMetric})
+    //await postData('user_history', action)
 
     setEditIndex(null)
     setIsEdited(true)
@@ -338,20 +351,23 @@ export default function PsiTable() {
                     onClick={()=>handleNameChange(index, item.id)}
                   />
                 </p> ) : (
-                  <PsiSiteHoverCard>
+                  <DetailHoverCard>
                     <Link
                       className='underline'
                       href={`/list/${item.id}`}>
                       {editName[index] || item.name}
                     </Link>
-                  </PsiSiteHoverCard>
+                  </DetailHoverCard>
                 )
               }
               </p>
               </TableCell>
               <TableCell>
                 <Text className='underline decoration-dotted dark:text-white'>
-                  <HoverCard url={item.url}>
+                  <HoverCard
+                    id={item.id}
+                    url={item.url}
+                  >
                     <div className='flex relative gap-x-1 items-center group'>
                       <EyeIcon className='absolute -left-5 w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-500 ease-in-out' />
                       <Link href={{pathname: item.url}} target='_blank'>
@@ -363,7 +379,7 @@ export default function PsiTable() {
               </TableCell>
               <TableCell>
                 {spinningItems.includes(index) ? (
-                  <ClockLoader size={16} className='dark:text-white' />
+                  <ClockLoader size={20} color='#36d7b7' />
                 ) : (
                   <div className='flex items-center gap-x-2'>
                     <Text className='dark:text-white'>{ item.siteMetrics[0]?.score ? item.siteMetrics[0].score : '未取得' }</Text>

@@ -44,7 +44,9 @@ export default function Notice() {
                   />
                 </motion.button>
 
-                <p className='text-sm'>9/15: 通知アラートが実装できた！</p>
+                <p className='text-sm mb-2 bg-gray-300 p-2 rounded-lg font-semibold hover:bg-gray-100 transition'>9/14: 通知アラートが実装できた！</p>
+                <p className='text-sm bg-gray-300 p-2 rounded-lg font-semibold hover:bg-gray-100 transition'>9/15: 「ページ一覧」テーブルのURLをマウスオーバーしたら、title、image、descriptionなどを
+                  マウスオーバー対象の詳細ページで反映させるように修正した。</p>
               </motion.li>
             )}
           </AnimatePresence>
@@ -55,13 +57,13 @@ export default function Notice() {
         <motion.button
           whileTap={{ scale: 0.96 }}
           whileHover={{ scale: 1.05 }}
-          layoutId='1'
+          layoutId='100'
           type='button'
           className=''
-          onClick={() => setNoticeFlagId('1')}
+          onClick={() => setNoticeFlagId('100')}
         >
           <BellIcon
-            className='w-6 h-6 text-yellow-400 hover:scale-[1.2] transition duration-300'
+            className='w-6 h-6 text-amber-400 hover:scale-[1.2] transition duration-300'
           />
         </motion.button>
       </div>
