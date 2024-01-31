@@ -82,33 +82,32 @@ export class AutoRunService {
   }
 
   private getNextValidDate(schedule: string): Date {
-
     return new Date(Date.now() + parseInt(schedule)*60*60*1000)
   }
 
   // cron jobを停止するメソッド
-  private stopCronJob(name: string) {
-    const job = this.jobs[name]
-    if (job) {
-      job.stop()
-      this.logger.warn(`Cron job for ${name} has been stopped.`)
-    }
-  }
+  // private stopCronJob(name: string) {
+  //   const job = this.jobs[name]
+  //   if (job) {
+  //     job.stop()
+  //     this.logger.warn(`Cron job for ${name} has been stopped.`)
+  //   }
+  // }
 
-  private addCronJob(name: string, schedule: string, url: string, device: string, id: number) {
-    const jobName = `${name}-${uuidv4()}`
-    const job = new CronJob(`* * */${schedule} * * *`, () => this.executeJob(name, url, device, id))
+  // private addCronJob(name: string, schedule: string, url: string, device: string, id: number) {
+  //   const jobName = `${name}-${uuidv4()}`
+  //   const job = new CronJob(`* * */${schedule} * * *`, () => this.executeJob(name, url, device, id))
 
-    // 以前のジョブが存在する場合は停止してから新しいジョブを追加
-    this.stopCronJob(jobName)
+  //   // 以前のジョブが存在する場合は停止してから新しいジョブを追加
+  //   this.stopCronJob(jobName)
 
-    this.schedulerRegistry.addCronJob(jobName, job)
-    job.start()
+  //   this.schedulerRegistry.addCronJob(jobName, job)
+  //   job.start()
 
-    this.logger.warn(`サイト名 ${name} のcronjob値は ${schedule}`)
+  //   this.logger.warn(`サイト名 ${name} のcronjob値は ${schedule}`)
 
-    this.jobs[jobName] = job
-  }
+  //   this.jobs[jobName] = job
+  // }
 
   // @Cron('* * 18 * * *', {
   //   timeZone: 'Asia/Tokyo',

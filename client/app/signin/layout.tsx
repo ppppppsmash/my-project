@@ -1,3 +1,6 @@
+import Providers from '../Providers'
+import AuthGuard from '@/components/Auth/AuthGuard'
+
 export default function LoginLayout({
   children,
 }: {
@@ -6,7 +9,11 @@ export default function LoginLayout({
   return (
     <html lang='ja'>
       <body>
-        {children}
+        <Providers>
+          <AuthGuard>
+            {children}
+          </AuthGuard>
+        </Providers>
       </body>
     </html>
   )

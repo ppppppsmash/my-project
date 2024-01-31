@@ -1,8 +1,6 @@
 import * as HoverCardPrimitive from '@radix-ui/react-hover-card'
 import { clsx } from 'clsx'
 import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import CircleLoader from 'react-spinners/CircleLoader'
 import {
   Text
 } from '@tremor/react'
@@ -10,7 +8,7 @@ import { SparklesIcon } from '@heroicons/react/24/solid'
 
 const { Root, Trigger, Portal } = HoverCardPrimitive
 
-const PsiSiteHoverCard = ({children}: {children: React.ReactNode}) => (
+const DetailHoverCard = ({children}: {children: React.ReactNode}) => (
   <HoverCardPrimitive.Root>
     <HoverCardPrimitive.Trigger asChild>
       {children}
@@ -34,4 +32,4 @@ const PsiSiteHoverCard = ({children}: {children: React.ReactNode}) => (
   </HoverCardPrimitive.Root>
 )
 
-export default PsiSiteHoverCard
+export default DetailHoverCard

@@ -7,6 +7,9 @@ export interface PSIDataType {
   createdAt: string
   updatedAt: string
   siteMetrics: PSIMetrics[]
+  image?: string
+  description?: string
+  title?: string
 }
 
 export interface PSIMetrics {

@@ -71,6 +71,18 @@ export class PsiSiteListService {
       savedSiteList.schedule = siteListData.schedule
     }
 
+    if (siteListData.title) {
+      savedSiteList.title = siteListData.title
+    }
+
+    if (siteListData.image) {
+      savedSiteList.image = siteListData.image
+    }
+
+    if (siteListData.description) {
+      savedSiteList.description = siteListData.description
+    }
+
     const siteMetrics = siteListData.siteMetrics
 
     if (siteMetrics && siteMetrics.length > 0) {

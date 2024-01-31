@@ -13,6 +13,7 @@ import {
   TableBody,
   TableCell,
   Text,
+  Bold,
   TextInput,
   MultiSelectBox,
   MultiSelectBoxItem,
@@ -25,21 +26,21 @@ import {
   ComputerDesktopIcon,
   ArrowSmallUpIcon,
   ArrowSmallDownIcon,
-  EyeIcon
+  EyeIcon,
+  CheckCircleIcon
 } from '@heroicons/react/24/outline'
 import TablePopup from '@/components/PopOver/TablePopup'
 import PsiSelect from '@/components/PsiSelect'
-import { deleteData, getData, getDataAll, patchData } from '@/utils/fetchData'
+import { deleteData, getData, getDataAll, postData, patchData } from '@/utils/fetchData'
 import { getPsiData, getPsiDataAgain } from '@/utils/getPsi'
 import { formatDate } from '@/utils/formatDate'
-import { fetchLinkPreview } from '@/utils/getLinkPreview'
-import Image from 'next/image'
 import { HoverCard } from '@/components/HoverCard/HoverCard'
-import PsiSiteHoverCard from '@/components/PsiSiteHoverCard'
+import DetailHoverCard from '@/components/HoverCard/DetailHoverCard'
 import ClockLoader from 'react-spinners/ClockLoader'
 import MoonLoader from 'react-spinners/MoonLoader'
 import { useSession } from 'next-auth/react'
 import BulkButton from '@/components/Button/BulkButton'
+import Dialog from './Dialog/Dialog'
 
 interface NewPSIDataType extends PSIDataType {
   score?: string
@@ -58,7 +59,7 @@ export default function PsiTable() {
   const [spinningItems, setSpinningItems] = useState<any[]>([])
   const [sortColumn, setSortColumn] = useState<string>('')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
-  const LIMIT_ROWS = 10
+  const [isBulk, setIsBulk] = useState<boolean>(false)
 
   const isSiteSelected = (siteList: NewPSIDataType) => {
     if (selectedNames.length === 0) return true
@@ -99,10 +100,6 @@ export default function PsiTable() {
     })
   }
 
-  const handlePageChange = (tablePage: number) => {
-    setCurrentTablePage(tablePage)
-  }
-
   const handleEdit = (index: number) => {
     setEditIndex(index)
     setIsEdited(false)
@@ -115,7 +112,24 @@ export default function PsiTable() {
       return {...siteMetric, name: editName[index]}
     })
 
+
+    const seoInfo = {
+      title: '123',
+      description: '123',
+      image: '123'
+    }
+    await patchData('psi_site_list', id, seoInfo)
+    //const ids = result?.findIndex(item => item.id === id)
+
+    // const action = {
+    //   action: 'site名を変更しました',
+    //   user_id: Number(session?.user?.id),
+    //   site_name: editName[index],
+    //   site_url: ids ? result?[ids].url : ''
+    // }
+
     await patchData('psi_site_list', id, {name: editName[index], siteMetrics: updatedSiteMetric})
+    //await postData('user_history', action)
 
     setEditIndex(null)
     setIsEdited(true)
@@ -175,6 +189,11 @@ export default function PsiTable() {
       return item
     })
 
+    setIsBulk(true)
+    setTimeout(() => {
+      setIsBulk(false)
+    }, 6000)
+
     // 各アイテムに対してPSIスコアを再取得
     if(selectedItems) {
       for (const selectedItem of selectedItems) {
@@ -189,8 +208,8 @@ export default function PsiTable() {
           }
         })
 
-        // スコア再取得ロジック（例: getPsiDataAgain 関数を使用）
-        await getPsiDataAgain(name, url, index || 0, id, device, Number(session?.user?.id), session?.user?.name || '');
+        await getPsiDataAgain(name, url, index || 0, id, device, Number(session?.user?.id), session?.user?.name || '')
+
         setTimeout(() => {
           setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index))
         }, 2000)
@@ -202,7 +221,16 @@ export default function PsiTable() {
   if (!result) return <h1 className='text-md text-center'>データがありません.</h1>
   return (
     <div>
-      <Flex>
+      {isBulk &&
+        <Dialog
+          className='w-10/12 md:w-1/2 mx-auto absolute top-12 -translate-x-1/2 left-1/2 opacity-0 animate-slide-in-sec'
+          title='成功'
+          color='green'
+          icon={CheckCircleIcon}
+          message='PSIスコアを一括取得中！'
+        />
+      }
+      <Flex className='items-end'>
         <MultiSelectBox
           onValueChange={setSelectedNames}
           placeholder="検索..."
@@ -225,7 +253,7 @@ export default function PsiTable() {
         />
       </Flex>
 
-      <Table className='mt-2 border-gray-750 border-[1px] rounded-lg overflow-x-scroll md:overflow-visible'>
+      <Table className='mt-2 border-gray-750 border-[1px] rounded-lg overflow-x-scroll lg:overflow-visible'>
         <TableHead>
           <TableRow className='border-b-[1px]  border-gray-750'>
             <TableHeaderCell
@@ -323,20 +351,23 @@ export default function PsiTable() {
                     onClick={()=>handleNameChange(index, item.id)}
                   />
                 </p> ) : (
-                  <PsiSiteHoverCard>
+                  <DetailHoverCard>
                     <Link
                       className='underline'
                       href={`/list/${item.id}`}>
                       {editName[index] || item.name}
                     </Link>
-                  </PsiSiteHoverCard>
+                  </DetailHoverCard>
                 )
               }
               </p>
               </TableCell>
               <TableCell>
                 <Text className='underline decoration-dotted dark:text-white'>
-                  <HoverCard url={item.url}>
+                  <HoverCard
+                    id={item.id}
+                    url={item.url}
+                  >
                     <div className='flex relative gap-x-1 items-center group'>
                       <EyeIcon className='absolute -left-5 w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-500 ease-in-out' />
                       <Link href={{pathname: item.url}} target='_blank'>
@@ -348,7 +379,7 @@ export default function PsiTable() {
               </TableCell>
               <TableCell>
                 {spinningItems.includes(index) ? (
-                  <ClockLoader size={16} className='dark:text-white' />
+                  <ClockLoader size={20} color='#36d7b7' />
                 ) : (
                   <div className='flex items-center gap-x-2'>
                     <Text className='dark:text-white'>{ item.siteMetrics[0]?.score ? item.siteMetrics[0].score : '未取得' }</Text>
@@ -373,7 +404,13 @@ export default function PsiTable() {
                 )}
               </TableCell>
               <TableCell>
-              <Text className='dark:text-white'>{item?.siteMetrics[0]?.updatedAt ? formatDate(item?.siteMetrics[0]?.updatedAt) : formatDate(item.createdAt)}</Text>
+                <Text className='dark:text-white'>{item?.siteMetrics[0]?.updatedAt ? formatDate(item?.siteMetrics[0]?.updatedAt) : formatDate(item.createdAt)}</Text>
+                { item?.siteMetrics[1]?.updatedAt && (
+                <Bold className='text-xs mt-2'>
+                  <span className='bg-gradient-to-r from-pink-400 via-indigo-500 to-violet-600
+                    bg-clip-text font-bold tracking-tight text-transparent dark:from-amber-200
+                    dark:to-sky-400'>前回: {formatDate(item?.siteMetrics[1]?.updatedAt)}</span>
+                </Bold>) }
               </TableCell>
               <TableCell>
               {editIndex === index ? (

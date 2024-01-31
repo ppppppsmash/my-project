@@ -11,6 +11,7 @@ import DelaySection from '@/components/FramerMotion/DelaySection'
 import Tab from '@/components/Tab/Tab'
 import DetailSite from '@/components/DetailSite'
 import DetailChart from '@/components/Charts/DetailChart'
+import { List, ListItem } from '@tremor/react'
 
 interface Props {
   params: { id: number }
@@ -64,16 +65,47 @@ export default function Slug({ params: { id } }: Props) {
           >
             <Col numColSpanSm={5}>
               <Card className='dark:bg-gray-950 mt-6'>
-                <Title className='dark:text-white'>{list.name}</Title>
-                <Subtitle className='flex items-center space-x-2 dark:text-white text-xs'>
-                  <Link
-                    target='_blank'
-                    href={{pathname: list.url}}
-                  >
-                    {list.url}
-                  </Link>
-                  <ArrowTopRightOnSquareIcon className='w-4 h-4' />
-                </Subtitle>
+                <div className='flex justify-start items-start gap-x-4'>
+                  {list.image && (
+                    <Text>
+                      <img
+                        className='rounded-lg border border-gray-300 shadow-lg'
+                        src={list.image}
+                        width='120'
+                        alt={list.name}
+                      />
+                    </Text>
+                  )}
+
+                  <div>
+                    <Title className='dark:text-white'>{list.name}</Title>
+                    <Subtitle className='flex items-center space-x-2 dark:text-white text-xs'>
+                      <Link
+                        target='_blank'
+                        href={{pathname: list.url}}
+                      >
+                        {list.url}
+                      </Link>
+                      <ArrowTopRightOnSquareIcon className='w-4 h-4' />
+                    </Subtitle>
+                  </div>
+                </div>
+
+                {list.image && (
+                  <div className='mt-4'>
+                    <Subtitle className='text-gray-900 dark:text-white mb-2'>
+                      <span className='bg-gradient-to-r from-pink-400 via-indigo-500 to-violet-600
+                        bg-clip-text font-bold tracking-tight text-transparent dark:from-amber-200
+                      dark:to-sky-400 pr-2'>Title:</span>
+                       {list.title}</Subtitle>
+                    <Text className='dark:text-white'>
+                      <span className='bg-gradient-to-r from-pink-400 via-indigo-500 to-violet-600
+                        bg-clip-text font-bold tracking-tight text-transparent dark:from-amber-200
+                      dark:to-sky-400 pr-2'>Description:</span>
+                       {list.description}</Text>
+                  </div>
+                )}
+
                 <div className='sm:flex items-center sm:space-x-5 sm:space-y-0 space-y-2 mt-4'>
                   <Text className='flex items-center space-x-2 dark:text-white'>
                     <ClockIcon className='w-4 h-4' />
