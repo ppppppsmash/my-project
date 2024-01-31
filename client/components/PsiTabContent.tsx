@@ -267,7 +267,7 @@ export default function PsiTabContent({ mode }: Props) {
       {isUploaded && (
         <>
           <Dialog
-            className='h-12 my-4'
+            className='w-1/2 mx-auto absolute -top-4 -translate-x-1/2 left-1/2 opacity-0 animate-slide-in-sec'
             title='成功'
             color='green'
             icon={CheckCircleIcon}
@@ -282,9 +282,9 @@ export default function PsiTabContent({ mode }: Props) {
           singleErrorInfo.map((info, index) => (
             <Dialog
               key={index}
-              className='h-12 my-4'
-              title='失敗'
-              color='rose'
+              className='w-1/2 mx-auto absolute -top-4 -translate-x-1/2 left-1/2 opacity-0 animate-slide-in-sec'
+              title='エラー'
+              color='red'
               icon={ExclamationTriangleIcon}
               message={info}
             />
@@ -295,9 +295,9 @@ export default function PsiTabContent({ mode }: Props) {
           multiErrorInfo.map((info, index) => (
             <Dialog
               key={index}
-              className='h-12 my-4'
-              title='失敗'
-              color='rose'
+              className='w-1/2 mx-auto absolute -top-4 -translate-x-1/2 left-1/2 opacity-0 animate-slide-in-sec'
+              title='エラー'
+              color='red'
               icon={ExclamationTriangleIcon}
               message={info}
             />
@@ -308,9 +308,9 @@ export default function PsiTabContent({ mode }: Props) {
           csvErrorInfo.map((info, index) => (
             <Dialog
               key={index}
-              className='h-12 my-4'
-              title='失敗'
-              color='rose'
+              className='w-1/2 mx-auto absolute top-10 -translate-x-1/2 left-1/2 opacity-0 animate-slide-in-sec'
+              title='エラー'
+              color='red'
               icon={ExclamationTriangleIcon}
               message={info}
             />
