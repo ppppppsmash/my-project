@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import PsiSelectBox from '@/components/PsiSelectBox'
+import CompareSelectBox from '@/components/Compare/CompareSelectBox'
 import { Card, Title, Flex } from '@tremor/react'
 import { PSIDataType, PSIMetrics } from '@/type'
 import { getDataAll } from '@/utils/fetchData'
@@ -164,7 +164,7 @@ export default function Compare() {
       <Flex className='sm:space-x-4 items-start sm:flex block space-x-0'>
         <Card className='mt-6 shadow-md overflow-x-scroll sm:overflow-visible sm:h-auto h-[400px] dark:bg-black'>
           <Flex className='mb-8 space-x-4'>
-            <PsiSelectBox
+            <CompareSelectBox
               siteList={siteList}
               onSiteSelect={(value, selectedDateLeft) =>
                 handleSiteSelect(value, setSelectedSiteLeft, selectedDateLeft, setSelectedDateLeft)
@@ -181,7 +181,7 @@ export default function Compare() {
         </Card>
         <Card className='mt-6 shadow-md overflow-x-scroll sm:overflow-visible sm:h-auto h-[400px] dark:bg-black'>
           <Flex className='mb-8 space-x-4'>
-            <PsiSelectBox
+            <CompareSelectBox
               siteList={siteList}
               onSiteSelect={(value, selectedDateRight) =>
                 handleSiteSelect(value, setSelectedSiteRight, selectedDateRight, setSelectedDateRight)

@@ -33,10 +33,6 @@ export default function RegistrationModal({ onShow, label, text, onOpen, onClose
   let [isOpen, setIsOpen] = useState(true)
   const [progress, setProgress] = useState<number>(0)
 
-  function closeModal() {
-    setIsOpen(false)
-  }
-
   const handleClick = () => {
     siteRegistrate(id, userId, userName, setProgress)
     onClose()

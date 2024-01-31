@@ -1,17 +1,15 @@
 'use client'
 
-import Link from 'next/link'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import dynamicImport from 'next/dynamic'
 import {
   Card,
-  Title,
-  Button
+  Title
 } from '@tremor/react'
 import { zenKaku } from '@/utils/font'
 const queryClient = new QueryClient()
 
-const DynamicComponent = dynamicImport(() => import('@/components/PsiList'))
+const DynamicComponent = dynamicImport(() => import('@/components/Tab/TableTab'))
 
 export default function PsiList() {
   return (

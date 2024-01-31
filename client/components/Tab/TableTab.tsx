@@ -2,10 +2,9 @@
 
 import TabForList from '@/components/Tab/Tab'
 import PsiTable from '@/components/PsiTable'
-import LineChartList from '@/components/Charts/LineChartList'
 import BarChartList from '@/components/Charts/BarChartList'
 
-export default function PsiList() {
+export default function TableTab() {
   return (
     <div className={`dark:bg-gray-950`}>
       <TabForList
