@@ -4,21 +4,19 @@ import { PSIDataType, UserHistory } from '@/type'
 import {
   Card,
   Title,
+  Bold,
   Text,
-  Flex,
   Table,
   TableRow,
   TableCell,
   TableHead,
   TableHeaderCell,
-  TableBody,
-  Badge,
-  Button,
-  Color,
+  TableBody
 } from '@tremor/react'
 import { getData, getDataAll } from '@/utils/fetchData'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatDate } from '@/utils/formatDate'
+import InfiniteScrollBox from '@/components/InfinityScroll'
 
 interface NewPSIDataType extends PSIDataType {
   score?: string
@@ -61,36 +59,36 @@ export default function PsiHistory() {
       <Card className='dark:bg-gray-950'>
         <Text className='mt-2 dark:text-white'>履歴一覧</Text>
         <Table className='mt-6 dark:text-white'>
-          <TableHead>
-            <TableRow>
-              <TableHeaderCell className='dark:text-white'>Date</TableHeaderCell>
-              <TableHeaderCell className='dark:text-white'>History</TableHeaderCell>
-            </TableRow>
-          </TableHead>
-
+          <div className='flex items-center pl-4 gap-x-[13rem] mb-2'>
+            <Bold className=''>Date</Bold>
+            <Bold>Action</Bold>
+          </div>
           <TableBody className='dark:text-white'>
-          {history?.map((item, index) => (
-            <TableRow
-              key={index}
-              className='opacity-0 translate-y-10 animate-slide-in'
-              style={{animationDelay: `${index * 0.1 + 1.3}s`}}
-            >
-              <TableCell>
-                <div key={index}>
-                  {formatDate(item.action_date)}
-                </div>
-              </TableCell>
-              <TableCell>
-                <span className='bg-gradient-to-r from-pink-400 via-indigo-500 to-violet-600
-                  bg-clip-text font-bold tracking-tight text-transparent dark:from-amber-200
-                  dark:to-sky-400'>
-                    {item.site_name}
-                </span>
-                「（{item.device}）{item.site_url}」:  {item.action}.
-              </TableCell>
-            </TableRow>
-          ))}
+            <InfiniteScrollBox>
+            {history?.map((item, index) => (
+              <TableRow
+                key={index}
+                className='opacity-0 translate-y-10 animate-slide-in'
+                style={{animationDelay: `${index * 0.1 + 1.3}s`}}
+              >
+                <TableCell className='pr-14'>
+                  <div key={index}>
+                    {formatDate(item.action_date)}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <span className='bg-gradient-to-r from-pink-400 via-indigo-500 to-violet-600
+                    bg-clip-text font-bold tracking-tight text-transparent dark:from-amber-200
+                    dark:to-sky-400'>
+                      {item.site_name}
+                  </span>
+                  「（{item.device}）{item.site_url}」:  {item.action}.
+                </TableCell>
+              </TableRow>
+            ))}
+            </InfiniteScrollBox>
           </TableBody>
+
         </Table>
       </Card>
     </div>
