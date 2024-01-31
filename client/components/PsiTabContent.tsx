@@ -2,9 +2,8 @@
 
 import Link from 'next/link'
 import { ChangeEvent, FormEvent, useState, useEffect } from 'react'
-import PsiCheckbox from '@/components/PsiCheckbox'
+import RegistrationCheckbox from '@/components/CheckBox/RegistrationCheckbox'
 import PsiSelect from '@/components/PsiSelect'
-import { getPsiData } from '@/utils/getPsi'
 import Input from '@/components/Input/Input'
 import Dialog from '@/components/Dialog/Dialog'
 import { ExclamationTriangleIcon, CheckCircleIcon, DocumentChartBarIcon, ArrowDownTrayIcon, ArrowUpTrayIcon } from '@heroicons/react/24/solid'
@@ -67,48 +66,35 @@ export default function PsiTabContent({ mode }: Props) {
   }
 
   // csv
-  const handleFileChangeUpload = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChangeUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      setSelectedFile(event.target.files[0])
+      event.preventDefault()
       setIsfileExist(true)
-    }
-  }
+      setIsUploaded(true)
+      setSelectedFile(event.target.files[0])
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setIsUploaded(true)
+      const formData = new FormData()
+      formData.append('csvFile', event.target.files[0])
 
-    if (!isFileExist) {
-      return
-    }
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}upload/${session?.user?.id}`, {
+          method: 'POST',
+          body: formData,
+        })
 
-    if (!selectedFile) {
-      return
-    }
+        console.log(response)
 
-    const formData = new FormData()
-    formData.append('csvFile', selectedFile)
-
-    console.log(selectedFile)
-
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}upload/${session?.user?.id}`, {
-        method: 'POST',
-        body: formData,
-      })
-
-      console.log(response)
-
-      if (response.ok) {
-        console.log('CSVファイルのアップロードが成功しました。')
-        const data = await response.json()
-        console.log(data)
-        setCsvData(data)
-      } else {
-        console.error('CSVアップロードエラー')
+        if (response.ok) {
+          console.log('CSVファイルのアップロードが成功しました。')
+          const data = await response.json()
+          console.log(data)
+          setCsvData(data)
+        } else {
+          console.error('CSVアップロードエラー')
+        }
+      } catch (error) {
+        console.error('CSVアップロードエラー:', error)
       }
-    } catch (error) {
-      console.error('CSVアップロードエラー:', error)
     }
   }
 
@@ -369,7 +355,7 @@ export default function PsiTabContent({ mode }: Props) {
               </Link>
             </Button>
           </div>
-          <form className='w-full' onSubmit={handleSubmit}>
+          <form className='w-full'>
             <Text className="text-xs font-semibold mt-4 -mb-4 inline-block text-neutral-700 dark:text-neutral-200">
               CSVファイルをアップロードしてください.
             </Text>
@@ -396,25 +382,6 @@ export default function PsiTabContent({ mode }: Props) {
                   id="formFile"
                 />
             </div>
-
-            { isFileExist &&
-            <>
-              <Button
-                className='w-[120px] -mt-8 mb-8 bg-gray-900 hover:bg-gray-700
-                py-2 px-4 rounded active:bg-gray-500 dark:bg-white dark:text-gray-950
-                duration-150 focus:shadow-outline ease-in-out text-right text-xs'
-                color='gray'
-                type='submit'
-              >
-                <span className='flex items-center gap-x-1'>
-                  <ArrowUpTrayIcon className='w-4 h-4' />
-                  <span className='text-xs'>
-                    アップロード
-                  </span>
-                </span>
-              </Button>
-            </>
-            }
           </form>
 
           <div className='mb-4 flex gap-6 items-end'>
@@ -463,8 +430,8 @@ export default function PsiTabContent({ mode }: Props) {
       </div>
 
         <div className='flex items-start justify-spacebetween space-x-8 mb-2'>
-          <PsiCheckbox device='desktop' checkEvent={handleDeviceChange} />
-          <PsiCheckbox device='mobile' checkEvent={handleDeviceChange} />
+          <RegistrationCheckbox device='desktop' checkEvent={handleDeviceChange} />
+          <RegistrationCheckbox device='mobile' checkEvent={handleDeviceChange} />
         </div>
 
         <div className='w-2/12'>

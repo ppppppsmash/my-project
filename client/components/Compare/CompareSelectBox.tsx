@@ -11,7 +11,7 @@ interface Props {
   onSiteSelect(value: string, selectedDate: string): void
 }
 
-export default function PsiSelectBox({ siteList, onSiteSelect }: Props) {
+export default function CompareSelectBox({ siteList, onSiteSelect }: Props) {
   const [selectedDate, setSelectedDate] = useState<string>('')
   const [selectedSiteMetrics, setSelectedSiteMetrics] = useState<PSIMetrics[]>([])
   const [selectedSiteId, setSelectedSiteId] = useState<string>('')

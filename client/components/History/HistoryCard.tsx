@@ -22,7 +22,7 @@ interface NewPSIDataType extends PSIDataType {
   score?: string
 }
 
-export default function PsiHistory() {
+export default function HistoryCard() {
   const { data: session, status } = useSession()
   const [userHistory, setUserHistory] = useState([])
 

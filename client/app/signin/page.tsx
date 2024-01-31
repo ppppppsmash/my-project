@@ -60,7 +60,7 @@ export default function LoginPage() {
     >
       {errorMessage &&
         <Dialog
-          className='w-1/2 mx-auto absolute top-10 -translate-x-1/2 left-1/2 opacity-0 animate-slide-in-sec'
+          className='w-10/12 md:w-1/2 mx-auto absolute top-16 -translate-x-1/2 left-1/2 opacity-0 animate-slide-in-sec'
           title='ログインに失敗しました'
           color='red'
           icon={ExclamationTriangleIcon}

@@ -1,12 +1,11 @@
-import { ChangeEvent } from 'react'
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 interface Props {
   device: string
   checkEvent?: (value: string) => void
 }
 
-export default function PsiCheckbox({ device, checkEvent }: Props) {
+export default function RegistrationCheckbox({ device, checkEvent }: Props) {
   const [isChecked, setIsChecked] = useState(false)
 
   const handleCheck = (event: ChangeEvent<HTMLInputElement>) => {
