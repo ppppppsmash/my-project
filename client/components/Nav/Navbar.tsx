@@ -10,8 +10,9 @@ import { Bars3Icon, XMarkIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react
 import { TbDeviceAnalytics } from 'react-icons/tb'
 import ToggleButton from '@/components/Nav/ToggleButton'
 import { inter } from '@/utils/font'
-import { signIn, signOut } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
+import Notice from '@/components/Alert/Notice'
 
 const navigation = [
   { name: '履歴一覧', href: '/' },
@@ -161,6 +162,8 @@ export default function Navbar() {
                   )}
                 </Disclosure.Button>
               </div>
+
+              <Notice />
 
               <ToggleButton />
             </div>
