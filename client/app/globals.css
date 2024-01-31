@@ -2,19 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-} */
-
-@media (prefers-color-scheme: dark) {
-  /* :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  } */
-}
 
 .space-y-6 > :not([hidden]) ~ :not([hidden]) {
   margin-top: 0
@@ -120,4 +107,29 @@
     100% {
         background-position: 0% 50%;
     }
+}
+
+#halo {
+  background: theme('colors.pink.500');
+  color: theme('colors.violet.400');
+}
+
+#halo-btn {
+  background: conic-gradient(from 45deg, white, black, white);
+}
+
+@property --shimmer-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: 0deg;
+  }
+
+  100% {
+    transform: 360deg;
+  }
 }

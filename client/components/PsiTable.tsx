@@ -13,6 +13,7 @@ import {
   TableBody,
   TableCell,
   Text,
+  Bold,
   TextInput,
   MultiSelectBox,
   MultiSelectBoxItem,
@@ -373,7 +374,13 @@ export default function PsiTable() {
                 )}
               </TableCell>
               <TableCell>
-              <Text className='dark:text-white'>{item?.siteMetrics[0]?.updatedAt ? formatDate(item?.siteMetrics[0]?.updatedAt) : formatDate(item.createdAt)}</Text>
+                <Text className='dark:text-white'>{item?.siteMetrics[0]?.updatedAt ? formatDate(item?.siteMetrics[0]?.updatedAt) : formatDate(item.createdAt)}</Text>
+                { item?.siteMetrics[1]?.updatedAt && (
+                <Bold className='text-xs mt-2'>
+                  <span className='bg-gradient-to-r from-pink-400 via-indigo-500 to-violet-600
+                    bg-clip-text font-bold tracking-tight text-transparent dark:from-amber-200
+                    dark:to-sky-400'>前回: {formatDate(item?.siteMetrics[1]?.updatedAt)}</span>
+                </Bold>) }
               </TableCell>
               <TableCell>
               {editIndex === index ? (
