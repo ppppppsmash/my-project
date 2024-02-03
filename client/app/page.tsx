@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react"
 import { getCsrfToken } from "next-auth/react"
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import dynamicImport from 'next/dynamic'
+import { formatDate, jpFormatDate } from '@/utils/formatDate'
 
 const queryClient = new QueryClient()
 
@@ -37,6 +38,7 @@ export default async function Home() {
                 <div>
                   <Text className='dark:text-white'>お疲れ様です！🤟 <br className='block sm:hidden' />{session?.user?.name} さん</Text>
                   <Text className='mt-4 dark:text-white'>Email: <br className='block sm:hidden' />{session?.user?.email}</Text>
+                  <Text className='mt-4 dark:text-white'>ログイン時間: <br className='block sm:hidden' />{jpFormatDate(session?.user?.loginedAt)}</Text>
                 </div>
               </div>
 

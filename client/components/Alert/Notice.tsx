@@ -44,9 +44,15 @@ export default function Notice() {
                   />
                 </motion.button>
 
-                <p className='text-sm mb-2 bg-gray-300 p-2 rounded-lg font-semibold hover:bg-gray-100 transition'>9/14: 通知アラートが実装できた！</p>
-                <p className='text-sm bg-gray-300 p-2 rounded-lg font-semibold hover:bg-gray-100 transition'>9/15: 「ページ一覧」テーブルのURLをマウスオーバーしたら、title、image、descriptionなどを
-                  マウスオーバー対象の詳細ページで反映させるように修正した。</p>
+                <p className='text-sm mb-2 bg-gray-300 p-2 rounded-lg font-semibold hover:bg-gray-100 transition'>
+                  9/14: 通知アラートが実装できた！
+                </p>
+                <p className='text-sm mb-2 bg-gray-300 p-2 rounded-lg font-semibold hover:bg-gray-100 transition'>
+                  9/15: 「ページ一覧」テーブルのURLをマウスオーバーしたら、title、image、descriptionなどを
+                  マウスオーバー対象の詳細ページで反映させるように実装した。</p>
+                <p className='text-sm mb-2 bg-gray-300 p-2 rounded-lg font-semibold hover:bg-gray-100 transition'>
+                  9/15: ユーザーログイン時間取得
+                </p>
               </motion.li>
             )}
           </AnimatePresence>
