@@ -1,9 +1,10 @@
-CREATE TABLE user (
+CREATE TABLE pagespeedinsights.user (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
-  image VARCHAR(255) NOT NULL
+  image VARCHAR(255) NOT NULL,
+  loginedAt VARCHAR(255)
 );
 
 CREATE TABLE pagespeedinsights.site_list (

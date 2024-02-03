@@ -24,10 +24,18 @@ const handler = NextAuth({
             const passwordMatch = await bcrypt.compare(credentials.password, user[0].password)
 
             if (passwordMatch) {
-              const loginedAt = new Date().toISOString()
-              await db.query('UPDATE user SET loginedAt = ? WHERE email = ?', [loginedAt, credentials?.email])
+              let loginedAt = user[0].loginedAt
+              let lastLoginedAt = user[0].lastLoginedAt
 
-              return Promise.resolve({ ...user[0] , loginedAt })
+              if (loginedAt) {
+                lastLoginedAt = loginedAt
+              }
+
+              loginedAt = new Date().toISOString()
+
+              await db.query('UPDATE user SET loginedAt = ?, lastLoginedAt = ? WHERE email = ?', [loginedAt, lastLoginedAt, credentials?.email])
+
+              return Promise.resolve({ ...user[0] , loginedAt, lastLoginedAt })
             }
           }
           return Promise.resolve(null)
@@ -54,6 +62,7 @@ const handler = NextAuth({
         if(user) {
           session.user.image = user[0].image
           session.user.loginedAt = user[0].loginedAt
+          session.user.lastLoginedAt = user[0].lastLoginedAt
         }
       }
       return session
