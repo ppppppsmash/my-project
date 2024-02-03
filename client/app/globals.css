@@ -110,12 +110,8 @@
 }
 
 #halo {
-  background: theme('colors.pink.500');
+  background: theme('colors.pink.950');
   color: theme('colors.violet.400');
-}
-
-#halo-btn {
-  background: conic-gradient(from 45deg, white, black, white);
 }
 
 @property --shimmer-angle {
@@ -124,12 +120,13 @@
   inherits: false;
 }
 
+
 @keyframes shimmer {
   0% {
-    transform: 0deg;
+    --shimmer-angle: 0deg;
   }
 
   100% {
-    transform: 360deg;
+    --shimmer-angle: 360deg;
   }
 }
