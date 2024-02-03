@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { dbConnect } from '@/lib/dbConnect'
 import bcrypt from 'bcrypt'
@@ -13,7 +13,7 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         try {
-          const db = await dbConnect();
+          const db = await dbConnect()
           const [user] = await db.query('SELECT * FROM user WHERE email = ?', [credentials?.email])
 
           if (!credentials?.email || !credentials?.password) {
@@ -22,8 +22,20 @@ const handler = NextAuth({
 
           if (user && credentials?.password) {
             const passwordMatch = await bcrypt.compare(credentials.password, user[0].password)
+
             if (passwordMatch) {
-              return Promise.resolve(user[0])
+              let loginedAt = user[0].loginedAt
+              let lastLoginedAt = user[0].lastLoginedAt
+
+              if (loginedAt) {
+                lastLoginedAt = loginedAt
+              }
+
+              loginedAt = new Date().toISOString()
+
+              await db.query('UPDATE user SET loginedAt = ?, lastLoginedAt = ? WHERE email = ?', [loginedAt, lastLoginedAt, credentials?.email])
+
+              return Promise.resolve({ ...user[0] , loginedAt, lastLoginedAt })
             }
           }
           return Promise.resolve(null)
@@ -49,15 +61,17 @@ const handler = NextAuth({
         const [user] = await db.query('SELECT * FROM user WHERE email = ?', [session.user.email])
         if(user) {
           session.user.image = user[0].image
+          session.user.loginedAt = user[0].loginedAt
+          session.user.lastLoginedAt = user[0].lastLoginedAt
         }
       }
-      return session;
+      return session
     }
   },
   pages: {
     signIn: '/signin',
     signOut: '/signin'
   }
-});
+})
 
 export { handler as GET, handler as POST }

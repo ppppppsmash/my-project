@@ -1,6 +1,7 @@
 import * as HoverCardPrimitive from '@radix-ui/react-hover-card'
 import { clsx } from 'clsx'
 import React, { useState } from 'react'
+import { Flex } from '@tremor/react'
 import { patchData } from '@/utils/fetchData'
 import { fetchLinkPreview } from '@/utils/getLinkPreview'
 import { motion } from 'framer-motion'
@@ -96,10 +97,13 @@ const HoverCard = ({children, url, id}: {children: React.ReactNode, url: string,
                   />
                 </div>
                 ) : (
-                  <div className='flex items-center justify-center'>
+                  <Flex className='flex-dirction justify-center gap-x-3'>
                     <CircleLoader size={20} />
-                    <span>Loading...</span>
-                  </div>
+                    <span className='bg-gradient-to-r from-fuchsia-500 to-emerald-400
+                      bg-clip-text font-bold tracking-tight text-transparent'>
+                      Loading...
+                    </span>
+                  </Flex>
                 )
               }
             </div>

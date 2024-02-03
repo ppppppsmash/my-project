@@ -25,3 +25,10 @@ export const datePickerFormatDate = (date: string) => {
     day: 'numeric'
   })
 }
+
+export const jpFormatDate =(date: string) => {
+  const utcDate = new Date(date)
+
+  const options = { timeZone: 'Asia/Tokyo' }
+  return utcDate.toLocaleString('ja-JP', options)
+}
