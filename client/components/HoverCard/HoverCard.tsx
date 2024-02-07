@@ -1,8 +1,9 @@
 import * as HoverCardPrimitive from '@radix-ui/react-hover-card'
 import { clsx } from 'clsx'
 import React, { useState } from 'react'
-import { Flex } from '@tremor/react'
-import { patchData } from '@/utils/fetchData'
+import { Flex, Bold } from '@tremor/react'
+import { useSession } from 'next-auth/react'
+import { postData, patchData } from '@/utils/fetchData'
 import { fetchLinkPreview } from '@/utils/getLinkPreview'
 import { motion } from 'framer-motion'
 import CircleLoader from 'react-spinners/CircleLoader'
@@ -11,7 +12,8 @@ const { Root, Trigger, Portal } = HoverCardPrimitive
 
 interface HoverCardProps {}
 
-const HoverCard = ({children, url, id}: {children: React.ReactNode, url: string, id: number}) => {
+const HoverCard = ({children, url, id, name, device}: {children: React.ReactNode, url: string, id: number, name: string, device: string}) => {
+  const { data: session, status } = useSession()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [imageUrl, setImageUrl] = useState('')
@@ -32,7 +34,17 @@ const HoverCard = ({children, url, id}: {children: React.ReactNode, url: string,
       description: fetchMeta.description,
       image: fetchMeta.image
     }
+
+    const historyAction = {
+      action: `SEO情報を取得した.`,
+      user_id: Number(session?.user?.id),
+      site_name: name,
+      site_url: url,
+      device
+    }
+
     await patchData('psi_site_list', id, seoInfo)
+    await postData('user_history', historyAction)
 
     setIsSeoFetched(true)
   }
@@ -99,10 +111,12 @@ const HoverCard = ({children, url, id}: {children: React.ReactNode, url: string,
                 ) : (
                   <Flex className='flex-dirction justify-center gap-x-3'>
                     <CircleLoader size={20} />
-                    <span className='bg-gradient-to-r from-fuchsia-500 to-emerald-400
-                      bg-clip-text font-bold tracking-tight text-transparent'>
-                      Loading...
-                    </span>
+                    <Bold className='animate-pulse'>
+                      <span className='bg-gradient-to-r from-fuchsia-500 to-emerald-400
+                        bg-clip-text font-bold tracking-tight text-transparent'>
+                        Loading...
+                      </span>
+                    </Bold>
                   </Flex>
                 )
               }
@@ -111,7 +125,7 @@ const HoverCard = ({children, url, id}: {children: React.ReactNode, url: string,
         </HoverCardPrimitive.Content>
       </HoverCardPrimitive.Portal>
     </HoverCardPrimitive.Root>
-  );
-};
+  )
+}
 
 export { HoverCard }

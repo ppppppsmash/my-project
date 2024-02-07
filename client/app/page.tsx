@@ -38,7 +38,20 @@ export default async function Home() {
                 )}
 
                 <div>
-                  <Text className='dark:text-white'>{session?.user?.name} さん<br />お疲れ様です！🤟 </Text>
+                  <Text className='dark:text-white text-md'>
+                    <span className='group'>
+                      <span className='font-mono font-bold text-lg'>&lt;</span>
+                      <span
+                        id='member'
+                        className='group font-extrabold bg-clip-text text-transparent tracking-tight bg-gradient-to-r from-pink-400 via-green-500 to-violet-600'
+                      >
+                        {session?.user?.name}
+                      </span>
+                      <span className='font-mono font-bold text-lg'>{' '}/&gt;</span>{' '}
+                      <span className='invisible inline-flex text-gray-950 before:content-["|"] before:w-4 group-hover:visible group-hover:animate-typing dark:text-white' />
+                    </span>
+                    <br />お疲れ様です！🤟 </Text>
+
                   <Text className='mt-2 dark:text-white'>Email: <br className='block sm:hidden' />{session?.user?.email}</Text>
 
                   { session?.user?.lastLoginedAt && (

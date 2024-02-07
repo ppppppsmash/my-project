@@ -76,7 +76,17 @@ export default function PsiTable() {
       }
     })
 
+    const historyAction = {
+      action: 'スコアを取得した.',
+      user_id: Number(session?.user?.id),
+      site_name: name,
+      site_url: url,
+      device
+    }
+
     await getPsiDataAgain(name, url, index, id, device, Number(session?.user?.id), session?.user?.name || '')
+    await postData('user_history', historyAction)
+
     setTimeout(() => {
       setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index))
     }, 2000)
@@ -158,8 +168,16 @@ export default function PsiTable() {
     refetchInterval: 10000
   })
 
-  const deleteItem = async (index: number, id: number) => {
+  const deleteItem = async (index: number, id: number, name: string, url: string, device: string) => {
+    const historyAction = {
+      action: '削除した.',
+      user_id: Number(session?.user?.id),
+      site_name: name,
+      site_url: url,
+      device
+    }
     await deleteData('psi_site_list', id)
+    await postData('user_history', historyAction)
 
     const newResult = result?.filter(item => item.id !== id)
     queryClient.setQueryData(['result'], newResult)
@@ -208,7 +226,13 @@ export default function PsiTable() {
           }
         })
 
+        const historyAction = {
+          action: `スコアを一括取得した.`,
+          user_id: Number(session?.user?.id)
+        }
+
         await getPsiDataAgain(name, url, index || 0, id, device, Number(session?.user?.id), session?.user?.name || '')
+        await postData('user_history', historyAction)
 
         setTimeout(() => {
           setSpinningItems((prevSpinningItems) => prevSpinningItems.filter((item) => item !== index))
@@ -367,6 +391,8 @@ export default function PsiTable() {
                   <HoverCard
                     id={item.id}
                     url={item.url}
+                    name={item.name}
+                    device={item.device}
                   >
                     <div className='flex relative gap-x-1 items-center group'>
                       <EyeIcon className='absolute -left-5 w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-500 ease-in-out' />
@@ -447,7 +473,7 @@ export default function PsiTable() {
                   className={index === sortedData.length - 1 || index === sortedData.length -2 ? 'bottom-8 -left-6' : 'top-4 -left-6'}
                   behaviorEdit={() => handleEdit(index)}
                   behaviorScoreAgain={() => handleClick(item.name, item.url, index, item.id, item.device)}
-                  behaviorDelete={() => deleteItem(index, item.id)}
+                  behaviorDelete={() => deleteItem(index, item.id, item.name, item.url, item.device)}
                 />
               </TableCell>
             </TableRow>

@@ -16,7 +16,7 @@ export const siteRegistrate = async(selectedDevice: string[], name: string, url:
         }
 
         const historyAction = {
-            action: '登録しました',
+            action: '登録した.',
             user_id: siteInfo.user_id,
             site_name: siteInfo.name,
             site_url: siteInfo.url,
