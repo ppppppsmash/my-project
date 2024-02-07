@@ -50,9 +50,13 @@ export default function HistoryCard() {
     refetchInterval: 10000
   })
 
-  console.log('abc', history)
-
-  if (!history?.length) return <Text className='mt-14 text-md text-center font-extrabold text-gray-500 dark:text-gray-100'>🤪 データがありません.</Text>
+  if (!history?.length) {
+    return (
+      <Text className='mt-14 text-md text-center font-extrabold text-gray-500 dark:text-gray-100'>
+        🤪 データがありません.
+      </Text>
+    )
+    }
 
   return (
     <div className='mt-14'>

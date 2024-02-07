@@ -75,10 +75,12 @@ module.exports = {
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        'accordion-down': "accordion-down 0.2s ease-out",
+        'accordion-up': "accordion-up 0.2s ease-out",
         'slide-in': 'slideIn 0.35s ease-in-out 0.5s forwards',
-        'slide-in-sec': 'slideInSec 0.35s ease-in-out 0.5s forwards'
+        'slide-in-sec': 'slideInSec 0.35s ease-in-out 0.5s forwards',
+        'typing': 'typing-pulse 1.35s steps(1, end) infinite',
+        'gradient-dynamic': 'gradient 10s ease infinite',
       },
       keyframes: {
         slideIn: {
