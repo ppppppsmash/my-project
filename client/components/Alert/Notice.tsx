@@ -10,7 +10,7 @@ export default function Notice() {
 
   return (
     <div className=''>
-      <div className='absolute top-14 -right-4 inset-y-0 pr-4 pt-4'>
+      <div className='absolute top-14 -right-5 inset-y-0 pr-4 pt-4'>
         <ul className='grid grid-cols-1 gap-4'>
           <AnimatePresence initial={false}>
             {noticeFlagId && (
@@ -21,7 +21,7 @@ export default function Notice() {
                 // className='relative z-50 w-64 p-5 text-base bg-white/40 backdrop-brightness-90 backdrop-blur-lg
                 //   border font-medium text-transparent bg-clip-text bg-gradient-to-br from-zinc-50 to-zinc-200/20
                 //   border-white/40 shadow-md rounded-xl'
-                className='relative z-50 w-64 p-5 shadow-xl rounded-xl bg-white'
+                className='relative z-50 w-64 p-4 shadow-lg rounded-xl bg-white dark:bg-gray-900 border-[1px] border-gray-300'
                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{
@@ -33,10 +33,10 @@ export default function Notice() {
               >
                 <motion.button
                   whileTap={{ scale: 0.96 }}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.2 }}
                   type='button'
                   aria-label='close'
-                  className='absolute -left-4 -top-2 text-xs bg-white shadow-sm rounded-full px-1.5 py-0.5 border border-white/10 z-50'
+                  className='absolute -left-4 -top-2 text-xs bg-white dark:bg-gray-900 shadow-full rounded-full px-1.5 py-0.5 border border-gray-300 z-50'
                   onClick={() => setNoticeFlagId('')}
                 >
                   <XCircleIcon
@@ -44,14 +44,21 @@ export default function Notice() {
                   />
                 </motion.button>
 
-                <p className='text-sm mb-2 bg-gray-300 p-2 rounded-lg font-semibold hover:bg-gray-100 transition'>
-                  9/14: 通知アラートが実装できた！
+                <p className='text-sm mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
+                  9/14: 「ヘッダー」通知アラートが実装できた！
                 </p>
-                <p className='text-sm mb-2 bg-gray-300 p-2 rounded-lg font-semibold hover:bg-gray-100 transition'>
-                  9/15: 「ページ一覧」テーブルのURLをマウスオーバーしたら、title、image、descriptionなどを
+                <p className='text-sm mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
+                  9/15: 「ページ一覧」: テーブルのURLをマウスオーバーしたら、title、image、descriptionなどを
                   マウスオーバー対象の詳細ページで反映させるように実装した。</p>
-                <p className='text-sm mb-2 bg-gray-300 p-2 rounded-lg font-semibold hover:bg-gray-100 transition'>
-                  9/15: ユーザーログイン時間取得
+                <p className='text-sm mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
+                  9/15: 「履歴一覧」: ユーザーログイン時間取得
+                </p>
+                <p className='text-sm mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
+                  9/16: 「履歴一覧」: 前回ログイン時間取得
+                </p>
+
+                <p className='text-sm mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
+                  9/16: 「ページ一覧」: angle animationを利用して、動的グラーデーションボタンを実装
                 </p>
               </motion.li>
             )}
@@ -59,7 +66,7 @@ export default function Notice() {
         </ul>
       </div>
 
-      <div className='absolute top-5 sm:right-[120px] right-10 z-50 flex items-center justify-center'>
+      <div className='absolute top-5 sm:right-[120px] right-24 z-50 flex items-center justify-center'>
         <motion.button
           whileTap={{ scale: 0.96 }}
           whileHover={{ scale: 1.05 }}

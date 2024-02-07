@@ -21,14 +21,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body className='h-full dark:bg-gray-950 dark:text-white'>
+      <body className='h-full dark:bg-gray-950 dark:text-white bg-[url("/grid-black.svg")] dark:bg-[url("/grid.svg")]'>
         <Providers>
           <AuthGuard>
             <div className='mb-16'>
               <Nav />
             </div>
-            <main className='p-4 md:py-10 md:px-16 mx-auto max-w-full relative
-              bg-[url("/grid-black.svg")] dark:bg-[url("/grid.svg")]'>
+            <main className='p-4 md:py-10 md:px-16 mx-auto max-w-full relative'>
               <DelaySection delay={0.2}>
                 <Suspense fallback={<h1 className='flex items-center justify-center my-4'><MoonLoader size={22} /></h1>}>
                   {children}
