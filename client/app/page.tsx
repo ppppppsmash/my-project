@@ -39,7 +39,7 @@ export default async function Home() {
 
                 <div>
                   <Text className='dark:text-white text-md'>
-                    <span className='group cursor-pointer'>
+                    <span className='group'>
                       <span className='font-mono font-bold text-lg'>&lt;</span>
                       <span
                         id='member'

@@ -167,13 +167,13 @@ export const getPsiDataAgain = async (name: string, url: string, index: number, 
         ]
       }
 
-      const historyAction = {
-        action: 'PSIスコアを取得しました',
-        user_id: userId,
-        site_name: psiSiteMetircs.name,
-        site_url: urlValidate(psiSiteMetircs.url),
-        device
-      }
+      // const historyAction = {
+      //   action: 'スコアを取得した',
+      //   user_id: userId,
+      //   site_name: psiSiteMetircs.name,
+      //   site_url: urlValidate(psiSiteMetircs.url),
+      //   device
+      // }
 
       if (score < 70) {
         const message = `${name}（${urlValidate(url)}, device: ${device}) から再取得したスコア: ${score}`
@@ -182,7 +182,7 @@ export const getPsiDataAgain = async (name: string, url: string, index: number, 
         //alert(messageWithUser)
         //await sendSlackAlert(messageWithUser)
       }
-      await postData('user_history', historyAction)
+      //await postData('user_history', historyAction)
       await patchData('psi_site_list', id, psiSiteList)
     }
 }

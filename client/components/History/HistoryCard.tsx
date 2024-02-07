@@ -13,6 +13,7 @@ import {
   TableHeaderCell,
   TableBody
 } from '@tremor/react'
+import { DevicePhoneMobileIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline'
 import { getData, getDataAll } from '@/utils/fetchData'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatDate } from '@/utils/formatDate'
@@ -63,12 +64,13 @@ export default function HistoryCard() {
       <Card className='dark:bg-gray-950'>
         <Text className='mt-2 dark:text-white'>履歴一覧</Text>
         <Table className='mt-6 dark:text-white'>
-          <div className='flex items-center pl-4 gap-x-[13rem] mb-2'>
-            <Bold className=''>Date</Bold>
-            <Bold>Action</Bold>
-          </div>
+          <TableHead>
+            <TableRow>
+              <TableHeaderCell className='dark:text-white'>Date</TableHeaderCell>
+              <TableHeaderCell className='dark:text-white'>History</TableHeaderCell>
+            </TableRow>
+          </TableHead>
           <TableBody className='dark:text-white'>
-            <InfiniteScrollBox>
             {history?.map((item, index) => (
               <TableRow
                 key={index}
@@ -81,16 +83,19 @@ export default function HistoryCard() {
                   </div>
                 </TableCell>
                 <TableCell>
-                  <span className='bg-gradient-to-r from-pink-400 via-indigo-500 to-violet-600
-                    bg-clip-text font-bold tracking-tight text-transparent dark:from-amber-200
-                    dark:to-sky-400'>
-                      {item.site_name}
-                  </span>
-                  「（{item.device}）{item.site_url}」:  {item.action}.
+                  <div className='flex gap-x-2'>
+                    { item?.device === 'mobile' &&  <DevicePhoneMobileIcon className='w-5 h-5' /> }
+                    { item?.device === 'desktop' &&  <ComputerDesktopIcon className='w-5 h-5' /> }
+
+                    <span className='bg-gradient-to-r from-stone-400 via-zinc-500 to-neutral-400
+                      bg-clip-text font-bold tracking-tight text-transparent dark:from-amber-200
+                      dark:to-sky-400'>
+                        { item?.site_name }{' '}{ item?.site_url }{' '}{ item.action }
+                    </span>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
-            </InfiniteScrollBox>
           </TableBody>
 
         </Table>
