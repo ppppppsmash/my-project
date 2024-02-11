@@ -1,13 +1,12 @@
-// DetailChart.tsx
-import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { Title, Card, LineChart, Color as TremorColor } from '@tremor/react'
 import { getData } from '@/utils/fetchData'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
 import { PSIDataType, PSIMetrics } from '@/type'
-import { DatePicker } from '../PopOver/DatePicker'
-import { format, parse } from 'date-fns'
-import { formatDate, datePickerFormatDate } from '@/utils/formatDate'
+import { DatePicker } from '@/components/PopOver/DatePicker'
+import { subMonths } from 'date-fns'
+import { datePickerFormatDate } from '@/utils/formatDate'
+import { DatePickerWithRange } from '@/components/PopOver/DatePickerWithRange'
 
 interface Props {
   id: number
@@ -15,20 +14,21 @@ interface Props {
 
 export default function DetailChart({ id }: Props) {
   const [siteMetrics, setSiteMetrics] = useState<PSIMetrics[]>([])
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
   const [selectedMetrics, setSelectedMetrics] = useState<PSIMetrics[]>([])
 
-  const metricsNewest = siteMetrics.length > 0 ? siteMetrics[siteMetrics.length - 1] : null
+  const [from, setFrom] = useState<any>(undefined)
+  const [to, setTo] = useState<any>(undefined)
+  const [defaultMonth, setDefaultMonth] = useState<any>('')
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getData('psi_site_list', id);
+      const data = await getData('psi_site_list', id)
       const formattedMetrics = metricsFormatter(data.siteMetrics)
 
       const metricsWithDateAsDate = formattedMetrics.map(metrics => ({
         ...metrics,
         createdAt: metrics.createdAt
-      }));
+      }))
 
       setSiteMetrics(metricsWithDateAsDate)
     }
@@ -36,23 +36,27 @@ export default function DetailChart({ id }: Props) {
   }, [id])
 
   useEffect(() => {
-    if (selectedDate) {
-      const matchingMetrics = siteMetrics.filter((metrics) => {
-        const array1 = metrics.createdAt.split(' ')
-        console.log(selectedDate.toString(), datePickerFormatDate(selectedDate.toString()))
-        return array1[0] === datePickerFormatDate(selectedDate.toString())
-      })
-      setSelectedMetrics(matchingMetrics)
-    } else {
-      setSelectedMetrics(siteMetrics)
-    }
-  }, [selectedDate, siteMetrics])
+    const matchingMetrics = siteMetrics.filter((metrics) => {
+      const period = metrics.createdAt.split(' ')
+      const createdAt = new Date(datePickerFormatDate(period[0]))
+      setDefaultMonth(subMonths(createdAt, 1))
+
+      if (from && to) {
+        return createdAt >= from && createdAt <= to
+      }
+
+      return true
+    })
+
+    setSelectedMetrics(matchingMetrics)
+  }, [siteMetrics, from, to])
+
 
   const colors: TremorColor[] = ['rose', 'emerald', 'orange', 'lime', 'violet', 'pink']
   const chartUserCategories: string[] = ['score', 'user_fcp', 'user_lcp', 'user_fid', 'user_cls', 'user_inp', 'user_ttfb']
   const chartLabCategories: string[] = ['score', 'fcp', 'lcp', 'tti', 'cls', 'tbt', 'si']
 
-  console.log(selectedDate)
+  console.log(from, to)
 
   return (
     <>
@@ -60,10 +64,13 @@ export default function DetailChart({ id }: Props) {
         <div className='w-full p-2'>
           <Title className='dark:text-white mb-5'>ユーザーパフォーマンス</Title>
 
-          {/* 注意: selectedDate はそのまま渡す */}
-          <DatePicker
-            selectedDate={selectedDate}
-            onSelectDate={setSelectedDate}
+
+          <DatePickerWithRange
+            selectedDateFrom={from}
+            selectedDateTo={to}
+            onSelectDateFrom={setFrom}
+            onSelectDateTo={setTo}
+            defaultMonth={defaultMonth}
           />
 
           <LineChart
@@ -92,5 +99,5 @@ export default function DetailChart({ id }: Props) {
         </div>
       </Card>
     </>
-  );
+  )
 }
