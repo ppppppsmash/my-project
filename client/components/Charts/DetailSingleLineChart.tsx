@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { PSIMetrics } from '@/type'
 import { Flex, Card, Text, LineChart, Color as TremorColor } from '@tremor/react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowsPointingInIcon, XCircleIcon } from '@heroicons/react/24/outline'
+import { ArrowsPointingInIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/outline'
 import { formatDate } from '@/utils/formatDate'
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
   categories: string[]
 }
 
-export default function PsiMotionModalsChart({ categories, siteMetrics }: Props) {
+export default function DetailSingleLineChart({ categories, siteMetrics }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const colors: TremorColor[] = ['rose', 'emerald', 'orange', 'lime', 'violet', 'pink']
 
@@ -35,9 +35,12 @@ export default function PsiMotionModalsChart({ categories, siteMetrics }: Props)
   }
 
   return (
-    <Flex className='w-full flex-wrap justify-start box-border p-2 -mx-2'>
+    <Flex className='w-full flex flex-wrap justify-start box-border gap-x-[2%] gap-y-4'>
       {categories.map((category, index) => (
-        <div className='sm:w-1/3 w-full p-2' key={index}>
+        <div
+          className='w-full sm:w-[32%] box-border'
+          key={index}
+        >
           <motion.div
             whileHover={{
               y: -10,
@@ -46,6 +49,13 @@ export default function PsiMotionModalsChart({ categories, siteMetrics }: Props)
             layoutId={index.toString()}
             onClick={() => setSelectedId(index.toString())}
           >
+            <motion.button
+              className='absolute top-5 right-4 z-50'
+              whileTap={{ scale: 1.5 }}
+              onClick={() => setSelectedId(null)}
+            >
+              <ArrowsPointingOutIcon className='w-5 h-5 text-gray-600 hover:scale-[1.1]' />
+            </motion.button>
             <Card className='dark:bg-gray-950'>
               <Text className='dark:text-white'>{formattedCategories(category)}</Text>
               <LineChart
@@ -62,27 +72,29 @@ export default function PsiMotionModalsChart({ categories, siteMetrics }: Props)
       ))}
       <AnimatePresence>
         {selectedId && (
-          <Card className='sm:fixed w-full sm:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2
-            -webkit-transform mx-auto sm:w-[1000px] z-10 dark:bg-gray-950'>
-            <motion.div
-              className='relative p-4'
-              layoutId={selectedId}>
-              <motion.button
-                className='absolute -top-4 right-0'
-                whileTap={{ scale: 1.5 }}
-                onClick={() => setSelectedId(null)}
-              >
-                <ArrowsPointingInIcon className='w-5 h-5 text-gray-600 hover:scale-[0.9]' />
-              </motion.button>
-              <LineChart
-                data={siteMetrics}
-                index='createdAt'
-                categories={[categories[parseInt(selectedId)]]}
-                colors={[colors[parseInt(selectedId)]]}
-                yAxisWidth={40}
-              />
-            </motion.div>
-          </Card>
+          <div className='fixed inset-0 z-40 flex items-center bg-background/50 backdrop-blur-sm sm:justify-center enter enter-active'>
+            <Card className='sm:fixed w-full sm:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2
+              -webkit-transform mx-auto sm:w-[1000px] z-10 dark:bg-gray-950'>
+              <motion.div
+                className='relative p-4'
+                layoutId={selectedId}>
+                <motion.button
+                  className='absolute -top-4 right-0'
+                  whileTap={{ scale: 1.5 }}
+                  onClick={() => setSelectedId(null)}
+                >
+                  <ArrowsPointingInIcon className='w-5 h-5 text-gray-600 hover:scale-[0.9]' />
+                </motion.button>
+                <LineChart
+                  data={siteMetrics}
+                  index='createdAt'
+                  categories={[categories[parseInt(selectedId)]]}
+                  colors={[colors[parseInt(selectedId)]]}
+                  yAxisWidth={40}
+                />
+              </motion.div>
+            </Card>
+          </div>
         )}
       </AnimatePresence>
     </Flex>
