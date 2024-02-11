@@ -46,31 +46,36 @@ export function DatePickerWithRange({
   return (
     <div className={cn('grid gap-2')}>
       <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            id='date'
-            variant={'outline'}
-            className={cn(
-              'w-[300px] justify-start text-left font-normal',
-              !date && 'text-muted-foreground'
-            )}
-          >
-            <CalendarIcon className='mr-2 h-4 w-4' />
-            {date?.from ? (
-              date.to ? (
-                <>
-                  {format(date.from, 'y年M月dd日')} -{' '}
-                  {format(date.to, 'y年M月dd日')}
-                </>
+        <PopoverTrigger
+          className='flex justify-end'
+          asChild
+        >
+          <div className='flex justify-end'>
+            <Button
+              id='date'
+              variant={'outline'}
+              className={cn(
+                'w-[300px] justify-start text-left font-normal mb-6',
+                !date && 'text-muted-foreground'
+              )}
+            >
+              <CalendarIcon className='mr-2 h-4 w-4' />
+              {date?.from ? (
+                date.to ? (
+                  <>
+                    {format(date.from, 'y年M月dd日')} -{' '}
+                    {format(date.to, 'y年M月dd日')}
+                  </>
+                ) : (
+                  format(date.from, 'y年M月dd日')
+                )
               ) : (
-                format(date.from, 'y年M月dd日')
-              )
-            ) : (
-              <span>日付範囲を選んでください.</span>
-            )}
-          </Button>
+                <span>日付範囲を選んでください.</span>
+              )}
+            </Button>
+          </div>
         </PopoverTrigger>
-        <PopoverContent className='w-auto p-0' align='start'>
+        <PopoverContent className='w-auto p-0' align='end'>
           <Calendar
             initialFocus
             mode='range'

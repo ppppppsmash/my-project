@@ -61,6 +61,10 @@ export default function Notice() {
                 <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
                   9/17: 「ページ一覧」 → 「詳細ページ」 → 「チャート詳細」: カレンダーから日付期間が選択できるように実装済み.
                 </p>
+
+                <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
+                  9/18: 「履歴一覧」: もっと見る ボタンを実装.
+                </p>
               </motion.li>
             )}
           </AnimatePresence>
