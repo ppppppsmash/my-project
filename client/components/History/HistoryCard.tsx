@@ -3,8 +3,7 @@ import { useSession } from 'next-auth/react'
 import { PSIDataType, UserHistory } from '@/type'
 import {
   Card,
-  Title,
-  Bold,
+  Button,
   Text,
   Table,
   TableRow,
@@ -13,7 +12,7 @@ import {
   TableHeaderCell,
   TableBody
 } from '@tremor/react'
-import { DevicePhoneMobileIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline'
+import { DevicePhoneMobileIcon, ComputerDesktopIcon, EyeIcon, CursorArrowRaysIcon } from '@heroicons/react/24/outline'
 import { getData, getDataAll } from '@/utils/fetchData'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatDate } from '@/utils/formatDate'
@@ -25,7 +24,7 @@ interface NewPSIDataType extends PSIDataType {
 
 export default function HistoryCard() {
   const { data: session, status } = useSession()
-  const [userHistory, setUserHistory] = useState([])
+  const [showMore, setShowMore] = useState<number>(15)
 
   const queryClient = useQueryClient()
 
@@ -71,11 +70,11 @@ export default function HistoryCard() {
             </TableRow>
           </TableHead>
           <TableBody className='dark:text-white'>
-            {history?.map((item, index) => (
+            {history?.slice(0, showMore).map((item, index) => (
               <TableRow
                 key={index}
-                className='opacity-0 translate-y-10 animate-slide-in'
-                style={{animationDelay: `${index * 0.1 + 1.3}s`}}
+                className={`opacity-0 translate-y-10 animate-slide-in`}
+                style={{animationDelay: `${index * 0.1 + 0.1}s`}}
               >
                 <TableCell className='pr-14'>
                   <div key={index}>
@@ -97,8 +96,30 @@ export default function HistoryCard() {
               </TableRow>
             ))}
           </TableBody>
-
         </Table>
+
+        {showMore < history.length && (
+          <div className='mt-4 flex justify-center'>
+            <Button
+              className='sm:w-[130px] w-1/3 bg-gray-900 hover:scale-[0.96] hover:bg-gray-900 shadow-md
+                py-2 px-4 rounded-full active:bg-gray-500 dark:bg-white dark:text-gray-950
+                duration-150 focus:shadow-outline ease-in-out group transition duration-600
+                border-white'
+              color='gray'
+              type='button'
+              onClick={() => setShowMore((prev) => prev + 15)}
+            >
+              <div className='flex gap-x-1 items-center'>
+                <CursorArrowRaysIcon
+                  className='w-5 h-5 group-hover:animate-ping transition duration-1000'
+                />
+                <span>
+                  もっと見る
+                </span>
+              </div>
+            </Button>
+          </div>
+        )}
       </Card>
     </div>
   )

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { format, addDays } from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
+import { DateRange } from 'react-day-picker'
 
 import { cn } from '@/lib/cn'
 import { Button } from '@/components/Button/ShadcnButton'
@@ -20,7 +21,6 @@ interface DatePickerProps {
 
 export function DatePicker({ selectedDate, onSelectDate }: DatePickerProps) {
   const [date, setDate] = useState<Date | undefined>(selectedDate)
-  console.log(date)
 
   return (
     <Popover>

@@ -44,21 +44,26 @@ export default function Notice() {
                   />
                 </motion.button>
 
-                <p className='text-sm mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
+                <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
                   9/14: 「ヘッダー」通知アラートが実装できた！
                 </p>
-                <p className='text-sm mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
+                <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
                   9/15: 「ページ一覧」: テーブルのURLをマウスオーバーしたら、title、image、descriptionなどを
                   マウスオーバー対象の詳細ページで反映させるように実装した。</p>
-                <p className='text-sm mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
-                  9/15: 「履歴一覧」: ユーザーログイン時間取得
-                </p>
-                <p className='text-sm mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
-                  9/16: 「履歴一覧」: 前回ログイン時間取得
+                <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
+                  9/16: 「履歴一覧」: ログイン時間 & 前回ログイン時間取得
                 </p>
 
-                <p className='text-sm mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
+                <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
                   9/16: 「ページ一覧」: angle animationを利用して、動的グラーデーションボタンを実装
+                </p>
+
+                <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
+                  9/17: 「ページ一覧」 → 「詳細ページ」 → 「チャート詳細」: カレンダーから日付期間が選択できるように実装済み.
+                </p>
+
+                <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
+                  9/18: 「履歴一覧」: もっと見る ボタンを実装.
                 </p>
               </motion.li>
             )}

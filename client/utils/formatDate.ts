@@ -15,20 +15,18 @@ export const formatDate = (date: string) => {
   })
 }
 
-export const datePickerFormatDate = (date: string) => {
-  const adjustedDate = new Date(date)
-  adjustedDate.setTime(adjustedDate.getTime())
-
-  return adjustedDate.toLocaleDateString('ja-JP', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
-}
-
 export const jpFormatDate =(date: string) => {
   const utcDate = new Date(date)
 
   const options = { timeZone: 'Asia/Tokyo' }
   return utcDate.toLocaleString('ja-JP', options)
 }
+
+export const datePickerFormatDate = (dateString: string) => {
+  const sanitizedDateString = dateString.replace(/年|月/g, ' ').replace('日', '');
+
+  const [year, month, day] = sanitizedDateString.split(' ');
+
+  return new Date(`${year}-${month}-${day}`);
+}
+

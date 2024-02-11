@@ -11,7 +11,6 @@ import DelaySection from '@/components/FramerMotion/DelaySection'
 import Tab from '@/components/Tab/Tab'
 import DetailSite from '@/components/DetailSite'
 import DetailChart from '@/components/Charts/DetailChart'
-import { List, ListItem } from '@tremor/react'
 
 interface Props {
   params: { id: number }

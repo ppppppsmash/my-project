@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Grid, Col, Card, Text, Title, Subtitle, Flex, DonutChart } from '@tremor/react'
-import PsiMotionModalsChart from '@/components/PsiMotionModalsChart'
+import DetailSingleLineChart from '@/components/Charts/DetailSingleLineChart'
 import { PSIDataType, PSIMetrics } from '@/type'
 import { getData } from '@/utils/fetchData'
 import { metricsFormatter } from '@/utils/graphDataFormatter'
@@ -31,9 +31,9 @@ export default function SiteDetail({ id }: Props) {
     <>
       <Title className='mt-10 dark:text-white border-b-2 border-b-black dark:border-b-white'>ユーザーパフォーマンス</Title>
       <Text className='text-xs mt-4 font-semibold'>
-        <div className='flex gap-x-1 items-center'>
+        <div className='flex gap-x-1 sm:items-center items-start'>
           <BoltIcon className='w-6 h-6 text-yellow-400' />
-          <span>マークをマウスオーバーしたらchatGPTから改善策を答えてくれるよ.</span>
+          <span>マークをマウスオーバーしたらchatGPTから改善策を答えてくれる.</span>
         </div>
       </Text>
       <Grid
@@ -137,39 +137,99 @@ export default function SiteDetail({ id }: Props) {
         className='gap-6 mt-6 mb-6'
         numColsLg={6}
       >
-        <Col numColSpanLg={2}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>Largest Contentful Paint: <strong>{metricsNewest?.lcp} s</strong></Text>
+        <Col numColSpanLg={3}>
+          <Card className='dark:bg-gray-950 group'>
+            <Flex>
+              <Text className='dark:text-white'>Largest Contentful Paint: <strong>{metricsNewest?.lcp} s</strong></Text>
+              <GPTHoverCard message={`Largest Contentful Paint: ${metricsNewest && metricsNewest?.lcp}s`}>
+                <div className='cursor-pointer'>
+                  <BoltIcon
+                    className='text-yellow-400 opacity-0 group-hover:opacity-100 transition duration-600
+                      hover:scale-[1.3] w-6 h-6 hover:rotate-180'
+                  />
+                </div>
+              </GPTHoverCard>
+            </Flex>
           </Card>
         </Col>
-        <Col numColSpanLg={2}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>Time to Interactive: <strong>{metricsNewest?.tti} s</strong></Text>
+        <Col numColSpanLg={3}>
+          <Card className='dark:bg-gray-950 group'>
+            <Flex>
+              <Text className='dark:text-white'>Time to Interactive: <strong>{metricsNewest?.tti} s</strong></Text>
+              <GPTHoverCard message={`Time to Interactive: ${metricsNewest && metricsNewest?.tti}s`}>
+                <div className='cursor-pointer'>
+                  <BoltIcon
+                    className='text-yellow-400 opacity-0 group-hover:opacity-100 transition duration-600
+                      hover:scale-[1.3] w-6 h-6 hover:rotate-180'
+                  />
+                </div>
+              </GPTHoverCard>
+            </Flex>
           </Card>
         </Col>
-        <Col numColSpanLg={2}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>Cumulative Layout Shift Score: <strong>{metricsNewest?.cls}</strong></Text>
+        <Col numColSpanLg={3}>
+          <Card className='dark:bg-gray-950 group'>
+            <Flex>
+              <Text className='dark:text-white'>Cumulative Layout Shift Score: <strong>{metricsNewest?.cls}</strong></Text>
+              <GPTHoverCard message={`Cumulative Layout Shift Score: ${metricsNewest && metricsNewest?.cls}`}>
+                <div className='cursor-pointer'>
+                  <BoltIcon
+                    className='text-yellow-400 opacity-0 group-hover:opacity-100 transition duration-600
+                      hover:scale-[1.3] w-6 h-6 hover:rotate-180'
+                  />
+                </div>
+              </GPTHoverCard>
+            </Flex>
           </Card>
         </Col>
-        <Col numColSpanLg={2}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>First Contentful Paint: <strong>{metricsNewest?.fcp} s</strong></Text>
+        <Col numColSpanLg={3}>
+          <Card className='dark:bg-gray-950 group'>
+            <Flex>
+              <Text className='dark:text-white'>First Contentful Paint: <strong>{metricsNewest?.fcp} s</strong></Text>
+              <GPTHoverCard message={`First Contentful Paint: ${metricsNewest && metricsNewest?.fcp}s`}>
+                <div className='cursor-pointer'>
+                  <BoltIcon
+                    className='text-yellow-400 opacity-0 group-hover:opacity-100 transition duration-600
+                      hover:scale-[1.3] w-6 h-6 hover:rotate-180'
+                  />
+                </div>
+              </GPTHoverCard>
+            </Flex>
           </Card>
         </Col>
-        <Col numColSpanLg={2}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>Total Blocking Time: <strong>{metricsNewest?.tbt} ms</strong></Text>
+        <Col numColSpanLg={3}>
+          <Card className='dark:bg-gray-950 group'>
+            <Flex>
+              <Text className='dark:text-white'>Total Blocking Time: <strong>{metricsNewest?.tbt} ms</strong></Text>
+              <GPTHoverCard message={`Total Blocking Time: ${metricsNewest && metricsNewest?.tbt}ms`}>
+                <div className='cursor-pointer'>
+                  <BoltIcon
+                    className='text-yellow-400 opacity-0 group-hover:opacity-100 transition duration-600
+                      hover:scale-[1.3] w-6 h-6 hover:rotate-180'
+                  />
+                </div>
+              </GPTHoverCard>
+            </Flex>
           </Card>
         </Col>
-        <Col numColSpanLg={2}>
-          <Card className='dark:bg-gray-950'>
-            <Text className='dark:text-white'>Speed Index: <strong>{metricsNewest?.si} s</strong></Text>
+        <Col numColSpanLg={3}>
+          <Card className='dark:bg-gray-950 group'>
+            <Flex>
+              <Text className='dark:text-white'>Speed Index: <strong>{metricsNewest?.si} s</strong></Text>
+              <GPTHoverCard message={`Speed Index: ${metricsNewest && metricsNewest?.si}s`}>
+                <div className='cursor-pointer'>
+                  <BoltIcon
+                    className='text-yellow-400 opacity-0 group-hover:opacity-100 transition duration-600
+                      hover:scale-[1.3] w-6 h-6 hover:rotate-180'
+                  />
+                </div>
+              </GPTHoverCard>
+            </Flex>
           </Card>
         </Col>
       </Grid>
       <div className='mt-4'>
-        <PsiMotionModalsChart
+        <DetailSingleLineChart
           categories={['lcp', 'tti', 'cls', 'fcp', 'tbt', 'si']}
           siteMetrics={siteMetrics}
         />
