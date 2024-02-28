@@ -31,7 +31,7 @@ import {
 } from '@heroicons/react/24/outline'
 import TablePopup from '@/components/PopOver/TablePopup'
 import PsiSelect from '@/components/PsiSelect'
-import { deleteData, getData, getDataAll, postData, patchData } from '@/utils/fetchData'
+import { deleteData, getData, getDataAll, postData, patchData, addCronJob } from '@/utils/fetchData'
 import { getPsiData, getPsiDataAgain } from '@/utils/getPsi'
 import { formatDate } from '@/utils/formatDate'
 import { HoverCard } from '@/components/HoverCard/HoverCard'
@@ -122,24 +122,16 @@ export default function PsiTable() {
       return {...siteMetric, name: editName[index]}
     })
 
-
-    const seoInfo = {
-      title: '123',
-      description: '123',
-      image: '123'
+    const historyAction = {
+      action: 'サイト名を変更した.',
+      user_id: Number(session?.user?.id),
+      site_name: editName[index],
+      site_url: siteList.url,
+      device: siteList.device
     }
-    await patchData('psi_site_list', id, seoInfo)
-    //const ids = result?.findIndex(item => item.id === id)
-
-    // const action = {
-    //   action: 'site名を変更しました',
-    //   user_id: Number(session?.user?.id),
-    //   site_name: editName[index],
-    //   site_url: ids ? result?[ids].url : ''
-    // }
 
     await patchData('psi_site_list', id, {name: editName[index], siteMetrics: updatedSiteMetric})
-    //await postData('user_history', action)
+    await postData('user_history', historyAction)
 
     setEditIndex(null)
     setIsEdited(true)
@@ -150,7 +142,19 @@ export default function PsiTable() {
   }
 
   const handleScheduleChange = async (id: number) => {
+    const siteList = await getData('psi_site_list', id)
     await patchData('psi_site_list', id, { schedule })
+
+    const historyAction = {
+      action: 'スケジュール(cron job)を設定した.',
+      user_id: Number(session?.user?.id),
+      site_name: siteList.name,
+      site_url: siteList.url,
+      device: siteList.device
+    }
+
+    await postData('user_history', historyAction)
+
     setEditIndex(null)
     setIsEdited(true)
   }
@@ -178,6 +182,7 @@ export default function PsiTable() {
     }
     await deleteData('psi_site_list', id)
     await postData('user_history', historyAction)
+    await addCronJob('add-cronjob')
 
     const newResult = result?.filter(item => item.id !== id)
     queryClient.setQueryData(['result'], newResult)
