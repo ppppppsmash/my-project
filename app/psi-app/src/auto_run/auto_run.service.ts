@@ -16,9 +16,8 @@ export class AutoRunService {
 
   async getPSIAuto() {
     try {
-      const url = `${process.env.API_BASE_URL}psi_site_list`
-      const response = await fetch(url)
-      const data = await response.json()
+      const url = 'http://127.0.0.1:3000/psi_site_list'
+      const { data } = await axios.get(url)
 
       data.map(({ name, schedule, url, device, id }) => {
         this.logger.debug(
@@ -26,7 +25,7 @@ export class AutoRunService {
         )
 
         if (schedule !== '0' && schedule !== '24') {
-          this.addCronJobHours(`cron job-${uuidv4()}`, schedule, name, url, device, id)
+          this.addCronJobHours(`cron job-${uuidv4()}`, `${schedule}`, name, url, device, id)
         } else if (schedule === '24') {
           this.addCronJobDay(`cron job-${uuidv4()}`, name, url, device, id)
         } else {
@@ -37,7 +36,6 @@ export class AutoRunService {
       return data
     } catch (error) {
       console.error('Error fetching schedule data:', error.message)
-      console.error('Error Info:', error)
       return null
     }
   }
@@ -47,9 +45,9 @@ export class AutoRunService {
 
     try {
       this.logger.debug('実行する')
-      const psiUrl = `${process.env.API_BASE_URL}psi`
-      const response = await fetch(`${psiUrl}?url=${url}&strategy=${device}`)
-      const data = await response.json()
+      const psiUrl = 'http://127.0.0.1:3000/psi'
+      const { data } = await axios.get(`${psiUrl}?url=${url}&strategy=${device}`)
+      console.log(data)
 
       const { lighthouseResult, loadingExperience } = data
       const { categories } = lighthouseResult
@@ -103,26 +101,24 @@ export class AutoRunService {
         ]
       }
 
-      const res = await fetch(`${process.env.API_BASE_URL}psi_site_list/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({...psiSiteList})
-      })
-
-      return res
+      await axios.patch(`${process.env.API_BASE_URL}psi_site_list/${id}`, psiSiteList)
 
     } catch (error) {
-      console.error(`Error fetching schedule data: ${id}`, error)
+      console.error('Error fetching schedule data:', error.message)
     }
   }
 
   addCronJobHours(job_name: string, time: string, name: string, url: string, device: string, id: number) {
     const job = new CronJob(`0 0-23/${time} * * *`, async () => {
       await this.getPsi(name, url,device, id)
-      this.logger.warn(`${job_name} ${time}時間ごとに ${job_name} を稼働する!`)
+      this.logger.warn(`${time}時間ごとに ${job_name} を稼働する!`)
     })
+
+    // job.addCallback(() => {
+    //   // ジョブが終了した後に自動的にジョブを削除
+    //   this.schedulerRegistry.deleteCronJob(job_name)
+    //   this.logger.warn(`${job_name} は実行済みなのでクローズ`)
+    // })
 
     this.schedulerRegistry.addCronJob(job_name, job)
     job.start()
@@ -137,6 +133,11 @@ export class AutoRunService {
       await this.getPsi(name, url,device, id)
       this.logger.warn(`毎日10:00 ${job_name} を稼働する!`)
     })
+
+    // job.addCallback(() => {
+    //   this.schedulerRegistry.deleteCronJob(job_name)
+    //   this.logger.warn(`${job_name} は実行済みなのでクローズ`)
+    // })
 
     this.schedulerRegistry.addCronJob(job_name, job)
     job.start()
