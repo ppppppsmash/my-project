@@ -36,7 +36,7 @@ const HoverCard = ({children, url, id, name, device}: {children: React.ReactNode
     }
 
     const historyAction = {
-      action: `SEO情報を取得した.`,
+      action: 'SEO情報を取得した.',
       user_id: Number(session?.user?.id),
       site_name: name,
       site_url: url,

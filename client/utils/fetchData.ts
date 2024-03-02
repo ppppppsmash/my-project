@@ -44,18 +44,18 @@ export const postData = async (api: string, args: any) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({...args})
-    });
+    })
 
     if (!response.ok) {
       // レスポンスがエラーを示す場合は例外を投げる
-      throw new Error(`APIリクエストが失敗しました。ステータスコード: ${response.status}`);
+      throw new Error(`APIリクエストが失敗しました。ステータスコード: ${response.status}`)
     }
 
     console.log(args)
     return response
   } catch (error) {
     // 例外が発生した場合はエラーを投げる
-    throw new Error('APIリクエストでエラーが発生しました.');
+    throw new Error('APIリクエストでエラーが発生しました.')
   }
 }
 
@@ -90,5 +90,21 @@ export const deleteData = async (api: string, id: number) => {
     return response
   } catch (error) {
     console.log(error)
+  }
+}
+
+export const addCronJob = async (api: string) => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}${api}`, {
+      method: 'POST',
+      cache: 'no-store',
+      headers: {
+          'Content-Type': 'application/json',
+      }
+    })
+
+    return response
+  } catch(error) {
+    throw new Error('APIリクエストでエラーが発生しました.')
   }
 }

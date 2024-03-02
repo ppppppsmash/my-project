@@ -154,6 +154,7 @@ export default function PsiTable() {
     }
 
     await postData('user_history', historyAction)
+    await addCronJob('add-cronjob')
 
     setEditIndex(null)
     setIsEdited(true)
@@ -252,7 +253,7 @@ export default function PsiTable() {
     <div>
       {isBulk &&
         <Dialog
-          className='w-10/12 md:w-1/2 mx-auto absolute top-12 -translate-x-1/2 left-1/2 opacity-0 animate-slide-in-sec'
+          className='w-10/12 md:w-1/2 mx-auto absolute top-10 -translate-x-1/2 left-1/2 opacity-0 animate-slide-in-sec'
           title='成功'
           color='green'
           icon={CheckCircleIcon}
