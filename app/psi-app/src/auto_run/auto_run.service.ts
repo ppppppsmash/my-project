@@ -1,24 +1,53 @@
 import { Injectable, Logger, SetMetadata } from '@nestjs/common'
-import { Cron, SchedulerRegistry } from '@nestjs/schedule'
+import { Cron, Interval, SchedulerRegistry, CronExpression } from '@nestjs/schedule'
 import { CronJob } from 'cron'
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 
 @Injectable()
 export class AutoRunService {
-  constructor(private readonly schedulerRegistry: SchedulerRegistry) {}
+  constructor(private schedulerRegistry: SchedulerRegistry) {}
 
   private readonly logger = new Logger(AutoRunService.name)
 
-  private readonly jobs: { [name: string]: CronJob } = {}
+  onModuleInit() {
+    this.getPSIAuto()
+  }
 
-  private async executeJob(name: string, url: string, device: string, id: number) {
-    this.logger.debug(`Executing cron job for ${name}`)
+  async getPSIAuto() {
+    try {
+      const url = 'http://localhost:3000/psi_site_list'
+      const { data } = await axios.get(url)
+
+      data.map(({ name, schedule, url, device, id }) => {
+        this.logger.debug(
+          `site: ${name}, schedule: ${schedule}`,
+        )
+
+        if(schedule !== '0' && schedule !== '24') {
+          this.addCronJobHours(`cron job-${uuidv4()}`, `${schedule}`, name, url, device, id)
+        } else if (schedule === '24') {
+          this.addCronJobDay(`cron job-${uuidv4()}`, name, url, device, id)
+        } else {
+          console.error('no!')
+        }
+      })
+
+      return data
+    } catch (error) {
+      console.error('Error fetching schedule data:', error.message)
+      return null
+    }
+  }
+
+  private async getPsi(name: string, url: string, device: string, id: number) {
+    this.logger.debug(`サイト${name} cronjob開始`)
 
     try {
-      this.logger.debug('実行するよ！')
+      this.logger.debug('実行する')
       const psiUrl = 'http://localhost:3000/psi'
       const { data } = await axios.get(`${psiUrl}?url=${url}&strategy=${device}`)
+      console.log(data)
 
       const { lighthouseResult, loadingExperience } = data
       const { categories } = lighthouseResult
@@ -42,25 +71,25 @@ export class AutoRunService {
         lcp: lighthouseResultAudits?.['largest-contentful-paint'],
         tti: lighthouseResultAudits?.['interactive'],
         tbt: lighthouseResultAudits?.['total-blocking-time'],
-        cls: lighthouseResultAudits?.['cumulative-layout-shift'],
+        cls: lighthouseResultAudits?.['cumulative-layout-shift']
       }
 
       const psiSiteMetircs = {
         score,
         name,
         url,
-        lcp: lighthouseResultMetrics.lcp.displayValue,
-        tti: lighthouseResultMetrics.tti.displayValue,
-        cls: lighthouseResultMetrics.cls.displayValue,
-        fcp: lighthouseResultMetrics.fcp.displayValue,
-        tbt: lighthouseResultMetrics.tbt.displayValue,
-        si: lighthouseResultMetrics.si.displayValue,
-        user_fcp: loadingExperienceMetrics.user_fcp.percentile,
-        user_lcp: loadingExperienceMetrics.user_lcp.percentile,
-        user_fid: loadingExperienceMetrics.user_fid.percentile,
-        user_cls: loadingExperienceMetrics.user_cls.percentile,
-        user_inp: loadingExperienceMetrics.user_inp.percentile,
-        user_ttfb: loadingExperienceMetrics.user_ttfb.percentile
+        lcp: lighthouseResultMetrics?.lcp?.displayValue,
+        tti: lighthouseResultMetrics?.tti?.displayValue,
+        cls: lighthouseResultMetrics?.cls?.displayValue,
+        fcp: lighthouseResultMetrics?.fcp?.displayValue,
+        tbt: lighthouseResultMetrics?.tbt?.displayValue,
+        si: lighthouseResultMetrics?.si?.displayValue,
+        user_fcp: loadingExperienceMetrics?.user_fcp?.percentile,
+        user_lcp: loadingExperienceMetrics?.user_lcp?.percentile,
+        user_fid: loadingExperienceMetrics?.user_fid?.percentile,
+        user_cls: loadingExperienceMetrics?.user_cls?.percentile,
+        user_inp: loadingExperienceMetrics?.user_inp?.percentile,
+        user_ttfb: loadingExperienceMetrics?.user_ttfb?.percentile
       }
 
       const psiSiteList = {
@@ -72,8 +101,6 @@ export class AutoRunService {
         ]
       }
 
-      console.log(psiSiteList)
-      // PATCHリクエストを送信して psi_site_list を更新
       await axios.patch(`http://localhost:3000/psi_site_list/${id}`, psiSiteList)
 
     } catch (error) {
@@ -81,66 +108,47 @@ export class AutoRunService {
     }
   }
 
-  private getNextValidDate(schedule: string): Date {
-    return new Date(Date.now() + parseInt(schedule)*60*60*1000)
+  addCronJobHours(job_name: string, time: string, name: string, url: string, device: string, id: number) {
+    const job = new CronJob(`0 0-23/${time} * * *`, async () => {
+      await this.getPsi(name, url,device, id)
+      this.logger.warn(`${time}時間ごとに ${job_name} を稼働する!`)
+    })
+
+    job.addCallback(() => {
+      // ジョブが終了した後に自動的にジョブを削除
+      this.schedulerRegistry.deleteCronJob(job_name)
+      this.logger.warn(`${job_name} は実行済みなのでクローズ`)
+    })
+
+    this.schedulerRegistry.addCronJob(job_name, job)
+    job.start()
+
+    this.logger.warn(
+      `${time}時間ごとに ${job_name} を稼働した.`
+    )
   }
 
-  // cron jobを停止するメソッド
-  // private stopCronJob(name: string) {
-  //   const job = this.jobs[name]
-  //   if (job) {
-  //     job.stop()
-  //     this.logger.warn(`Cron job for ${name} has been stopped.`)
-  //   }
-  // }
+  addCronJobDay(job_name: string, name: string, url: string, device: string, id: number) {
+    const job = new CronJob(`0 10 * * *`, async () => {
+      await this.getPsi(name, url,device, id)
+      this.logger.warn(`毎日10:00 ${job_name} を稼働する!`)
+    })
 
-  // private addCronJob(name: string, schedule: string, url: string, device: string, id: number) {
-  //   const jobName = `${name}-${uuidv4()}`
-  //   const job = new CronJob(`* * */${schedule} * * *`, () => this.executeJob(name, url, device, id))
+    job.addCallback(() => {
+      this.schedulerRegistry.deleteCronJob(job_name)
+      this.logger.warn(`${job_name} は実行済みなのでクローズ`)
+    })
 
-  //   // 以前のジョブが存在する場合は停止してから新しいジョブを追加
-  //   this.stopCronJob(jobName)
+    this.schedulerRegistry.addCronJob(job_name, job)
+    job.start()
 
-  //   this.schedulerRegistry.addCronJob(jobName, job)
-  //   job.start()
+    this.logger.warn(
+      `毎日10:00 ${job_name} を稼働した.`
+    )
+  }
 
-  //   this.logger.warn(`サイト名 ${name} のcronjob値は ${schedule}`)
-
-  //   this.jobs[jobName] = job
-  // }
-
-  // @Cron('* * 18 * * *', {
-  //   timeZone: 'Asia/Tokyo',
-  // })
-  // async handleCron() {
-  //   this.logger.debug('Called when the second is 0')
-
-  //   try {
-  //     const url = 'http://localhost:3000/psi_site_list' // 既存のエンドポイントのURL
-  //     const { data } = await axios.get(url)
-
-  //     // dataが配列であることを確認してからscheduleを取得
-  //     data.map(({ name, schedule, url, device, id }) => {
-  //       // 次回のcron jobの実行時刻をログに出力
-  //       const nextExecutionTime = this.getNextValidDate(schedule)
-  //       this.logger.debug(
-  //         `Next execution time for ${name}, schedule: ${schedule}: ${nextExecutionTime.toISOString()}`,
-  //       )
-
-  //       if (schedule === '0') {
-  //         this.stopCronJob(name)
-  //         console.log(name)
-  //       } else {
-  //         this.addCronJob(name, schedule, url, device, id)
-  //         console.log(name)
-  //       }
-  //     })
-
-  //     return data
-  //   } catch (error) {
-  //     console.error('Error fetching schedule data:', error.message)
-  //     return null
-  //   }
-  // }
-
+  deleteCron(job_name: string) {
+    this.schedulerRegistry.deleteCronJob(job_name)
+    this.logger.warn(`job ${job_name} deleted!`)
+  }
 }
