@@ -24,7 +24,7 @@ export class AutoRunService {
           `site: ${name}, schedule: ${schedule}`,
         )
 
-        if(schedule !== '0' && schedule !== '24') {
+        if (schedule !== '0' && schedule !== '24') {
           this.addCronJobHours(`cron job-${uuidv4()}`, `${schedule}`, name, url, device, id)
         } else if (schedule === '24') {
           this.addCronJobDay(`cron job-${uuidv4()}`, name, url, device, id)
@@ -114,11 +114,11 @@ export class AutoRunService {
       this.logger.warn(`${time}時間ごとに ${job_name} を稼働する!`)
     })
 
-    job.addCallback(() => {
-      // ジョブが終了した後に自動的にジョブを削除
-      this.schedulerRegistry.deleteCronJob(job_name)
-      this.logger.warn(`${job_name} は実行済みなのでクローズ`)
-    })
+    // job.addCallback(() => {
+    //   // ジョブが終了した後に自動的にジョブを削除
+    //   this.schedulerRegistry.deleteCronJob(job_name)
+    //   this.logger.warn(`${job_name} は実行済みなのでクローズ`)
+    // })
 
     this.schedulerRegistry.addCronJob(job_name, job)
     job.start()
@@ -134,10 +134,10 @@ export class AutoRunService {
       this.logger.warn(`毎日10:00 ${job_name} を稼働する!`)
     })
 
-    job.addCallback(() => {
-      this.schedulerRegistry.deleteCronJob(job_name)
-      this.logger.warn(`${job_name} は実行済みなのでクローズ`)
-    })
+    // job.addCallback(() => {
+    //   this.schedulerRegistry.deleteCronJob(job_name)
+    //   this.logger.warn(`${job_name} は実行済みなのでクローズ`)
+    // })
 
     this.schedulerRegistry.addCronJob(job_name, job)
     job.start()

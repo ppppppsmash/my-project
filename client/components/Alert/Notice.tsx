@@ -55,7 +55,7 @@ export default function Notice() {
                 </p>
 
                 <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
-                  9/16: 「ページ一覧」: angle animationを利用して、動的グラーデーションボタンを実装
+                  9/16: 「ページ一覧」: angel animationを利用して、動的グラーデーションボタンを実装
                 </p>
 
                 <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
@@ -64,6 +64,10 @@ export default function Notice() {
 
                 <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
                   9/18: 「履歴一覧」: もっと見る ボタンを実装.
+                </p>
+
+                <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
+                  9/22: <span className='font-semibold'>「Cron Job処理」</span>を実装済み.
                 </p>
               </motion.li>
             )}
