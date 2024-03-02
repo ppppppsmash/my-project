@@ -101,7 +101,7 @@ export class AutoRunService {
         ]
       }
 
-      await axios.patch(`http://localhost:3000/psi_site_list/${id}`, psiSiteList)
+      await axios.patch(`${process.env.API_BASE_URL}psi_site_list/${id}`, psiSiteList)
 
     } catch (error) {
       console.error('Error fetching schedule data:', error.message)
