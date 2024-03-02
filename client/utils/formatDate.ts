@@ -1,11 +1,5 @@
-import { format, addHours } from 'date-fns'
-
 export const formatDate = (date: string) => {
-  const adjustedDate = new Date(date)
-  adjustedDate.setTime(adjustedDate.getTime() - 9 * 60 * 60 * 1000)
-
-  //return format(adjustedDate, 'PPP')
-  return adjustedDate.toLocaleDateString('ja-JP', {
+  const formattedDate = new Date(date).toLocaleDateString('ja-JP', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -13,6 +7,8 @@ export const formatDate = (date: string) => {
     minute: '2-digit',
     second: '2-digit'
   })
+
+  return formattedDate
 }
 
 export const jpFormatDate =(date: string) => {

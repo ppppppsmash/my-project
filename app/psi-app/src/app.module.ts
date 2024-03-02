@@ -29,7 +29,7 @@ import configuration from './config/configuration'
         ...configService.get('database'),
       }),
     }),
-    //AutoRunModule,
+    AutoRunModule,
     PsiSiteListModule,
     PsiModule,
     PsiUploadModule,

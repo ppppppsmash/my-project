@@ -423,7 +423,7 @@ export default function PsiTabContent({ mode }: Props) {
       <div className='flex justify-spacebetween items-center space-x-4'>
         <div>
           <PsiSelect
-            placeholder='自動で取得時間選択'
+            placeholder='自動取得時間選択'
             handleSelectChange={getChangeSelect}
           />
         </div>
