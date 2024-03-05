@@ -4,7 +4,6 @@ import { PSIMetrics } from '@/type'
 import { Flex, Card, Text, LineChart, Color as TremorColor } from '@tremor/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowsPointingInIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/outline'
-import { formatDate } from '@/utils/formatDate'
 
 interface Props {
   siteMetrics: PSIMetrics[]
@@ -38,7 +37,7 @@ export default function DetailSingleLineChart({ categories, siteMetrics }: Props
     <Flex className='w-full flex flex-wrap justify-start box-border gap-x-[2%] gap-y-4'>
       {categories.map((category, index) => (
         <div
-          className='w-full sm:w-[32%] box-border'
+          className='w-full sm:w-[32%] box-border relative'
           key={index}
         >
           <motion.div
@@ -50,7 +49,7 @@ export default function DetailSingleLineChart({ categories, siteMetrics }: Props
             onClick={() => setSelectedId(index.toString())}
           >
             <motion.button
-              className='absolute top-5 right-4 z-50'
+              className='absolute top-5 right-4 z-40'
               whileTap={{ scale: 1.5 }}
               onClick={() => setSelectedId(null)}
             >
