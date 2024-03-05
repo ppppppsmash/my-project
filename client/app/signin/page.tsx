@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useRef, useState, useEffect } from 'react'
-import { signIn, signOut } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Title } from '@tremor/react'
@@ -74,15 +74,14 @@ export default function LoginPage() {
           message={errorMessage}
         />
       }
+
       <div className='flex flex-col w-10/12 md:w-full items-center justify-center
         sm:py-8 mx-auto md:h-screen lg:py-0 pt-[150px]'>
-        <div className='w-full bg-gray-400/30 backdrop-blur-lg rounded-xl shadow-3xl
-          dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 border border-gray-400/30
-          dark:border-gray-700 hover:scale-[1.01] transition duration-300'>
+        <div className='dark:bg-gray-800 hover:scale-[1.01] transition duration-300 group'>
           <div className='p-6 space-y-4 md:space-y-6 sm:p-8'>
             <Title
               className={`text-xl leading-tight tracking-tight text-white text-center
-                md:text-2xl dark:text-white font-semibold ${quicksand.className}`}
+                md:text-3xl dark:text-white font-extrabold`}
             >
               PSI Measurement
             </Title>
@@ -111,7 +110,7 @@ export default function LoginPage() {
                   duration-500 px-3 pb-3 py-3 placeholder:text-xs'
                 />
                 <span
-                  className='absolute right-2 bottom-4'
+                  className='absolute right-2 bottom-4 hidden group-hover:block duration-300 transition-all'
                   onClick={togglePassword}
                 >
                     {isRevealPassword ? (
@@ -121,12 +120,15 @@ export default function LoginPage() {
                     )}
               </span>
               </div>
-              <button
-                onClick={onLogin}
-                className={`w-full bg-gray-950 text-white py-2 rounded hover:shadow-xl transition
-                  duration-300 hover:shadow-gray-300 font-extrabold ${inter.className}`}>
-                  ログイン
-              </button>
+
+              <div className='w-full mx-auto'>
+                <button
+                  onClick={onLogin}
+                  className={`w-full bg-gray-950 text-white py-2 rounded hover:shadow-xl transition
+                    duration-300 hover:shadow-gray-300/50 font-extrabold ${inter.className}`}>
+                    ログイン
+                </button>
+              </div>
             </div>
           </div>
         </div>
