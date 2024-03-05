@@ -7,9 +7,12 @@ import { useRouter } from 'next/navigation'
 import { Title } from '@tremor/react'
 import { inter, quicksand } from '@/utils/font'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/solid'
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import Dialog from '@/components/Dialog/Dialog'
 
 export default function LoginPage() {
+  const [isRevealPassword, setIsRevealPassword] = useState(false)
+
   const { data: session, status } = useSession()
 
   const email = useRef<HTMLInputElement | null>(null)
@@ -18,6 +21,10 @@ export default function LoginPage() {
   const router = useRouter()
 
   const [errorMessage, setErrorMessage] = useState<string>('')
+
+  const togglePassword = () => {
+    setIsRevealPassword((prevState) => !prevState)
+  }
 
   const onLogin = async () => {
     const emailValue = email.current?.value || ''
@@ -92,10 +99,10 @@ export default function LoginPage() {
                   placeholder='name@webcrew.co.jp'
                 />
               </div>
-              <div className='mb-6 pt-3 rounded bg-gray-900'>
+              <div className='mb-6 pt-3 rounded bg-gray-900 relative'>
                 <label className='block text-white text-sm font-light mb-2 ml-3'>Password</label>
                 <input
-                  type='password'
+                  type={isRevealPassword ? 'text' : 'password'}
                   name='Password'
                   placeholder='••••••••'
                   ref={password}
@@ -103,6 +110,16 @@ export default function LoginPage() {
                   border-b-4 border-gray-300 focus:border-gray-600 transition
                   duration-500 px-3 pb-3 py-3 placeholder:text-xs'
                 />
+                <span
+                  className='absolute right-2 bottom-4'
+                  onClick={togglePassword}
+                >
+                    {isRevealPassword ? (
+                  <EyeSlashIcon className='w-5 h-5' />
+                    ) : (
+                  <EyeIcon className='w-5 h-5' />
+                    )}
+              </span>
               </div>
               <button
                 onClick={onLogin}
