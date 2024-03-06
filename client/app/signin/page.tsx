@@ -160,7 +160,7 @@ export default function LoginPage() {
               <div className='flex items-center gap-x-2 justify-end !mt-2'>
                 <Switch
                   checked={isChecked}
-                  onCheckedChange={(isChecked) => checkHandler(!isChecked)}
+                  onCheckedChange={(isChecked: boolean) => checkHandler(!isChecked)}
                 />
                 <p className={`text-xs font-extrabold ${isChecked ? ' text-neutral-900' : 'text-neutral-600'}`}>remember</p>
               </div>

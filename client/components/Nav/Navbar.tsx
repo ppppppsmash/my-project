@@ -8,7 +8,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion'
 import { Bars3Icon, XMarkIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline'
 import { TbDeviceAnalytics } from 'react-icons/tb'
-import ToggleButton from '@/components/Nav/ToggleButton'
+import { ModeToggle } from '@/components/Nav/ModeToggle'
 import { inter } from '@/utils/font'
 import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
@@ -165,7 +165,9 @@ export default function Navbar() {
 
               <Notice />
 
-              <ToggleButton />
+              <div className='absolute top-3 sm:right-16 right-10'>
+                <ModeToggle />
+              </div>
             </div>
 
           </div>
