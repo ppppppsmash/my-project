@@ -32,7 +32,7 @@ import {
 import TablePopup from '@/components/PopOver/TablePopup'
 import PsiSelect from '@/components/PsiSelect'
 import { deleteData, getData, getDataAll, postData, patchData, addCronJob } from '@/utils/fetchData'
-import { getPsiData, getPsiDataAgain } from '@/utils/getPsi'
+import { getPsiDataAgain } from '@/utils/getPsi'
 import { formatDate } from '@/utils/formatDate'
 import { HoverCard } from '@/components/HoverCard/HoverCard'
 import DetailHoverCard from '@/components/HoverCard/DetailHoverCard'
@@ -40,7 +40,7 @@ import ClockLoader from 'react-spinners/ClockLoader'
 import MoonLoader from 'react-spinners/MoonLoader'
 import { useSession } from 'next-auth/react'
 import BulkButton from '@/components/Button/BulkButton'
-import Dialog from './Dialog/Dialog'
+import Dialog from '@/components/Dialog/Dialog'
 
 interface NewPSIDataType extends PSIDataType {
   score?: string

@@ -9,8 +9,8 @@ import { ArrowTopRightOnSquareIcon, ClockIcon, DevicePhoneMobileIcon, ComputerDe
 import { metricsFormatter } from '@/utils/graphDataFormatter'
 import DelaySection from '@/components/FramerMotion/DelaySection'
 import Tab from '@/components/Tab/Tab'
-import DetailSite from '@/components/DetailSite'
-import DetailChart from '@/components/Charts/DetailChart'
+import DetailSite from '@/components/DetailCard/DetailSite'
+import DetailChart from '@/components/DetailCard/DetailChart'
 
 interface Props {
   params: { id: number }

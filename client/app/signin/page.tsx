@@ -109,11 +109,11 @@ export default function LoginPage() {
 
       <div className='flex flex-col w-10/12 md:w-full items-center justify-center
         sm:py-8 mx-auto md:h-screen lg:py-0 pt-[150px]'>
-        <div className='dark:bg-gray-800 w-10/12 mx-auto sm:w-[280px]'>
+        <div className='w-10/12 mx-auto sm:w-[280px]'>
           <div className='space-y-4 md:space-y-6'>
             <Title
               className={`text-xl leading-tight tracking-tight text-white text-center
-                md:text-2xl dark:text-white font-extrabold`}
+                md:text-2xl font-extrabold`}
             >
               PSI Measurement
             </Title>
@@ -162,7 +162,7 @@ export default function LoginPage() {
                   checked={isChecked}
                   onCheckedChange={(isChecked) => checkHandler(!isChecked)}
                 />
-                <p className={`text-xs ${isChecked ? 'font-extrabold text-neutral-900' : 'font-normal text-neutral-600'}`}>remember</p>
+                <p className={`text-xs font-extrabold ${isChecked ? ' text-neutral-900' : 'text-neutral-600'}`}>remember</p>
               </div>
 
 
