@@ -18,14 +18,9 @@ export class AutoRunService {
 
   async getPSIAuto() {
     try {
-<<<<<<< HEAD
       const url = `${process.env.API_BASE_URL}psi_site_list`
       const response = await fetch(url)
       const data = await response.json()
-=======
-      const url = 'http://127.0.0.1:3000/psi_site_list'
-      const { data } = await axios.get(url)
->>>>>>> develop/liming.pei
 
       data.map(({ name, schedule, url, device, id }) => {
         this.logger.debug(
