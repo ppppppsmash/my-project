@@ -49,15 +49,9 @@ export class AutoRunService {
 
     try {
       this.logger.debug('実行する')
-<<<<<<< HEAD
       const psiUrl = `${process.env.API_BASE_URL}psi`
       const response = await fetch(`${psiUrl}?url=${url}&strategy=${device}`)
       //const data = await response.json()
-=======
-      const psiUrl = 'http://127.0.0.1:3000/psi'
-      const { data } = await axios.get(`${psiUrl}?url=${url}&strategy=${device}`)
-      console.log(data)
->>>>>>> develop/liming.pei
 
       const queryParams = `url=${encodeURIComponent(url)}&strategy=${encodeURIComponent(device)}`
       const options = {
