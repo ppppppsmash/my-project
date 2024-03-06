@@ -16,7 +16,6 @@ import { DevicePhoneMobileIcon, ComputerDesktopIcon, EyeIcon, CursorArrowRaysIco
 import { getData, getDataAll } from '@/utils/fetchData'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatDate } from '@/utils/formatDate'
-import InfiniteScrollBox from '@/components/InfinityScroll'
 
 interface NewPSIDataType extends PSIDataType {
   score?: string

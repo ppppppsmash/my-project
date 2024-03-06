@@ -8,6 +8,7 @@ import { Title } from '@tremor/react'
 import { inter, quicksand } from '@/utils/font'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/solid'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
+import { Switch } from '@/components/CheckBox/RememberCheckbox'
 import Dialog from '@/components/Dialog/Dialog'
 
 export default function LoginPage() {
@@ -38,8 +39,8 @@ export default function LoginPage() {
     setIsRevealPassword((prevState) => !prevState)
   }
 
-  const checkHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setIsChecked(event.target.checked)
+  const checkHandler = (checked: boolean) => {
+    setIsChecked(!checked)
   }
 
   const onLogin = async () => {
@@ -108,11 +109,11 @@ export default function LoginPage() {
 
       <div className='flex flex-col w-10/12 md:w-full items-center justify-center
         sm:py-8 mx-auto md:h-screen lg:py-0 pt-[150px]'>
-        <div className='dark:bg-gray-800 w-10/12 mx-auto sm:w-[280px]'>
+        <div className='w-10/12 mx-auto sm:w-[280px]'>
           <div className='space-y-4 md:space-y-6'>
             <Title
               className={`text-xl leading-tight tracking-tight text-white text-center
-                md:text-2xl dark:text-white font-extrabold`}
+                md:text-2xl font-extrabold`}
             >
               PSI Measurement
             </Title>
@@ -153,19 +154,17 @@ export default function LoginPage() {
                     ) : (
                   <EyeIcon className='w-5 h-5' />
                     )}
-              </span>
+                </span>
               </div>
 
-              <div className='flex gap-x-1'>
-                <input
-                  type="checkbox"
+              <div className='flex items-center gap-x-2 justify-end !mt-2'>
+                <Switch
                   checked={isChecked}
-                  onChange={checkHandler}
+                  onCheckedChange={(isChecked: boolean) => checkHandler(!isChecked)}
                 />
-                <p>
-                  remember me
-                </p>
+                <p className={`text-xs font-extrabold ${isChecked ? ' text-neutral-900' : 'text-neutral-600'}`}>remember</p>
               </div>
+
 
               <div className='w-full mx-auto'>
                 <button
