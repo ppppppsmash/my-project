@@ -2,8 +2,7 @@
 
 import * as React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { BellIcon } from '@heroicons/react/24/solid'
-import { XCircleIcon } from '@heroicons/react/24/outline'
+import { XCircleIcon, BellIcon } from '@heroicons/react/24/outline'
 
 export default function Notice() {
   const [noticeFlagId, setNoticeFlagId] = React.useState<string>('')
@@ -85,7 +84,7 @@ export default function Notice() {
           onClick={() => setNoticeFlagId('100')}
         >
           <BellIcon
-            className='w-6 h-6 text-amber-400 hover:scale-[1.2] transition duration-300'
+            className='w-6 h-6 text-black dark:text-white hover:scale-[1.2] transition duration-300'
           />
         </motion.button>
       </div>

@@ -15,12 +15,18 @@ import ConfirmModal from '@/components/Modals/ConfirmModal'
 import { useSession } from 'next-auth/react'
 import RegistrationModal from './Modals/RegistrationModal'
 import { siteRegistrate } from '@/utils/siteRegistrator'
+import { fetchLinkPreview } from '@/utils/getLinkPreview'
 
 interface Props {
   mode: string
+  _name: (value: any) => void
+  _url: (value: any) => void
+  _title: (value: any) => void
+  _description: (value: any) => void
+  _image: (value: any) => void
 }
 
-export default function PsiTabContent({ mode }: Props) {
+export default function PsiTabContent({ mode, _name, _url, _title, _description, _image }: Props) {
   const { data: session, status } = useSession()
   const id: number = 0
   const [name, setName] = useState<string>('')
@@ -47,18 +53,20 @@ export default function PsiTabContent({ mode }: Props) {
 
   const [isConfirm, setIsConfirm] = useState<boolean>(false)
 
-  // progress状態管理
-  const handleProgress = (newProgress: any) => {
-    setProgress(newProgress)
-  }
-
   // 単体サイト
   const getChangeUrlName = ({target}: ChangeEvent<HTMLInputElement>) => {
     setName(target.value)
+    _name(target.value)
   }
 
-  const getChangeUrl = ({target}: ChangeEvent<HTMLInputElement>) => {
+  const getChangeUrl = async ({target}: ChangeEvent<HTMLInputElement>) => {
     setUrl(target.value)
+    _url(target.value)
+
+    const fetchMeta = await fetchLinkPreview(target.value)
+    _title(fetchMeta.title)
+    _description(fetchMeta.description)
+    _image(fetchMeta.image)
   }
 
   const getChangeSelect = (value: string) => {
@@ -82,8 +90,6 @@ export default function PsiTabContent({ mode }: Props) {
           body: formData,
         })
 
-        console.log(response)
-
         if (response.ok) {
           console.log('CSVファイルのアップロードが成功しました。')
           const data = await response.json()
@@ -105,8 +111,6 @@ export default function PsiTabContent({ mode }: Props) {
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv/${session?.user?.id}/${selectedFileName}`)
-
-      console.log(response)
 
       const blob = await response.blob()
 
