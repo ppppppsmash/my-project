@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import dynamicImport from 'next/dynamic'
 import { zenKaku } from '@/utils/font'
-import { Grid, Card, Title, Bold, Text } from '@tremor/react'
+import { Grid, Card, Title, Bold, Text, Col } from '@tremor/react'
 import { useSession } from 'next-auth/react'
+import { urlValidate } from '@/utils/validation'
 
 const DynamicComponent = dynamicImport(() => import('@/components/Tab/RegistrationTab'))
 
@@ -46,46 +47,67 @@ export default function AddList() {
             ページ登録
           </Title>
 
-          <Grid numColsLg={2} className="mt-6 gap-6">
-            <Card className='mt-6 shadow-lg dark:bg-gray-950 dark:text-white'>
-              <div>
-                <Bold>
-                  サイト名：
-                </Bold>
-                <Text className='mt-2'>
-                  { name }
-                </Text>
-              </div>
+          <Grid numColsLg={3} className="mt-6 gap-6">
+            <Col numColSpanSm={1}>
+              <Card className='mt-6 shadow-lg dark:bg-gray-950 dark:text-white'>
 
-              <div className='mt-6'>
-                <Bold>
-                  サイトURL：
-                </Bold>
-                <Text className='mt-2'>
-                  { url }
-                </Text>
-              </div>
+              { name &&
+                <div>
+                  <Bold>
+                    サイト名：
+                  </Bold>
+                  <Text className='mt-2'>
+                    { name }
+                  </Text>
+                </div>
+              }
 
-              <div>
-                { title }
-                { description }
+              { url &&
+                <>
+                  <div className='mt-6'>
+                    <Bold>
+                      サイトURL：
+                    </Bold>
+                    <Text className='mt-2'>
+                      { urlValidate(url) }
+                    </Text>
+                  </div>
 
-                <img
-                  src={image}
-                  width='200'
+                  <div>
+                    { title }
+                    { description }
+
+                    <img
+                      src={image}
+                      width='200'
+                    />
+                  </div>
+                </>
+                }
+
+                <div className={`${!name ? 'block' : 'hidden'} w-full mx-auto`}>
+                  <Text className='text-center animate-pulse'>
+                    <span className='bg-gradient-to-r from-fuchsia-500 to-emerald-400
+                      bg-clip-text font-bold tracking-tight text-transparent'>
+                      登録情報プレビュー
+                    </span>
+                  </Text>
+                </div>
+
+              </Card>
+            </Col>
+
+            <Col numColSpanSm={2}>
+              <Card className='mt-6 shadow-lg dark:bg-gray-950 dark:text-white'>
+                <DynamicComponent
+                  _name={handleNameValueChange}
+                  _url={handleUrlValueChange}
+                  _title={handleTitleValueChange}
+                  _description={handleDescriptionValueChange}
+                  _image={handleImageValueChange}
                 />
-              </div>
-            </Card>
-
-            <Card className='mt-6 shadow-lg dark:bg-gray-950 dark:text-white'>
-              <DynamicComponent
-                _name={handleNameValueChange}
-                _url={handleUrlValueChange}
-                _title={handleTitleValueChange}
-                _description={handleDescriptionValueChange}
-                _image={handleImageValueChange}
-              />
-            </Card>
+              </Card>
+            </Col>
           </Grid>
         </div>
       }

@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { ChangeEvent, FormEvent, useState, useEffect } from 'react'
+import debounce from 'lodash.debounce'
 import RegistrationCheckbox from '@/components/CheckBox/RegistrationCheckbox'
 import PsiSelect from '@/components/PsiSelect'
 import Input from '@/components/Input/Input'
@@ -321,7 +322,7 @@ export default function PsiTabContent({ mode, _name, _url, _title, _description,
           <div className='mb-4'>
             <Input
               placeholder='https://example.com'
-              handleChange={getChangeUrl}
+              handleChange={debounce(getChangeUrl, 5000)}
             />
           </div>
         </div>
