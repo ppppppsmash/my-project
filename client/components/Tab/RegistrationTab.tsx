@@ -16,7 +16,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function RegistrationTab({ _name, _url }: Props) {
+export default function RegistrationTab({ _name, _url, _title, _description, _image }: Props) {
   const [selectedTab, setSelectedTab] = useState(0)
 
   const handleNameChange = (newValue: any) => {
@@ -28,15 +28,15 @@ export default function RegistrationTab({ _name, _url }: Props) {
   }
 
   const handleTitleChange = (newValue: any) => {
-    _url(newValue)
+    _title(newValue)
   }
 
   const handleDescriptionChange = (newValue: any) => {
-    _url(newValue)
+    _description(newValue)
   }
 
   const handleImageChange = (newValue: any) => {
-    _url(newValue)
+    _image(newValue)
   }
 
   let [categories] = useState({
