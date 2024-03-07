@@ -48,7 +48,7 @@ const GPTHoverCard = ({ children, message }: { children: React.ReactNode, messag
         <Bold className='animate-pulse'>
             <span className='bg-gradient-to-r from-fuchsia-500 to-emerald-400
               bg-clip-text font-bold tracking-tight text-transparent'>
-                ChatGPTは考え中...
+                ChatGPTは考えている...
             </span>
           </Bold>
       </Flex>
