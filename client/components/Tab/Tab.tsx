@@ -3,6 +3,7 @@ import {
   TabList,
   Tab
 } from '@tremor/react'
+import CursorArea from '@/components/LayoutComponents/CursorArea'
 
 import { useState } from 'react'
 
@@ -26,16 +27,24 @@ export default function TabForList({
           onValueChange={(value) => setShowCard(value === '1')}
           className='mt-6 text-gray-950'
         >
-          <Tab
-            className='text-gray-900 dark:text-white'
-            value='1'
-            text={textA}
-            icon={DocumentTextIcon} />
-          <Tab
-            className='text-gray-900 dark:text-white'
-            value='2'
-            text={textB}
-            icon={ChartPieIcon} />
+          <CursorArea>
+            <Tab
+              className='text-gray-900 dark:text-white'
+              value='1'
+              text={textA}
+              icon={DocumentTextIcon}
+              data-cursor='block'
+            />
+          </CursorArea>
+          <CursorArea>
+            <Tab
+              className='text-gray-900 dark:text-white'
+              value='2'
+              text={textB}
+              icon={ChartPieIcon}
+              data-cursor='block'
+            />
+          </CursorArea>
         </TabList>
       </>
 

@@ -1,10 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, Title, Flex, Button, SelectBox, SelectBoxItem } from '@tremor/react'
+import { SelectBox, SelectBoxItem } from '@tremor/react'
 import { PSIDataType, PSIMetrics } from '@/type'
 import { DevicePhoneMobileIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline'
 import { formatDate } from '@/utils/formatDate'
+import CursorArea from '@/components/LayoutComponents/CursorArea'
 
 interface Props {
   siteList: PSIDataType[]
@@ -35,28 +36,42 @@ export default function CompareSelectBox({ siteList, onSiteSelect }: Props) {
   }
 
   return (
-    <div className="flex w-full gap-x-4">
-      <SelectBox className="w-full" placeholder="サイトを選択してください" onValueChange={handleSelectChange}>
-        {siteList.map((site) => (
-          <SelectBoxItem
-            key={site.id}
-            text={site.name}
-            value={site.id.toString()}
-            icon={site.device === 'mobile' ? DevicePhoneMobileIcon : ComputerDesktopIcon}
-          />
-        ))}
-      </SelectBox>
+    <div className='flex w-full gap-x-4'>
+      <CursorArea>
+        <div
+          className='w-full z-50'
+          data-cursor='block'
+        >
+          <SelectBox className='w-full' placeholder='サイトを選択してください' onValueChange={handleSelectChange}>
+            {siteList.map((site) => (
+              <SelectBoxItem
+                key={site.id}
+                text={site.name}
+                value={site.id.toString()}
+                icon={site.device === 'mobile' ? DevicePhoneMobileIcon : ComputerDesktopIcon}
+              />
+            ))}
+          </SelectBox>
+        </div>
+      </CursorArea>
 
-      <SelectBox
-        className="w-full"
-        placeholder="日付を選択してください"
-        onValueChange={handleDateSelectChange}
-        disabled={selectedSiteMetrics.length === 0}
-      >
-        {selectedSiteMetrics.map((siteMetric, index) => (
-          <SelectBoxItem key={index} text={formatDate(siteMetric.createdAt)} value={siteMetric.createdAt} />
-        ))}
-      </SelectBox>
+      <CursorArea>
+        <div
+          className='w-full z-50'
+          data-cursor='block'
+        >
+          <SelectBox
+            className='w-full'
+            placeholder='日付を選択してください'
+            onValueChange={handleDateSelectChange}
+            disabled={selectedSiteMetrics.length === 0}
+          >
+            {selectedSiteMetrics.map((siteMetric, index) => (
+              <SelectBoxItem key={index} text={formatDate(siteMetric.createdAt)} value={siteMetric.createdAt} />
+            ))}
+          </SelectBox>
+        </div>
+      </CursorArea>
     </div>
   )
 }

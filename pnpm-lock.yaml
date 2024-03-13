@@ -1,0 +1,16 @@
+lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+dependencies:
+  ipad-cursor:
+    specifier: ^0.5.2
+    version: 0.5.2
+
+packages:
+
+  /ipad-cursor@0.5.2:
+    resolution: {integrity: sha512-RC8ib+wtOzvi0gsuINYnn2lfALmLBsnrabyShyTSaaPupzILLoDfVqowiWIajeiBdml8JC09C/V025pBH+FH2Q==}
+    dev: false

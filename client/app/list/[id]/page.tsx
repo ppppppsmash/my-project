@@ -11,6 +11,7 @@ import DelaySection from '@/components/FramerMotion/DelaySection'
 import Tab from '@/components/Tab/Tab'
 import DetailSite from '@/components/DetailCard/DetailSite'
 import DetailChart from '@/components/DetailCard/DetailChart'
+import CursorArea from '@/components/LayoutComponents/CursorArea'
 
 interface Props {
   params: { id: number }
@@ -78,15 +79,20 @@ export default function Slug({ params: { id } }: Props) {
 
                   <div>
                     <Title className='dark:text-white'>{list.name}</Title>
-                    <Subtitle className='flex items-center space-x-2 dark:text-white text-xs'>
-                      <Link
-                        target='_blank'
-                        href={{pathname: list.url}}
+                    <CursorArea>
+                      <Subtitle
+                        className='flex items-center space-x-2 dark:text-white text-xs'
+                        data-cursor='block'
                       >
-                        {list.url}
-                      </Link>
-                      <ArrowTopRightOnSquareIcon className='w-4 h-4' />
-                    </Subtitle>
+                        <Link
+                          target='_blank'
+                          href={{pathname: list.url}}
+                        >
+                          {list.url}
+                        </Link>
+                        <ArrowTopRightOnSquareIcon className='w-4 h-4' />
+                      </Subtitle>
+                    </CursorArea>
                   </div>
                 </div>
 
