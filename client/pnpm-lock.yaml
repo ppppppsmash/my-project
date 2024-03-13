@@ -89,6 +89,9 @@ dependencies:
   framer-motion:
     specifier: ^10.12.16
     version: 10.12.16(react-dom@18.2.0)(react@18.2.0)
+  ipad-cursor:
+    specifier: ^0.5.2
+    version: 0.5.2
   lodash.debounce:
     specifier: ^4.0.8
     version: 4.0.8
@@ -4677,6 +4680,10 @@ packages:
     resolution: {integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==}
     dependencies:
       loose-envify: 1.4.0
+    dev: false
+
+  /ipad-cursor@0.5.2:
+    resolution: {integrity: sha512-RC8ib+wtOzvi0gsuINYnn2lfALmLBsnrabyShyTSaaPupzILLoDfVqowiWIajeiBdml8JC09C/V025pBH+FH2Q==}
     dev: false
 
   /is-array-buffer@3.0.2:

@@ -10,6 +10,7 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/solid'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import { Switch } from '@/components/CheckBox/RememberCheckbox'
 import Dialog from '@/components/Dialog/Dialog'
+import CursorArea from '@/components/LayoutComponents/CursorArea'
 
 export default function LoginPage() {
   const [isRevealPassword, setIsRevealPassword] = useState<boolean>(false)
@@ -167,12 +168,15 @@ export default function LoginPage() {
 
 
               <div className='w-full mx-auto'>
-                <button
-                  onClick={onLogin}
-                  className={`w-full bg-gray-950 text-white py-2 hover:shadow-xl transition
-                    duration-300 hover:shadow-gray-300/50 font-extrabold ${inter.className}`}>
-                    ログイン
-                </button>
+                <CursorArea>
+                  <button
+                    onClick={onLogin}
+                    data-cursor='block'
+                    className={`w-full bg-gray-950 text-white py-2 hover:shadow-xl transition
+                      duration-300 hover:shadow-gray-300/50 font-extrabold ${inter.className}`}>
+                      ログイン
+                  </button>
+                </CursorArea>
               </div>
             </div>
           </div>

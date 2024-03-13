@@ -13,6 +13,7 @@ import { inter } from '@/utils/font'
 import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 import Notice from '@/components/Alert/Notice'
+import CursorArea from '@/components/LayoutComponents/CursorArea'
 
 const navigation = [
   { name: '履歴一覧', href: '/' },
@@ -74,23 +75,26 @@ export default function Navbar() {
                   onMouseMove={handleMouseMove}
                 >
                   {navigation.map((item, index) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      onClick={() => handleNavItemClick(item.href)}
-                      className={`relative duration-300 border-transparent text-gray-500 dark:text-white
-                        inline-flex items-center px-1 pt-1 text-[12px] font-thin hover:scale-[1.1]
-                        ${item.href === currentNavItem ? 'transition duration-150 text-[13px] bg-gradient-to-r from-teal-300 via-sky-500 to-indigo-600 bg-clip-text font-bold tracking-tight text-transparent dark:from-amber-200dark:to-sky-400' : ''}`}
-                      aria-current={pathname === item.href ? 'page' : undefined}
-                    >
-                      {item.name}
-                      {item.href === currentNavItem &&
-                      <motion.span
-                        className='absolute inset-x-1 -bottom-px h-px bg-gradient-to-r border-slate-500 dark:border-white text-gray-900 dark:text-white border-b-2'
-                        layoutId='active-nav-item'
-                      />
-                    }
-                    </a>
+                    <CursorArea>
+                      <a
+                        data-cursor='block'
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => handleNavItemClick(item.href)}
+                        className={`relative duration-300 border-transparent text-gray-500 dark:text-white
+                          inline-flex items-center px-1 pt-1 text-[12px] font-thin hover:scale-[1.1]
+                          ${item.href === currentNavItem ? 'transition duration-150 text-[13px] bg-gradient-to-r from-teal-300 via-sky-500 to-indigo-600 bg-clip-text font-bold tracking-tight text-transparent dark:from-amber-200dark:to-sky-400' : ''}`}
+                        aria-current={pathname === item.href ? 'page' : undefined}
+                      >
+                        {item.name}
+                        {item.href === currentNavItem &&
+                        <motion.span
+                          className='absolute inset-x-1 -bottom-px h-px bg-gradient-to-r border-slate-500 dark:border-white text-gray-900 dark:text-white border-b-2'
+                          layoutId='active-nav-item'
+                        />
+                      }
+                      </a>
+                    </CursorArea>
                   ))}
                 </div>
 
@@ -166,9 +170,14 @@ export default function Navbar() {
 
               <Notice />
 
-              <div className='absolute top-3 sm:right-16 right-10'>
-                <ModeToggle />
-              </div>
+              <CursorArea>
+                <div
+                  className='absolute top-3 sm:right-16 right-10'
+                  data-cursor='block'
+                >
+                  <ModeToggle />
+                </div>
+              </CursorArea>
             </div>
 
           </div>

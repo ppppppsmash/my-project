@@ -1,14 +1,15 @@
 'use client'
 
-import * as React from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { XCircleIcon, BellIcon } from '@heroicons/react/24/outline'
+import CursorArea from '@/components/LayoutComponents/CursorArea'
 
 export default function Notice() {
-  const [noticeFlagId, setNoticeFlagId] = React.useState<string>('')
+  const [noticeFlagId, setNoticeFlagId] = useState<string>('')
 
   return (
-    <div className=''>
+    <div>
       <div className='absolute top-14 -right-5 inset-y-0 pr-4 pt-4'>
         <ul className='grid grid-cols-1 gap-4'>
           <AnimatePresence initial={false}>
@@ -17,9 +18,6 @@ export default function Notice() {
                 layout='position'
                 key={noticeFlagId}
                 layoutId={noticeFlagId}
-                // className='relative z-50 w-64 p-5 text-base bg-white/40 backdrop-brightness-90 backdrop-blur-lg
-                //   border font-medium text-transparent bg-clip-text bg-gradient-to-br from-zinc-50 to-zinc-200/20
-                //   border-white/40 shadow-md rounded-xl'
                 className='relative z-50 w-64 p-4 shadow-lg rounded-xl bg-white dark:bg-gray-900 border-[1px] border-gray-300'
                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -44,9 +42,6 @@ export default function Notice() {
                 </motion.button>
 
                 <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
-                  9/14: 「ヘッダー」通知アラートが実装できた！
-                </p>
-                <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
                   9/15: 「ページ一覧」: テーブルのURLをマウスオーバーしたら、title、image、descriptionなどを
                   マウスオーバー対象の詳細ページで反映させるように実装した。</p>
                 <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
@@ -66,7 +61,11 @@ export default function Notice() {
                 </p>
 
                 <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
-                  9/22: <span className='font-semibold'>「Cron Job処理」</span>を実装済み.
+                  9/22: <span className='font-semibold'>「Cron Job処理」</span>を実装（不具合修正ing）。
+                </p>
+
+                <p className='text-xs mb-2 bg-gray-100 p-2 rounded-lg font-thin hover:bg-gray-50 transition dark:text-gray-500'>
+                  10月: remember me & cursor コンポーネント実装済み
                 </p>
               </motion.li>
             )}
@@ -75,18 +74,21 @@ export default function Notice() {
       </div>
 
       <div className='absolute top-5 sm:right-[120px] right-24 z-50 flex items-center justify-center'>
-        <motion.button
-          whileTap={{ scale: 0.96 }}
-          whileHover={{ scale: 1.05 }}
-          layoutId='100'
-          type='button'
-          className=''
-          onClick={() => setNoticeFlagId('100')}
-        >
-          <BellIcon
-            className='w-6 h-6 text-black dark:text-white hover:scale-[1.2] transition duration-300'
-          />
-        </motion.button>
+        <CursorArea>
+          <motion.button
+            whileTap={{ scale: 0.96 }}
+            whileHover={{ scale: 1.05 }}
+            layoutId='100'
+            type='button'
+            className=''
+            onClick={() => setNoticeFlagId('100')}
+            data-cursor='block'
+          >
+            <BellIcon
+              className='w-6 h-6 text-black dark:text-white hover:scale-[1.2] transition duration-300'
+            />
+          </motion.button>
+        </CursorArea>
       </div>
     </div>
   )

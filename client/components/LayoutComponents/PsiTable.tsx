@@ -41,6 +41,7 @@ import MoonLoader from 'react-spinners/MoonLoader'
 import { useSession } from 'next-auth/react'
 import BulkButton from '@/components/Button/BulkButton'
 import Dialog from '@/components/Dialog/Dialog'
+import CursorArea from '@/components/LayoutComponents/CursorArea'
 
 interface NewPSIDataType extends PSIDataType {
   score?: string
@@ -261,22 +262,29 @@ export default function PsiTable() {
         />
       }
       <Flex className='items-end'>
-        <MultiSelectBox
-          onValueChange={setSelectedNames}
-          placeholder="検索..."
-          className="max-w-xs mt-8 dark:bg-gray-950"
-        >
-          {result.map((item) => (
-            <MultiSelectBoxItem
-              key={item?.id}
-              value={(item?.name).toString()}
-              text={item?.name}
-              className='dark:bg-gray-950 dark:text-white'
+        <CursorArea>
+          <div
+            className='max-w-xs mt-8 z-50'
+            data-cursor='block'
+          >
+            <MultiSelectBox
+              onValueChange={setSelectedNames}
+              placeholder="検索..."
+              className="dark:bg-gray-950"
             >
-              {item?.name}
-            </MultiSelectBoxItem>
-          ))}
-        </MultiSelectBox>
+              {result.map((item) => (
+                <MultiSelectBoxItem
+                  key={item?.id}
+                  value={(item?.name).toString()}
+                  text={item?.name}
+                  className='dark:bg-gray-950 dark:text-white'
+                >
+                  {item?.name}
+                </MultiSelectBoxItem>
+              ))}
+            </MultiSelectBox>
+          </div>
+        </CursorArea>
         <BulkButton
           label="Let's Get !"
           clickEvent={handleBulkUpdate}
@@ -357,9 +365,9 @@ export default function PsiTable() {
                 <p className='flex items-center space-x-2'>
               {
                 item.device === 'mobile' ? (
-                  <DevicePhoneMobileIcon className='w-5 h-5' />
+                  <DevicePhoneMobileIcon className='w-5 h-5 -mr-7' />
                 ) : (
-                  <ComputerDesktopIcon className='w-5 h-5' />
+                  <ComputerDesktopIcon className='w-5 h-5 -mr-7' />
                 )
               }
               {editIndex === index ? (
@@ -382,11 +390,15 @@ export default function PsiTable() {
                   />
                 </p> ) : (
                   <DetailHoverCard>
-                    <Link
-                      className='underline'
-                      href={`/list/${item.id}`}>
-                      {editName[index] || item.name}
-                    </Link>
+                    <CursorArea>
+                      <Link
+                        className='underline pl-7 pr-3 py-1'
+                        href={`/list/${item.id}`}
+                        data-cursor='block'
+                      >
+                        {editName[index] || item.name}
+                      </Link>
+                    </CursorArea>
                   </DetailHoverCard>
                 )
               }
@@ -401,10 +413,19 @@ export default function PsiTable() {
                     device={item.device}
                   >
                     <div className='flex relative gap-x-1 items-center group'>
-                      <EyeIcon className='absolute -left-5 w-4 h-4 opacity-0 group-hover:opacity-100 transition duration-500 ease-in-out' />
-                      <Link href={{pathname: item.url}} target='_blank'>
-                        {item.url}
-                      </Link>
+                      <EyeIcon className='absolute -left-1 w-4 h-4 opacity-0
+                        group-hover:opacity-100 transition duration-500 ease-in-out'
+                      />
+                      <CursorArea>
+                        <Link
+                          className='px-4'
+                          href={{pathname: item.url}}
+                          target='_blank'
+                          data-cursor='block'
+                        >
+                          {item.url}
+                        </Link>
+                      </CursorArea>
                     </div>
                   </HoverCard>
                 </Text>
@@ -475,12 +496,19 @@ export default function PsiTable() {
               }
               </TableCell>
               <TableCell>
-                <TablePopup
-                  className={index === sortedData.length - 1 || index === sortedData.length -2 ? 'bottom-8 -left-6' : 'top-4 -left-6'}
-                  behaviorEdit={() => handleEdit(index)}
-                  behaviorScoreAgain={() => handleClick(item.name, item.url, index, item.id, item.device)}
-                  behaviorDelete={() => deleteItem(index, item.id, item.name, item.url, item.device)}
-                />
+                <CursorArea>
+                  <div
+                    className='w-6'
+                    data-cursor='block'
+                  >
+                    <TablePopup
+                      className={index === sortedData.length - 1 || index === sortedData.length -2 ? 'bottom-8 -left-6' : 'top-4 -left-6'}
+                      behaviorEdit={() => handleEdit(index)}
+                      behaviorScoreAgain={() => handleClick(item.name, item.url, index, item.id, item.device)}
+                      behaviorDelete={() => deleteItem(index, item.id, item.name, item.url, item.device)}
+                    />
+                  </div>
+                </CursorArea>
               </TableCell>
             </TableRow>
           ))}

@@ -14,8 +14,8 @@ export default function TableTab() {
         childrenB={
           <BarChartList />
         }
-        textA='表組み一覧'
-        textB='チャート一覧'
+        textA='表組み'
+        textB='チャート'
       />
     </div>
   )
