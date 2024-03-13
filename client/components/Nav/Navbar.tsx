@@ -77,9 +77,10 @@ export default function Navbar() {
                     <a
                       key={item.name}
                       href={item.href}
-                      onClick={() => handleNavItemClick(item.href)} // クリック時にcurrentNavItemを更新
-                      className='relative border-transparent text-gray-500 dark:text-white hover:text-gray-700 hover:border-gray-300
-                      inline-flex items-center px-1 pt-1 text-[12px] font-medium'
+                      onClick={() => handleNavItemClick(item.href)}
+                      className={`relative duration-300 border-transparent text-gray-500 dark:text-white
+                        inline-flex items-center px-1 pt-1 text-[12px] font-thin hover:scale-[1.1]
+                        ${item.href === currentNavItem ? 'transition duration-150 text-[13px] bg-gradient-to-r from-teal-300 via-sky-500 to-indigo-600 bg-clip-text font-bold tracking-tight text-transparent dark:from-amber-200dark:to-sky-400' : ''}`}
                       aria-current={pathname === item.href ? 'page' : undefined}
                     >
                       {item.name}
