@@ -75,10 +75,10 @@ export default function Navbar() {
                   onMouseMove={handleMouseMove}
                 >
                   {navigation.map((item, index) => (
-                    <CursorArea>
+                    <CursorArea key={index}>
                       <a
                         data-cursor='block'
-                        key={item.name}
+                        key={index}
                         href={item.href}
                         onClick={() => handleNavItemClick(item.href)}
                         className={`relative duration-300 border-transparent text-gray-500 dark:text-white

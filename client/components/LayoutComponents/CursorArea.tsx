@@ -3,7 +3,7 @@
 import { IPadCursorProvider, useIPadCursor } from 'ipad-cursor/react'
 import type { IpadCursorConfig } from 'ipad-cursor'
 
-export default function cursorLayout({
+export default function CursorLayout({
   children
 }: {
   children: React.ReactNode
