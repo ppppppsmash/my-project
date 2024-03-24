@@ -7,7 +7,7 @@ import type { Metadata } from 'next'
 import Favicon from '@/public/favicon.ico'
 import MoonLoader from 'react-spinners/MoonLoader'
 import Providers from './Providers'
-import { CursorContextProvider } from '@/components/LayoutComponents/CursorContext'
+import { CursorContextProvider } from '@/components/ConText/CursorContext'
 import { ThemeProvider } from '@/components/Theme/ThemeProvider'
 
 export const metadata: Metadata = {

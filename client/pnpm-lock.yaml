@@ -158,6 +158,9 @@ dependencies:
   tailwindcss-animation-delay:
     specifier: ^1.0.7
     version: 1.0.7(tailwindcss@3.3.1)
+  tailwindcss-elevation:
+    specifier: ^2.0.0
+    version: 2.0.0(tailwindcss@3.3.1)
   typeorm:
     specifier: ^0.3.17
     version: 0.3.17(mysql2@3.2.0)
@@ -4592,6 +4595,11 @@ packages:
       function-bind: 1.1.1
     dev: false
 
+  /hex-rgb@4.3.0:
+    resolution: {integrity: sha512-Ox1pJVrDCyGHMG9CFg1tmrRUMRPRsAWYc/PinY0XzJU4K7y7vjNoLKIQ7BR5UJMCxNN8EM1MNDmHWA/B3aZUuw==}
+    engines: {node: '>=6'}
+    dev: false
+
   /highlight.js@10.7.3:
     resolution: {integrity: sha512-tzcUFauisWKNHaRkN4Wjl/ZA07gENAjFl3J/c480dprkGTg5EQstgaNFqBfUqCq54kZRIEcreTsAgF/m2quD7A==}
     dev: false
@@ -6434,6 +6442,15 @@ packages:
     peerDependencies:
       tailwindcss: '>=2.0.0'
     dependencies:
+      tailwindcss: 3.3.1(postcss@8.4.23)
+    dev: false
+
+  /tailwindcss-elevation@2.0.0(tailwindcss@3.3.1):
+    resolution: {integrity: sha512-ejQ9bCTiilb/aOF2l9fLF9sWGc2QvxepePTGlLIxGZzJpRYKODf1tJlIN51W9ho4tXD2GKbBb10jd3bKm3THKQ==}
+    peerDependencies:
+      tailwindcss: ^3.0.1
+    dependencies:
+      hex-rgb: 4.3.0
       tailwindcss: 3.3.1(postcss@8.4.23)
     dev: false
 

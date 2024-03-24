@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ChangeEvent, FormEvent, useState, useEffect } from 'react'
+import { ChangeEvent, useState, useEffect, useContext } from 'react'
 import debounce from 'lodash.debounce'
 import RegistrationCheckbox from '@/components/CheckBox/RegistrationCheckbox'
 import PsiSelect from '@/components/PsiSelect'
@@ -17,21 +17,18 @@ import { useSession } from 'next-auth/react'
 import RegistrationModal from './Modals/RegistrationModal'
 import { siteRegistrate } from '@/utils/siteRegistrator'
 import { fetchLinkPreview } from '@/utils/getLinkPreview'
+import { PreviewContext } from '@/components/LayoutComponents/AddPage'
 
 interface Props {
   mode: string
-  _name: (value: any) => void
-  _url: (value: any) => void
-  _title: (value: any) => void
-  _description: (value: any) => void
-  _image: (value: any) => void
 }
 
-export default function PsiTabContent({ mode, _name, _url, _title, _description, _image }: Props) {
+export default function PsiTabContent({ mode }: Props) {
   const { data: session, status } = useSession()
   const id: number = 0
-  const [name, setName] = useState<string>('')
-  const [url, setUrl] = useState<string>('')
+
+  const {name, setName, url, setUrl, title, setTitle, description, setDescription, image, setImage} = useContext(PreviewContext)
+
   const [dialogErr, setDialogErr] = useState<boolean>(false)
   const [singleErrorInfo, setSingleErrorInfo] = useState<string[]>([])
   const [multiErrorInfo, setMultiErrorInfo] = useState<string[]>([])
@@ -57,17 +54,15 @@ export default function PsiTabContent({ mode, _name, _url, _title, _description,
   // 単体サイト
   const getChangeUrlName = ({target}: ChangeEvent<HTMLInputElement>) => {
     setName(target.value)
-    _name(target.value)
   }
 
   const getChangeUrl = async ({target}: ChangeEvent<HTMLInputElement>) => {
     setUrl(target.value)
-    _url(target.value)
 
     const fetchMeta = await fetchLinkPreview(target.value)
-    _title(fetchMeta.title)
-    _description(fetchMeta.description)
-    _image(fetchMeta.image)
+    setTitle(fetchMeta.title)
+    setDescription(fetchMeta.description)
+    setImage(fetchMeta.image)
   }
 
   const getChangeSelect = (value: string) => {

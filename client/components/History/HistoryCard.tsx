@@ -59,8 +59,8 @@ export default function HistoryCard() {
 
   return (
     <div className='mt-14'>
-      <Card className='dark:bg-gray-950'>
-        <Text className='mt-2 dark:text-white'>履歴一覧</Text>
+      <Card className='dark:bg-gray-950 elevation-10'>
+        <Text className='mt-2 dark:text-white elevation-10'>履歴一覧</Text>
         <Table className='mt-6 dark:text-white'>
           <TableHead>
             <TableRow>

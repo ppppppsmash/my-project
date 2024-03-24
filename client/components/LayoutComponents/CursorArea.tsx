@@ -2,7 +2,7 @@
 
 import { IPadCursorProvider, useIPadCursor } from 'ipad-cursor/react'
 import type { IpadCursorConfig } from 'ipad-cursor'
-import { useCursorContext } from '@/components/LayoutComponents/CursorContext'
+import { useCursorContext } from '@/components/ConText/CursorContext'
 
 export default function CursorLayout({
   children
@@ -13,10 +13,15 @@ export default function CursorLayout({
 
   const config: IpadCursorConfig = {
     blockPadding: 'auto',
-    blockStyle: {
-    },
     className: 'none',
     enableAutoTextCursor: true,
+    normalStyle: {
+      backdropBlur: '20px',
+    },
+    blockStyle: {
+      backdropBlur: '0px',
+      durationBackdropFilter: '1s',
+    },
   }
   useIPadCursor()
 

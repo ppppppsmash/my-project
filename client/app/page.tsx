@@ -15,9 +15,6 @@ const DynamicPsiHistoryComponent = dynamicImport(() => import('@/components/Hist
 
 export default async function Home() {
   const { data: session, status } = useSession()
-  // const session = await getServerSession(authOptions)
-
-  console.log(session?.user)
 
   if (status === 'authenticated') {
     return (

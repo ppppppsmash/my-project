@@ -114,7 +114,13 @@ module.exports = {
       },
     },
     plugins: [
-      require('tailwindcss-animation-delay')
+      require('tailwindcss-animation-delay'),
+      require('tailwindcss-elevation')(
+        {
+          color: '77,192,181',
+          opacityBoost: '0.23'
+        }
+      )
     ],
   }
 }

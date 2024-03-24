@@ -4,40 +4,12 @@ import { ChangeEvent, FormEvent, useState, useEffect } from 'react'
 import { Tab } from '@headlessui/react'
 import PsiTabContent from '@/components/PsiTabContent'
 
-interface Props {
-  _name(value: any): void
-  _url(value: any): void
-  _title(value: any): void
-  _description(value: any): void
-  _image(value: any): void
-}
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function RegistrationTab({ _name, _url, _title, _description, _image }: Props) {
+export default function RegistrationTab() {
   const [selectedTab, setSelectedTab] = useState(0)
-
-  const handleNameChange = (newValue: any) => {
-    _name(newValue)
-  }
-
-  const handleUrlChange = (newValue: any) => {
-    _url(newValue)
-  }
-
-  const handleTitleChange = (newValue: any) => {
-    _title(newValue)
-  }
-
-  const handleDescriptionChange = (newValue: any) => {
-    _description(newValue)
-  }
-
-  const handleImageChange = (newValue: any) => {
-    _image(newValue)
-  }
 
   let [categories] = useState({
     '単体登録': [
@@ -84,11 +56,6 @@ export default function RegistrationTab({ _name, _url, _title, _description, _im
             { selectedTab === 0 &&
               <PsiTabContent
                 mode={posts[0].mode}
-                _name={handleNameChange}
-                _url={handleUrlChange}
-                _title={handleTitleChange}
-                _description={handleDescriptionChange}
-                _image={handleImageChange}
               />
             }
           </Tab.Panel>
