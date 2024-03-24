@@ -38,7 +38,26 @@ const handler = NextAuth({
               return Promise.resolve({ ...user[0] , loginedAt, lastLoginedAt })
             }
           }
-          return Promise.resolve(null)
+
+          // 登録&パスワードのハッシュ化
+          const hashedPassword = await bcrypt.hash(credentials.password, 10)
+          // ユーザーの作成
+          const newUser = {
+            email: credentials.email,
+            password: hashedPassword,
+            loginedAt: new Date().toISOString(),
+            lastLoginedAt: null
+          }
+
+          // ユーザーをデータベースに保存
+          const result = await db.query('INSERT INTO user SET ?', newUser)
+
+          if (result.insertId) {
+            // 登録に成功した場合、ユーザー情報を返す
+            return Promise.resolve({ ...newUser, id: result.insertId })
+          } else {
+            return Promise.resolve(null) // 登録に失敗した場合
+          }
         } catch (error) {
           console.error('Authentication error:', error)
           return Promise.resolve(null)
@@ -69,8 +88,8 @@ const handler = NextAuth({
     }
   },
   pages: {
-    signIn: '/signin',
-    signOut: '/signin'
+    signIn: '/auth',
+    signOut: '/auth'
   }
 })
 

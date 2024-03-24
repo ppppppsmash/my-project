@@ -1,3 +1,5 @@
+'use client'
+
 import { DocumentTextIcon, ChartPieIcon } from '@heroicons/react/24/solid'
 import {
   TabList,
@@ -27,7 +29,7 @@ export default function TabForList({
           onValueChange={(value) => setShowCard(value === '1')}
           className='mt-6 text-gray-950'
         >
-          <CursorArea>
+          {/* <CursorArea> */}
             <Tab
               className='text-gray-900 dark:text-white'
               value='1'
@@ -35,8 +37,8 @@ export default function TabForList({
               icon={DocumentTextIcon}
               data-cursor='block'
             />
-          </CursorArea>
-          <CursorArea>
+          {/* </CursorArea> */}
+          {/* <CursorArea> */}
             <Tab
               className='text-gray-900 dark:text-white'
               value='2'
@@ -44,7 +46,7 @@ export default function TabForList({
               icon={ChartPieIcon}
               data-cursor='block'
             />
-          </CursorArea>
+          {/* </CursorArea> */}
         </TabList>
       </>
 

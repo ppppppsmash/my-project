@@ -1,4 +1,5 @@
 export const getDataAll = async(api: string, user_id: number) => {
+  console.log(`${process.env.NEXT_PUBLIC_NEST_URL}${api}`)
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}${api}/`, {
       method: 'GET',

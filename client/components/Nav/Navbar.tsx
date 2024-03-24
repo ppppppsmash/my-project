@@ -50,7 +50,7 @@ export default function Navbar() {
 
   const onLogOut = async () => {
     const result = await signOut({
-      callbackUrl: '/signin'
+      callbackUrl: '/auth'
     })
   }
 
