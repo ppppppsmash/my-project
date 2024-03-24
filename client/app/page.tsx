@@ -4,8 +4,7 @@ import {
   Text
 } from '@tremor/react'
 import Image from 'next/image'
-import { useSession } from "next-auth/react"
-import { getCsrfToken } from "next-auth/react"
+import { useSession } from 'next-auth/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import dynamicImport from 'next/dynamic'
 import { formatDate, jpFormatDate } from '@/utils/formatDate'
@@ -48,7 +47,7 @@ export default async function Home() {
                         {session?.user?.name}
                       </span>
                       <span className='font-mono font-bold text-lg'>{' '}/&gt;</span>{' '}
-                      <span className='invisible inline-flex text-gray-950 before:content-["|"] before:w-4 group-hover:visible group-hover:animate-typing dark:text-white' />
+                      <span className={`invisible inline-flex text-gray-950 before:content-['|'] before:w-4 group-hover:visible group-hover:animate-typing dark:text-white`} />
                     </span>
                     <br />お疲れ様です！🤟 </Text>
 
