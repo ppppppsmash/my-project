@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, createContext } from 'react'
+import { useState, createContext, useEffect } from 'react'
 import dynamicImport from 'next/dynamic'
 import { zenKaku } from '@/utils/font'
 import { Grid, Card, Title, Bold, Text, Col } from '@tremor/react'
 import { urlValidate } from '@/utils/validation'
+import { ConstructionIcon } from 'lucide-react'
 
 const DynamicComponent = dynamicImport(() => import('@/components/Tab/RegistrationTab'))
 
@@ -19,6 +20,14 @@ export const PreviewContext = createContext({} as {
   setDescription: React.Dispatch<React.SetStateAction<string>>
   image: string
   setImage: React.Dispatch<React.SetStateAction<string>>
+  schedule: string
+  setSchedule: React.Dispatch<React.SetStateAction<string>>
+  selectedDevice: string[]
+  setSelectedDevice: React.Dispatch<React.SetStateAction<string[]>>
+  names: string[]
+  setNames: React.Dispatch<React.SetStateAction<string[]>>
+  csvData: any[]
+  setCsvData: React.Dispatch<React.SetStateAction<any[]>>
 })
 
 export default function AddPage() {
@@ -27,6 +36,16 @@ export default function AddPage() {
   const [title, setTitle] = useState<string>('')
   const [description, setDescription] = useState<string>('')
   const [image, setImage] = useState<string>('')
+  const [schedule, setSchedule] = useState<string>('')
+  const [selectedDevice, setSelectedDevice] = useState<string[]>([])
+  const [names, setNames] = useState<string[]>([])
+  const [csvData, setCsvData] = useState<any[]>([])
+
+  useEffect(() => {
+    if (names.length === 1 && names[0] === "") {
+      setNames([]);
+    }
+  }, [names])
 
   return (
     <>
@@ -40,7 +59,7 @@ export default function AddPage() {
           <Col numColSpanSm={1}>
             <Card className='mt-6 shadow-lg dark:bg-gray-950 dark:text-white duration-300 transition ease-in-out'>
 
-              {image &&
+              { image &&
               <div className='text-center'>
                 <img
                   src={image}
@@ -52,7 +71,7 @@ export default function AddPage() {
 
               { name &&
               <div className='mt-6'>
-                <Bold>
+                <Bold className='animate-tracking-in-expand'>
                   サイト名：
                 </Bold>
                 <Text className='mt-2'>
@@ -64,7 +83,7 @@ export default function AddPage() {
               { url &&
               <>
                 <div className='mt-6'>
-                  <Bold>
+                  <Bold className='mt-2 animate-tracking-in-expand'>
                     URL：
                   </Bold>
                   <Text className='mt-1'>
@@ -73,7 +92,7 @@ export default function AddPage() {
                 </div>
 
                 <div className='mt-6'>
-                  <Bold>
+                  <Bold className='mt-2 animate-tracking-in-expand'>
                     Description：
                   </Bold>
                   <Text className='mt-1'>
@@ -83,12 +102,86 @@ export default function AddPage() {
               </>
               }
 
-              <div className={`${!name && !url ? 'block' : 'hidden'} w-full mx-auto`}>
+              { names.map((name, index) => (
+                name &&
+                <>
+                  <div className='mt-6 animate-tracking-in-expand'>
+                    <Bold>
+                      サイト名：
+                    </Bold>
+
+                    <Text className='mt-1' key={index}>
+                      {name.split(' ')[0]}
+                    </Text>
+                  </div>
+
+                  { name.includes(' ') &&
+                  <div className='mt-1 animate-tracking-in-expand'>
+                    <Bold>
+                      URL：
+                    </Bold>
+
+                    <Text className='mt-1' key={index}>
+                      {urlValidate(name.split(' ')[1])}
+                    </Text>
+                  </div>
+                  }
+                </>
+              ))}
+
+              { csvData.map((csv, index) => (
+                <>
+                  <div className='mt-6' key={index}>
+                    <Bold className='animate-tracking-in-expand'>
+                        サイト名：
+                    </Bold>
+                    <Text className='mt-1'>
+                      { csv.NAME }
+                    </Text>
+                  </div>
+
+                  <div className='mt-6'>
+                    <Bold className='animate-tracking-in-expand'>
+                      URL：
+                    </Bold>
+                    <Text className='mt-1'>
+                      { csv.URL }
+                    </Text>
+                  </div>
+                </>
+              ))}
+
+              { schedule &&
+                <div className='mt-6'>
+                  <Bold className='animate-tracking-in-expand'>
+                    Scheduler
+                  </Bold>
+                  <Text className='mt-1'>
+                    { schedule } 時間ごと自動実行
+                  </Text>
+                </div>
+              }
+
+              { selectedDevice.length != 0 &&
+                <div className='mt-6'>
+                  <Bold className='animate-tracking-in-expand'>
+                    デバイス
+                  </Bold>
+                  {selectedDevice.map((device, index) => (
+                    <Text className='mt-1' key={index}>
+                      { device }
+                    </Text>
+                  ))}
+                </div>
+              }
+
+              <div className={`${!name && !url && !title && !description && !image && !schedule && !selectedDevice.length && !names.length && !csvData.length ? 'block animate-scale-up-center' : 'hidden'} w-full mx-auto`}>
                 <Text className='text-center animate-pulse'>
-                  <span className='bg-gradient-to-r from-fuchsia-500 to-emerald-400
-                    bg-clip-text font-bold tracking-tight text-transparent'>
-                    登録情報プレビュー<br />
-                    （現在複数登録とCSV登録は実装中...）
+                  <span
+                    className='bg-gradient-to-r from-fuchsia-500 to-emerald-400
+                      bg-clip-text font-bold tracking-tight text-transparent'
+                    >
+                    登録情報プレビュー
                   </span>
                 </Text>
               </div>
@@ -98,9 +191,11 @@ export default function AddPage() {
 
           <Col numColSpanSm={2}>
             <Card className='elevation-10 mt-6 shadow-lg dark:bg-gray-950 dark:text-white'>
-            <PreviewContext.Provider value={{name, setName, url, setUrl, title, setTitle, description, setDescription, image, setImage }}>
-              <DynamicComponent />
-            </PreviewContext.Provider>
+              <PreviewContext.Provider value={{
+                name, setName, url, setUrl, title, setTitle, description, setDescription, image, setImage, schedule, setSchedule, selectedDevice, setSelectedDevice, names, setNames, csvData, setCsvData
+              }}>
+                <DynamicComponent />
+              </PreviewContext.Provider>
             </Card>
           </Col>
         </Grid>

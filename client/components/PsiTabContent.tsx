@@ -27,21 +27,20 @@ export default function PsiTabContent({ mode }: Props) {
   const { data: session, status } = useSession()
   const id: number = 0
 
-  const {name, setName, url, setUrl, title, setTitle, description, setDescription, image, setImage} = useContext(PreviewContext)
+  const {name, setName, url, setUrl, title, setTitle, description,
+        setDescription, image, setImage, schedule, setSchedule,
+        selectedDevice, setSelectedDevice, names, setNames, csvData, setCsvData} = useContext(PreviewContext)
 
   const [dialogErr, setDialogErr] = useState<boolean>(false)
   const [singleErrorInfo, setSingleErrorInfo] = useState<string[]>([])
   const [multiErrorInfo, setMultiErrorInfo] = useState<string[]>([])
   const [csvErrorInfo, setCsvErrorInfo] = useState<string[]>([])
 
-  const [names, setNames] = useState<string[]>([])
-  const [schedule, setSchedule] = useState<string>('0')
-  const [selectedDevice, setSelectedDevice] = useState<string[]>([])
+  //const [names, setNames] = useState<string[]>([])
 
   const [isFileExist, setIsfileExist] = useState<boolean>(false)
   const [isUploaded, setIsUploaded] = useState<boolean>(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [csvData, setCsvData] = useState<any[]>([])
 
   const [loading, setLoading] = useState<boolean>(false)
   const [progress, setProgress] = useState<number>(0)
@@ -206,7 +205,6 @@ export default function PsiTabContent({ mode }: Props) {
       }
     } else if (mode === 'csv') {
       const csvSiteList = csvData.map(async (data) => {
-        console.log(data)
         await siteRegistrate(selectedDevice, data.NAME, data.URL, schedule, Number(session?.user?.id), setProgress)
       })
       await Promise.all(csvSiteList)
@@ -225,7 +223,27 @@ export default function PsiTabContent({ mode }: Props) {
     setNames(separatedValue)
   }
 
+  const clearFields = () => {
+    if (mode === 'single' || mode === 'multiple' || mode === 'csv') {
+      setName('')
+      setUrl('')
+      setTitle('')
+      setDescription('')
+      setImage('')
+      setSchedule('')
+      setNames([])
+      setSelectedDevice([])
+      setIsfileExist(false)
+      setIsUploaded(false)
+      setSelectedFile(null)
+      setCsvData([])
+      setSelectedFileName('')
+    }
+  }
+
   useEffect(() => {
+    clearFields()
+
     const fetchCsvFiles = async () => {
       try {
         //const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv-list`)

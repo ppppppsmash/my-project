@@ -13,7 +13,7 @@ export default function PsiSelect({ placeholder, handleSelectChange }: Props) {
         onValueChange={(value) => handleSelectChange(value)}
         defaultValue='0'
       >
-        <SelectBoxItem value='0' text={placeholder} icon={ClockIcon} />
+        <SelectBoxItem value='' text={placeholder} icon={ClockIcon} />
         <SelectBoxItem value='1' text='1時間ごと' icon={ClockIcon} />
         <SelectBoxItem value='2' text='2時間ごと' icon={ClockIcon} />
         <SelectBoxItem value='4' text='4時間ごと' icon={ClockIcon} />

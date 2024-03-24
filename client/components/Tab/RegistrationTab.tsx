@@ -37,14 +37,14 @@ export default function RegistrationTab() {
           <Tab
             key={category}
             className={({ selected }) =>
-            classNames(
-              'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-900 dark:text-gray-950',
-              'ring-white ring-opacity-40 ring-offset-2 ring-offset-gray-400 focus:outline-none focus:ring-1',
-            selected
-              ? 'bg-white shadow dark:bg-gray-950 dark:text-white'
-              : 'text-blue-100 hover:text-gray-500 hover:bg-white dark:hover:bg-gray-300 dark:bg-white dark:text-gray-950'
-            )
-          }
+              classNames(
+                'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-900 dark:text-gray-950',
+                'ring-white ring-opacity-40 ring-offset-2 ring-offset-gray-400 focus:outline-none focus:ring-1',
+              selected
+                ? 'bg-white shadow dark:bg-gray-950 dark:text-white'
+                : 'text-blue-100 hover:text-gray-500 hover:bg-white dark:hover:bg-gray-300 dark:bg-white dark:text-gray-950'
+              )
+            }
           >
             {category}
           </Tab>
@@ -52,7 +52,9 @@ export default function RegistrationTab() {
         </Tab.List>
         <Tab.Panels className='mt-2'>
         {Object.values(categories).map((posts, index) => (
-          <Tab.Panel key={index}>
+          <Tab.Panel
+            key={index}
+          >
             { selectedTab === 0 &&
               <PsiTabContent
                 mode={posts[0].mode}

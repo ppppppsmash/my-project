@@ -56,8 +56,6 @@ export default function DetailChart({ id }: Props) {
   const chartUserCategories: string[] = ['score', 'user_fcp', 'user_lcp', 'user_fid', 'user_cls', 'user_inp', 'user_ttfb']
   const chartLabCategories: string[] = ['score', 'fcp', 'lcp', 'tti', 'cls', 'tbt', 'si']
 
-  console.log(from, to)
-
   return (
     <>
       <Card className='w-full box-border p-2 -mx-2 dark:bg-gray-950'>
