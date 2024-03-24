@@ -7,6 +7,7 @@ import {
   Title
 } from '@tremor/react'
 import { zenKaku } from '@/utils/font'
+
 const queryClient = new QueryClient()
 
 const DynamicComponent = dynamicImport(() => import('@/components/Tab/TableTab'))
