@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common'
-import axios from 'axios'
 
 @Injectable()
 export class LinkPreviewService {
@@ -9,7 +8,8 @@ export class LinkPreviewService {
     const LINK_PREVIEW_API_URL = `${process.env.LINK_PREVIEW_API_URL}?key=${LINK_PREVIEW_API_KEY}`
 
     try {
-      const { data } = await axios.get(`${LINK_PREVIEW_API_URL}&q=${url}`)
+      const response = await fetch(`${LINK_PREVIEW_API_URL}&q=${url}`)
+      const data = await response.json()
       return data
     } catch (error) {
       console.error(error)

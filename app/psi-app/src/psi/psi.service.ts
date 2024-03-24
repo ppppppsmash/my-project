@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common'
-import axios from 'axios'
 
 @Injectable()
 export class PsiService {
@@ -9,7 +8,8 @@ export class PsiService {
 
   async fetchData(url: string, strategy: string): Promise<any> {
 
-    const { data } = await axios.get(`${this.PSI_API_URL}?url=${url}&key=${this.PSI_API_KEY}&strategy=${strategy}`)
+    const response = await fetch(`${this.PSI_API_URL}?url=${url}&key=${this.PSI_API_KEY}&strategy=${strategy}`)
+    const data = await response.json()
 
     return data
   }

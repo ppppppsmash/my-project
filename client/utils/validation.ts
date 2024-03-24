@@ -19,7 +19,7 @@ export const urlValidate = (url: string) => {
 
 export const inputValidate = (value: string) => {
   if(!value) {
-    return 'サイト名を入力してください.'
+    return '必須項目.'
   }
 
   return ''

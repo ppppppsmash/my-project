@@ -58,10 +58,13 @@ export default function PsiTabContent({ mode }: Props) {
   const getChangeUrl = async ({target}: ChangeEvent<HTMLInputElement>) => {
     setUrl(target.value)
 
-    const fetchMeta = await fetchLinkPreview(target.value)
-    setTitle(fetchMeta.title)
-    setDescription(fetchMeta.description)
-    setImage(fetchMeta.image)
+
+    if (urlValidate(target.value)) {
+      const fetchMeta = await fetchLinkPreview(target.value)
+      setTitle(fetchMeta.title)
+      setDescription(fetchMeta.description)
+      setImage(fetchMeta.image)
+    }
   }
 
   const getChangeSelect = (value: string) => {
@@ -89,7 +92,7 @@ export default function PsiTabContent({ mode }: Props) {
           console.log('CSVファイルのアップロードが成功しました。')
           const data = await response.json()
           console.log(data)
-          setCsvData(data)
+          setCsvData(data.results)
         } else {
           console.error('CSVアップロードエラー')
         }
@@ -135,6 +138,7 @@ export default function PsiTabContent({ mode }: Props) {
   const openModal = () => {
     const checkboxValidation = checkboxValidate(selectedDevice.join(','))
     const inputValidation = inputValidate(name)
+    const urlValidation = inputValidate(url)
     const textareaValidation = textareaValidate(names)
     const csvValidation = csvValidate(isUploaded, isFileExist)
     let newSingleErrorInfo = []
@@ -147,8 +151,13 @@ export default function PsiTabContent({ mode }: Props) {
       }
 
       if (inputValidation) {
-        newSingleErrorInfo.push(inputValidation)
+        newSingleErrorInfo.push(`サイト名は${inputValidation}`)
       }
+
+      if (urlValidation) {
+        newSingleErrorInfo.push(`URLは${urlValidation}`)
+      }
+
     } else if (mode === 'multiple') {
       if (checkboxValidation) {
         newMultiErrorInfo.push(checkboxValidation)
@@ -246,7 +255,6 @@ export default function PsiTabContent({ mode }: Props) {
 
     const fetchCsvFiles = async () => {
       try {
-        //const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv-list`)
         const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv-list/${session?.user?.id}/`)
         if (response.ok) {
           const data = await response.json()

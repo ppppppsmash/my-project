@@ -1,9 +1,6 @@
 import { Injectable, Logger, SetMetadata } from '@nestjs/common'
 import { Cron, Interval, SchedulerRegistry, CronExpression } from '@nestjs/schedule'
-import { CronJob } from 'cron'
-import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
-const https = require('https')
 const schedule = require('node-schedule')
 
 @Injectable()

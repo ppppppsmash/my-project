@@ -12,7 +12,7 @@ export default function LoginLayout({
       <body>
         <Providers>
           <AuthGuard>
-            <div id="login">
+            <div>
               {children}
             </div>
           </AuthGuard>

@@ -20,14 +20,14 @@ export class PsiSiteListService {
 
   async findAll(): Promise<SiteList[]> {
     const date = new Date()
-    date.setMonth(date.getMonth() - 3)
+    date.setMonth(date.getMonth() - 4)
 
     return await this.pageRepository
       .createQueryBuilder('siteList')
       .leftJoinAndSelect('siteList.siteMetrics', 'siteMetrics')
       .orderBy('siteList.id', 'DESC')
       .addOrderBy('siteMetrics.id', 'DESC')
-      .where('siteMetrics.updatedAt >= :date', { date })
+      .where('siteList.updatedAt >= :date', { date })
       .getMany()
   }
 

@@ -5,7 +5,6 @@ import dynamicImport from 'next/dynamic'
 import { zenKaku } from '@/utils/font'
 import { Grid, Card, Title, Bold, Text, Col } from '@tremor/react'
 import { urlValidate } from '@/utils/validation'
-import { ConstructionIcon } from 'lucide-react'
 
 const DynamicComponent = dynamicImport(() => import('@/components/Tab/RegistrationTab'))
 

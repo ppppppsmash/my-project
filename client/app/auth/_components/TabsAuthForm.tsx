@@ -22,6 +22,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+import { Toaster, toast } from 'sonner'
 
 export function TabsAuthForm() {
   // login
@@ -68,9 +69,9 @@ export function TabsAuthForm() {
       })
 
       if (result?.error) {
-        setErrorMessage("正しいメールアドレスとパスワードを入力してください.")
+        toast('正しいメールアドレスとパスワードを入力してください.')
       } else {
-        setErrorMessage("")
+        toast('PSIツールへようこそ.')
 
         if (isChecked) {
           localStorage.email = emailValue
@@ -113,7 +114,7 @@ export function TabsAuthForm() {
 
   const handleSignUpChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setSignUpValues({ ...signUpValues, [name]: value });
+    setSignUpValues({ ...signUpValues, [name]: value })
   };
 
   const onSignUp = async (e: React.FormEvent) => {
@@ -129,19 +130,25 @@ export function TabsAuthForm() {
         },
       })
 
+      console.log(res)
+
       if (!res.ok) {
-        console.log("error")
-        return;
+        const errorMessage = await res.json()
+        console.log(errorMessage)
+        toast(errorMessage.message)
+        return
       }
 
-      signIn(undefined, { callbackUrl: "/" });
+     toast('アカウントが作成できました.')
+     signIn(undefined, { callbackUrl: "/" })
     } catch (error: any) {
-      console.log(error);
+      console.log(error)
     }
   };
 
   return (
     <Tabs defaultValue="login" className="w-[400px] mx-auto">
+      <Toaster />
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="login">ログイン</TabsTrigger>
         <TabsTrigger value="register">ユーザ登録</TabsTrigger>
