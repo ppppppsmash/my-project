@@ -27,7 +27,7 @@ export default function CursorLayout({
 
   return (
     <>
-    { coolCursor ? (
+    { !coolCursor ? (
       <IPadCursorProvider config={config}>
         { children }
       </IPadCursorProvider>

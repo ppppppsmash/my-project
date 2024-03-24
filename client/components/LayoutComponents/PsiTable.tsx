@@ -155,7 +155,7 @@ export default function PsiTable() {
     }
 
     await postData('user_history', historyAction)
-    await addCronJob('add-cronjob')
+    await addCronJob('scheduler')
 
     setEditIndex(null)
     setIsEdited(true)
@@ -184,7 +184,7 @@ export default function PsiTable() {
     }
     await deleteData('psi_site_list', id)
     await postData('user_history', historyAction)
-    await addCronJob('add-cronjob')
+    await addCronJob('scheduler')
 
     const newResult = result?.filter(item => item.id !== id)
     queryClient.setQueryData(['result'], newResult)

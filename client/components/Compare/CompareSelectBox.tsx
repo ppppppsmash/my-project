@@ -39,7 +39,7 @@ export default function CompareSelectBox({ siteList, onSiteSelect }: Props) {
     <div className='flex w-full gap-x-4'>
       <CursorArea>
         <div
-          className='w-full z-50'
+          className='w-full'
           data-cursor='block'
         >
           <SelectBox className='w-full' placeholder='サイトを選択してください' onValueChange={handleSelectChange}>
@@ -57,7 +57,7 @@ export default function CompareSelectBox({ siteList, onSiteSelect }: Props) {
 
       <CursorArea>
         <div
-          className='w-full z-50'
+          className='w-full'
           data-cursor='block'
         >
           <SelectBox

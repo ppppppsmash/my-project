@@ -96,7 +96,7 @@ export const addCronJob = async (api: string) => {
       method: 'POST',
       cache: 'no-store',
       headers: {
-          'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
       }
     })
 

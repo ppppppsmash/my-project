@@ -11,7 +11,7 @@ export default function CursorToggle() {
       onClick={() => setCoolCursor(!coolCursor)}
       className='flex items-center gap-x-2 cursor-pointer hover:scale-[1.2] transition duration-300'
     >
-      { coolCursor ? (
+      { !coolCursor ? (
         <CursorArrowRaysIcon className='w-6 h-6' />
         ) : (
         <CursorArrowRippleIcon className='w-6 h-6' />
