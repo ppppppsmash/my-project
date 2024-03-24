@@ -1,10 +1,10 @@
-import { Multer } from 'multer'
 import { Controller, Post, Param, UploadedFile, UseInterceptors, BadRequestException } from '@nestjs/common'
+import { Multer } from 'multer'
 import { FileInterceptor } from '@nestjs/platform-express'
+import { format } from 'date-fns'
 import * as csvParser from 'csv-parser'
 import * as path from 'path'
-import * as fs from 'fs-extra'
-import { format } from 'date-fns'
+import { Storage } from '@google-cloud/storage'
 
 @Controller('upload')
 export class CsvUploadController {
@@ -15,37 +15,54 @@ export class CsvUploadController {
       throw new BadRequestException('CSVファイルが指定されていません.')
     }
 
-    const timeZoneOffset = 9 * 60
-    const now = new Date()
-    now.setTime(now.getTime() + timeZoneOffset * 60 * 1000)
-    const dateTime = format(now, 'yyyyMMddHHmm')
+    // Google Cloud Storage認証
+    const storage = new Storage({
+      credentials: {
+        client_email: process.env.STORAGE_CLIENT_EMAIL,
+        private_key: process.env.STORAGE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      },
+    })
 
+    const bucketName = 'psi-measurement'
+    const dev = `dev/${userId}`
+    const prod = `prod/${userId}`
+
+    const timeZoneOffset = 9 * 60 * 60 * 1000
+    const now = new Date(Date.now() + timeZoneOffset)
+    const dateTime = format(now, 'yyyyMMddHHmm')
     const fileName = path.parse(file.originalname).name
     const newFileName = `${fileName}-${dateTime}${path.extname(file.originalname)}`
 
-    const userFolderPath = path.join('./files', userId)
-    await fs.ensureDir(userFolderPath)
+    let folderPath: string
+    if (process.env.NODE_ENV === 'development') {
+      folderPath = dev
+    } else {
+      folderPath = prod
+    }
 
-    console.log('User folder path:', userFolderPath)
+    // ファイルのアップロード先のパスを設定
+    const filePath = path.join(folderPath, newFileName)
 
-    const tempFilePath = path.join('./files', file.filename)
-    const newFilePath = path.join(userFolderPath, newFileName)
+    // Google Cloud Storageにファイルをアップロード
+    await storage.bucket(bucketName).upload(file.path, {
+      destination: filePath,
+    })
 
-    await fs.rename(tempFilePath, newFilePath)
-
-    console.log(tempFilePath, newFilePath)
+    const [url] = await storage.bucket(bucketName).file(filePath).getSignedUrl({
+      action: 'read',
+      expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    })
 
     const results = []
     return new Promise((resolve, reject) => {
-      const stream = fs.createReadStream(newFilePath)
+      const stream = storage.bucket(bucketName).file(filePath).createReadStream()
       stream
         .pipe(csvParser())
         .on('data', (data) => {
           const filteredData = Object.fromEntries(Object.entries(data).filter(([key, value]) => key !== ''))
           results.push(filteredData)
-          console.log(results)
         })
-        .on('end', () => resolve(results))
+        .on('end', () => resolve({ results, url }))
         .on('error', (error) => reject(error))
     })
   }

@@ -1,5 +1,6 @@
 import Providers from '../Providers'
 import AuthGuard from '@/components/Auth/AuthGuard'
+import '../globals.css'
 
 export default function LoginLayout({
   children,
@@ -11,7 +12,9 @@ export default function LoginLayout({
       <body>
         <Providers>
           <AuthGuard>
-            {children}
+            <div>
+              {children}
+            </div>
           </AuthGuard>
         </Providers>
       </body>

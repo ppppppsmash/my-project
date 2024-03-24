@@ -34,8 +34,6 @@ export default function PsiCompareList({ siteList, compareResult, selectedDate }
     user_ttfb
   } = compareResult
 
-  console.log(lcp)
-
   return (
     <List key={siteList.id} className='dark:text-white'>
       <ListItem>

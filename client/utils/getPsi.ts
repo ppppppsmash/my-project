@@ -66,8 +66,6 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
         user_ttfb: loadingExperienceMetrics?.user_ttfb?.percentile
       }
 
-      console.log(psiSiteMetircs)
-
       const psiSiteList = {
         name,
         url: urlValidate(url),
@@ -89,7 +87,6 @@ export const getPsiData = async (selectedDevice: string[], name: string, url: st
 
       if (score < 70) {
         const message = `${name}（${urlValidate(url)}, device: ${device}) から取得したスコア: ${score}`
-        console.log(userName)
 
         if (userName) {
           const messageWithUser = `${userName} さんからのメッセージ:\n${message}`

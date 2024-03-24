@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ChangeEvent, FormEvent, useState, useEffect } from 'react'
+import { ChangeEvent, useState, useEffect, useContext } from 'react'
 import debounce from 'lodash.debounce'
 import RegistrationCheckbox from '@/components/CheckBox/RegistrationCheckbox'
 import PsiSelect from '@/components/PsiSelect'
@@ -17,34 +17,30 @@ import { useSession } from 'next-auth/react'
 import RegistrationModal from './Modals/RegistrationModal'
 import { siteRegistrate } from '@/utils/siteRegistrator'
 import { fetchLinkPreview } from '@/utils/getLinkPreview'
+import { PreviewContext } from '@/components/LayoutComponents/AddPage'
 
 interface Props {
   mode: string
-  _name: (value: any) => void
-  _url: (value: any) => void
-  _title: (value: any) => void
-  _description: (value: any) => void
-  _image: (value: any) => void
 }
 
-export default function PsiTabContent({ mode, _name, _url, _title, _description, _image }: Props) {
+export default function PsiTabContent({ mode }: Props) {
   const { data: session, status } = useSession()
   const id: number = 0
-  const [name, setName] = useState<string>('')
-  const [url, setUrl] = useState<string>('')
+
+  const {name, setName, url, setUrl, title, setTitle, description,
+        setDescription, image, setImage, schedule, setSchedule,
+        selectedDevice, setSelectedDevice, names, setNames, csvData, setCsvData} = useContext(PreviewContext)
+
   const [dialogErr, setDialogErr] = useState<boolean>(false)
   const [singleErrorInfo, setSingleErrorInfo] = useState<string[]>([])
   const [multiErrorInfo, setMultiErrorInfo] = useState<string[]>([])
   const [csvErrorInfo, setCsvErrorInfo] = useState<string[]>([])
 
-  const [names, setNames] = useState<string[]>([])
-  const [schedule, setSchedule] = useState<string>('0')
-  const [selectedDevice, setSelectedDevice] = useState<string[]>([])
+  //const [names, setNames] = useState<string[]>([])
 
   const [isFileExist, setIsfileExist] = useState<boolean>(false)
   const [isUploaded, setIsUploaded] = useState<boolean>(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [csvData, setCsvData] = useState<any[]>([])
 
   const [loading, setLoading] = useState<boolean>(false)
   const [progress, setProgress] = useState<number>(0)
@@ -57,17 +53,18 @@ export default function PsiTabContent({ mode, _name, _url, _title, _description,
   // 単体サイト
   const getChangeUrlName = ({target}: ChangeEvent<HTMLInputElement>) => {
     setName(target.value)
-    _name(target.value)
   }
 
   const getChangeUrl = async ({target}: ChangeEvent<HTMLInputElement>) => {
     setUrl(target.value)
-    _url(target.value)
 
-    const fetchMeta = await fetchLinkPreview(target.value)
-    _title(fetchMeta.title)
-    _description(fetchMeta.description)
-    _image(fetchMeta.image)
+
+    if (urlValidate(target.value)) {
+      const fetchMeta = await fetchLinkPreview(target.value)
+      setTitle(fetchMeta.title)
+      setDescription(fetchMeta.description)
+      setImage(fetchMeta.image)
+    }
   }
 
   const getChangeSelect = (value: string) => {
@@ -95,7 +92,7 @@ export default function PsiTabContent({ mode, _name, _url, _title, _description,
           console.log('CSVファイルのアップロードが成功しました。')
           const data = await response.json()
           console.log(data)
-          setCsvData(data)
+          setCsvData(data.results)
         } else {
           console.error('CSVアップロードエラー')
         }
@@ -141,6 +138,7 @@ export default function PsiTabContent({ mode, _name, _url, _title, _description,
   const openModal = () => {
     const checkboxValidation = checkboxValidate(selectedDevice.join(','))
     const inputValidation = inputValidate(name)
+    const urlValidation = inputValidate(url)
     const textareaValidation = textareaValidate(names)
     const csvValidation = csvValidate(isUploaded, isFileExist)
     let newSingleErrorInfo = []
@@ -153,8 +151,13 @@ export default function PsiTabContent({ mode, _name, _url, _title, _description,
       }
 
       if (inputValidation) {
-        newSingleErrorInfo.push(inputValidation)
+        newSingleErrorInfo.push(`サイト名は${inputValidation}`)
       }
+
+      if (urlValidation) {
+        newSingleErrorInfo.push(`URLは${urlValidation}`)
+      }
+
     } else if (mode === 'multiple') {
       if (checkboxValidation) {
         newMultiErrorInfo.push(checkboxValidation)
@@ -211,7 +214,6 @@ export default function PsiTabContent({ mode, _name, _url, _title, _description,
       }
     } else if (mode === 'csv') {
       const csvSiteList = csvData.map(async (data) => {
-        console.log(data)
         await siteRegistrate(selectedDevice, data.NAME, data.URL, schedule, Number(session?.user?.id), setProgress)
       })
       await Promise.all(csvSiteList)
@@ -230,10 +232,29 @@ export default function PsiTabContent({ mode, _name, _url, _title, _description,
     setNames(separatedValue)
   }
 
+  const clearFields = () => {
+    if (mode === 'single' || mode === 'multiple' || mode === 'csv') {
+      setName('')
+      setUrl('')
+      setTitle('')
+      setDescription('')
+      setImage('')
+      setSchedule('')
+      setNames([])
+      setSelectedDevice([])
+      setIsfileExist(false)
+      setIsUploaded(false)
+      setSelectedFile(null)
+      setCsvData([])
+      setSelectedFileName('')
+    }
+  }
+
   useEffect(() => {
+    clearFields()
+
     const fetchCsvFiles = async () => {
       try {
-        //const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv-list`)
         const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}download/csv-list/${session?.user?.id}/`)
         if (response.ok) {
           const data = await response.json()

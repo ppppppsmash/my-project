@@ -6,7 +6,7 @@ export class AutoRunController {
 
   constructor(private autoRunService: AutoRunService) {}
 
-  @Post('add-cronjob')
+  @Post('scheduler')
   getPSIAuto() {
     this.autoRunService.getPSIAuto()
   }

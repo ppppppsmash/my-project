@@ -1,4 +1,5 @@
 export const getDataAll = async(api: string, user_id: number) => {
+  console.log(`${process.env.NEXT_PUBLIC_NEST_URL}${api}`)
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_URL}${api}/`, {
       method: 'GET',
@@ -8,10 +9,8 @@ export const getDataAll = async(api: string, user_id: number) => {
       }
     })
     const data = await response.json()
-    console.log(data)
     // return data
     const filteredData = data.filter((item: any) => item.user_id === user_id)
-    console.log(filteredData)
     return filteredData
   } catch (error) {
     console.log(error)
@@ -28,7 +27,6 @@ export const getData = async(api: string, id: number) => {
       }
     })
     const data = await response.json()
-    console.log(data)
     return data
   } catch (error) {
     console.log(error)
@@ -99,7 +97,7 @@ export const addCronJob = async (api: string) => {
       method: 'POST',
       cache: 'no-store',
       headers: {
-          'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
       }
     })
 

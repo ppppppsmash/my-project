@@ -48,8 +48,6 @@ export default function Slug({ params: { id } }: Props) {
     fetchData()
   }, [id])
 
-  console.log(metricsNewest)
-
   return (
     <DelaySection delay={0.3}>
       {siteList.length > 0 && siteList.map((list, index) => (

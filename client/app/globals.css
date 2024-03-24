@@ -142,3 +142,7 @@
     opacity: 0;
   }
 }
+
+.react-slideshow-fadezoom-images-wrap {
+  width: 500px!important;
+}

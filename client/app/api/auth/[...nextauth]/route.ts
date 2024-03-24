@@ -38,6 +38,7 @@ const handler = NextAuth({
               return Promise.resolve({ ...user[0] , loginedAt, lastLoginedAt })
             }
           }
+
           return Promise.resolve(null)
         } catch (error) {
           console.error('Authentication error:', error)
@@ -69,8 +70,8 @@ const handler = NextAuth({
     }
   },
   pages: {
-    signIn: '/signin',
-    signOut: '/signin'
+    signIn: '/auth',
+    signOut: '/auth'
   }
 })
 

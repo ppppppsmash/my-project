@@ -27,7 +27,7 @@ export const siteRegistrate = async(selectedDevice: string[], name: string, url:
 
     await postData('user_history', historyAction)
     await postData('psi_site_list', siteInfo)
-    await addCronJob('add-cronjob')
+    await addCronJob('scheduler')
   }
 
   progressCallback(TOTAL_PROGRESS)

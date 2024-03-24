@@ -13,6 +13,7 @@ import { inter } from '@/utils/font'
 import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 import Notice from '@/components/Alert/Notice'
+import CursorToggle from '@/components/Nav/CursorToggle'
 import CursorArea from '@/components/LayoutComponents/CursorArea'
 
 const navigation = [
@@ -47,11 +48,9 @@ export default function Navbar() {
     }, [mouseX, mouseY, radius]
   )
 
-  const background = useMotionTemplate`radial-gradient(${radius}px circle at ${mouseX}px ${mouseY}px, var(--spotlight-color) 0%, transparent 65%)`
-
   const onLogOut = async () => {
     const result = await signOut({
-      callbackUrl: '/signin'
+      callbackUrl: '/auth'
     })
   }
 
@@ -76,10 +75,10 @@ export default function Navbar() {
                 >
                   {navigation.map((item, index) => (
                     <CursorArea key={index}>
-                      <a
+                      <Link
                         data-cursor='block'
                         key={index}
-                        href={item.href}
+                        href={{pathname: item.href}}
                         onClick={() => handleNavItemClick(item.href)}
                         className={`relative duration-300 border-transparent text-gray-500 dark:text-white
                           inline-flex items-center px-1 pt-1 text-[12px] font-thin hover:scale-[1.1]
@@ -93,7 +92,7 @@ export default function Navbar() {
                           layoutId='active-nav-item'
                         />
                       }
-                      </a>
+                      </Link>
                     </CursorArea>
                   ))}
                 </div>
@@ -167,6 +166,15 @@ export default function Navbar() {
                   )}
                 </Disclosure.Button>
               </div>
+
+              <CursorArea>
+                <div
+                  className='absolute top-5 sm:right-[165px] right-24 z-50 flex items-center justify-center'
+                  data-cursor='block'
+                >
+                  <CursorToggle />
+                </div>
+              </CursorArea>
 
               <Notice />
 

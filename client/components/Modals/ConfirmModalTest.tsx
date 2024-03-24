@@ -37,8 +37,6 @@ export default function ConfirmModalTest({ isConfirm }: Props) {
     window.location.href = path
   }
 
-  console.log(isConfirm)
-
   return (
     <AlertDialog>
       <AlertDialogTrigger>

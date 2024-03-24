@@ -19,11 +19,15 @@ export class PsiSiteListService {
   ) {}
 
   async findAll(): Promise<SiteList[]> {
+    const date = new Date()
+    date.setMonth(date.getMonth() - 4)
+
     return await this.pageRepository
       .createQueryBuilder('siteList')
       .leftJoinAndSelect('siteList.siteMetrics', 'siteMetrics')
       .orderBy('siteList.id', 'DESC')
       .addOrderBy('siteMetrics.id', 'DESC')
+      .where('siteList.updatedAt >= :date', { date })
       .getMany()
   }
 
@@ -35,24 +39,8 @@ export class PsiSiteListService {
     })
   }
 
-  // async create(SiteList): Promise<any> {
-  //   const savedSiteList = await this.pageRepository.save(SiteList)
-  //   const siteMetrics = SiteList.siteMetrics
-
-  //   await Promise.all(siteMetrics.map(async (metric) => {
-  //     metric.siteList = savedSiteList
-  //     await this.metricsRepository.save(metric)
-  //   }))
-  // }
-
   async create(SiteList): Promise<any> {
     await this.pageRepository.save(SiteList)
-    // const siteMetrics = SiteList.siteMetrics
-
-    // await Promise.all(siteMetrics.map(async (metric) => {
-    //   metric.siteList = savedSiteList
-    //   await this.metricsRepository.save(metric)
-    // }))
   }
 
   async patch(id: number, siteListData): Promise<any> {

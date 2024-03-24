@@ -8,6 +8,7 @@ import {
   Flex
 } from '@tremor/react'
 import CircleLoader from 'react-spinners/CircleLoader'
+import { RiContactsBookLine } from 'react-icons/ri'
 
 const GPTHoverCard = ({ children, message }: { children: React.ReactNode, message: string }) => {
   const [hovered, setHovered] = useState(false);
@@ -31,8 +32,14 @@ const GPTHoverCard = ({ children, message }: { children: React.ReactNode, messag
 
       if(response?.ok) {
         const responseData = await response.json()
-        const result = responseData.choices[0].message.content
-        setResponse(result)
+      //  const result = responseData.choices[0]?.message?.content
+
+      if (responseData.error) {
+        setResponse(responseData.error.message)
+      } else {
+        setResponse(responseData)
+      }
+        console.log(responseData.error.message)
       }
     }
   }
